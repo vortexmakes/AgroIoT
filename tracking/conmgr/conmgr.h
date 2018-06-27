@@ -108,13 +108,9 @@ extern "C" {
     #define MOVISTAR_APN_USER   "WAP"
     #define MOVISTAR_APN_PASS   "WAP"
 
-    #define CLARO_APN_ADDR      "INTERNET.CTIMOVIL.COM.AR"
-    #define CLARO_APN_USER      "CLAROGPRS"
-    #define CLARO_APN_PASS      "CLAROGPRS999"
-
-#define CONNECTION_APN          CLARO_APN_ADDR
-#define CONNECTION_USER         CLARO_APN_USER
-#define CONNECTION_PASSWORD     CLARO_APN_PASS
+#define CONNECTION_APN          MOVISTAR_APN_ADDR
+#define CONNECTION_USER         MOVISTAR_APN_USER
+#define CONNECTION_PASSWORD     MOVISTAR_APN_PASS
 
 /* .................................. SIM PIN .............................. */
 #define SIM_PIN_NUMBER          9474
@@ -123,21 +119,12 @@ extern "C" {
     #define YIPIES_SERVER       "71.6.135.77"
     #define YIPIES_PORT         "33499"
 
-    #define MOSQUITTO_SERVER    "test.mosquitto.org"
-    #define MOSQUITTO_PORT      "1883"
-
-    #define LINSSE_SERVER       "linsse.com.ar"
-    #define LINSSE_PORT         "2000"
-
     #define DOCKLIGHT_SERVER    "181.230.72.86"
     #define DOCKLIGHT_PORT      "33498"
 
-    #define DOCKLIGHT_BIS_SERVER "200.127.3.140"
-    #define DOCKLIGHT_BIS_PORT   "33498"
-
 #define CONNECTION_PROT         "TCP"
-#define CONNECTION_DOMAIN       LINSSE_SERVER 
-#define CONNECTION_PORT         LINSSE_PORT
+#define CONNECTION_DOMAIN       DOCKLIGHT_SERVER 
+#define CONNECTION_PORT         DOCKLIGHT_PORT
 
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */
