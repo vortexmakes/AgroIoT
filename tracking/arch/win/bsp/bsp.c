@@ -181,11 +181,6 @@ bsp_keyParser(int c)
             RKH_SMA_POST_FIFO(conMgr, RKH_UPCAST(RKH_EVT_T, &e_Send), &bsp);
             break;
 
-        case 'a':
-            //send_Frame();
-            break;
-
-
         default:
             break;
     }

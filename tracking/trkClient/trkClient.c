@@ -66,16 +66,16 @@ RKH_CREATE_TRANS_TABLE(Client_Connected)
     RKH_TRREG(evNetDisconnected, NULL, NULL, &Client_Disconnected),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(Client_Send, sendEntry, NULL, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(Client_Send, sendEntry, NULL, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Send)
-    RKH_TRREG(evSent, NULL, NULL, &Client_Receive),
-    RKH_TRREG(evSendFail, NULL, NULL, &Client_Send),
+    RKH_TRREG(evSent,     NULL, NULL, &Client_Receive),
+    RKH_TRREG(evSendFail, NULL, NULL, &Client_Wait),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(Client_Receive, recvEntry, NULL, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(Client_Receive, recvEntry, NULL, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Receive)
-    RKH_TRREG(evReceived, NULL, NULL,   &Client_CheckResp),
-    RKH_TRREG(evRecvFail, NULL, NULL,   &Client_Send),
+    RKH_TRREG(evReceived, NULL, NULL, &Client_CheckResp),
+    RKH_TRREG(evRecvFail, NULL, NULL, &Client_Wait),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_COND_STATE(Client_CheckResp);
@@ -84,9 +84,9 @@ RKH_CREATE_BRANCH_TABLE(Client_CheckResp)
     RKH_BRANCH(ELSE,        NULL,   &Client_Receive),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_BASIC_STATE(Client_Wait, waitEntry, waitExit, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(Client_Wait, waitEntry, waitExit, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Wait)
-    RKH_TRREG(evTimeout, NULL, NULL,   &Client_Send),
+    RKH_TRREG(evTimeout, NULL, NULL, &Client_Send),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
