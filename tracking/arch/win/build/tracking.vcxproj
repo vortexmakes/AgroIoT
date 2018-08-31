@@ -95,6 +95,8 @@
     <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_bittbl.c" />
     <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_dynevt.c" />
     <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_evtpool.c" />
+    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_pubsub.c" />
+    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_rdygrp.c" />
     <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_sched.c" />
     <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_version.c" />
     <ClCompile Include="..\..\..\..\third-party\rkh\source\mempool\src\rkhmempool.c" />

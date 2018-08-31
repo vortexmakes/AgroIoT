@@ -18,10 +18,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "rkh.h"
+#include "rkhfwk_pubsub.h"
 #include "rkhtmr.h"
+#include "bsp.h"
 #include "signals.h"
+#include "events.h"
+#include "topics.h"
 #include "trkClient.h"
-#include "conmgr.h"
 #include "epoch.h"
 #include "date.h"
 
@@ -44,7 +47,9 @@ static void init(TrkClient *const me, RKH_EVT_T *pe);
 /* ........................ Declares effect actions ........................ */
 /* ......................... Declares entry actions ........................ */
 static void sendEntry(TrkClient *const me);
+static void sendFail(TrkClient *const me);
 static void recvEntry(TrkClient *const me);
+static void recvFail(TrkClient *const me);
 static void waitEntry(TrkClient *const me);
 
 /* ......................... Declares exit actions ......................... */
@@ -69,13 +74,13 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_BASIC_STATE(Client_Send, sendEntry, NULL, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Send)
     RKH_TRREG(evSent,     NULL, NULL, &Client_Receive),
-    RKH_TRREG(evSendFail, NULL, NULL, &Client_Wait),
+    RKH_TRREG(evSendFail, NULL, sendFail, &Client_Wait),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(Client_Receive, recvEntry, NULL, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Receive)
     RKH_TRREG(evReceived, NULL, NULL, &Client_CheckResp),
-    RKH_TRREG(evRecvFail, NULL, NULL, &Client_Wait),
+    RKH_TRREG(evRecvFail, NULL, recvFail, &Client_Wait),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_COND_STATE(Client_CheckResp);
@@ -93,9 +98,7 @@ RKH_END_TRANS_TABLE
 struct TrkClient
 {
     RKH_SMA_T ao;       /* Base structure */
-    RKH_TMR_T timer;    /* which is responsible for toggling the LED */
-                        /* posting the TIMEOUT signal event to active object */
-                        /* 'conMgr' */
+    RKH_TMR_T timer;    
 };
 
 RKH_SMA_CREATE(TrkClient, trkClient, 2, HCAL, &Client_Disconnected, init, NULL);
@@ -105,11 +108,6 @@ RKH_SMA_DEF_PTR(trkClient);
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-/*
- *  Declare and allocate the 'e_tout' event.
- *  The 'e_tout' event with TIMEOUT signal never changes, so it can be
- *  statically allocated just once by means of RKH_ROM_STATIC_EVENT() macro.
- */
 static RKH_STATIC_EVENT(e_tout, evTimeout);
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static SendEvt evSendObj;
@@ -122,6 +120,8 @@ static void
 init(TrkClient *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
+
+    tpConnection_subscribe(me);
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->timer);
@@ -144,13 +144,29 @@ sendEntry(TrkClient *const me)
 {
     evSendObj.size = strlen(testFrame);
     memcpy(evSendObj.buf, testFrame, evSendObj.size);
-    RKH_SMA_POST_FIFO(conMgr, RKH_UPCAST(RKH_EVT_T, &evSendObj), me);
+    tpConnection_publish(&evSendObj, me);
+}
+
+static void
+sendFail(TrkClient *const me)
+{
+    (void)me;
+
+    bsp_sendFail();
 }
 
 static void
 recvEntry(TrkClient *const me)
 {
-    RKH_SMA_POST_FIFO(conMgr, &evRecvObj, me);
+    tpConnection_publish(&evRecvObj, me);
+}
+
+static void
+recvFail(TrkClient *const me)
+{
+    (void)me;
+
+    bsp_recvFail();
 }
 
 static void

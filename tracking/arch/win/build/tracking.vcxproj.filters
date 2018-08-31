@@ -106,6 +106,12 @@
     <ClCompile Include="..\..\..\trkClient\trkClient.c">
       <Filter>tracking\trkClient</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_rdygrp.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_pubsub.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">

@@ -252,4 +252,16 @@ bsp_netStatus(Status_t status)
             status == ConnectedSt ? "Connected" : "Disconnected");
 }
 
+void 
+bsp_sendFail(void)
+{
+    printf("\r\nGprs Socket Sending Failure\r\n"); 
+}
+
+void 
+bsp_recvFail(void)
+{
+    printf("\r\nGprs Socket Receiving Failure\r\n"); 
+}
+
 /* ------------------------------ File footer ------------------------------ */

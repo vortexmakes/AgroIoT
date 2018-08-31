@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include "rkh.h"
 #include "rkhfwk_dynevt.h"
+#include "rkhfwk_pubsub.h"
 #include "bsp.h"
 #include "signals.h"
 #include "trkClient.h"
@@ -68,7 +69,7 @@ setupTraceFilters(void)
     //RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
     //RKH_FILTER_OFF_SMA(modMgr);
-    //RKH_FILTER_OFF_SMA(conMgr);
+    RKH_FILTER_OFF_SMA(conMgr);
     RKH_FILTER_OFF_SMA(trkClient);
     RKH_FILTER_OFF_ALL_SIGNALS();
 }
@@ -83,6 +84,7 @@ main(int argc, char *argv[])
     mTime_init();
 
     rkh_fwk_init();
+    rkh_pubsub_init();
 
     setupTraceFilters();
 

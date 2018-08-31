@@ -22,8 +22,7 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
-#include "epoch.h"
-#include "modMgr.h"
+#include "events.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -89,18 +88,6 @@ extern "C" {
 #define CONNSTATUS_PERIOD   RKH_TIME_MS(2000)
 
 /**
- * Specifies sizeof send / receive buffers.
- */
-#define SEND_BUFF_SIZE      1024
-#define RECV_BUFF_SIZE      1024
-
-/**
- *  ImeiEvt process definitions
- */
-#define IMEI_LENGTH         15
-#define IMEI_BUF_SIZE       IMEI_LENGTH + 1
-
-/**
  * GSM Network Provider and Connection specific configurations.
  */
 /* .................................. APN .................................. */
@@ -123,44 +110,14 @@ extern "C" {
     #define DOCKLIGHT_PORT      "33498"
 
 #define CONNECTION_PROT         "TCP"
-#define CONNECTION_DOMAIN       DOCKLIGHT_SERVER 
-#define CONNECTION_PORT         DOCKLIGHT_PORT
+#define CONNECTION_DOMAIN       YIPIES_SERVER 
+#define CONNECTION_PORT         YIPIES_PORT
 
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */
 RKH_SMA_DCLR(conMgr);
 
 /* ------------------------------- Data types ------------------------------ */
-typedef struct SendEvt SendEvt;
-struct SendEvt
-{
-    RKH_EVT_T evt;
-    unsigned char buf[SEND_BUFF_SIZE];
-    ruint size;
-};
-
-typedef struct ReceivedEvt ReceivedEvt;
-struct ReceivedEvt
-{
-    RKH_EVT_T evt;
-    unsigned char buf[RECV_BUFF_SIZE];
-    ruint size;
-};
-
-typedef struct LocalTimeEvt LocalTimeEvt;
-struct LocalTimeEvt
-{
-    ModMgrResp e;
-    Time time;
-};
-
-typedef struct ImeiEvt ImeiEvt;
-struct ImeiEvt
-{
-    ModMgrResp e;
-    char buf[IMEI_BUF_SIZE];
-};
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 ReceivedEvt * ConMgr_ReceiveDataGetRef(void);

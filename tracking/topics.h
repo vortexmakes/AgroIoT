@@ -1,26 +1,27 @@
 /**
- *  \file       modmgr.h
- *  \brief      Module Manager.
+ *  \file       topics.h
+ *  \brief      Event topics definitions.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
  *  2018.05.02  DaBa  v1.0.00  Initial version
+ *  2018.05.11  LeFr  v1.0.01
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario Baliï¿½a db@vortexmakes.com
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __MODMGR_H__
-#define __MODMGR_H__
+#ifndef __TOPICS_H__
+#define __TOPICS_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
-#include "events.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -28,10 +29,27 @@ extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
+#define tpConnection_subscribe(me)   rkh_pubsub_subscribe(tpConnection, \
+                                                RKH_UPCAST(RKH_SMA_T, (me)))
+
+#define tpConnection_publish(ev, me) rkh_pubsub_publish(tpConnection, \
+                                                RKH_UPCAST(RKH_EVT_T, (ev)), \
+                                                RKH_UPCAST(RKH_SMA_T, (me)))
+
+#define tpModURC_subscribe(me)      rkh_pubsub_subscribe(tpModURC, \
+                                                RKH_UPCAST(RKH_SMA_T, (me)))
+
+#define tpModURC_publish(ev, me)    rkh_pubsub_publish(tpModURC, \
+                                                RKH_UPCAST(RKH_EVT_T, (ev)), \
+                                                RKH_UPCAST(RKH_SMA_T, (me)))
 /* -------------------------------- Constants ------------------------------ */
 /* ................................ Signals ................................ */
-/* ........................ Declares active object ......................... */
-RKH_SMA_DCLR(modMgr);
+typedef enum Topics Topics;
+enum Topics
+{
+	tpConnection,
+    tpModURC
+};
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */

@@ -4,9 +4,12 @@
 [submodule "third-party/rkh"]
 	path = third-party/rkh
 	url = https://github.com/vortexmakes/RKH.git
+	branch = pubsub
 [submodule "third-party/ceedling"]
 	path = third-party/ceedling
 	url = https://github.com/ThrowTheSwitch/Ceedling.git
 [submodule "third-party/ssp"]
 	path = third-party/ssp
 	url = https://github.com/leanfrancucci/ssp.git
+[submodule "rkh"]
+	branch = pubsub

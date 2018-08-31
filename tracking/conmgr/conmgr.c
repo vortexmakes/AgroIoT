@@ -18,13 +18,14 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
+#include "rkhfwk_pubsub.h"
 #include <string.h>
 #include "conmgr.h"
 #include "modpwr.h"
 #include "modmgr.h"
 #include "modcmd.h"
-#include "trkClient.h"
 #include "signals.h"
+#include "topics.h"
 #include "rtime.h"
 #include "bsp.h"
 
@@ -364,9 +365,7 @@ RKH_END_TRANS_TABLE
 struct ConMgr
 {
     RKH_SMA_T ao;       /* base structure */
-    RKH_TMR_T timer;    /* which is responsible for toggling the LED */
-                        /* posting the TIMEOUT signal event to active object */
-                        /* 'conMgr' */
+    RKH_TMR_T timer;
     rui8_t retryCount; 
     SendEvt *psend;
 };
@@ -380,11 +379,6 @@ RKH_SMA_DEF_PTR(conMgr);
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-/*
- *  Declare and allocate the 'e_tout' event.
- *  The 'e_tout' event with TIMEOUT signal never changes, so it can be
- *  statically allocated just once by means of RKH_ROM_STATIC_EVENT() macro.
- */
 static RKH_STATIC_EVENT(e_tout, evToutDelay);
 static RKH_ROM_STATIC_EVENT(e_Open, evOpen);
 static RKH_ROM_STATIC_EVENT(e_Close, evClose);
@@ -405,6 +399,9 @@ static void
 init(ConMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
+
+    tpConnection_subscribe(me);
+    tpModURC_subscribe(me);
 
     RKH_TR_FWK_AO(me);
 
@@ -636,7 +633,7 @@ sendOk(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    RKH_SMA_POST_FIFO(trkClient, &e_Sent, conMgr);
+    tpConnection_publish(&e_Sent, me);
 }
 
 static void
@@ -645,7 +642,7 @@ recvOk(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    RKH_SMA_POST_FIFO(trkClient, RKH_UPCAST(RKH_EVT_T, &e_Received), conMgr);
+    tpConnection_publish(&e_Received, me);
 }
 
 static void
@@ -654,7 +651,7 @@ sendFail(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    RKH_SMA_POST_FIFO(trkClient, &e_SendFail, conMgr);
+    tpConnection_publish(&e_SendFail, me);
 	ModCmd_init();
 }
 
@@ -664,7 +661,7 @@ recvFail(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    RKH_SMA_POST_FIFO(trkClient, &e_RecvFail, conMgr);
+    tpConnection_publish(&e_RecvFail, me);
 	ModCmd_init();
 }
 
@@ -811,7 +808,7 @@ socketConnected(ConMgr *const me)
 {
     (void)me;
 
-    RKH_SMA_POST_FIFO(trkClient, &e_NetConnected, conMgr);
+    tpConnection_publish(&e_NetConnected, me);
     bsp_netStatus(ConnectedSt);
 }
 
@@ -896,7 +893,7 @@ socketDisconnected(ConMgr *const me)
 {
     (void)me;
 
-    RKH_SMA_POST_FIFO(trkClient, &e_NetDisconnected, conMgr);
+    tpConnection_publish(&e_NetDisconnected, me);
     bsp_netStatus(DisconnectedSt);
 }
 

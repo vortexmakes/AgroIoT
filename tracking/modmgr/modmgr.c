@@ -18,7 +18,9 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
+#include "rkhfwk_pubsub.h"
 #include "signals.h"
+#include "topics.h"
 #include "modmgr.h"
 #include "conmgr.h"
 #include "bsp.h"
@@ -181,7 +183,13 @@ notifyURC(ModMgr *const me, RKH_EVT_T *pe)
 {
     (void)me;
 
-    forwardModMgrEvt(conMgr, pe);
+    ModMgrResp *presp;
+
+    presp = (ModMgrResp *)(pe);
+
+    presp->evt.e = presp->fwdEvt;
+
+    tpModURC_publish(presp, me);
 }
 
 static void
