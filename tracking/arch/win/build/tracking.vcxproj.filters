@@ -115,6 +115,9 @@
     <ClCompile Include="..\..\..\geoMgr\geoMgr.c">
       <Filter>tracking\geomgr</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\gps\gps.c">
+      <Filter>gps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -159,7 +162,7 @@
     <Filter Include="tracking\geomgr">
       <UniqueIdentifier>{0fb18af6-a058-49e5-aedb-1c1816dcb9f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="rmc">
+    <Filter Include="gps">
       <UniqueIdentifier>{243e14d6-e14a-466e-8ae1-2a7bb8407f63}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -179,11 +182,14 @@
     <ClInclude Include="..\..\..\geoMgr\geoMgr.h">
       <Filter>tracking\geomgr</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\rmc\ubx.h">
-      <Filter>rmc</Filter>
+    <ClInclude Include="..\..\..\gps\ubx.h">
+      <Filter>gps</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\rmc\rmc.h">
-      <Filter>rmc</Filter>
+    <ClInclude Include="..\..\..\gps\rmc.h">
+      <Filter>gps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gps\gps.h">
+      <Filter>gps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

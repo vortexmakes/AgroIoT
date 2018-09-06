@@ -170,6 +170,8 @@ init(GeoMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &GeoMgr_Void);
 
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
+
+    bsp_serial_open(GPS_PORT);
 }
 
 /* ............................ Effect actions ............................. */

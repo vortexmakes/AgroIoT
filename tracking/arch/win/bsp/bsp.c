@@ -32,6 +32,7 @@
 #include "conmgr.h"
 #include "modpwr.h"
 #include "mTime.h"
+#include "gps.h"
 
 
 RKH_THIS_MODULE
@@ -51,12 +52,14 @@ RKH_THIS_MODULE
 /* ---------------------------- Global variables --------------------------- */
 SERIAL_T serials[ NUM_CHANNELS ] =
 {
-	{	"COM8",	19200, 8, PAR_NONE, STOP_1, 0 },	// COM1
+	{	"COM1",	19200, 8, PAR_NONE, STOP_1, 0 },
+	{	"COM2",	19200, 8, PAR_NONE, STOP_1, 0 }
 };
 
 /* ---------------------------- Local variables ---------------------------- */
 static rui8_t bsp;
-static ModCmdRcvHandler cmdParser;
+static ModCmdRcvHandler gsmCmdParser;
+static GpsRcvHandler    gpsParser;
 static char *opts = (char *)TRK_CFG_OPTIONS;
 static const char *helpMessage =
 {
@@ -66,6 +69,7 @@ static const char *helpMessage =
     "\t -t ipaddr of TCP trace client\n"
     "\t -p port of TCP trace client\n"
     "\t -m GSM Module Serial Port\n"
+    "\t -g GPS Module Serial Port\n"
     "\t -h (help)\n"
 };
 
@@ -76,10 +80,14 @@ static RKH_ROM_STATIC_EVENT(e_Ok, evOk);
 static RKH_ROM_STATIC_EVENT(e_Recv, evRecv);
 static SendEvt e_Send;
 
-static void ser_rx_isr(unsigned char byte);
-static void ser_tx_isr(void);
-static SERIAL_CBACK_T ser_cback =
-{ ser_rx_isr, NULL, NULL, ser_tx_isr, NULL, NULL, NULL };
+static void gsm_rx_isr(unsigned char byte);
+static void gsm_tx_isr(void);
+static void gps_rx_isr(unsigned char byte);
+static void gps_tx_isr(void);
+static SERIAL_CBACK_T gsm_ser_cback =
+{ gsm_rx_isr, NULL, NULL, gsm_tx_isr, NULL, NULL, NULL };
+static SERIAL_CBACK_T gps_ser_cback =
+{ gps_rx_isr, NULL, NULL, gps_tx_isr, NULL, NULL, NULL };
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -108,6 +116,10 @@ processCmdLineOpts(int argc, char **argv)
                 strcpy(serials[GSM_PORT].com_name, optarg);
                 break;
 
+            case 'g':
+                strcpy(serials[GPS_PORT].com_name, optarg);
+                break;
+
 			case 's':
                 trace_io_silence();
 				break;
@@ -129,6 +141,32 @@ processCmdLineOpts(int argc, char **argv)
                 printf(helpMessage);
                 break;
         }
+}
+
+static
+void
+gsm_rx_isr( unsigned char byte )
+{
+    gsmCmdParser(byte);
+//	putchar(byte);
+}
+
+static
+void
+gsm_tx_isr( void )
+{
+}
+
+static
+void
+gps_rx_isr( unsigned char byte )
+{
+}
+
+static
+void
+gps_tx_isr( void )
+{
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -192,25 +230,21 @@ bsp_timeTick(void)
     mTime_tick();
 }
 
-static
-void
-ser_rx_isr( unsigned char byte )
-{
-    cmdParser(byte);
-//	putchar(byte);
-}
-
-static
-void
-ser_tx_isr( void )
-{
-}
-
 void
 bsp_serial_open(int ch)
 {
-    cmdParser = ModCmd_init();
-    init_serial_hard(ch, &ser_cback );
+    switch(ch)
+    {
+        case GSM_PORT:
+            gsmCmdParser = ModCmd_init();
+			init_serial_hard(ch, &gsm_ser_cback);
+            break;
+
+        case GPS_PORT:
+            gpsParser = gps_init();
+			init_serial_hard(ch, &gps_ser_cback);
+    }
+        
     connect_serial(ch);
 	set_dtr(ch);
 	Sleep(500);
