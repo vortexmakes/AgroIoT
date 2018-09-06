@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\third-party\rkh\source\fwk\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\mempool\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\queue\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sm\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sma\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\tmr\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\trc\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\;$(ProjectDir)..\..\..\..\third-party\ssp\src;$(ProjectDir)..\bsp;$(ProjectDir)..\bsp\serial;$(ProjectDir)..\..\..;$(ProjectDir)..\..\..\parser\sim900;$(ProjectDir)..\..\..\modpwr;$(ProjectDir)..\..\..\modcmd;$(ProjectDir)..\..\..\conmgr;$(ProjectDir)..\..\..\trkClient;$(ProjectDir)..\..\..\epoch;$(ProjectDir)..\..\..\date;$(ProjectDir)..\..\..\rtime;$(ProjectDir)..\..\..\mTime;$(ProjectDir)..\..\..\modmgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\third-party\rkh\source\fwk\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\mempool\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\queue\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sm\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sma\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\tmr\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\trc\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\;$(ProjectDir)..\..\..\..\third-party\ssp\src;$(ProjectDir)..\bsp;$(ProjectDir)..\bsp\serial;$(ProjectDir)..\..\..;$(ProjectDir)..\..\..\parser\sim900;$(ProjectDir)..\..\..\modpwr;$(ProjectDir)..\..\..\geoMgr;$(ProjectDir)..\..\..\modcmd;$(ProjectDir)..\..\..\conmgr;$(ProjectDir)..\..\..\trkClient;$(ProjectDir)..\..\..\epoch;$(ProjectDir)..\..\..\rmc;$(ProjectDir)..\..\..\date;$(ProjectDir)..\..\..\rtime;$(ProjectDir)..\..\..\mTime;$(ProjectDir)..\..\..\modmgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;__W32STVC__;CIPSHUT_ON_INIT;MODPWR_CTRL_ENABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -114,6 +114,7 @@
     <ClCompile Include="..\..\..\conmgr\conmgr.c" />
     <ClCompile Include="..\..\..\date\date.c" />
     <ClCompile Include="..\..\..\epoch\epoch.c" />
+    <ClCompile Include="..\..\..\geoMgr\geoMgr.c" />
     <ClCompile Include="..\..\..\main.c" />
     <ClCompile Include="..\..\..\modcmd\modcmdSim900.c" />
     <ClCompile Include="..\..\..\modmgr\modmgr.c" />
@@ -132,9 +133,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\bsp.h" />
+    <ClInclude Include="..\..\..\geoMgr\geoMgr.h" />
     <ClInclude Include="..\..\..\mTime\mTime.h" />
     <ClInclude Include="..\..\..\mTime\mTimeCfg.h" />
     <ClInclude Include="..\..\..\rkhcfg.h" />
+    <ClInclude Include="..\..\..\rmc\rmc.h" />
+    <ClInclude Include="..\..\..\rmc\ubx.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\bsp\serial\winbsp.lib" />

@@ -25,6 +25,7 @@
 #include "trkClient.h"
 #include "conmgr.h"
 #include "modmgr.h"
+#include "GeoMgr.h"
 #include "mTime.h"
 #include "epoch.h"
 
@@ -32,6 +33,7 @@
 #define TRKCLIENT_QSTO_SIZE  16
 #define CONMGR_QSTO_SIZE    8
 #define MODMGR_QSTO_SIZE    4
+#define GEOMGR_QSTO_SIZE    4
 
 #define SIZEOF_EP0STO       16
 #define SIZEOF_EP0_BLOCK    sizeof(RKH_EVT_T)
@@ -47,6 +49,7 @@
 static RKH_EVT_T *TrkCLient_qsto[TRKCLIENT_QSTO_SIZE];
 static RKH_EVT_T *ConMgr_qsto[CONMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
+static RKH_EVT_T *GeoMgr_qsto[GEOMGR_QSTO_SIZE];
 static rui8_t evPool0Sto[SIZEOF_EP0STO], 
               evPool1Sto[SIZEOF_EP1STO], 
               evPool2Sto[SIZEOF_EP2STO];
@@ -70,8 +73,9 @@ setupTraceFilters(void)
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
     //RKH_FILTER_OFF_SMA(modMgr);
     RKH_FILTER_OFF_SMA(conMgr);
-    RKH_FILTER_OFF_SMA(trkClient);
-    RKH_FILTER_OFF_ALL_SIGNALS();
+	RKH_FILTER_OFF_SMA(geoMgr);
+	RKH_FILTER_OFF_SMA(trkClient);
+	RKH_FILTER_OFF_ALL_SIGNALS();
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -97,6 +101,7 @@ main(int argc, char *argv[])
 
     RKH_SMA_ACTIVATE(conMgr, ConMgr_qsto, CONMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(modMgr, ModMgr_qsto, MODMGR_QSTO_SIZE, 0, 0);
+	RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(trkClient, TrkCLient_qsto, TRKCLIENT_QSTO_SIZE, 0, 0);
 
     RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);

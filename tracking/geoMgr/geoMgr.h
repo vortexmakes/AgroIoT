@@ -1,24 +1,22 @@
 /**
- *  \file       signals.h
- *  \brief      Event signal definitions.
+ *  \file       geoMgr.h
+ *  \brief      Geolocalization Context Manager.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.02  DaBa  v1.0.00  Initial version
- *  2018.05.11  LeFr  v1.0.01
+ *  2018.05.02  DaBa  v1.0.00   Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliï¿½a db@vortexmakes.com
- *  LeFr  Leandro Francucci lf@vortexmakes.com
+ *  DaBa  Dario Baliña db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __SIGNALS_H__
-#define __SIGNALS_H__
+#ifndef __GEOMGR_H__
+#define __GEOMGR_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
@@ -31,50 +29,8 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ................................ Signals ................................ */
-typedef enum Signals Signals;
-enum Signals
-{
-	evOpen,
-	evClose,
-    evCmd,
-    evResponse,
-    evNoResponse,
-    evURC,
-	evTimeout,
-    evToutWaitResponse,
-    evOk,
-    evError,
-    evToutDelay,
-    evSimReady,
-    evSimPin,
-    evSimError,
-    evNoReg,
-    evReg,
-    evIP,
-    evIPInitial,
-    evIPStart,
-    evIPStatus,
-    evIPGprsAct,
-    evConnecting,
-    evClosed,
-    evConnected,
-    evSend,
-    evSendFail,
-    evSent,
-    evRecv,
-    evRecvFail,
-    evReceived,
-    evNetConnected,
-    evNetDisconnected,
-    evDisconnected,
-	evTerminate,     /* press the key escape on the keyboard */
-    evNetClockSync,
-    evLocalTime,
-    evUnlocked,
-    evImei,
-    evRMC,
-	evRestart
-};
+/* ........................ Declares active object ......................... */
+RKH_SMA_DCLR(geoMgr);
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */

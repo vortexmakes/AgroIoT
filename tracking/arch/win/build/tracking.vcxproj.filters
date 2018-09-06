@@ -112,6 +112,9 @@
     <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_pubsub.c">
       <Filter>rkh</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\geoMgr\geoMgr.c">
+      <Filter>tracking\geomgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -153,6 +156,12 @@
     <Filter Include="tracking\trkClient">
       <UniqueIdentifier>{ea3a0de7-30de-4c7a-a2b3-da537c3bbe1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tracking\geomgr">
+      <UniqueIdentifier>{0fb18af6-a058-49e5-aedb-1c1816dcb9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rmc">
+      <UniqueIdentifier>{243e14d6-e14a-466e-8ae1-2a7bb8407f63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\rkhcfg.h">
@@ -166,6 +175,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\mTime\mTimeCfg.h">
       <Filter>mTime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\geoMgr\geoMgr.h">
+      <Filter>tracking\geomgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\rmc\ubx.h">
+      <Filter>rmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\rmc\rmc.h">
+      <Filter>rmc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
