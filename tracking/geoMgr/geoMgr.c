@@ -47,6 +47,7 @@ static void configInc(GeoMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void configInit(GeoMgr *const me);
+static void configSend(GeoMgr *const me);
 static void startWaitSync(GeoMgr *const me);
 static void ontimeEntry(GeoMgr *const me);
 
@@ -61,9 +62,9 @@ rbool_t chkRMCActive(GeoMgr *const me, RKH_EVT_T *pe);
 
 
 /* ........................ States and pseudostates ........................ */
-RKH_CREATE_BASIC_STATE(GeoMgr_Configure, configInit, NULL, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(GeoMgr_Configure, configSend, NULL, RKH_ROOT, NULL);
 RKH_CREATE_TRANS_TABLE(GeoMgr_Configure)
-    RKH_TRREG(evTimeout, configInc, NULL, &GeoMgr_ChoiceInit),
+    RKH_TRREG(evTimeout, NULL, configInc, &GeoMgr_ChoiceInit),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(GeoMgr_ChoiceInit);
@@ -141,7 +142,7 @@ static UBXCmd_t InitCmds[] =
     { gsvOff, sizeof(gsvOff) },
     { gllOff, sizeof(gllOff) },
     { ggaOff, sizeof(ggaOff) },
-    { rmc2Hz, sizeof(rmc2Hz) },
+    //{ rmc2Hz, sizeof(rmc2Hz) },
     { NULL, 0 }
 };
 
@@ -172,6 +173,8 @@ init(GeoMgr *const me, RKH_EVT_T *pe)
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
 
     bsp_serial_open(GPS_PORT);
+
+	configInit(me);
 }
 
 /* ............................ Effect actions ............................. */
@@ -179,7 +182,7 @@ static void
 configInc(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
-
+	
     ++me->pInitCmd;
 }
 
@@ -188,9 +191,15 @@ static void
 configInit(GeoMgr *const me)
 {
     me->pInitCmd = InitCmds;
-   // ubx_sendCmd(me->pInitCmd->cmd, me->pInitCmd->size);
+}
 
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), UBX_INTERCMD_TIME);
+static void
+configSend(GeoMgr *const me, RKH_EVT_T *pe)
+{
+	(void)pe;
+
+	ubx_sendCmd(me->pInitCmd->cmd, me->pInitCmd->size);
+	RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), UBX_INTERCMD_TIME);
 }
 
 static void

@@ -40,7 +40,7 @@ RKH_THIS_MODULE
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 #define ESC                 0x1B
-#define TRK_CFG_OPTIONS     "st:f:p:m:h"
+#define TRK_CFG_OPTIONS     "st:f:p:m:g:h"
 
 #define TEST_TX_PACKET      "----o Ping"
 #define TEST_RX_PACKET      "o---- Pong"
@@ -53,7 +53,7 @@ RKH_THIS_MODULE
 SERIAL_T serials[ NUM_CHANNELS ] =
 {
 	{	"COM1",	19200, 8, PAR_NONE, STOP_1, 0 },
-	{	"COM2",	19200, 8, PAR_NONE, STOP_1, 0 }
+	{	"COM2",	9600, 8, PAR_NONE, STOP_1, 0 }
 };
 
 /* ---------------------------- Local variables ---------------------------- */
@@ -161,6 +161,8 @@ static
 void
 gps_rx_isr( unsigned char byte )
 {
+    gpsParser(byte);
+	putchar(byte);
 }
 
 static

@@ -27,6 +27,9 @@ extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
+#define ubx_sendCmd(cmd,size)	\
+					bsp_serial_putnchar(GPS_PORT, (unsigned char *)cmd, size)
+
 /* -------------------------------- Constants ------------------------------ */
 #define UBX_GSA_OFF {0xB5, 0x62, 0x06, 0x01, 0x08, 0x00, 0xF0, 0x02, \
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x32}
@@ -56,7 +59,6 @@ typedef struct
     const unsigned char *cmd;
     int size;
 }UBXCmd_t;
-
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */

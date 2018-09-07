@@ -1,22 +1,22 @@
 /**
- *  \file       sim900parser.h
- *  \brief      SIM900 parser for SSP.
+ *  \file       ubxm8parser.h
+ *  \brief      Ublox M8 GPS parser for SSP.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.07  LeFr  v1.0.00  Initial version
+ *  2018.09.07  Daba  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  LeFr  Leandro Francucci lf@vortexmakes.com
+ *  DaBa  Dario Baliña db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __SIM900PARSER_H__
-#define __SIM900PARSER_H__
+#ifndef __UBXM8PARSER_H__
+#define __UBXM8PARSER_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
@@ -29,12 +29,12 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-SSP_DCLR_NORMAL_NODE rootCmdParser;
+SSP_DCLR_NORMAL_NODE rootGpsParser;
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void sim900parser_init(void);
+void ubx8mparser_init(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

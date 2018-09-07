@@ -221,7 +221,7 @@ ModCmd_init(void)
 
     RKH_ENTER_CRITICAL_();
   	ssp_init(&sim900Parser, &rootCmdParser);
-  	parser_init();
+  	sim900parser_init();
     RKH_EXIT_CRITICAL_();
     return &doSearch;
 }

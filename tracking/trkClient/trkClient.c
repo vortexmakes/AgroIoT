@@ -101,7 +101,7 @@ struct TrkClient
     RKH_TMR_T timer;    
 };
 
-RKH_SMA_CREATE(TrkClient, trkClient, 2, HCAL, &Client_Disconnected, init, NULL);
+RKH_SMA_CREATE(TrkClient, trkClient, 3, HCAL, &Client_Disconnected, init, NULL);
 RKH_SMA_DEF_PTR(trkClient);
 
 /* ------------------------------- Constants ------------------------------- */
