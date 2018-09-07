@@ -49,7 +49,7 @@ extern "C" {
 #define UBX_RMC_2HZ {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xF4, 0x01, \
                      0x01, 0x00, 0x00, 0x00, 0x0A, 0x75}
 
-#define UBX_INTERCMD_TIME   RKH_TIME_MS(1000)
+#define UBX_INTERCMD_TIME   RKH_TIME_MS(300)
 
 #define RMC_PERIOD_TIMEOUT  RKH_TIME_MS(3000)
 

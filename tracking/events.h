@@ -23,6 +23,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "epoch.h"
+#include "rmc.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -107,6 +108,12 @@ struct ImeiEvt
     char buf[IMEI_BUF_SIZE];
 };
 
+typedef struct RmcEvt RmcEvt;
+struct RmcEvt
+{
+    RKH_EVT_T evt;
+    RMC_t *p;
+};
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

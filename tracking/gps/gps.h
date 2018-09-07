@@ -32,7 +32,7 @@ typedef void (*GpsRcvHandler)(unsigned char c);
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-GpsRcvHandler gps_init(void);
+GpsRcvHandler gps_parserInit(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

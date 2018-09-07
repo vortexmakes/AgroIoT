@@ -39,7 +39,7 @@ doSearch(unsigned char c)
 
 /* ---------------------------- Global functions --------------------------- */
 GpsRcvHandler
-gps_init(void)
+gps_parserInit(void)
 {
     RKH_SR_ALLOC();
 

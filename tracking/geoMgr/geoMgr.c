@@ -27,6 +27,7 @@
 #include "geoMgr.h"
 #include "rmc.h"
 #include "ubx.h"
+#include "gps.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
@@ -44,6 +45,7 @@ static void init(GeoMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ Declares effect actions ........................ */
 static void configInc(GeoMgr *const me, RKH_EVT_T *pe);
+static void startRMCParser(GeoMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void configInit(GeoMgr *const me);
@@ -70,7 +72,7 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_CHOICE_STATE(GeoMgr_ChoiceInit);
 RKH_CREATE_BRANCH_TABLE(GeoMgr_ChoiceInit)
     RKH_BRANCH(chkConfigNotEnd,  NULL,   &GeoMgr_Configure),
-    RKH_BRANCH(ELSE,             NULL,   &GeoMgr_WaitTimeSync),
+    RKH_BRANCH(ELSE,             startRMCParser,   &GeoMgr_WaitTimeSync),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BASIC_STATE(GeoMgr_WaitTimeSync, startWaitSync, 
@@ -86,8 +88,8 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(GeoMgr_ChoiceTimeSync);
 RKH_CREATE_BRANCH_TABLE(GeoMgr_ChoiceTimeSync)
-    RKH_BRANCH(checkRMCTime,   NULL,   &GeoMgr_WaitTimeSync),
-    RKH_BRANCH(ELSE,           NULL,   &GeoMgr_OnTimeSync),
+    RKH_BRANCH(checkRMCTime,   NULL,            &GeoMgr_WaitTimeSync),
+    RKH_BRANCH(ELSE,           NULL, &GeoMgr_OnTimeSync),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_COMP_REGION_STATE(GeoMgr_OnTimeSync, ontimeEntry, ontimeExit,
@@ -169,6 +171,7 @@ init(GeoMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &GeoMgr_ChoiceActive);
     RKH_TR_FWK_STATE(me, &GeoMgr_Active);
     RKH_TR_FWK_STATE(me, &GeoMgr_Void);
+	RKH_TR_FWK_SIG(evRMC);
 
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
 
@@ -186,6 +189,15 @@ configInc(GeoMgr *const me, RKH_EVT_T *pe)
     ++me->pInitCmd;
 }
 
+static void
+startRMCParser(GeoMgr *const me, RKH_EVT_T *pe)
+{
+	(void)me;
+	(void)pe;
+	
+    bsp_gpsParserHandler_set((void *)gps_parserInit());
+}
+
 /* ............................. Entry actions ............................. */
 static void
 configInit(GeoMgr *const me)
@@ -194,10 +206,8 @@ configInit(GeoMgr *const me)
 }
 
 static void
-configSend(GeoMgr *const me, RKH_EVT_T *pe)
+configSend(GeoMgr *const me)
 {
-	(void)pe;
-
 	ubx_sendCmd(me->pInitCmd->cmd, me->pInitCmd->size);
 	RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), UBX_INTERCMD_TIME);
 }

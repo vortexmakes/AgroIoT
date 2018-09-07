@@ -74,6 +74,8 @@ void bsp_mqttStatus(Status_t status);
 void bsp_sendFail(void);
 void bsp_recvFail(void);
 
+void bsp_gpsParserHandler_set(void *p);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

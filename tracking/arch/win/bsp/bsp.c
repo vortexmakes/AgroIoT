@@ -161,8 +161,10 @@ static
 void
 gps_rx_isr( unsigned char byte )
 {
-    gpsParser(byte);
-	putchar(byte);
+    if(gpsParser != NULL)
+        gpsParser(byte);
+
+//	putchar(byte);
 }
 
 static
@@ -243,7 +245,7 @@ bsp_serial_open(int ch)
             break;
 
         case GPS_PORT:
-            gpsParser = gps_init();
+            gpsParser = NULL;
 			init_serial_hard(ch, &gps_ser_cback);
     }
         
@@ -298,6 +300,12 @@ void
 bsp_recvFail(void)
 {
     printf("\r\nGprs Socket Receiving Failure\r\n"); 
+}
+
+void
+bsp_gpsParserHandler_set(void *p)
+{
+    gpsParser = p;
 }
 
 /* ------------------------------ File footer ------------------------------ */
