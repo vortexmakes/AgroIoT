@@ -262,7 +262,7 @@ chkRMCActive(GeoMgr *const me, RKH_EVT_T *pe)
 	(void)me;
 	(void)pe;
     
-    return (rmc_status((RMC_t *(pe))) == RMC_StatusActive) ? 
+    return (rmc_status((RMC_t *(pe))) == RMC_StatusValid) ? 
                                             RKH_TRUE : RKH_FALSE;
 }
 

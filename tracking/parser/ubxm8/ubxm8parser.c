@@ -23,135 +23,170 @@
 #include <stdlib.h>
 
 /* ----------------------------- Local macros ------------------------------ */
+#define GET_RMC_FIELDS(r) \
+                { \
+                    { (r).utc, RMC_UTC_LEN },  \
+                    { (r).status, RMC_INDICATOR_LEN },   \
+                    { (r).latitude, RMC_LATITUDE_LEN },  \
+                    { (r).northingIndicator, RMC_INDICATOR_LEN },  \
+                    { (r).longitude, RMC_LONGITUDE_LEN },  \
+                    { (r).eastingIndicator, RMC_INDICATOR_LEN },  \
+                    { (r).sog, RMC_SOG_LEN },  \
+                    { (r).cog, RMC_COG_LEN },  \
+                    { (r).date, RMC_DATE_LEN },  \
+                    { (r).magneticVariation, RMC_MAGVAR_LEN },  \
+                    { (r).magneticVarIndicator, RMC_INDICATOR_LEN },  \
+                    { (r).modeIndicator, RMC_INDICATOR_LEN },  \
+                    { (r).navigationalStatus, RMC_INDICATOR_LEN }  \
+                }
+
 /* ------------------------------- Constants ------------------------------- */
+#define NMEA_FRAME_MAX_SIZE     82 // NMEA 0183 specification
+
 /* ---------------------------- Local data types --------------------------- */
+typedef struct
+{
+    char *p;
+    unsigned char size;
+} RmcField_t;
+
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 static rui8_t ubxm8parser;
 static RMC_t rmcCurrent, rmcLast;
 static RmcEvt rmcEvt;
-static char *p;
+static unsigned char *p;
+static char *pF;
+static unsigned char nmeaFrame[NMEA_FRAME_MAX_SIZE];
+static unsigned char checksum;
+
+static const RmcField_t rmcFields[RMC_FIELDS_NUM] = GET_RMC_FIELDS(rmcCurrent);
+static const RmcField_t *pRmcF;
 
 SSP_DCLR_NORMAL_NODE rootGpsParser;
-SSP_DCLR_TRN_NODE rmcTimeInt, rmcTimeDec, rmcStatus, 
-                  rmcLongitudeInt, rmcLongitudeDec, rmcLongitudInd, 
-                  rmcLatitudeInt, rmcLatitudeDec, rmcLatitudeInd,
-                  rmcSpeedInt, rmcSpeedDec, rmcTrack, rmcDate,
-                  rmcMagneticOff, rmcMagneticInd, rmcCheckSum;
+SSP_DCLR_TRN_NODE inNMEA, inRMC, inChk;
 
 /* ----------------------- Local function prototypes ----------------------- */
-static void rmcUpdate(unsigned char pos);
-static void toRmcTimeInt(unsigned char pos);
-static void rmcTimeIntCollect(unsigned char c);
-static void toRmcTimeDec(unsigned char pos);
-static void rmcTimeDecCollect(unsigned char c);
-static void toRmcStatus(unsigned char pos);
-static void rmcStatusCollect(unsigned char c);
-static void toRmcLongitudeInt(unsigned char pos);
-static void rmcLongitudeIntCollect(unsigned char c);
-static void toRmcLongitudeDec(unsigned char pos);
-static void toRmcLongitudeInd(unsigned char pos);
-static void toRmcLatitudeInt(unsigned char pos);
-static void toRmcLatitudeDec(unsigned char pos);
-static void toRmcLatitudeInd(unsigned char pos);
-static void toSpeed(unsigned char pos);
-static void toTrack(unsigned char pos);
-static void toDate(unsigned char pos);
-static void toMagneticOff(unsigned char pos);
-static void toMagneticOffInd(unsigned char pos);
+static void nmeaStarts(unsigned char pos);
+static void nmeaCollect(unsigned char c);
+static void chkCollect(unsigned char c);
+static void rmcStarts(unsigned char pos);
+static void rmcCollect(unsigned char c);
+static void rmcIncField(unsigned char pos);
+static void chkCmpAndPublish(unsigned char pos);
 
 /* ---------------------------- Local functions ---------------------------- */
 
 SSP_CREATE_NORMAL_NODE(rootGpsParser);
 SSP_CREATE_BR_TABLE(rootGpsParser)
-	//SSPBR("$GNRMC,",      rmcUpdate,      &rootGpsParser),
-	SSPBR("$GNRMC,",    toRmcTimeInt,  &rmcTimeInt),
+	SSPBR("$",    nmeaStarts,  &inNMEA),
 SSP_END_BR_TABLE
 
-SSP_CREATE_TRN_NODE(rmcTimeInt, rmcTimeIntCollect);
-SSP_CREATE_BR_TABLE(rmcTimeInt)
-	SSPBR(".",      toRmcTimeDec,  &rmcTimeDec),
-	SSPBR("\r\n",   toRmcTimeDec,  &rootGpsParser),
+SSP_CREATE_TRN_NODE(inNMEA, nmeaCollect);
+SSP_CREATE_BR_TABLE(inNMEA)
+	SSPBR("GNRMC,",    rmcStarts, &inRMC),
+	SSPBR("\n",       NULL,      &rootGpsParser),
 SSP_END_BR_TABLE
 
-SSP_CREATE_TRN_NODE(rmcTimeDec, rmcTimeDecCollect);
-SSP_CREATE_BR_TABLE(rmcTimeDec)
-	SSPBR(",",      toRmcStatus,  &rmcStatus),
-	SSPBR("\r\n",   toRmcTimeDec,  &rootGpsParser),
+SSP_CREATE_TRN_NODE(inRMC, rmcCollect);
+SSP_CREATE_BR_TABLE(inRMC)
+	SSPBR(",",    rmcIncField,   &inRMC),
+	SSPBR("*",    NULL,  &inChk),
+	SSPBR("\n",   NULL,  &rootGpsParser),
 SSP_END_BR_TABLE
 
-SSP_CREATE_TRN_NODE(rmcStatus, rmcStatusCollect);
-SSP_CREATE_BR_TABLE(rmcStatus)
-	SSPBR(",",   toRmcLongitudeInt,  &rmcLongitudeInt),
-	SSPBR("\r\n",   toRmcTimeDec,  &rootGpsParser),
-SSP_END_BR_TABLE
-
-SSP_CREATE_TRN_NODE(rmcLongitudeInt, rmcLongitudeIntCollect);
-SSP_CREATE_BR_TABLE(rmcLongitudeInt)
+SSP_CREATE_TRN_NODE(inChk, chkCollect);
+SSP_CREATE_BR_TABLE(inChk)
+	SSPBR("\n",   chkCmpAndPublish,  &rootGpsParser),
 SSP_END_BR_TABLE
 
 static void
-toRmcTimeInt(unsigned char pos)
+nmeaStarts(unsigned char pos)
 {
     (void)pos;
 
-    memset(&rmcCurrent, '\0', sizeof(rmcCurrent));
-    p = rmcCurrent.timeInt;
+    memset(&nmeaFrame, '\0', sizeof(nmeaFrame));
+    p = nmeaFrame;
+    checksum = 0;
 }
 
 static void
-rmcTimeIntCollect(unsigned char c)
+nmeaCollect(unsigned char c)
 {
-    (void)c;
+    if(p >= nmeaFrame + NMEA_FRAME_MAX_SIZE)
+        return;
+
+	*p++ = c;
+
+    if (c == '*')
+        return;
+
+    checksum ^= c;
 }
 
 static void
-toRmcTimeDec(unsigned char pos)
+chkCollect(unsigned char c)
 {
-    (void)pos;
+    if (c == '\r' || c == '\n')
+        return;
+
+    if(p >= nmeaFrame + NMEA_FRAME_MAX_SIZE)
+        return;
+
+	*p++ = c;
+}
+
+static void
+rmcStarts(unsigned char pos)
+{
+	(void)pos;
+
+    pRmcF = &rmcFields[0];
+    pF = pRmcF->p;
+}
+
+static void
+rmcCollect(unsigned char c)
+{
+    nmeaCollect(c);
+
+	if (pRmcF >= rmcFields + RMC_FIELDS_NUM)
+		return;
+
+    if( pF >= (pRmcF->p + pRmcF->size) )
+        return;
+
+    if (c == ',')
+        return;
+
+    *pF++ = c;
 
 }
 
 static void
-rmcTimeDecCollect(unsigned char c)
+rmcIncField(unsigned char pos)
 {
-    (void)c;
-}
+	(void)pos;
 
+    ++pRmcF;
 
-static void
-toRmcStatus(unsigned char pos)
-{
-    (void)pos;
+	if(pRmcF >= rmcFields + RMC_FIELDS_NUM)
+		return;
 
-    p = &rmcCurrent.status;
-}
-
-static void
-rmcStatusCollect(unsigned char pos)
-{
-    (void)pos;
-
-    p = &rmcCurrent.status;
+    pF = pRmcF->p;
 }
 
 static void
-toRmcLongitudeInt(unsigned char pos)
+chkCmpAndPublish(unsigned char pos)
 {
-    (void)pos;
+    unsigned char fchk;
 
-}
+	(void)pos;
 
-static void
-rmcLongitudeIntCollect(unsigned char pos)
-{
-    (void)pos;
+	fchk = (unsigned char)strtol((const char *)(p-2), NULL, 16);
 
-}
-static void
-rmcLast_update(unsigned char pos)
-{
-    (void)pos;
+    if(fchk != checksum)
+        return;
 
     rmcLast = rmcCurrent;
 

@@ -30,38 +30,83 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define RMC_TIME_INT_LEN        6
-#define RMC_TIME_DEC_LEN        2
-#define RMC_LATITUDE_INT_LEN    4
-#define RMC_LATITUDE_DEC_LEN    5
-#define RMC_LONGITUDE_INT_LEN   5
-#define RMC_LONGITUDE_DEC_LEN   5
-#define RMC_SPEED_INT_LEN       3
-#define RMC_SPEED_DEC_LEN       3
-#define RMC_TRACK_LEN           5
-#define RMC_DATE_LEN            6
-#define RMC_MAGVAR_LEN          5
+#define RMC_UTC_LEN         9
+#define RMC_LATITUDE_LEN    10
+#define RMC_LONGITUDE_LEN   11
+#define RMC_SOG_LEN         7
+#define RMC_COG_LEN         7
+#define RMC_DATE_LEN        6
+#define RMC_MAGVAR_LEN      7
+#define RMC_INDICATOR_LEN   1
 
-#define RMC_StatusVoid      'V'
-#define RMC_StatusActive    'A'
+#define RMC_StatusInvalid   'V'
+#define RMC_StatusValid     'A'
 
 /* ------------------------------- Data types ------------------------------ */
+typedef enum
+{
+    rmcUtc,
+    rmcStatus,
+    rmcLatitude,
+    rmcNorthingIndicator,
+    rmcLongitude,
+    rmcEastingIndicator,
+    rmcSog,
+    rmcCog,
+    rmcDate,
+    rmcMagneticVariation,
+    rmcMagneticVarIndicator,
+    rmcModeIndicator,
+    rmcNavigationalStatus,
+
+    RMC_FIELDS_NUM
+}RMC_fields;
+
 typedef struct
 {
-    char timeInt[RMC_TIME_INT_LEN+1];
-    char timeDec[RMC_TIME_DEC_LEN+1];
-    char status;
-    char latitudeInt[RMC_LATITUDE_INT_LEN+1];
-    char latitudeDec[RMC_LATITUDE_DEC_LEN+1];
-    char latitudeInd;
-    char longitudeInt[RMC_LONGITUDE_INT_LEN+1];
-    char longitudeDec[RMC_LONGITUDE_DEC_LEN+1];
-    char speedInt[RMC_SPEED_INT_LEN+1];
-    char speedDec[RMC_SPEED_DEC_LEN+1];
-    char track[RMC_TRACK_LEN+1];
+    /* Universal time coordinated hhmmss.ss*/
+    char utc[RMC_UTC_LEN+1];
+
+    /* Status A=Valid, V=Invalid */
+    char status[RMC_INDICATOR_LEN+1];
+
+    /* Latitude ddmm.mmmmm */
+    char latitude[RMC_LATITUDE_LEN+1];
+
+    /* Northing Indicator N=North, S=South */
+    char northingIndicator[RMC_INDICATOR_LEN+1];
+
+    /* Longitud dddmm.mmmmm */
+    char longitude[RMC_LONGITUDE_LEN+1];
+
+    /* Easting Indicator E=East, W=West */
+    char eastingIndicator[RMC_INDICATOR_LEN+1];
+
+    /* Speed Over Ground [knots] sss.sss */
+    char sog[RMC_SOG_LEN+1];
+
+    /* Course Over Ground [degrees] ddd.ddd */
+    char cog[RMC_COG_LEN+1];
+
+    /* Universarl date coordinate ddmmyy */
     char date[RMC_DATE_LEN+1];
-    char MagneticOff[RMC_MAGVAR_LEN+1];
-    char MagneticOffInd;
+
+    /* Magnetic Variation [degrees] */
+    char magneticVariation[RMC_MAGVAR_LEN+1];
+    
+    /* Magnetic Variation Indicator E=East, W=West */
+    char magneticVarIndicator[RMC_INDICATOR_LEN+1];
+
+    /* Mode Indicator 
+     * A=Autonomus, D=Differential, R=Fixed RTK,
+     * F=Float RTK, E=DeadReckoning, N=None
+     */
+    char modeIndicator[RMC_INDICATOR_LEN+1];      
+
+    /* Navigational Status Indicator
+     * S=Safe, C=Caution, U=Unsafe, V=NotValid
+     */
+    char navigationalStatus[RMC_INDICATOR_LEN+1]; 
 }RMC_t;
 
 /* -------------------------- External variables --------------------------- */
