@@ -116,6 +116,7 @@
     <ClCompile Include="..\..\..\epoch\epoch.c" />
     <ClCompile Include="..\..\..\geoMgr\geoMgr.c" />
     <ClCompile Include="..\..\..\gps\gps.c" />
+    <ClCompile Include="..\..\..\gps\rmc.c" />
     <ClCompile Include="..\..\..\main.c" />
     <ClCompile Include="..\..\..\modcmd\modcmdSim900.c" />
     <ClCompile Include="..\..\..\modmgr\modmgr.c" />

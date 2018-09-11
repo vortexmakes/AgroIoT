@@ -19,6 +19,7 @@
 #include "ubxm8parser.h"
 #include "geoMgr.h"
 #include "signals.h"
+#include "rmc.h"
 #include "events.h"
 #include <stdlib.h>
 

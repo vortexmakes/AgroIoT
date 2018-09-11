@@ -111,11 +111,9 @@ typedef struct
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-#define rmc_status(x)   'A'
-//char rmc_status( RMC_t *p);
+char rmc_status(RMC_t *p);
 
-#define rmc_time(x)     -1
-//Epoch rmc_time(RMC_t *p);
+int rmc_timeUpdate(RMC_t *p);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

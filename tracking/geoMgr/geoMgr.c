@@ -88,16 +88,15 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(GeoMgr_ChoiceTimeSync);
 RKH_CREATE_BRANCH_TABLE(GeoMgr_ChoiceTimeSync)
-    RKH_BRANCH(checkRMCTime,   NULL,            &GeoMgr_WaitTimeSync),
+    RKH_BRANCH(checkRMCTime,   NULL, &GeoMgr_WaitTimeSync),
     RKH_BRANCH(ELSE,           NULL, &GeoMgr_OnTimeSync),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_COMP_REGION_STATE(GeoMgr_OnTimeSync, ontimeEntry, ontimeExit,
+RKH_CREATE_COMP_REGION_STATE(GeoMgr_OnTimeSync, NULL, NULL,
                              RKH_ROOT, &GeoMgr_ChoiceActive, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(GeoMgr_OnTimeSync)
     RKH_TRREG(evTimeout, NULL, NULL, &GeoMgr_Failure),
-    RKH_TRREG(evRMC, NULL, NULL, &GeoMgr_OnTimeSync),
 RKH_END_TRANS_TABLE
 
 
@@ -107,12 +106,14 @@ RKH_CREATE_BRANCH_TABLE(GeoMgr_ChoiceActive)
     RKH_BRANCH(ELSE,         NULL,   &GeoMgr_Void),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_BASIC_STATE(GeoMgr_Active, NULL, NULL, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(GeoMgr_Active, ontimeEntry, ontimeExit, &GeoMgr_OnTimeSync, NULL);
 RKH_CREATE_TRANS_TABLE(GeoMgr_Active)
+	RKH_TRREG(evRMC, NULL, NULL, &GeoMgr_OnTimeSync),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(GeoMgr_Void, NULL, NULL, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(GeoMgr_Void, ontimeEntry, ontimeEntry, &GeoMgr_OnTimeSync, NULL);
 RKH_CREATE_TRANS_TABLE(GeoMgr_Void)
+	RKH_TRREG(evRMC, NULL, NULL, &GeoMgr_OnTimeSync),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
@@ -251,18 +252,16 @@ rbool_t
 checkRMCTime(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)me;
-	(void)pe;
-     
-    return (rmc_time((RMC_t *)(pe)) < 0) ? RKH_TRUE : RKH_FALSE;
+    
+    return (rmc_timeUpdate(((RmcEvt *)pe)->p) < 0) ? RKH_TRUE : RKH_FALSE;
 }
 
 rbool_t
 chkRMCActive(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)me;
-	(void)pe;
     
-    return (rmc_status((RMC_t *(pe))) == RMC_StatusValid) ? 
+    return (rmc_status(((RmcEvt *)pe)->p) == RMC_StatusValid) ?
                                             RKH_TRUE : RKH_FALSE;
 }
 

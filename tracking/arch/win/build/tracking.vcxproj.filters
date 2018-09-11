@@ -121,6 +121,9 @@
     <ClCompile Include="..\..\..\parser\ubxm8\ubxm8parser.c">
       <Filter>tracking\parser</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\gps\rmc.c">
+      <Filter>gps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
