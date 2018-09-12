@@ -46,6 +46,7 @@ static void init(GeoMgr *const me, RKH_EVT_T *pe);
 /* ........................ Declares effect actions ........................ */
 static void configInc(GeoMgr *const me, RKH_EVT_T *pe);
 static void startRMCParser(GeoMgr *const me, RKH_EVT_T *pe);
+static void restartTimer(GeoMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void configInit(GeoMgr *const me);
@@ -55,7 +56,6 @@ static void ontimeEntry(GeoMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
 static void waitSyncExit(GeoMgr *const me);
-static void ontimeExit(GeoMgr *const me);
 
 /* ............................ Declares guards ............................ */
 rbool_t chkConfigNotEnd(GeoMgr *const me, RKH_EVT_T *pe);
@@ -88,14 +88,15 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(GeoMgr_ChoiceTimeSync);
 RKH_CREATE_BRANCH_TABLE(GeoMgr_ChoiceTimeSync)
-    RKH_BRANCH(checkRMCTime,   NULL, &GeoMgr_WaitTimeSync),
-    RKH_BRANCH(ELSE,           NULL, &GeoMgr_OnTimeSync),
+    RKH_BRANCH(checkRMCTime,   NULL, &GeoMgr_OnTimeSync),
+    RKH_BRANCH(ELSE,           NULL, &GeoMgr_WaitTimeSync),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_COMP_REGION_STATE(GeoMgr_OnTimeSync, NULL, NULL,
+RKH_CREATE_COMP_REGION_STATE(GeoMgr_OnTimeSync, ontimeEntry, NULL,
                              RKH_ROOT, &GeoMgr_ChoiceActive, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(GeoMgr_OnTimeSync)
+	RKH_TRREG(evRMC, NULL, restartTimer, &GeoMgr_OnTimeSync),
     RKH_TRREG(evTimeout, NULL, NULL, &GeoMgr_Failure),
 RKH_END_TRANS_TABLE
 
@@ -106,14 +107,12 @@ RKH_CREATE_BRANCH_TABLE(GeoMgr_ChoiceActive)
     RKH_BRANCH(ELSE,         NULL,   &GeoMgr_Void),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_BASIC_STATE(GeoMgr_Active, ontimeEntry, ontimeExit, &GeoMgr_OnTimeSync, NULL);
+RKH_CREATE_BASIC_STATE(GeoMgr_Active, NULL, NULL, &GeoMgr_OnTimeSync, NULL);
 RKH_CREATE_TRANS_TABLE(GeoMgr_Active)
-	RKH_TRREG(evRMC, NULL, NULL, &GeoMgr_OnTimeSync),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(GeoMgr_Void, ontimeEntry, ontimeEntry, &GeoMgr_OnTimeSync, NULL);
+RKH_CREATE_BASIC_STATE(GeoMgr_Void, NULL, NULL, &GeoMgr_OnTimeSync, NULL);
 RKH_CREATE_TRANS_TABLE(GeoMgr_Void)
-	RKH_TRREG(evRMC, NULL, NULL, &GeoMgr_OnTimeSync),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
@@ -128,6 +127,8 @@ RKH_SMA_CREATE(GeoMgr, geoMgr, 2, HCAL, &GeoMgr_Configure, init, NULL);
 RKH_SMA_DEF_PTR(geoMgr);
 
 /* ------------------------------- Constants ------------------------------- */
+#define GPS_ALIVE_TIME  RMC_PERIOD_TIMEOUT
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
@@ -199,6 +200,16 @@ startRMCParser(GeoMgr *const me, RKH_EVT_T *pe)
     bsp_gpsParserHandler_set((void *)gps_parserInit());
 }
 
+static void
+restartTimer(GeoMgr *const me, RKH_EVT_T *pe)
+{
+	(void)me;
+	(void)pe;
+	
+    rkh_tmr_stop(&me->timer);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), GPS_ALIVE_TIME);
+}
+
 /* ............................. Entry actions ............................. */
 static void
 configInit(GeoMgr *const me)
@@ -216,25 +227,19 @@ configSend(GeoMgr *const me)
 static void
 startWaitSync(GeoMgr *const me)
 {
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), RMC_PERIOD_TIMEOUT);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), GPS_ALIVE_TIME);
 }
 
 static void
 ontimeEntry(GeoMgr *const me)
 {
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), RMC_PERIOD_TIMEOUT);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), GPS_ALIVE_TIME);
 }
 
 
 /* ............................. Exit actions .............................. */
 static void
 waitSyncExit(GeoMgr *const me)
-{
-    rkh_tmr_stop(&me->timer);
-}
-
-static void
-ontimeExit(GeoMgr *const me)
 {
     rkh_tmr_stop(&me->timer);
 }
@@ -253,7 +258,7 @@ checkRMCTime(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)me;
     
-    return (rmc_timeUpdate(((RmcEvt *)pe)->p) < 0) ? RKH_TRUE : RKH_FALSE;
+    return (rmc_timeUpdate(((RmcEvt *)pe)->p) >= 0) ? RKH_TRUE : RKH_FALSE;
 }
 
 rbool_t
