@@ -148,7 +148,7 @@ void
 gsm_rx_isr( unsigned char byte )
 {
     gsmCmdParser(byte);
-//	putchar(byte);
+	putchar(byte);
 }
 
 static

@@ -34,7 +34,7 @@
 #define TEST_FRAME   "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
                      "000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
-#define TEST_FRAME_HEADER   "!0|"
+#define TEST_FRAME_HEADER   "!0|12"
 #define TEST_FRAME_TAIL     "00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
 /* ......................... Declares active object ........................ */
@@ -160,11 +160,11 @@ sendFrame(TrkClient *const me, RKH_EVT_T *pe)
     strcat(p, ",");
     strcat(p, geo->utc);
     strcat(p, ",");
-    strcat(p, geo->status);
+	strcat(p, geo->latInd);
+	strcat(p, geo->latitude);
     strcat(p, ",");
-    strcat(p, geo->latitude);
-    strcat(p, ",");
-    strcat(p, geo->longitude);
+	strcat(p, geo->longInd);
+	strcat(p, geo->longitude);
     strcat(p, ",");
     strcat(p, geo->speed);
     strcat(p, ",");
