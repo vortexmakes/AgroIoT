@@ -30,14 +30,16 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define RMC_UTC_LEN         9
-#define RMC_LATITUDE_LEN    10
-#define RMC_LONGITUDE_LEN   11
-#define RMC_SOG_LEN         7
-#define RMC_COG_LEN         7
-#define RMC_DATE_LEN        6
-#define RMC_MAGVAR_LEN      7
-#define RMC_INDICATOR_LEN   1
+#define RMC_UTC_LEN             9
+#define RMC_LATITUDE_LEN        10
+#define RMC_LATITUDE_DEG_LEN    2
+#define RMC_LONGITUDE_LEN       11
+#define RMC_LONGITUDE_DEG_LEN   3
+#define RMC_SOG_LEN             7
+#define RMC_COG_LEN             7
+#define RMC_DATE_LEN            6
+#define RMC_MAGVAR_LEN          7
+#define RMC_INDICATOR_LEN       1
 
 #define RMC_StatusInvalid   'V'
 #define RMC_StatusValid     'A'
@@ -107,13 +109,13 @@ typedef struct
      * S=Safe, C=Caution, U=Unsafe, V=NotValid
      */
     char navigationalStatus[RMC_INDICATOR_LEN+1]; 
-}RMC_t;
+}Rmc;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-char rmc_status(RMC_t *p);
+char rmc_status(Rmc *p);
 
-int rmc_timeUpdate(RMC_t *p);
+int rmc_timeUpdate(Rmc *p);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

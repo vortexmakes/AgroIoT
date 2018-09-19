@@ -305,7 +305,7 @@ bsp_recvFail(void)
 void
 bsp_gpsParserHandler_set(void *p)
 {
-    gpsParser = p;
+    gpsParser = (GpsRcvHandler)p;
 }
 
 /* ------------------------------ File footer ------------------------------ */

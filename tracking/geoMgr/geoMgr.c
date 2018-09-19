@@ -47,6 +47,8 @@ static void init(GeoMgr *const me, RKH_EVT_T *pe);
 static void configInc(GeoMgr *const me, RKH_EVT_T *pe);
 static void startRMCParser(GeoMgr *const me, RKH_EVT_T *pe);
 static void restartTimer(GeoMgr *const me, RKH_EVT_T *pe);
+static void publishRmc(GeoMgr *const me, RKH_EVT_T *pe);
+static void publishInvRmc(GeoMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void configInit(GeoMgr *const me);
@@ -103,8 +105,8 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(GeoMgr_ChoiceActive);
 RKH_CREATE_BRANCH_TABLE(GeoMgr_ChoiceActive)
-    RKH_BRANCH(chkRMCActive, NULL,   &GeoMgr_Active),
-    RKH_BRANCH(ELSE,         NULL,   &GeoMgr_Void),
+    RKH_BRANCH(chkRMCActive, publishRmc,     &GeoMgr_Active),
+    RKH_BRANCH(ELSE,         publishInvRmc,  &GeoMgr_Void),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BASIC_STATE(GeoMgr_Active, NULL, NULL, &GeoMgr_OnTimeSync, NULL);
@@ -152,6 +154,12 @@ static UBXCmd_t InitCmds[] =
 
 static RKH_STATIC_EVENT(e_tout, evTimeout);
 
+static RKHROM GeoStampEvt geoStampInvalidEvt =
+{
+    RKH_INIT_STATIC_EVT( evGeoStampInvalid ),
+    GEO_INVALID_GEOSTAMP
+};
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ............................ Initial action ............................. */
@@ -174,6 +182,7 @@ init(GeoMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &GeoMgr_Active);
     RKH_TR_FWK_STATE(me, &GeoMgr_Void);
 	RKH_TR_FWK_SIG(evRMC);
+	RKH_TR_FWK_SIG(evGeoStamp);
 
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
 
@@ -210,6 +219,88 @@ restartTimer(GeoMgr *const me, RKH_EVT_T *pe)
     RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), GPS_ALIVE_TIME);
 }
 
+void
+rmcPos2Degrees( char *dest, char *org, int size, int degOffset )
+{
+    char *pdeg, *pmin;
+    char min[10];
+    int val;
+
+    pdeg = strtok(org, ".");
+    pmin = strtok(NULL, ".");
+
+    snprintf(min, sizeof(min), "%s%s", 
+            pdeg != NULL ? pdeg + degOffset : "",
+            pmin != NULL ? pmin: "" );
+
+    val = atol(min);
+    val = (val*100)/60;
+
+    *(org + degOffset) = '\0';
+
+    snprintf(dest, size, "%s.%07u", org, val );
+}
+
+static void
+publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
+{
+    Rmc *pRmc;
+    GeoStampEvt *geoStampEvt;
+    GeoStamp *pGps;
+    char *pchr;
+
+	(void)me;
+	(void)pe;
+	
+    pRmc = &(((RmcEvt *)(pe))->rmc);
+
+    geoStampEvt = RKH_ALLOC_EVT(GeoStampEvt, evGeoStamp, &geoMgr);
+    pGps = &(geoStampEvt->gps);
+
+    memset(pGps, 0, sizeof(GeoStamp));
+
+    /* utc: like NMEA utc, decimals discard */
+    strncpy(pGps->utc, pRmc->utc, UTC_LENGTH);
+
+    /* status: like NMEA A=Valid, V=Invalid  */
+    *(pGps->status) = RMC_StatusValid;
+
+    /* latitude: convert NMEA DDMM.MMMMM to DD.DDDDDD */
+    rmcPos2Degrees(pGps->latitude, pRmc->latitude,
+                        LATITUDE_LENGTH, RMC_LATITUDE_DEG_LEN);
+
+    /* Indicator: 'N'->'+' / 'S'->'-' */
+    *pGps->latInd = *(pRmc->northingIndicator) == 'N' ? '+' : '-';
+
+    /* longitude: convert NMEA DDDMM.MMMMM to DDD.DDDDDD */
+    rmcPos2Degrees(pGps->longitude, pRmc->longitude,
+                        LONGITUDE_LENGTH, RMC_LONGITUDE_DEG_LEN);
+
+    /* Indicator: 'E'->'+' / 'W'->'-' */
+    *pGps->longInd = *(pRmc->eastingIndicator) == 'E' ? '+' : '-';
+
+    /* speed: like NMEA sog [knots] */
+    strncpy(pGps->speed, pRmc->sog, SPEED_LENGTH);
+
+    /* course: like NMEA cog [degrees], decimals discarded */
+    pchr = strtok(pRmc->cog, ".");
+    strncpy(pGps->course, (pchr != NULL) ? pchr : "", COURSE_LENGTH);
+
+    /* date: like NMEA date [degrees], decimals discarded */
+    strncpy(pGps->date, pRmc->date, DATE_LENGTH);
+
+    tpGeo_publish(geoStampEvt, me);
+}
+
+
+static void
+publishInvRmc(GeoMgr *const me, RKH_EVT_T *pe)
+{
+	(void)pe;
+
+    tpGeo_publish(&geoStampInvalidEvt, me);
+}
+
 /* ............................. Entry actions ............................. */
 static void
 configInit(GeoMgr *const me)
@@ -236,7 +327,6 @@ ontimeEntry(GeoMgr *const me)
     RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), GPS_ALIVE_TIME);
 }
 
-
 /* ............................. Exit actions .............................. */
 static void
 waitSyncExit(GeoMgr *const me)
@@ -258,7 +348,7 @@ checkRMCTime(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)me;
     
-    return (rmc_timeUpdate(((RmcEvt *)pe)->p) >= 0) ? RKH_TRUE : RKH_FALSE;
+    return (rmc_timeUpdate(&((RmcEvt *)pe)->rmc) >= 0) ? RKH_TRUE : RKH_FALSE;
 }
 
 rbool_t
@@ -266,7 +356,7 @@ chkRMCActive(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)me;
     
-    return (rmc_status(((RmcEvt *)pe)->p) == RMC_StatusValid) ?
+    return (rmc_status(&((RmcEvt *)pe)->rmc) == RMC_StatusValid) ?
                                             RKH_TRUE : RKH_FALSE;
 }
 

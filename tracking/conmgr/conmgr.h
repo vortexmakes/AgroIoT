@@ -110,8 +110,8 @@ extern "C" {
     #define DOCKLIGHT_PORT      "33498"
 
 #define CONNECTION_PROT         "TCP"
-#define CONNECTION_DOMAIN       YIPIES_SERVER 
-#define CONNECTION_PORT         YIPIES_PORT
+#define CONNECTION_DOMAIN       DOCKLIGHT_SERVER 
+#define CONNECTION_PORT         DOCKLIGHT_PORT
 
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */

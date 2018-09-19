@@ -24,6 +24,7 @@
 #include "rkh.h"
 #include "epoch.h"
 #include "rmc.h"
+#include "gps.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -112,8 +113,16 @@ typedef struct RmcEvt RmcEvt;
 struct RmcEvt
 {
     RKH_EVT_T evt;
-    RMC_t *p;
+    Rmc rmc;
 };
+
+typedef struct GeoStampEvt GeoStampEvt;
+struct GeoStampEvt
+{
+    RKH_EVT_T evt;
+    GeoStamp gps;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

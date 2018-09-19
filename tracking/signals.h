@@ -73,6 +73,8 @@ enum Signals
     evUnlocked,
     evImei,
     evRMC,
+    evGeoStamp,
+    evGeoStampInvalid,
 	evRestart
 };
 

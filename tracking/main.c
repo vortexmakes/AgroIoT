@@ -37,10 +37,12 @@
 
 #define SIZEOF_EP0STO       16
 #define SIZEOF_EP0_BLOCK    sizeof(RKH_EVT_T)
-#define SIZEOF_EP1STO       128
-#define SIZEOF_EP1_BLOCK    sizeof(ModCmd)
-#define SIZEOF_EP2STO       512
+
+#define SIZEOF_EP1_BLOCK    sizeof(RmcEvt)
+#define SIZEOF_EP1STO       (4*SIZEOF_EP1_BLOCK)
+
 #define SIZEOF_EP2_BLOCK    sizeof(ModMgrEvt)
+#define SIZEOF_EP2STO       (4*SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -72,9 +74,9 @@ setupTraceFilters(void)
     //RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
     //RKH_FILTER_OFF_SMA(modMgr);
-    //RKH_FILTER_OFF_SMA(conMgr);
+    RKH_FILTER_OFF_SMA(conMgr);
 	RKH_FILTER_OFF_SMA(geoMgr);
-	//RKH_FILTER_OFF_SMA(trkClient);
+	RKH_FILTER_OFF_SMA(trkClient);
 	RKH_FILTER_OFF_ALL_SIGNALS();
 }
 
@@ -102,7 +104,7 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(conMgr, ConMgr_qsto, CONMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(modMgr, ModMgr_qsto, MODMGR_QSTO_SIZE, 0, 0);
 	RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
-//    RKH_SMA_ACTIVATE(trkClient, TrkCLient_qsto, TRKCLIENT_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(trkClient, TrkCLient_qsto, TRKCLIENT_QSTO_SIZE, 0, 0);
 
     RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);
 

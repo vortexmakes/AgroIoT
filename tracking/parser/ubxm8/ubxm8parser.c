@@ -54,7 +54,7 @@ typedef struct
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 static rui8_t ubxm8parser;
-static RMC_t rmcCurrent, rmcLast;
+static Rmc rmcCurrent;
 static RmcEvt rmcEvt;
 static unsigned char *p;
 static char *pF;
@@ -74,7 +74,7 @@ static void chkCollect(unsigned char c);
 static void rmcStarts(unsigned char pos);
 static void rmcCollect(unsigned char c);
 static void rmcIncField(unsigned char pos);
-static void chkCmpAndPublish(unsigned char pos);
+static void chkCrcAndPublish(unsigned char pos);
 
 /* ---------------------------- Local functions ---------------------------- */
 
@@ -98,7 +98,7 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_TRN_NODE(inChk, chkCollect);
 SSP_CREATE_BR_TABLE(inChk)
-	SSPBR("\n",   chkCmpAndPublish,  &rootGpsParser),
+	SSPBR("\n",   chkCrcAndPublish,  &rootGpsParser),
 SSP_END_BR_TABLE
 
 static void
@@ -178,9 +178,10 @@ rmcIncField(unsigned char pos)
 }
 
 static void
-chkCmpAndPublish(unsigned char pos)
+chkCrcAndPublish(unsigned char pos)
 {
     unsigned char fchk;
+    RmcEvt *pRmc;
 
 	(void)pos;
 
@@ -189,13 +190,11 @@ chkCmpAndPublish(unsigned char pos)
     if(fchk != checksum)
         return;
 
-    rmcLast = rmcCurrent;
+    pRmc = RKH_ALLOC_EVT(RmcEvt, evRMC, &ubxm8parser);
 
-    rmcEvt.p = &rmcLast;
+    pRmc->rmc = rmcCurrent;
 
-    RKH_SET_STATIC_EVENT(RKH_UPCAST(RKH_EVT_T, &rmcEvt), evRMC);
-
-    RKH_SMA_POST_FIFO(geoMgr, RKH_UPCAST(RKH_EVT_T, &rmcEvt), &ubxm8parser);
+    RKH_SMA_POST_FIFO(geoMgr, RKH_UPCAST(RKH_EVT_T, pRmc), &ubxm8parser);
 }
 
 

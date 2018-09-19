@@ -52,31 +52,31 @@ static Time rmcTime;
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 char
-rmc_status(RMC_t *p)
+rmc_status(Rmc *p)
 {
 	return (char)(p->status[0]);
 }
 
 int
-rmc_timeUpdate(RMC_t *p)
+rmc_timeUpdate(Rmc *p)
 {
-	char *putc, *pdate;
+	char *pUtc, *pDate;
 
-	putc = p->utc;
-	pdate = p->date;
+	pUtc = p->utc;
+	pDate = p->date;
 
-	if (strlen(putc) == 0 || strlen(pdate) == 0)
+	if (strlen(pUtc) == 0 || strlen(pDate) == 0)
 	{
 		memset(&rmcTime, 0, sizeof(rmcTime));
 		return -1;
 	}
 
-    rmcTime.tm_year = RMC_YEAR(pdate);
-    rmcTime.tm_mon = RMC_MONTH(pdate);
-    rmcTime.tm_mday = RMC_DAY(pdate);
-    rmcTime.tm_hour = RMC_HOUR(putc);
-    rmcTime.tm_min = RMC_MIN(putc);
-    rmcTime.tm_sec = RMC_SEC(putc);
+    rmcTime.tm_year = RMC_YEAR(pDate);
+    rmcTime.tm_mon = RMC_MONTH(pDate);
+    rmcTime.tm_mday = RMC_DAY(pDate);
+    rmcTime.tm_hour = RMC_HOUR(pUtc);
+    rmcTime.tm_min = RMC_MIN(pUtc);
+    rmcTime.tm_sec = RMC_SEC(pUtc);
 
 	if ((rmcTime.tm_year < 1970) ||
 		(rmcTime.tm_mon < 1) || (rmcTime.tm_mon > 12) ||
