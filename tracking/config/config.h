@@ -1,7 +1,7 @@
 /**
- *  \file settings.h
+ *  \file config.h
  *
- *	This module contains application constant declarations
+ *	This module contains functions for read and write configuration
  */
 /* -------------------------- Development history -------------------------- */
 /*
@@ -15,8 +15,8 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __SETTINGS_H__
-#define __SETTINGS_H__
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
 
 /* ----------------------------- Include files ----------------------------- */
 /* ---------------------- External C language linkage ---------------------- */
@@ -26,16 +26,17 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define AGROIOT_VERSION_DATE 	"190918"
-#define ACCELERATION_PERIOD     3
-
-/* Default configurations */
-#define ACLIMIT_DFT             6
-#define BRLIMIT_DFT             20
-
 /* ------------------------------- Data types ------------------------------ */
+typedef struct
+{
+	rui8_t aclimit;
+	rui8_t brlimit;
+} Config;
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+Config * config_read(void);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

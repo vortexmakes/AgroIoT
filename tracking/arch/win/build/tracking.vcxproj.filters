@@ -124,6 +124,9 @@
     <ClCompile Include="..\..\..\gps\rmc.c">
       <Filter>gps</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\config\config.c">
+      <Filter>config</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -171,6 +174,9 @@
     <Filter Include="gps">
       <UniqueIdentifier>{243e14d6-e14a-466e-8ae1-2a7bb8407f63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{10e64840-7393-43b6-a09c-6c01898f398f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\rkhcfg.h">
@@ -196,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\gps\gps.h">
       <Filter>gps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\config\config.h">
+      <Filter>config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

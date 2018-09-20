@@ -21,6 +21,7 @@
 #include "rkhfwk_pubsub.h"
 #include "rkhtmr.h"
 #include "bsp.h"
+#include "config.h"
 #include "signals.h"
 #include "events.h"
 #include "topics.h"
@@ -55,6 +56,7 @@ static void configInit(GeoMgr *const me);
 static void configSend(GeoMgr *const me);
 static void startWaitSync(GeoMgr *const me);
 static void ontimeEntry(GeoMgr *const me);
+static void turnsDetect(GeoMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
 static void waitSyncExit(GeoMgr *const me);
@@ -63,7 +65,6 @@ static void waitSyncExit(GeoMgr *const me);
 rbool_t chkConfigNotEnd(GeoMgr *const me, RKH_EVT_T *pe);
 rbool_t checkRMCTime(GeoMgr *const me, RKH_EVT_T *pe);
 rbool_t chkRMCActive(GeoMgr *const me, RKH_EVT_T *pe);
-
 
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(GeoMgr_Configure, configSend, NULL, RKH_ROOT, NULL);
@@ -109,7 +110,7 @@ RKH_CREATE_BRANCH_TABLE(GeoMgr_ChoiceActive)
     RKH_BRANCH(ELSE,         publishInvRmc,  &GeoMgr_Void),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_BASIC_STATE(GeoMgr_Active, NULL, NULL, &GeoMgr_OnTimeSync, NULL);
+RKH_CREATE_BASIC_STATE(GeoMgr_Active, turnsDetect, NULL, &GeoMgr_OnTimeSync, NULL);
 RKH_CREATE_TRANS_TABLE(GeoMgr_Active)
 RKH_END_TRANS_TABLE
 
@@ -123,6 +124,9 @@ struct GeoMgr
     RKH_SMA_T ao;       /* Base structure */
     RKH_TMR_T timer;    
     UBXCmd_t *pInitCmd;
+    Rmc rmc;
+    rui8_t count;
+    int cog;
 };
 
 RKH_SMA_CREATE(GeoMgr, geoMgr, 2, HCAL, &GeoMgr_Configure, init, NULL);
@@ -152,7 +156,8 @@ static UBXCmd_t InitCmds[] =
     { NULL, 0 }
 };
 
-static RKH_STATIC_EVENT(e_tout, evTimeout);
+static RKH_ROM_STATIC_EVENT(toutEvt, evTimeout);
+static RKH_ROM_STATIC_EVENT(turnEvt, evTurn);
 
 static RKHROM GeoStampEvt geoStampInvalidEvt =
 {
@@ -183,12 +188,16 @@ init(GeoMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &GeoMgr_Void);
 	RKH_TR_FWK_SIG(evRMC);
 	RKH_TR_FWK_SIG(evGeoStamp);
+	RKH_TR_FWK_SIG(evGeoStampInvalid);
+	RKH_TR_FWK_SIG(evTurn);
 
-    RKH_TMR_INIT(&me->timer, &e_tout, NULL);
+    RKH_TMR_INIT(&me->timer, &toutEvt, NULL);
 
     bsp_serial_open(GPS_PORT);
 
 	configInit(me);
+
+    me->cog = -1;
 }
 
 /* ............................ Effect actions ............................. */
@@ -253,6 +262,8 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
 	(void)pe;
 	
     pRmc = &(((RmcEvt *)(pe))->rmc);
+
+    me->rmc = *pRmc;
 
     geoStampEvt = RKH_ALLOC_EVT(GeoStampEvt, evGeoStamp, &geoMgr);
     pGps = &(geoStampEvt->gps);
@@ -325,6 +336,34 @@ static void
 ontimeEntry(GeoMgr *const me)
 {
     RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), GPS_ALIVE_TIME);
+}
+
+static void
+turnsDetect(GeoMgr *const me)
+{
+    Config *cfg;
+    int currSog, currCog, diff, cog;
+
+    currSog = atol(me->rmc.sog);
+    currCog = atol(me->rmc.cog);
+
+    cfg = config_read();
+
+    if(me->cog < 0)
+        me->cog = currCog;
+
+    if(!(me->count % ACCELERATION_PERIOD) && 
+        (currSog > cfg->aclimit))
+    {
+		diff = abs(currCog - me->cog);
+		cog = diff < (360 - diff) ? diff : (360 - diff);
+		me->cog = currCog;
+
+		if(cog > cfg->brlimit)
+        {
+            tpGeo_publish(&turnEvt, me);
+        }
+    }
 }
 
 /* ............................. Exit actions .............................. */

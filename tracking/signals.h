@@ -75,6 +75,7 @@ enum Signals
     evRMC,
     evGeoStamp,
     evGeoStampInvalid,
+    evTurn,
 	evRestart
 };
 

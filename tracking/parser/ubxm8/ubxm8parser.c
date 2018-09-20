@@ -197,7 +197,6 @@ chkCrcAndPublish(unsigned char pos)
     RKH_SMA_POST_FIFO(geoMgr, RKH_UPCAST(RKH_EVT_T, pRmc), &ubxm8parser);
 }
 
-
 /* ---------------------------- Global functions --------------------------- */
 void
 ubx8mparser_init(void)
