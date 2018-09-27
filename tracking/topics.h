@@ -49,6 +49,13 @@ extern "C" {
 #define tpGeo_publish(ev, me)        rkh_pubsub_publish(tpGeo, \
                                                 RKH_UPCAST(RKH_EVT_T, (ev)), \
                                                 RKH_UPCAST(RKH_SMA_T, (me)))
+
+#define tpIoChg_subscribe(me)          rkh_pubsub_subscribe(tpIoChg, \
+                                                RKH_UPCAST(RKH_SMA_T, (me)))
+
+#define tpIoChg_publish(ev, me)        rkh_pubsub_publish(tpIoChg, \
+                                                RKH_UPCAST(RKH_EVT_T, (ev)), \
+                                                RKH_UPCAST(RKH_SMA_T, (me)))
 /* -------------------------------- Constants ------------------------------ */
 /* ................................ Signals ................................ */
 typedef enum Topics Topics;
@@ -56,7 +63,8 @@ enum Topics
 {
 	tpConnection,
     tpModURC,
-	tpGeo
+	tpGeo,
+    tpIoChg
 };
 
 /* ------------------------------- Data types ------------------------------ */

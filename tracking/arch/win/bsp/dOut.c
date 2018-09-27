@@ -1,6 +1,6 @@
 /**
- *  \file       mTimeTble.c
- * 	\bried      mTime timers Table.
+ *  \file       dout.c
+ *  \brief      Implementation of Digital Outputs Control HAL.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -16,50 +16,36 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
-#include "mTime.h"
-#include "mTimeCfg.h"
-#include "epoch.h"
-#include "modpwr.h"
-#include "dIn.h"
+#include "rkh.h"
+#include "dOut.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static void(* const actions_100[])( void ) =
-{
-#ifdef MODPWR_CTRL_ENABLE
-	modPwr_ctrl, 
-#endif
-    epoch_updateByStep,
-	dIn_scan,
-    NULL
-};
-
-static void(* const actions_1000[])( void ) =
-{
-	NULL
-};
-
-static void(* const actions_10000[])( void ) =
-{
-	NULL
-};
-
-const timerChain_t timerChain[] =
-{
-	{ MTIME_EPOCH_SCAN_PERIOD, actions_100 },
-	{ MTIME_1SEC_SCAN_PERIOD, actions_1000 },
-	{ MTIME_10SEC_SCAN_PERIOD, actions_10000 }
-};
+static rui8_t dOuts[NUM_DOUT_SIGNALS];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
+void
+dOut_init(void)
+{
+    memset(dOuts, 0, sizeof(dOuts));
+}
+
+void
+dOut_set(rui8_t out, rui8_t val)
+{
+    printf("dOut[%d]:%d", out, val);
+    dOuts[out] = val;
+}
+
+rui8_t
+dOut_get(rui8_t out)
+{
+    return dOuts[out];
+}
+
 /* ------------------------------ End of file ------------------------------ */
-
-
-
-
-

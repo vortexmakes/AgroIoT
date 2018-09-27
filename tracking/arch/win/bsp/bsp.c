@@ -33,7 +33,8 @@
 #include "modpwr.h"
 #include "mTime.h"
 #include "gps.h"
-
+#include "dIn.h"
+#include "dOut.h"
 
 RKH_THIS_MODULE
 
@@ -185,6 +186,8 @@ bsp_init(int argc, char *argv[])
     processCmdLineOpts(argc, argv);
 
     modPwr_init();
+	dIn_init();
+	dOut_init();
 }
 
 void

@@ -123,6 +123,13 @@ struct GeoStampEvt
     GeoStamp gps;
 };
 
+typedef struct IoChgEvt IoChgEvt;
+struct IoChgEvt
+{
+    RKH_EVT_T evt;
+    unsigned char din;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

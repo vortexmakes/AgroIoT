@@ -76,6 +76,7 @@ enum Signals
     evGeoStamp,
     evGeoStampInvalid,
     evTurn,
+    evIoChg,
 	evRestart
 };
 

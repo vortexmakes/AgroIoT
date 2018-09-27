@@ -127,6 +127,12 @@
     <ClCompile Include="..\..\..\config\config.c">
       <Filter>config</Filter>
     </ClCompile>
+    <ClCompile Include="..\bsp\dOut.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\bsp\dIn.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -176,6 +182,9 @@
     </Filter>
     <Filter Include="config">
       <UniqueIdentifier>{10e64840-7393-43b6-a09c-6c01898f398f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ioChg">
+      <UniqueIdentifier>{9c21e863-2358-4894-9779-22ceacaa20c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

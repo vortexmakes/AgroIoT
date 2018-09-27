@@ -129,6 +129,7 @@ init(TrkClient *const me, RKH_EVT_T *pe)
 
     tpConnection_subscribe(me);
     tpGeo_subscribe(me);
+    tpIoChg_subscribe(me);
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->timer);

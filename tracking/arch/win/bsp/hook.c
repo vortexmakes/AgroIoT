@@ -100,6 +100,7 @@ isr_kbdThread(LPVOID par)      /* Win32 thread to emulate keyboard ISR */
     {
 		c = (char)_getch();
         bsp_keyParser(c);
+		keyb_dIn_parser(c);        
     }
     return 0;
 }
