@@ -1,26 +1,26 @@
 /**
- *  \file       ubxm8parser.h
- *  \brief      Ublox M8 GPS parser for SSP.
+ *  \file       dIn.h
+ *  \brief      Specification of Digital Inputs HAL and change detection.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.09.07  Daba  v1.0.00  Initial version
+ *  2018.05.17  DaBa  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario BaliÃ±a       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __UBXM8PARSER_H__
-#define __UBXM8PARSER_H__
+#ifndef __IOCHG_H__
+#define __IOCHG_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
-#include "ssp.h"
+#include "dIn.h"
+#include "dOut.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -29,11 +29,9 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-SSP_DCLR_NORMAL_NODE rootGpsParser;
-
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
-extern ruint ubxm8parser;
+extern ruint ioChg;
 
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

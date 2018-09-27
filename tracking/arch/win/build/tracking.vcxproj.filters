@@ -133,6 +133,9 @@
     <ClCompile Include="..\bsp\dIn.c">
       <Filter>bsp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\signals.c">
+      <Filter>tracking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -214,6 +217,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\config\config.h">
       <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ioChg\dIn.h">
+      <Filter>ioChg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ioChg\dOut.h">
+      <Filter>ioChg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ioChg\ioChg.h">
+      <Filter>ioChg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

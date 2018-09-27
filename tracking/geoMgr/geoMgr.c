@@ -186,10 +186,6 @@ init(GeoMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &GeoMgr_ChoiceActive);
     RKH_TR_FWK_STATE(me, &GeoMgr_Active);
     RKH_TR_FWK_STATE(me, &GeoMgr_Void);
-	RKH_TR_FWK_SIG(evRMC);
-	RKH_TR_FWK_SIG(evGeoStamp);
-	RKH_TR_FWK_SIG(evGeoStampInvalid);
-	RKH_TR_FWK_SIG(evTurn);
 
     RKH_TMR_INIT(&me->timer, &toutEvt, NULL);
 

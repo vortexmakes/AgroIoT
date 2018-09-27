@@ -52,8 +52,9 @@ typedef struct
 } RmcField_t;
 
 /* ---------------------------- Global variables --------------------------- */
+ruint ubxm8parser;
+
 /* ---------------------------- Local variables ---------------------------- */
-static rui8_t ubxm8parser;
 static Rmc rmcCurrent;
 static RmcEvt rmcEvt;
 static unsigned char *p;
@@ -198,10 +199,4 @@ chkCrcAndPublish(unsigned char pos)
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void
-ubx8mparser_init(void)
-{
-    RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
-}
-
 /* ------------------------------ End of file ------------------------------ */

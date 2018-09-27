@@ -27,13 +27,14 @@
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+ruint ioChg;
+
 /* ---------------------------- Local variables ---------------------------- */
 static unsigned char dIns[NUM_DIN_SIGNALS];
 static unsigned char dInsKb[NUM_DIN_SIGNALS];
 static unsigned char dInsMask;
 
 static IoChgEvt ioChgEvt;
-static unsigned char ioChg;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -55,8 +56,6 @@ dIn_init(void)
     memset(dInsKb, 0, sizeof(dIns));
     RKH_SET_STATIC_EVENT((RKH_EVT_T *)&ioChgEvt, evIoChg);
     ioChgEvt.din = 0;
-    RKH_TR_FWK_ACTOR(&ioChg, "ioChg");
-    RKH_TR_FWK_SIG(evIoChg);
 }
 
 void

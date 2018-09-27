@@ -5,14 +5,12 @@
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.02  DaBa  v1.0.00  Initial version
- *  2018.05.11  LeFr  v1.0.01
+ *  2018.09.27  DaBa  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliï¿½a db@vortexmakes.com
- *  LeFr  Leandro Francucci lf@vortexmakes.com
+ *  DaBa  Dario Baliña db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -67,7 +65,6 @@ enum Signals
     evNetConnected,
     evNetDisconnected,
     evDisconnected,
-	evTerminate,     /* press the key escape on the keyboard */
     evNetClockSync,
     evLocalTime,
     evUnlocked,
@@ -77,12 +74,15 @@ enum Signals
     evGeoStampInvalid,
     evTurn,
     evIoChg,
-	evRestart
+	evRestart,
+	evTerminate,     /* press the key escape on the keyboard */
 };
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void signals_publishSymbols(void);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

@@ -33,9 +33,9 @@ SSP_DCLR_NORMAL_NODE rootCmdParser;
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
-/* -------------------------- Function prototypes -------------------------- */
-void sim900parser_init(void);
+extern ruint sim900parser;
 
+/* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

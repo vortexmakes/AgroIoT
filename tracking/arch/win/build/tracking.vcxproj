@@ -125,6 +125,7 @@
     <ClCompile Include="..\..\..\mTime\mTimeTbl.c" />
     <ClCompile Include="..\..\..\parser\sim900\sim900parser.c" />
     <ClCompile Include="..\..\..\parser\ubxm8\ubxm8parser.c" />
+    <ClCompile Include="..\..\..\signals.c" />
     <ClCompile Include="..\..\..\trkClient\trkClient.c" />
     <ClCompile Include="..\bsp\assert.c" />
     <ClCompile Include="..\bsp\bsp.c" />
@@ -144,6 +145,9 @@
     <ClInclude Include="..\..\..\gps\gps.h" />
     <ClInclude Include="..\..\..\gps\rmc.h" />
     <ClInclude Include="..\..\..\gps\ubx.h" />
+    <ClInclude Include="..\..\..\ioChg\dIn.h" />
+    <ClInclude Include="..\..\..\ioChg\dOut.h" />
+    <ClInclude Include="..\..\..\ioChg\ioChg.h" />
     <ClInclude Include="..\..\..\mTime\mTime.h" />
     <ClInclude Include="..\..\..\mTime\mTimeCfg.h" />
     <ClInclude Include="..\..\..\rkhcfg.h" />

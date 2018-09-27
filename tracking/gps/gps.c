@@ -45,7 +45,6 @@ gps_parserInit(void)
 
     RKH_ENTER_CRITICAL_();
   	ssp_init(&gpsParser, &rootGpsParser);
-	ubx8mparser_init();
     RKH_EXIT_CRITICAL_();
     return &doSearch;
 }

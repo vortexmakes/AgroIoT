@@ -26,6 +26,10 @@
 #include "conmgr.h"
 #include "modmgr.h"
 #include "GeoMgr.h"
+#include "ioChg.h"
+#include "sim900parser.h"
+#include "ubxm8parser.h"
+
 #include "mTime.h"
 #include "epoch.h"
 
@@ -95,6 +99,12 @@ main(int argc, char *argv[])
     setupTraceFilters();
 
     RKH_TRC_OPEN();
+
+    signals_publishSymbols();
+
+    RKH_TR_FWK_ACTOR(&ioChg, "ioChg");
+    RKH_TR_FWK_ACTOR(&sim900parser, "sim900parser");
+    RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
 
     rkh_dynEvt_init();
     rkh_fwk_registerEvtPool(evPool0Sto, SIZEOF_EP0STO, SIZEOF_EP0_BLOCK);

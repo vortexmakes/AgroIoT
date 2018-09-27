@@ -30,8 +30,9 @@
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+ruint sim900parser;
+
 /* ---------------------------- Local variables ---------------------------- */
-static rui8_t sim900parser;
 SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_ci, 
                      at_plus_cip, at_plus_cips, 
                      at_plus_cipsta, at_plus_ciprxget,
@@ -712,10 +713,4 @@ imeiSet(unsigned char pos)
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void
-sim900parser_init(void)
-{
-    RKH_TR_FWK_ACTOR(&sim900parser, "sim900parser");
-}
-
 /* ------------------------------ End of file ------------------------------ */
