@@ -21,6 +21,7 @@
 #include "epoch.h"
 #include "modpwr.h"
 #include "dIn.h"
+#include "dOut.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -34,6 +35,7 @@ static void(* const actions_100[])( void ) =
 #endif
     epoch_updateByStep,
 	dIn_scan,
+    dOut_process,
     NULL
 };
 

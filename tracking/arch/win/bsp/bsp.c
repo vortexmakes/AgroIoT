@@ -149,7 +149,7 @@ void
 gsm_rx_isr( unsigned char byte )
 {
     gsmCmdParser(byte);
-	putchar(byte);
+	//putchar(byte);
 }
 
 static
@@ -198,6 +198,10 @@ bsp_keyParser(int c)
         case ESC:
             RKH_SMA_POST_FIFO(modMgr, &e_Term, &bsp);
             rkhport_fwk_stop();
+            break;
+
+        case 'q':
+            dOut_set(0, 1, DOUT_TIME(1000));
             break;
 
         case 'o':

@@ -22,9 +22,15 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
+typedef struct
+{
+    ruint val;
+    rui16_t timer;
+}DigitalTimerOutput;
+
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static rui8_t dOuts[NUM_DOUT_SIGNALS];
+static DigitalTimerOutput dOuts[NUM_DOUT_SIGNALS];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -36,16 +42,43 @@ dOut_init(void)
 }
 
 void
-dOut_set(rui8_t out, rui8_t val)
+dOut_set(ruint out, ruint val, rui16_t tmr)
 {
-    printf("dOut[%d]:%d", out, val);
-    dOuts[out] = val;
+    RKH_SR_ALLOC();
+
+    if(out >= NUM_DOUT_SIGNALS)
+        return;
+
+    printf("dOut[%d]:%d\r\n", out, val);
+
+    RKH_ENTER_CRITICAL_();    
+    dOuts[out].val = val != 0 ? 1 : 0;
+    dOuts[out].timer = tmr;
+    RKH_EXIT_CRITICAL_();    
 }
 
-rui8_t
-dOut_get(rui8_t out)
+ruint
+dOut_get(ruint out)
 {
-    return dOuts[out];
+    return dOuts[out].val;
+}
+
+void
+dOut_process(void)
+{
+    DigitalTimerOutput *p;
+    ruint i;
+
+    p = dOuts;
+
+	for(p=dOuts, i=0; p < &dOuts[NUM_DOUT_SIGNALS]; ++p, ++i)
+    {
+		if(p->timer > 0 && !(--(p->timer)))
+        {
+			p->val ^= 1;
+            printf("dOut[%d]:%d\r\n", i, p->val);
+        }
+    }
 }
 
 /* ------------------------------ End of file ------------------------------ */

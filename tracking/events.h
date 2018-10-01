@@ -127,7 +127,7 @@ typedef struct IoChgEvt IoChgEvt;
 struct IoChgEvt
 {
     RKH_EVT_T evt;
-    unsigned char din;
+    ruint din;
 };
 
 /* -------------------------- External variables --------------------------- */

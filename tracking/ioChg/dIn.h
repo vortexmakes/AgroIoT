@@ -37,6 +37,7 @@ typedef enum dInSignalId
 /* -------------------------- Function prototypes -------------------------- */
 void dIn_init(void);
 void dIn_scan(void);
+ruint dIn_get(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

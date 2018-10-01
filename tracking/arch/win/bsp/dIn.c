@@ -32,7 +32,6 @@ ruint ioChg;
 /* ---------------------------- Local variables ---------------------------- */
 static unsigned char dIns[NUM_DIN_SIGNALS];
 static unsigned char dInsKb[NUM_DIN_SIGNALS];
-static unsigned char dInsMask;
 
 static IoChgEvt ioChgEvt;
 
@@ -73,6 +72,12 @@ dIn_scan(void)
             tpIoChg_publish(&ioChgEvt, &ioChg);
         }
     }
+}
+
+ruint
+dIn_get(void)
+{
+    return ioChgEvt.din;
 }
 
 /* ------------------------------ End of file ------------------------------ */
