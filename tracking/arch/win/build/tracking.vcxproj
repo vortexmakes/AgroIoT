@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\third-party\rkh\source\fwk\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\mempool\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\queue\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sm\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sma\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\tmr\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\trc\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\;$(ProjectDir)..\..\..\..\third-party\ssp\src;$(ProjectDir)..\bsp;$(ProjectDir)..\bsp\serial;$(ProjectDir)..\..\..;$(ProjectDir)..\..\..\parser\sim900;$(ProjectDir)..\..\..\parser\ubxm8;$(ProjectDir)..\..\..\modpwr;$(ProjectDir)..\..\..\geoMgr;$(ProjectDir)..\..\..\modcmd;$(ProjectDir)..\..\..\conmgr;$(ProjectDir)..\..\..\trkClient;$(ProjectDir)..\..\..\epoch;$(ProjectDir)..\..\..\gps;$(ProjectDir)..\..\..\date;$(ProjectDir)..\..\..\rtime;$(ProjectDir)..\..\..\mTime;$(ProjectDir)..\..\..\config;$(ProjectDir)..\..\..\ioChg;$(ProjectDir)..\..\..\modmgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\third-party\rkh\source\fwk\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\mempool\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\queue\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sm\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sma\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\tmr\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\trc\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\;$(ProjectDir)..\..\..\..\third-party\ssp\src;$(ProjectDir)..\bsp;$(ProjectDir)..\bsp\serial;$(ProjectDir)..\..\..;$(ProjectDir)..\..\..\parser\sim900;$(ProjectDir)..\..\..\parser\ubxm8;$(ProjectDir)..\..\..\modpwr;$(ProjectDir)..\..\..\geoMgr;$(ProjectDir)..\..\..\modcmd;$(ProjectDir)..\..\..\conmgr;$(ProjectDir)..\..\..\trkClient;$(ProjectDir)..\..\..\epoch;$(ProjectDir)..\..\..\gps;$(ProjectDir)..\..\..\date;$(ProjectDir)..\..\..\rtime;$(ProjectDir)..\..\..\mTime;$(ProjectDir)..\..\..\config;$(ProjectDir)..\..\..\ioChg;$(ProjectDir)..\..\..\modmgr;$(ProjectDir)..\..\..\tpsens\cbox;$(ProjectDir)..\..\..\tpsens\ps;$(ProjectDir)..\..\..\tpsens\tplink;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;__W32STVC__;CIPSHUT_ON_INIT;MODPWR_CTRL_ENABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -126,6 +126,12 @@
     <ClCompile Include="..\..\..\parser\sim900\sim900parser.c" />
     <ClCompile Include="..\..\..\parser\ubxm8\ubxm8parser.c" />
     <ClCompile Include="..\..\..\signals.c" />
+    <ClCompile Include="..\..\..\tpsens\cbox\cbox.c" />
+    <ClCompile Include="..\..\..\tpsens\ps\ps.c" />
+    <ClCompile Include="..\..\..\tpsens\tplink\tplact.c" />
+    <ClCompile Include="..\..\..\tpsens\tplink\tplfsm.c" />
+    <ClCompile Include="..\..\..\tpsens\tplink\tplink.c" />
+    <ClCompile Include="..\..\..\tpsens\tplink\tpltbl.c" />
     <ClCompile Include="..\..\..\trkClient\trkClient.c" />
     <ClCompile Include="..\bsp\assert.c" />
     <ClCompile Include="..\bsp\bsp.c" />
@@ -135,6 +141,7 @@
     <ClCompile Include="..\bsp\hook.c" />
     <ClCompile Include="..\bsp\modpwr.c" />
     <ClCompile Include="..\bsp\rtime.c" />
+    <ClCompile Include="..\bsp\tplhal.c" />
     <ClCompile Include="..\bsp\trace_io.c" />
     <ClCompile Include="..\bsp\trace_io_tcp.c" />
   </ItemGroup>

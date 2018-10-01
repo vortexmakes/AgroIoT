@@ -34,7 +34,8 @@ extern "C" {
 enum
 {
 	GSM_PORT, 
-	GPS_PORT, 
+	GPS_PORT,
+	TPSENS_PORT,
 
   	NUM_CHANNELS
 };

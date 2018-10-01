@@ -133,6 +133,27 @@
     <ClCompile Include="..\bsp\dIn.c">
       <Filter>bsp</Filter>
     </ClCompile>
+    <ClCompile Include="..\bsp\tplhal.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\tplink\tplact.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\tplink\tplfsm.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\tplink\tplink.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\tplink\tpltbl.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\cbox\cbox.c">
+      <Filter>tpsens\cbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\ps\ps.c">
+      <Filter>tpsens\cbox</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\signals.c">
       <Filter>tracking</Filter>
     </ClCompile>
@@ -188,6 +209,18 @@
     </Filter>
     <Filter Include="ioChg">
       <UniqueIdentifier>{9c21e863-2358-4894-9779-22ceacaa20c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tpsens">
+      <UniqueIdentifier>{14f9c01c-b872-41ec-b8b0-d868e3632c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tpsens\cbox">
+      <UniqueIdentifier>{a0528311-3239-4a28-9ccb-565af81b7767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tpsens\ps">
+      <UniqueIdentifier>{ef17ddfb-96a2-4350-a5a0-d6ce6e88c84c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tpsens\tplink">
+      <UniqueIdentifier>{a49ebf66-1fda-4e14-b082-fbfd0a587cd9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -35,6 +35,7 @@
 #include "gps.h"
 #include "dIn.h"
 #include "dOut.h"
+#include "tplfsm.h"
 
 RKH_THIS_MODULE
 
@@ -85,10 +86,17 @@ static void gsm_rx_isr(unsigned char byte);
 static void gsm_tx_isr(void);
 static void gps_rx_isr(unsigned char byte);
 static void gps_tx_isr(void);
+
+void tplink_rx_isr(unsigned char byte);
+void tplink_tx_isr(void);
+
 static SERIAL_CBACK_T gsm_ser_cback =
 { gsm_rx_isr, NULL, NULL, gsm_tx_isr, NULL, NULL, NULL };
 static SERIAL_CBACK_T gps_ser_cback =
 { gps_rx_isr, NULL, NULL, gps_tx_isr, NULL, NULL, NULL };
+static SERIAL_CBACK_T tplink_cback =
+{ tplink_rx_isr, NULL, NULL, tplink_tx_isr, NULL, NULL, NULL };
+
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -239,6 +247,7 @@ void
 bsp_timeTick(void)
 {
     mTime_tick();
+	tplfsm_timer_isr();
 }
 
 void
@@ -254,6 +263,9 @@ bsp_serial_open(int ch)
         case GPS_PORT:
             gpsParser = NULL;
 			init_serial_hard(ch, &gps_ser_cback);
+
+		case TPSENS_PORT:
+			init_serial_hard(ch, &tplink_cback);
     }
         
     connect_serial(ch);
