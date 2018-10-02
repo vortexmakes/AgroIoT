@@ -133,9 +133,6 @@
     <ClCompile Include="..\bsp\dIn.c">
       <Filter>bsp</Filter>
     </ClCompile>
-    <ClCompile Include="..\bsp\tplhal.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\tpsens\tplink\tplact.c">
       <Filter>tpsens\tplink</Filter>
     </ClCompile>
@@ -151,11 +148,14 @@
     <ClCompile Include="..\..\..\tpsens\cbox\cbox.c">
       <Filter>tpsens\cbox</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\ps\ps.c">
-      <Filter>tpsens\cbox</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\signals.c">
       <Filter>tracking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\ps\ps.c">
+      <Filter>tpsens\ps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\tplink\tplhal.c">
+      <Filter>tpsens\tplink</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

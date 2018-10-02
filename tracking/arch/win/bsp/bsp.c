@@ -42,7 +42,7 @@ RKH_THIS_MODULE
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 #define ESC                 0x1B
-#define TRK_CFG_OPTIONS     "st:f:p:m:g:h"
+#define TRK_CFG_OPTIONS     "st:f:p:m:g:c:h"
 
 #define TEST_TX_PACKET      "----o Ping"
 #define TEST_RX_PACKET      "o---- Pong"
@@ -55,7 +55,8 @@ RKH_THIS_MODULE
 SERIAL_T serials[ NUM_CHANNELS ] =
 {
 	{	"COM1",	19200, 8, PAR_NONE, STOP_1, 0 },
-	{	"COM2",	9600, 8, PAR_NONE, STOP_1, 0 }
+	{	"COM2",	9600, 8, PAR_NONE, STOP_1, 0 },
+	{   "COM3",	9600, 8, PAR_NONE, STOP_1, 0 }
 };
 
 /* ---------------------------- Local variables ---------------------------- */
@@ -72,6 +73,7 @@ static const char *helpMessage =
     "\t -p port of TCP trace client\n"
     "\t -m GSM Module Serial Port\n"
     "\t -g GPS Module Serial Port\n"
+	"\t -c Tpsens Serial Port\n"
     "\t -h (help)\n"
 };
 
@@ -128,6 +130,10 @@ processCmdLineOpts(int argc, char **argv)
             case 'g':
                 strcpy(serials[GPS_PORT].com_name, optarg);
                 break;
+
+			case 'c':
+				strcpy(serials[TPSENS_PORT].com_name, optarg);
+				break;
 
 			case 's':
                 trace_io_silence();
@@ -263,9 +269,14 @@ bsp_serial_open(int ch)
         case GPS_PORT:
             gpsParser = NULL;
 			init_serial_hard(ch, &gps_ser_cback);
+			break;
 
 		case TPSENS_PORT:
 			init_serial_hard(ch, &tplink_cback);
+			break;
+
+		default:
+			break;
     }
         
     connect_serial(ch);
@@ -300,6 +311,12 @@ bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata)
         tx_data(ch, *p);
         ++p;
     }
+}
+
+void
+bsp_serial_putchar(int ch, unsigned char c)
+{
+    tx_data(ch, c);
 }
 
 void 

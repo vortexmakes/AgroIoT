@@ -110,7 +110,9 @@ proc_cbdata( CBOX_STR *p )
 {
 	void *q;
 	void *t;
-
+#if 0
+    /*** TODO: fix responce´s payload processing
+     *
 	if( tmp_cbox == NULL )
 		return;
 
@@ -142,15 +144,18 @@ proc_cbdata( CBOX_STR *p )
 
 	CBP_ASIGN( hum, CBOX_STR);
 	
+/********
+* TODO: Resolve 
+      save_in_flash???
+      last_sections_state????
 	if(tmp_cbox->a.x == EQTYPE_SPRAYERPRO && tmp_cbox->hum != last_sections_state)
 	{
-/********
- * TODO: Resolve save_in_flash???
+ 
 			save_in_flash = 1;
-*/
 	}
 	last_sections_state = tmp_cbox->hum;
-
+*/
+#endif
 }
 
 /**
@@ -169,7 +174,7 @@ on_st_rcv( ST_T station, PS_PLBUFF_T *pb )
 			if( ((CBOX_STR *)(pb->payload))->cmd != CBOX_READ_ALL )
 				break;
 
-			if( sizeof(CBOX_STR) != pb->qty )
+			if( pb->qty != 0x10 )
 				break;
 			
 			proc_cbdata( (CBOX_STR *) pb->payload );
@@ -301,6 +306,7 @@ cb_init( CBOX_STR *p )
 	tmp_cbox = p;
 
 	ps_init();
+	ps_start();
 }	
 
 

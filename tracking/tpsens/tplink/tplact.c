@@ -466,7 +466,8 @@ proc_tpl_eofxmit( MUInt input, uchar data )
 #endif
 			
 		default:
-			return TPL_IDLE;
+			return proc_tpl_idle(input, data);
+			//return TPL_IDLE;
 	}
 }
 

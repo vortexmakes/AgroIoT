@@ -130,6 +130,7 @@
     <ClCompile Include="..\..\..\tpsens\ps\ps.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tplact.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tplfsm.c" />
+    <ClCompile Include="..\..\..\tpsens\tplink\tplhal.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tplink.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tpltbl.c" />
     <ClCompile Include="..\..\..\trkClient\trkClient.c" />
@@ -141,7 +142,6 @@
     <ClCompile Include="..\bsp\hook.c" />
     <ClCompile Include="..\bsp\modpwr.c" />
     <ClCompile Include="..\bsp\rtime.c" />
-    <ClCompile Include="..\bsp\tplhal.c" />
     <ClCompile Include="..\bsp\trace_io.c" />
     <ClCompile Include="..\bsp\trace_io_tcp.c" />
   </ItemGroup>

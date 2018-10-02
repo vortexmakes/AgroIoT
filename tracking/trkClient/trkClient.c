@@ -28,6 +28,7 @@
 #include "epoch.h"
 #include "date.h"
 #include "conMgr.h"
+#include "cbox.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WAIT_TIME    RKH_TIME_MS(2000)
@@ -118,6 +119,7 @@ static RKH_STATIC_EVENT(e_tout, evTimeout);
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static SendEvt evSendObj;
 static char *testFrame = TEST_FRAME;
+static CBOX_STR cbox;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -143,6 +145,8 @@ init(TrkClient *const me, RKH_EVT_T *pe)
 
     RKH_SET_STATIC_EVENT(RKH_UPCAST(RKH_EVT_T, &evSendObj), evSend);
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
+
+	cb_init(&cbox);
 }
 
 /* ............................ Effect actions ............................. */
@@ -177,6 +181,8 @@ sendFrame(TrkClient *const me, RKH_EVT_T *pe)
 
     evSendObj.size = strlen((char *)evSendObj.buf);
     tpConnection_publish(&evSendObj, me);
+
+	get_cb_data();
 }
 
 /* ............................. Entry actions ............................. */

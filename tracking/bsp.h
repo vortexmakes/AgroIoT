@@ -68,6 +68,7 @@ void bsp_serial_open(int ch);
 void bsp_serial_close(int ch);
 void bsp_serial_puts(int ch, char *p);
 void bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata);
+void bsp_serial_putchar(int ch, unsigned char c);
 
 void bsp_netStatus(Status_t status);
 void bsp_mqttStatus(Status_t status);
