@@ -18,45 +18,51 @@ tplink_init( void )
 	init_tpl_hal();
 }
 
+void
+tplink_deinit( void )
+{
+	deinit_tpl_hal();
+}
+
 MInt
-#if (TPLINK_ADDRESSING_ON) && (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
-tplink_send_frame( uchar addr, uchar *pl, ushort qty )
-#else
-tplink_send_frame( uchar *pl, ushort qty )
-#endif
+tplink_send_frame( TPLFRM_T *p )
 {
 #ifdef __TPLINK_DBG__
 	ushort i;
-	uchar *p;
+	uchar *pd;
 #endif
 
-	if( get_tplfsm_state() >= TPL_IN_XMIT )
-		return -TPLINK_ERR_BUSY;
-
-	if( qty > TPLINK_MAX_PLOAD_SIZE )
+	if( p->qty > TPLINK_MAX_PLOAD_SIZE )
 		return -TPLINK_ERR_PLOAD_SIZE_EXCEED;
+
+	tpl_enter_critical();
+
+	if( get_tplfsm_state() >= TPL_IN_XMIT )
+	{
+		tpl_exit_critical();
+		return -TPLINK_ERR_BUSY;
+	}
 
 #ifdef __TPLINK_DBG__
 	#if (TPLINK_ADDRESSING_ON) && (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
 	mprintf(( "%s: station = %02d, qty = %02d, buff =", 
-										__FUNCTION__, addr, qty ));
+										__FUNCTION__, p->addr, p->qty ));
 	#else
 	mprintf(( "%s: qty = %02d, buff =", 
-										__FUNCTION__, qty ));
+										__FUNCTION__, p->qty ));
 
 	#endif
 
-	for( i = qty, p = pl; i; --i, ++p )
-		mprintf(( " %c", *p ));
+	for( i = p->qty, pd = p->pload; i; --i, ++pd )
+		mprintf(( " %X", *pd ));
 
 	mprintf(( "\n" ));
 #endif
 
-#if (TPLINK_ADDRESSING_ON) && (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
-	start_xmit( addr, pl, qty );
-#else
-	start_xmit( pl, qty );
-#endif
+	start_xmit( p );
+
+	tpl_exit_critical();
+
 	return TPLINK_OK;
 }
 

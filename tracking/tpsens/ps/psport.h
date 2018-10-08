@@ -34,16 +34,13 @@
 #define __PSPORT_H__
 
 
-#include <stdio.h>
-#include "mytypes.h"
-#include "ps.h"
-#include "rkh.h"
-#include "tplink.h"
-
-
 /*
  *	##### Include dependant files #####
  */
+#include <stdio.h>
+#include "mytypes.h"
+#include "rkh.h"
+#include "tplink.h"
 
 
 
@@ -59,7 +56,7 @@
  *	##### Defines the data link layer interface #####
  */
 #define dll_init()				tplink_init()
-#define dll_send_frame(s, p)	tplink_send_frame((s),(p)->payload,(p)->qty)
+void dll_send_frame(ST_T s, PS_PLBUFF_T *p);
 
 
 /*

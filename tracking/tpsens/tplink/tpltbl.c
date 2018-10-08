@@ -21,5 +21,5 @@ const PROCFUNC_T tpltbl[TPL_NUM_STATES] =
 	proc_tpl_xmitesc,
 	proc_tpl_xchk,
 	proc_tpl_wxmit,
-	proc_tpl_eofxmit,
+	proc_tpl_wxmitcmp,
 };

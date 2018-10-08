@@ -157,6 +157,9 @@
     <ClCompile Include="..\..\..\tpsens\tplink\tplhal.c">
       <Filter>tpsens\tplink</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\tpsens\ps\psport.c">
+      <Filter>tpsens\ps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">

@@ -17,26 +17,27 @@ static TPLFRM_T tpl;
 static uchar *pl;
 static ushort curr_dcnt, check;
 static uchar check_sum, curr_escape;
+static ushort curr_toutfrm;
 
 static const uchar esc_codes[TPLINK_NUM_ESC_CODES-1] = { TPL_SOF, TPL_ESC };
 
 #define store_addr(x)			tpl.addr = (x)
-#define store_dcnt_h(x)			tpl.qty = (x)<<8
+#define store_dcnt_h(x)			tpl.qty = (ushort)((x)<<8)
 #define store_dcnt_l(x)			tpl.qty |= (x)
 #define fits_in_pload_size()	( tpl.qty <= TPLINK_MAX_PLOAD_SIZE )
 
 #define store_data(x)			*pl++ = (x)
 
-#define save_escaped( x )		curr_escape = ((x) & TPLINK_ESC_MASK)
+#define save_escaped( x )		curr_escape = (uchar)((x) & TPLINK_ESC_MASK)
 #define get_esc_code(x)			esc_codes[(x)-1]
 #define xmit_escape()			tpl_xmit(TPL_ESC)
 #define xmit_esc_code()			tpl_xmit(curr_escape)
 
 #define add_check_sum(x)		check_sum += (x)
-#define store_chk_h(x)			check = (x) << 8
+#define store_chk_h(x)			check = (ushort)((x) << 8)
 #define store_chk_l(x)			check |= (x)
-#define xmit_chk_h()			tpl_xmit((check & 0xFF00) >> 8)
-#define xmit_chk_l()			tpl_xmit(check & 0x00FF)
+#define xmit_chk_h()			tpl_xmit((uchar)((check & 0xFF00) >> 8))
+#define xmit_chk_l()			tpl_xmit((uchar)(check & 0x00FF))
 #define verify_check()			( check == calc_check(check_sum) )
 
 #define is_rcv_inframe()		( ++curr_dcnt <= tpl.qty )	
@@ -45,31 +46,30 @@ static const uchar esc_codes[TPLINK_NUM_ESC_CODES-1] = { TPL_SOF, TPL_ESC };
 #define init_pload();			pl = tpl.pload;								\
 								curr_dcnt = tpl.qty = check = check_sum = 0; 
 void
-#if (TPLINK_ADDRESSING_ON) && (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
-start_xmit( uchar addr, uchar *pb, ushort qty )
-#else
-start_xmit( uchar *pb, ushort qty )
-#endif
+start_xmit( TPLFRM_T *p )
 {
 #if TPLINK_ADDRESSING_ON
 #if (TPLINK_DEV_TYPE == TPLINK_DEV_SLAVE)
 	tpl.addr = get_slave_addr();
 #else
-	tpl.addr = addr | TPLINK_COMFLOW_MSK;
+	tpl.addr = p->addr | TPLINK_COMFLOW_MSK;
 #endif
 #endif
 
 	pl = tpl.pload;
-	*pl++ = (qty & 0xFF00) >> 8;
-	*pl++ = qty & 0x00FF;
-	memcpy( pl, pb, qty );
+	*pl++ = (uchar)((p->qty & 0xFF00) >> 8);
+	*pl++ = (uchar)(p->qty & 0x00FF);
+	memcpy( pl, p->pload, p->qty );
 
 	init_pload();
 
-	tpl.qty = qty+2;
+	tpl.qty = (ushort)(p->qty+2);
 
 	tpl_choke_xmit( TPL_SOF );
 	tplfsm_stop_timer();
+#if ((TPLINK_DEV_TYPE == TPLINK_DEV_MASTER) && (TPLINK_VAR_FRMTOUT))
+	curr_toutfrm = p->toutfrm;
+#endif
 }
 
 static
@@ -136,6 +136,8 @@ proc_tpl_idle( MUInt input, uchar data )
 		case TPLINK_XMIT:
 #if TPLINK_ADDRESSING_ON
 			tpl_xmit( tpl.addr );
+#else
+			proc_tpl_inxmit( TPLINK_XMIT, 0 );
 #endif
 			tplfsm_stop_timer();
 			return TPL_IN_XMIT;
@@ -145,6 +147,7 @@ proc_tpl_idle( MUInt input, uchar data )
 			tplink_ontout();
 			tplfsm_stop_timer();
 #endif
+			return TPL_IDLE;
 
 		default:
 			return TPL_IDLE;
@@ -169,7 +172,11 @@ proc_tpl_inesc( MUInt input, uchar data )
 		case TPLINK_TOUT:
 			mprintf(("##TPLDBG: RCV Tout\n"));
 			tplink_ontout();
+			return TPL_IDLE;
+
 		default:
+			tplfsm_stop_timer();
+			tpl_stop_xmit();
 			return TPL_IDLE;
 	}
 }
@@ -186,12 +193,7 @@ proc_tpl_waddr( MUInt input, uchar data )
 	switch( input )
 	{
 		case TPLINK_RCV:
-			if( data == TPL_SOF )
-			{
-				start_rcv();
-				return TPL_WADDR;
-			}
-			else if( data == TPL_ESC )
+			if( data == TPL_ESC )
 				return TPL_IDLE;
 			else
 			{
@@ -199,6 +201,7 @@ proc_tpl_waddr( MUInt input, uchar data )
 				if( is_from_master(data) && is_my_slave_addr(data) )
 				{
 					store_addr(data);
+					tplfsm_kick_timer( TPLINK_INTER_BYTE_TIME );
 					return TPL_WNDATAH;
 				}
 				else
@@ -206,6 +209,7 @@ proc_tpl_waddr( MUInt input, uchar data )
 #else
 				if( is_from_last_slave(data) )
 				{
+					tplfsm_kick_timer( TPLINK_INTER_BYTE_TIME );
 					store_addr(data);
 					return TPL_WNDATAH;
 				}
@@ -217,7 +221,11 @@ proc_tpl_waddr( MUInt input, uchar data )
 		case TPLINK_TOUT:
 			mprintf(("##TPLDBG: RCV Tout\n"));
 			tplink_ontout();
+			return TPL_IDLE;
+
 		default:
+			tplfsm_stop_timer();
+			tpl_stop_xmit();
 			return TPL_IDLE;
 	}
 }
@@ -229,12 +237,7 @@ proc_tpl_wndatah( MUInt input, uchar data )
 	switch( input )
 	{
 		case TPLINK_RCV:
-			if( data == TPL_SOF )
-			{
-				start_rcv();
-				return TPL_WNDATAH;
-			}
-			else if( data == TPL_ESC )
+			if( data == TPL_ESC )
 			{
 				tplfsm_kick_timer( TPLINK_INTER_BYTE_TIME );
 				return call_tplst( TPL_IN_ESC, TPL_WNDATAH );
@@ -251,7 +254,11 @@ proc_tpl_wndatah( MUInt input, uchar data )
 		case TPLINK_TOUT:
 			mprintf(("##TPLDBG: RCV Tout\n"));
 			tplink_ontout();
+			return TPL_IDLE;
+
 		default:
+			tplfsm_stop_timer();
+			tpl_stop_xmit();
 			return TPL_IDLE;
 	}
 }
@@ -262,12 +269,7 @@ proc_tpl_wndatal( MUInt input, uchar data )
 	switch( input )
 	{
 		case TPLINK_RCV:
-			if( data == TPL_SOF )
-			{
-				start_rcv();
-				return TPL_WNDATAH;
-			}
-			else if( data == TPL_ESC )
+			if( data == TPL_ESC )
 			{
 				tplfsm_kick_timer( TPLINK_INTER_BYTE_TIME );
 				return call_tplst( TPL_IN_ESC, TPL_WNDATAL );
@@ -287,7 +289,11 @@ proc_tpl_wndatal( MUInt input, uchar data )
 		case TPLINK_TOUT:
 			mprintf(("##TPLDBG: RCV Tout\n"));
 			tplink_ontout();
+			return TPL_IDLE;
+
 		default:
+			tplfsm_stop_timer();
+			tpl_stop_xmit();
 			return TPL_IDLE;
 	}
 }
@@ -298,12 +304,7 @@ proc_tpl_indata( MUInt input, uchar data )
 	switch( input )
 	{
 		case TPLINK_RCV:
-			if( data == TPL_SOF )
-			{
-				start_rcv();
-				return TPL_WNDATAH;
-			}
-			else if( data == TPL_ESC )
+			if( data == TPL_ESC )
 			{
 				tplfsm_kick_timer( TPLINK_INTER_BYTE_TIME );
 				return call_tplst( TPL_IN_ESC, TPL_IN_DATA );
@@ -325,7 +326,11 @@ proc_tpl_indata( MUInt input, uchar data )
 		case TPLINK_TOUT:
 			mprintf(("##TPLDBG: RCV Tout\n"));
 			tplink_ontout();
+			return TPL_IDLE;
+
 		default:
+			tplfsm_stop_timer();
+			tpl_stop_xmit();
 			return TPL_IDLE;
 	}
 }
@@ -336,36 +341,28 @@ proc_tpl_wchk( MUInt input, uchar data )
 	switch( input )
 	{
 		case TPLINK_RCV:
-			if( data == TPL_SOF )
+			store_chk_l( data );
+			if( verify_check() )
 			{
-				start_rcv();
-				return TPL_WNDATAH;
+				mprintf(("##TPLDBG: Valid Frame RCV\n"));
+				tplink_onrcv( &tpl );
+				tplfsm_stop_timer();
 			}
-			else if( data == TPL_ESC )
+			else				
 			{
-				tplfsm_kick_timer( TPLINK_INTER_BYTE_TIME );
-				return call_tplst( TPL_IN_ESC, TPL_IN_DATA );
-			}
-			else
-			{
-				store_chk_l( data );
-				if( verify_check() )
-				{
-					mprintf(("##TPLDBG: Valid Frame RCV\n"));
-					tplink_onrcv( &tpl );
-				}
-				else				
-				{
-					mprintf(("##TPLDBG: Invalid Frame Checksum\n"));
-					tplink_onchkerr();
-				}	
-				return TPL_IDLE;
-			}
+				mprintf(("##TPLDBG: Invalid Frame Checksum\n"));
+				tplink_onchkerr();
+				tplfsm_stop_timer();
+			}	
+			return TPL_IDLE;
 
 		case TPLINK_TOUT:
 			mprintf(("##TPLDBG: RCV Tout\n"));
 			tplink_ontout();
+
 		default:
+			tplfsm_stop_timer();
+			tpl_stop_xmit();
 			return TPL_IDLE;
 	}
 }
@@ -373,8 +370,8 @@ proc_tpl_wchk( MUInt input, uchar data )
 MUInt
 proc_tpl_inxmit( MUInt input, uchar data )
 {
-  (void)data;
-  
+	(void)data;
+
 	switch( input )
 	{
 		case TPLINK_XMIT:
@@ -406,7 +403,8 @@ proc_tpl_inxmit( MUInt input, uchar data )
 MUInt
 proc_tpl_xmitesc( MUInt input, uchar data )
 {
-  (void)data;
+	(void)data;
+
 	switch( input )
 	{
 		case TPLINK_XMIT:
@@ -424,7 +422,8 @@ proc_tpl_xmitesc( MUInt input, uchar data )
 MUInt
 proc_tpl_xchk( MUInt input, uchar data )
 {
-  (void)data;
+	(void)data;
+
 	switch( input )
 	{
 		case TPLINK_XMIT:
@@ -440,34 +439,51 @@ proc_tpl_xchk( MUInt input, uchar data )
 MUInt
 proc_tpl_wxmit( MUInt input, uchar data )
 {
-  (void)data;
+	(void)data;
+
 	switch( input )
 	{
 		case TPLINK_XMIT:
 			tpl_stop_xmit();
+#if TPLINK_BSP_SUPPORT_TC_IRQ == 1
 			return TPL_WXMITCMP;
-
+#else
+			tpl_eoftx();
+			tplink_onxmit_cmp();
+#if (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
+#if (TPLINK_VAR_FRMTOUT)
+			tplfsm_kick_timer( curr_toutfrm );
+#else
+			tplfsm_kick_timer( TPLINK_FRMTOUT_DFT );
+#endif
+#endif
+			return TPL_IDLE;
+#endif
 		default:
 			return TPL_IDLE;
 	}
 }
 
 MUInt
-proc_tpl_eofxmit( MUInt input, uchar data )
+proc_tpl_wxmitcmp( MUInt input, uchar data )
 {
-  (void)data;
+	(void)data;
+
 	switch( input )
 	{
 		case TPLINK_XMIT:
 			tpl_eoftx();
 			tplink_onxmit_cmp();
 #if (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
-			tplfsm_kick_timer( TPLINK_INTER_FRAME_TIME );
+#if (TPLINK_VAR_FRMTOUT)
+			tplfsm_kick_timer( curr_toutfrm );
+#else
+			tplfsm_kick_timer( TPLINK_FRMTOUT_DFT );
+#endif
 #endif
 			
 		default:
-			return proc_tpl_idle(input, data);
-			//return TPL_IDLE;
+			return TPL_IDLE;
 	}
 }
 

@@ -2,9 +2,8 @@
  * tplfsm.c
  */
 
-
 #include "mytypes.h"
-#include "rkh.h"
+#include "tplhal.h"
 #include "tplfsm.h"
 #include "tpltbl.h"
 #include <string.h>
@@ -53,42 +52,48 @@ static unsigned short tplfsm_timer;
 void
 tplfsm_kick_timer( unsigned short time )
 {
-	RKH_SR_ALLOC();
-
-	RKH_ENTER_CRITICAL_();
+	tpl_enter_critical();
 	tplfsm_timer = time;
-	RKH_EXIT_CRITICAL_();
+	tpl_exit_critical();
 }
 
 void
 tplfsm_stop_timer( void )
 {
-	RKH_SR_ALLOC();
-
-	RKH_ENTER_CRITICAL_();
+	tpl_enter_critical();
 	tplfsm_timer = 0;
-	RKH_EXIT_CRITICAL_();
+	tpl_exit_critical();
 }
 
 void
 tplfsm_timer_isr( void )
 {
+	tpl_enter_critical();
 	if( tplfsm_timer == 0 || --tplfsm_timer )
+	{
+		tpl_exit_critical();
 		return;
+	}
+
 
 	proc_tplfsm( TPLINK_TOUT, 0 );
+	tpl_exit_critical();
 }
 
 void
 tplfsm_rcv_isr( uchar rcv )
 {
+	tpl_enter_critical();
 	proc_tplfsm( TPLINK_RCV, rcv );
+	tpl_exit_critical();
 }
 
 void
 tplfsm_xmit_isr( void )
 {
+	tpl_enter_critical();
 	proc_tplfsm( TPLINK_XMIT, 0 );
+	tpl_exit_critical();
 }
 
 

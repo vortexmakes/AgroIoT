@@ -55,7 +55,6 @@
 
 #include "mytypes.h"
 #include "pscfg.h"
-#include "psport.h"
 
 
 /**

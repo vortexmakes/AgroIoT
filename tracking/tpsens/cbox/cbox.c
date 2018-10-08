@@ -110,12 +110,12 @@ proc_cbdata( CBOX_STR *p )
 {
 	void *q;
 	void *t;
-#if 0
-    /*** TODO: fix responce´s payload processing
-     *
+
+    /* TODO: fix responce´s payload processing
+     */
 	if( tmp_cbox == NULL )
 		return;
-
+#if 0
 	++cbfrm_count;
 
 	q = &tmp_cbox->h;

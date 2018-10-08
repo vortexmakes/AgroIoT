@@ -19,6 +19,9 @@ typedef struct
 #endif
 	ushort qty;
 	uchar pload[ TPLINK_MAX_PLOAD_SIZE + 2 ];
+#if ((TPLINK_DEV_TYPE == TPLINK_DEV_MASTER) && (TPLINK_VAR_FRMTOUT))
+	ushort toutfrm;
+#endif
 }TPLFRM_T;
 
 /*
@@ -31,11 +34,25 @@ enum
 	TPLINK_ERR_PLOAD_SIZE_EXCEED
 };
 
+#if (TPLINK_VAR_FRMTOUT) && (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
+/*
+ * tplink_frmtout:
+ * 	Used to convert timer values in msec to TpLink base time.
+ */
+#define tplink_frmtout(x)		((x)/(TPLINK_BASE_TIME))
+#endif
+
 /*
  * tplink_init:
  * 		Initilizes TPLINK software and hardware
  */
 void tplink_init( void );
+
+/*
+ * tplink_deinit:
+ * 		Deinit TPLINK software and hardware
+ */
+void tplink_deinit( void );
 
 /*
  * tplink_send_frame:
@@ -55,11 +72,7 @@ void tplink_init( void );
  * 			                  at calling time.
  * 
  */
-#if (TPLINK_ADDRESSING_ON) && (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
-MInt tplink_send_frame( uchar addr, uchar *pl, ushort qty );
-#else
-MInt tplink_send_frame( uchar *pl, ushort qty );
-#endif
+MInt tplink_send_frame( TPLFRM_T *p );
 
 /*
  * tplink_onrcv:

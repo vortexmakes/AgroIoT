@@ -128,6 +128,7 @@
     <ClCompile Include="..\..\..\signals.c" />
     <ClCompile Include="..\..\..\tpsens\cbox\cbox.c" />
     <ClCompile Include="..\..\..\tpsens\ps\ps.c" />
+    <ClCompile Include="..\..\..\tpsens\ps\psport.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tplact.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tplfsm.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tplhal.c" />

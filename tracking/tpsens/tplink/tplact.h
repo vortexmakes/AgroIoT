@@ -21,12 +21,8 @@ MUInt proc_tpl_inxmit( MUInt input, uchar data );
 MUInt proc_tpl_xmitesc( MUInt input, uchar data );
 MUInt proc_tpl_xchk( MUInt input, uchar data );
 MUInt proc_tpl_wxmit( MUInt input, uchar data );
-MUInt proc_tpl_eofxmit( MUInt input, uchar data );
+MUInt proc_tpl_wxmitcmp( MUInt input, uchar data );
 
-#if (TPLINK_ADDRESSING_ON) && (TPLINK_DEV_TYPE == TPLINK_DEV_MASTER)
-void start_xmit( uchar addr, uchar *pb, ushort qty );
-#else
-void start_xmit( uchar *pb, ushort qty );
-#endif
+void start_xmit( TPLFRM_T *p );
 
 #endif

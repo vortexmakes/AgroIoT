@@ -7,20 +7,25 @@
 
 #include "mytypes.h"
 #include "tplcfg.h"
+#include "rkh.h"
 
 void init_tpl_hal( void );
+void deinit_tpl_hal( void );
 
 void tpl_choke_xmit( uchar data );
 void tpl_xmit( uchar data );
 void tpl_stop_xmit( void );
 void tpl_eoftx( void );
 
-#if __TPLINK_DBG__
+#define tpl_enter_critical()   RKH_ENTER_CRITICAL_()
+#define tpl_exit_critical()    RKH_EXIT_CRITICAL_()
+
+#if __TPLINK_DBG__ || TREO_DBG
 
 #include <stdio.h>
 #define mprintf(x)	printf x
 #else
-#define mprintf(x);
+#define mprintf(x)	(void)0
 #endif
 
 #endif
