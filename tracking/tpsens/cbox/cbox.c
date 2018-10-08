@@ -1,4 +1,20 @@
+/**
+ *  \file       cbox.c
+ * 	\bried      Module to handle cbox responces-
+ */
 
+/* -------------------------- Development history -------------------------- */
+/*
+ *  2018.05.17  DaBa  v1.0.00  Initial version
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ *  DaBa  Dario Bali√±a       db@vortexmakes.com
+ */
+
+/* --------------------------------- Notes --------------------------------- */
+/* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
 #include "tplink.h"
 #include "tplhal.h"
@@ -8,6 +24,16 @@
 #include "cbdata.h"
 #include "mytypes.h"
 
+/* ----------------------------- Local macros ------------------------------ */
+/* ------------------------------- Constants ------------------------------- */
+/* ---------------------------- Local data types --------------------------- */
+/* ---------------------------- Global variables --------------------------- */
+/********
+* TODO: Resolve save_in_flash???
+*/
+//extern MUInt save_in_flash;
+
+/* ---------------------------- Local variables ---------------------------- */
 static const PS_PLBUFF_T reqs[] = 
 {
 	{ 1, { CBOX_NULL } },
@@ -17,13 +43,12 @@ static const PS_PLBUFF_T reqs[] =
 MUInt cbfrm_count;
 static CBOX_STR *tmp_cbox;
 static MUInt cbpol_running;
-/********
-* TODO: Resolve save_in_flash???
-*/
-//extern MUInt save_in_flash;
-
 static uchar last_sections_state;
+static PSM_PKT_T pskt;
 
+/* ----------------------- Local function prototypes ----------------------- */
+/* ---------------------------- Local functions ---------------------------- */
+/* ---------------------------- Global functions --------------------------- */
 
 /**
  * 	Protocol scheduler's callbacks.
@@ -96,6 +121,12 @@ reset_cb_data( void )
 	cbfrm_count = 0;
 }
 
+#define assembleShort(p,s)  \
+        { \
+            s = (*p) << 8 | *((p)+1); \
+            p += 2; \
+        }
+
 #define CBP_ADD(x,y) 	((y *)q)->x += ((y *)t)->x;
 #define CBP_PROM(x,y,cast)	((y *)q)->x = (((y *)q)->x > 0) ?			\
 								(cast)((((y *)q)->x + ((y *)t)->x) >> 1) :	\
@@ -111,11 +142,8 @@ proc_cbdata( CBOX_STR *p )
 	void *q;
 	void *t;
 
-    /* TODO: fix responce¥s payload processing
-     */
 	if( tmp_cbox == NULL )
 		return;
-#if 0
 	++cbfrm_count;
 
 	q = &tmp_cbox->h;
@@ -155,7 +183,6 @@ proc_cbdata( CBOX_STR *p )
 	}
 	last_sections_state = tmp_cbox->hum;
 */
-#endif
 }
 
 /**
@@ -168,17 +195,31 @@ proc_cbdata( CBOX_STR *p )
 void 
 on_st_rcv( ST_T station, PS_PLBUFF_T *pb )
 {
+    CBOX_STR cbox;
+    uchar *p;
+
 	switch( station )
 	{
 		case ADDR_NORIA:
-			if( ((CBOX_STR *)(pb->payload))->cmd != CBOX_READ_ALL )
-				break;
+            p = (uchar *)pb->payload;
+            cbox.cmd = *p++;
+            cbox.m = *p++;
 
-			if( pb->qty != 0x10 )
-				break;
-			
-			proc_cbdata( (CBOX_STR *) pb->payload );
+            assembleShort(p, cbox.h.hoard);
+            assembleShort(p, cbox.h.pqty);
+            assembleShort(p, cbox.h.flow);
+
+            assembleShort(p, cbox.a.x);
+            assembleShort(p, cbox.a.y);
+            assembleShort(p, cbox.a.z);
+
+            cbox.a.m = *p++;
+
+            cbox.hum = *p++;
+
+			proc_cbdata((CBOX_STR *)&cbox);
 			break;
+
 		case ADDR_CAUDALIMETRO:
 		default:
 			break;
@@ -248,8 +289,6 @@ on_st_run( ST_T station )
  * tplink Callback functions
  */
 
-static PSM_PKT_T pskt;
-
 void
 tplink_onrcv( TPLFRM_T *p )
 {
@@ -309,4 +348,4 @@ cb_init( CBOX_STR *p )
 	ps_start();
 }	
 
-
+/* ------------------------------ End of file ------------------------------ */

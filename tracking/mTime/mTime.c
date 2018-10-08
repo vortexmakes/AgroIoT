@@ -23,13 +23,15 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
-static unsigned short counter;
-static int enabled = 0;
-
 /* ---------------------------- Global variables --------------------------- */
 extern const timerChain_t timerChain[NUM_TIMER_DIVISORS];
 
 /* ---------------------------- Local variables ---------------------------- */
+static unsigned short counter;
+static int enabled = 0;
+
+/* ----------------------- Local function prototypes ----------------------- */
+/* ---------------------------- Local functions ---------------------------- */
 static
 void
 execute_list(void (* const *p)(void))
@@ -38,8 +40,6 @@ execute_list(void (* const *p)(void))
 		(**p)();
 }
 
-/* ----------------------- Local function prototypes ----------------------- */
-/* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
 mTime_init(void)
