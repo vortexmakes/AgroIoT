@@ -25,6 +25,7 @@
 #include "epoch.h"
 #include "rmc.h"
 #include "gps.h"
+#include "cbox.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -128,6 +129,13 @@ struct IoChgEvt
 {
     RKH_EVT_T evt;
     ruint din;
+};
+
+typedef struct SensorData SensorData;
+struct SensorData
+{
+    RKH_EVT_T evt;
+    CBOX_STR cbox;
 };
 
 /* -------------------------- External variables --------------------------- */

@@ -23,7 +23,7 @@
 
 #include "mytypes.h"
 
-#define __TPLINK_DBG__	1
+#define __TPLINK_DBG__	0
 
 #ifndef TPLINK_DEV_TYPE
 #define TPLINK_DEV_TYPE			TPLINK_DEV_MASTER	/* Device type */

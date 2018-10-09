@@ -38,14 +38,6 @@ typedef struct
 #define EQTYPE_SPRAYER			0xFF07
 #define EQTYPE_SPRAYERPRO		0xFF08
 
-extern MUInt cbfrm_count;
-
-uchar get_movdet_stat( void *pstr );
-char * get_cb_horde( void *pstr );
-char * get_cb_paddles( void *pstr );
-char * get_cb_hum( void *pstr );
-char * get_cb_ax( void *pstr );
-char * get_cb_ay( void *pstr );
-char * get_cb_az( void *pstr );
+CBOX_STR *get_cbdata(void);
 
 #endif

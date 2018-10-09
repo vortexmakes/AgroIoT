@@ -72,6 +72,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evTurn);
     RKH_TR_FWK_SIG(evIoChg);
 	RKH_TR_FWK_SIG(evRestart);
+	RKH_TR_FWK_SIG(evEndOfCycle);
 	RKH_TR_FWK_SIG(evTerminate);     /* press the key escape on the keyboard */
 }
 

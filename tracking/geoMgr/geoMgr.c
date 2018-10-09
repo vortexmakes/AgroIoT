@@ -152,7 +152,7 @@ static UBXCmd_t InitCmds[] =
     { gsvOff, sizeof(gsvOff) },
     { gllOff, sizeof(gllOff) },
     { ggaOff, sizeof(ggaOff) },
-    //{ rmc2Hz, sizeof(rmc2Hz) },
+//    { rmc2Hz, sizeof(rmc2Hz) },
     { NULL, 0 }
 };
 

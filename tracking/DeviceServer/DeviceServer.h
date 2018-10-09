@@ -1,25 +1,26 @@
 /**
- *  \file       cbox.h
- * 	\bried      Module to handle cbox responces-
+ *  \file       DeviceServer.h
+ *  \brief      TpSensor Externals Devices Server
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.17  DaBa  v1.0.00  Initial version
+ *  2018.05.02  DaBa  v1.0.00   Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario BaliÃ±a       db@vortexmakes.com
+ *  DaBa  Dario Baliña db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __CBOX_H__
-#define __CBOX_H__
-#include "cbdata.h"
+#ifndef __DEVICESERVER_H__
+#define __DEVICESERVER_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "rkh.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -27,10 +28,14 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+#define DEVICE_CYCLE_TIME     RKH_TIME_MS(2000)
+
+/* ................................ Signals ................................ */
+/* ........................ Declares active object ......................... */
+RKH_SMA_DCLR(deviceServer);
+
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
-extern ruint tpSens;
-
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
@@ -41,4 +46,3 @@ extern ruint tpSens;
 #endif
 
 /* ------------------------------ End of file ------------------------------ */
-

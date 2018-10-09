@@ -28,7 +28,6 @@
 #include "epoch.h"
 #include "date.h"
 #include "conMgr.h"
-#include "cbox.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WAIT_TIME    RKH_TIME_MS(2000)
@@ -36,7 +35,9 @@
                      "000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
 #define TEST_FRAME_HEADER   "!0|12"
-#define TEST_FRAME_TAIL     "00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
+#define TEST_FRAME_TAIL     "+0"
+
+//#define TEST_FRAME_TAIL     "00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
 /* ......................... Declares active object ........................ */
 typedef struct TrkClient TrkClient;
@@ -51,7 +52,9 @@ RKH_DCLR_COND_STATE Client_CheckResp;
 static void init(TrkClient *const me, RKH_EVT_T *pe);
 
 /* ........................ Declares effect actions ........................ */
-static void sendFrame(TrkClient *const me, RKH_EVT_T *pe);
+static void updateGeoStamp(TrkClient *const me, RKH_EVT_T *pe);
+static void sendIo(TrkClient *const me, RKH_EVT_T *pe);
+static void sendSensor(TrkClient *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void sendFail(TrkClient *const me);
@@ -74,13 +77,15 @@ RKH_CREATE_COMP_REGION_STATE(Client_Connected, NULL, NULL, RKH_ROOT,
                              &Client_Idle, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Connected)
+    RKH_TRINT(evGeoStamp,        NULL, updateGeoStamp),
+    RKH_TRINT(evGeoStampInvalid, NULL, NULL),
     RKH_TRREG(evNetDisconnected, NULL, NULL, &Client_Disconnected),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(Client_Idle, NULL, NULL, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Idle)
-    RKH_TRREG(evGeoStamp,           NULL, sendFrame, &Client_Send),
-    RKH_TRREG(evGeoStampInvalid,    NULL, sendFrame, &Client_Send),
+    RKH_TRREG(evSensorData,    NULL, sendSensor, &Client_Send),
+    RKH_TRREG(evIoChg,         NULL, sendIo, &Client_Send),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(Client_Send, NULL, NULL, &Client_Connected, NULL);
@@ -106,9 +111,10 @@ struct TrkClient
 {
     RKH_SMA_T ao;       /* Base structure */
     RKH_TMR_T timer;    
+    GeoStamp geo;
 };
 
-RKH_SMA_CREATE(TrkClient, trkClient, 3, HCAL, &Client_Disconnected, init, NULL);
+RKH_SMA_CREATE(TrkClient, trkClient, 4, HCAL, &Client_Disconnected, init, NULL);
 RKH_SMA_DEF_PTR(trkClient);
 
 /* ------------------------------- Constants ------------------------------- */
@@ -119,6 +125,8 @@ static RKH_STATIC_EVENT(e_tout, evTimeout);
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static SendEvt evSendObj;
 static char *testFrame = TEST_FRAME;
+static ruint din;
+static ruint dout;
 static CBOX_STR cbox;
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -132,6 +140,7 @@ init(TrkClient *const me, RKH_EVT_T *pe)
     tpConnection_subscribe(me);
     tpGeo_subscribe(me);
     tpIoChg_subscribe(me);
+	tpSensor_subscribe(me);
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->timer);
@@ -145,44 +154,87 @@ init(TrkClient *const me, RKH_EVT_T *pe)
 
     RKH_SET_STATIC_EVENT(RKH_UPCAST(RKH_EVT_T, &evSendObj), evSend);
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
-
-	cb_init(&cbox);
 }
 
 /* ............................ Effect actions ............................. */
 static void
-sendFrame(TrkClient *const me, RKH_EVT_T *pe)
+updateGeoStamp(TrkClient *const me, RKH_EVT_T *pe)
 {
-    char *p;
-    GeoStamp *geo;
+    me->geo = (((GeoStampEvt *)pe)->gps);
+}
 
-    geo = &(((GeoStampEvt *)pe)->gps);
+static void
+sendFrame(TrkClient *const me)
+{
+    char buff[10];
+
+    char *p;
 
     p = (char *)evSendObj.buf;
 
     sprintf(p, "%s", TEST_FRAME_HEADER);
     strcat(p, ConMgr_Imei());
     strcat(p, ",");
-    strcat(p, geo->utc);
+    strcat(p, me->geo.utc);
     strcat(p, ",");
-	strcat(p, geo->latInd);
-	strcat(p, geo->latitude);
+	strcat(p, me->geo.latInd);
+	strcat(p, me->geo.latitude);
     strcat(p, ",");
-	strcat(p, geo->longInd);
-	strcat(p, geo->longitude);
+	strcat(p, me->geo.longInd);
+	strcat(p, me->geo.longitude);
     strcat(p, ",");
-    strcat(p, geo->speed);
+    strcat(p, me->geo.speed);
     strcat(p, ",");
-    strcat(p, geo->course);
+    strcat(p, me->geo.course);
     strcat(p, ",");
-    strcat(p, geo->date);
+    strcat(p, me->geo.date);
     strcat(p, ",");
+
+    sprintf(buff, "%02x%02x,", dout, din );
+    strcat(p, buff);
+
+    sprintf(buff, "%04x,", cbox.h.hoard );
+    strcat(p, buff);
+
+    sprintf(buff, "%02x,", cbox.h.pqty );
+    strcat(p, buff);
+
+    sprintf(buff, "%02x,", cbox.hum );
+    strcat(p, buff);
+
+    sprintf(buff, "%04x,", cbox.a.x );
+    strcat(p, buff);
+    sprintf(buff, "%04x,", cbox.a.y );
+    strcat(p, buff);
+    sprintf(buff, "%04x,", cbox.a.z );
+    strcat(p, buff);
+
     strcat(p, TEST_FRAME_TAIL);
 
     evSendObj.size = strlen((char *)evSendObj.buf);
     tpConnection_publish(&evSendObj, me);
+}
 
-	get_cb_data();
+static void
+sendIo(TrkClient *const me, RKH_EVT_T *pe)
+{
+    IoChgEvt *pio;
+
+    pio = RKH_DOWNCAST(IoChgEvt, pe);
+    din = pio->din;
+
+    sendFrame(me);
+}
+
+static void
+sendSensor(TrkClient *const me, RKH_EVT_T *pe)
+{
+    SensorData *ps;
+
+    ps = RKH_DOWNCAST(SensorData, pe);
+    cbox = ps->cbox;
+    
+    sendFrame(me);
 }
 
 /* ............................. Entry actions ............................. */

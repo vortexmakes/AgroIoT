@@ -160,6 +160,9 @@
     <ClCompile Include="..\..\..\tpsens\ps\psport.c">
       <Filter>tpsens\ps</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\deviceServer\deviceServer.c">
+      <Filter>tracking\deviceServer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -224,6 +227,9 @@
     </Filter>
     <Filter Include="tpsens\tplink">
       <UniqueIdentifier>{a49ebf66-1fda-4e14-b082-fbfd0a587cd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tracking\deviceServer">
+      <UniqueIdentifier>{d33fa21a-77df-40df-8897-af9d9c3fcba4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
