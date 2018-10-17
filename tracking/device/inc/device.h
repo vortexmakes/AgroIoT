@@ -19,6 +19,8 @@
 #define __DEVICE_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "jobcond.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -27,8 +29,18 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ------------------------------- Data types ------------------------------ */
+typedef struct Device Device;
+struct Device
+{
+    int id;
+    JobCond *jobCond;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void device_ctor(Device *const me, int id, JobCond *jobCond, 
+                 TestOper testOper);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

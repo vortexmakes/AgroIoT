@@ -1,11 +1,11 @@
 /**
- *  \file       test_device.c
- *  \brief      Unit test for device module.
+ *  \file       test_jobcond.c
+ *  \brief      Unit test for job condition module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.16.10  LeFr  v1.0.00  ---
+ *  2018.17.10  LeFr  v1.0.00  ---
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -16,22 +16,11 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
-#include "device.h"
-#include "Mock_jobcond.h"
+#include "jobcond.h"
 #include "Mock_rkhassert.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-enum
-{
-    DEVA, DEVB, NUM_DEVS
-};
-
-enum
-{
-    X1, X2, Y0
-};
-
 /* ---------------------------- Local data types --------------------------- */
 typedef struct DevAJobCond DevAJobCond;
 struct DevAJobCond
@@ -42,19 +31,9 @@ struct DevAJobCond
     int yMin;
 };
 
-typedef struct DevA DevA;
-struct DevA
-{
-    Device base;
-    int x;
-    int y;
-};
-
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 static DevAJobCond devAJobCond;
-static DevA devA;               /* It must be statically instantiated in a */
-                                /* concrete class (c source file) */
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -65,72 +44,52 @@ MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 }
 
 static int 
-DevA_testJobCond(JobCond *const me)
+DevA_test(JobCond *const me)
 {
     return 1;
-}
-
-static void
-DevA_ctor(int xMax, int xMin, int yMin, TestOper testOper)
-{
-    DevA *me = &devA;
-    DevAJobCond *jc;
-
-    device_ctor((Device *)me, DEVA, (JobCond *)&devAJobCond, testOper);
-    me->x = 0; /* default initialization */
-    me->y = 0;
-    jc = (DevAJobCond *)(me->base.jobCond); /* it's not quite safe */
-    jc->xMax = xMax; /* initializes the job condition */
-    jc->xMin = xMin;
-    jc->yMin = yMin;
 }
 
 /* ---------------------------- Global functions --------------------------- */
 void 
 setUp(void)
 {
-    Mock_jobcond_Init();
+    Mock_rkhassert_Init();
 }
 
 void 
 tearDown(void)
 {
-    Mock_jobcond_Verify();
-    Mock_jobcond_Destroy();
+    Mock_rkhassert_Verify();
+    Mock_rkhassert_Destroy();
 }
 
 void
 test_InitAttr(void)
 {
-    jobcond_ctor_Expect((JobCond *)&devAJobCond, DevA_testJobCond);
+    JobCond *me = (JobCond *)&devAJobCond;
 
-    device_ctor((Device *)&devA, DEVA, (JobCond *)&devAJobCond, 
-                DevA_testJobCond);
-
-    TEST_ASSERT_EQUAL(DEVA, devA.base.id);
-    TEST_ASSERT_EQUAL(&devAJobCond, devA.base.jobCond);
-}
-
-void
-test_InitConcreteDevice(void)
-{
-    jobcond_ctor_Expect((JobCond *)&devAJobCond, DevA_testJobCond);
-
-    DevA_ctor(X1, X2, Y0, DevA_testJobCond);
-
-    TEST_ASSERT_EQUAL(DEVA, devA.base.id);
-    TEST_ASSERT_EQUAL(&devAJobCond, devA.base.jobCond);
+    jobcond_ctor(me, DevA_test);
+    TEST_ASSERT_EQUAL(DevA_test, me->test);
 }
 
 void
 test_FailsWrongArgs(void)
 {
-    rkh_assert_Expect("device", 0);
+    JobCond *me = (JobCond *)&devAJobCond;
+
+    rkh_assert_Expect("jobcond", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
 
-    device_ctor((Device *)0, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond);
+    jobcond_ctor((JobCond *)0, DevA_test);
+
+    rkh_assert_Expect("jobcond", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    jobcond_ctor(me, (TestOper)0);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -37,6 +37,8 @@ struct JobCond
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void jobcond_ctor(JobCond *const me, TestOper testOper);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

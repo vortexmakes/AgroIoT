@@ -27,6 +27,7 @@
   :include:
     - inc
     - ../../third-party/rkh/source/portable/test
+    - ../../third-party/rkh/source/fwk/inc
   :support:
     - test/support
 
