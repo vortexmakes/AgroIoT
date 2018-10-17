@@ -71,12 +71,12 @@ DevA_testJobCond(JobCond *const me)
 }
 
 static void
-DevA_ctor(int xMax, int xMin, int yMin, TestOper testOper)
+DevA_ctor(int xMax, int xMin, int yMin)
 {
     DevA *me = &devA;
     DevAJobCond *jc;
 
-    device_ctor((Device *)me, DEVA, (JobCond *)&devAJobCond, testOper);
+    device_ctor((Device *)me, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond);
     me->x = 0; /* default initialization */
     me->y = 0;
     jc = (DevAJobCond *)(me->base.jobCond); /* it's not quite safe */
@@ -116,7 +116,7 @@ test_InitConcreteDevice(void)
 {
     jobcond_ctor_Expect((JobCond *)&devAJobCond, DevA_testJobCond);
 
-    DevA_ctor(X1, X2, Y0, DevA_testJobCond);
+    DevA_ctor(X1, X2, Y0);
 
     TEST_ASSERT_EQUAL(DEVA, devA.base.id);
     TEST_ASSERT_EQUAL(&devAJobCond, devA.base.jobCond);

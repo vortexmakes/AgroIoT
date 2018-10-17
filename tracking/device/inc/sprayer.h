@@ -1,11 +1,11 @@
 /**
- *  \file       device.h
- *  \brief      Specifies the interface of Device module
+ *  \file       sprayer.h
+ *  \brief      Specifies the interface of sprayer concrete module
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.16.10  LeFr  v1.0.00  Initial version
+ *  2018.17.10  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -15,11 +15,11 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __DEVICE_H__
-#define __DEVICE_H__
+#ifndef __SPRAYER_H__
+#define __SPRAYER_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "jobcond.h"
+#include "device.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -28,24 +28,10 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-typedef enum DevId DevId;
-enum DevId
-{
-    SPRAYER, NUM_DEVS
-};
-
 /* ------------------------------- Data types ------------------------------ */
-typedef struct Device Device;
-struct Device
-{
-    int id;
-    JobCond *jobCond;
-};
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void device_ctor(Device *const me, int id, JobCond *jobCond, 
-                 TestOper testOper);
+void sprayer_ctor(int sectionThd);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
