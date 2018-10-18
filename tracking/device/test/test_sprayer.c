@@ -17,6 +17,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
 #include "sprayer.h"
+#include "sprayerSpy.h"
 #include "Mock_rkhassert.h"
 #include "Mock_device.h"
 
@@ -60,13 +61,20 @@ void
 test_InitAttr(void)
 {
     int sectionThd_Expect = 5;
+    Device *sprayer = (Device *)0;
 
     device_ctor_Expect(0, SPRAYER, 0, 0);
     device_ctor_IgnoreArg_me();
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_testOper();
 
-    sprayer_ctor(sectionThd_Expect);
+    sprayer = sprayer_ctor(sectionThd_Expect);
+
+    TEST_ASSERT_EQUAL(0, sprayerSpy_getMaxNumSections());
+    TEST_ASSERT_EQUAL(0, sprayerSpy_getSection());
+    TEST_ASSERT_EQUAL(0, sprayerSpy_getDosage());
+    TEST_ASSERT_EQUAL(sectionThd_Expect, sprayerSpy_getSectionThd());
+    TEST_ASSERT_NOT_NULL(sprayer);
 }
 
 void

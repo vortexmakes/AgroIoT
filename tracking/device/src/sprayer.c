@@ -52,14 +52,39 @@ sprayer_test(JobCond *const me)
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void 
+Device * 
 sprayer_ctor(int sectionThd)
 {
     Sprayer *me = &sprayer;
-    SprayerJobCond *jc;
 
     device_ctor((Device *)me, SPRAYER, (JobCond *)&sprayerJobCond, 
                 sprayer_test);
+    sprayerJobCond.sectionThd = sectionThd;
+    return (Device *)&sprayer;
+}
+
+int 
+sprayerSpy_getMaxNumSections(void)
+{
+    return sprayer.maxNumSections;
+}
+
+int 
+sprayerSpy_getSection(void)
+{
+    return sprayer.section;
+}
+
+int 
+sprayerSpy_getDosage(void)
+{
+    return sprayer.dosage;
+}
+
+int 
+sprayerSpy_getSectionThd(void)
+{
+    return sprayerJobCond.sectionThd;
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -1,11 +1,11 @@
 /**
- *  \file       jobcond.h
- *  \brief      Specifies the interface of JobCond module
+ *  \file       sprayerSpy.h
+ *  \brief      Specifies the interface of sprayer spy
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.16.10  LeFr  v1.0.00  Initial version
+ *  2018.18.10  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -15,10 +15,12 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __JOBCOND_H__
-#define __JOBCOND_H__
+#ifndef __SPRAYERSPY_H__
+#define __SPRAYERSPY_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "sprayer.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -27,17 +29,12 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ------------------------------- Data types ------------------------------ */
-typedef struct JobCond JobCond;
-typedef int (*TestOper)(JobCond *const me);
-
-struct JobCond
-{
-    TestOper test;
-};
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void jobcond_ctor(JobCond *const me, TestOper testOper);
+int sprayerSpy_getMaxNumSections(void);
+int sprayerSpy_getSection(void);
+int sprayerSpy_getDosage(void);
+int sprayerSpy_getSectionThd(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -16,7 +16,6 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "device.h"
-#include "jobcond.h"
 #include "rkhassert.h"
 #include "rkhitl.h"     /* It's needed to include platform files */
 
@@ -33,11 +32,13 @@ RKH_MODULE_NAME(device)
 void 
 device_ctor(Device *const me, int id, JobCond *jobCond, TestOper testOper)
 {
-    RKH_REQUIRE(me != (Device *)0);
+    RKH_REQUIRE((me != (Device *)0) && 
+                (jobCond != (JobCond *)0) &&
+                (testOper != (TestOper)0));
 
-    jobcond_ctor(jobCond, testOper);
     me->id = id;
     me->jobCond = jobCond;
+    me->jobCond->test = testOper;
 }
 
 /* ------------------------------ End of file ------------------------------ */

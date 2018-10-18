@@ -17,19 +17,13 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
 #include "device.h"
-#include "Mock_jobcond.h"
 #include "Mock_rkhassert.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 enum
 {
-    DEVA, DEVB, NUM_DEVS
-};
-
-enum
-{
-    X1, X2, Y0
+    DEVA, DEVB
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -64,14 +58,31 @@ MockAssertCallback(const char* const file, int line, int cmock_num_calls)
     TEST_PASS();
 }
 
-static int 
-DevA_testJobCond(JobCond *const me)
+static void
+MockJobCondCtorCallback(JobCond *const me, TestOper testOper, 
+                        int cmock_num_calls)
 {
-    return 1;
+    me->test = testOper;
 }
 
-static void
-DevA_ctor(int xMax, int xMin, int yMin)
+static int 
+DevA_testJobCond(Device *const me)
+{
+    DevAJobCond *jc;
+    DevA *realMe;
+    int result = 1;
+
+    realMe = (DevA *)me;
+    jc = (DevAJobCond *)(me->jobCond);
+    if (realMe->x > jc->xMax)
+    {
+        result = 0;
+    }
+    return result;
+}
+
+static Device *
+DevA_ctor(int xMin, int xMax, int yMin)
 {
     DevA *me = &devA;
     DevAJobCond *jc;
@@ -83,43 +94,51 @@ DevA_ctor(int xMax, int xMin, int yMin)
     jc->xMax = xMax; /* initializes the job condition */
     jc->xMin = xMin;
     jc->yMin = yMin;
+    return (Device *)me;
 }
 
 /* ---------------------------- Global functions --------------------------- */
 void 
 setUp(void)
 {
-    Mock_jobcond_Init();
 }
 
 void 
 tearDown(void)
 {
-    Mock_jobcond_Verify();
-    Mock_jobcond_Destroy();
 }
 
 void
 test_InitAttr(void)
 {
-    jobcond_ctor_Expect((JobCond *)&devAJobCond, DevA_testJobCond);
+    Device *me = (Device *)&devA;
 
-    device_ctor((Device *)&devA, DEVA, (JobCond *)&devAJobCond, 
-                DevA_testJobCond);
+    device_ctor(me, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond);
 
-    TEST_ASSERT_EQUAL(DEVA, devA.base.id);
-    TEST_ASSERT_EQUAL(&devAJobCond, devA.base.jobCond);
+    TEST_ASSERT_EQUAL(DEVA, me->id);
+    TEST_ASSERT_EQUAL(&devAJobCond, me->jobCond);
 }
 
 void
 test_InitConcreteDevice(void)
 {
-    jobcond_ctor_Expect((JobCond *)&devAJobCond, DevA_testJobCond);
+    Device *me = (Device *)0;
+    me = DevA_ctor(1, 8, 3);
+    TEST_ASSERT_NOT_NULL(me);
+}
 
-    DevA_ctor(X1, X2, Y0);
+void
+test_CallsTestOper(void)
+{
+    Device *me = (Device *)0;
+    int result;
 
-    TEST_ASSERT_EQUAL(DEVA, devA.base.id);
-    TEST_ASSERT_EQUAL(&devAJobCond, devA.base.jobCond);
+    me = DevA_ctor(1, 8, 3);
+    devA.x = 5;
+    devA.y = 4;
+
+    result = (*me->jobCond->test)(me);
+    TEST_ASSERT_EQUAL(0, result);
 }
 
 void

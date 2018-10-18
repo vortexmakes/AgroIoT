@@ -19,8 +19,6 @@
 #define __DEVICE_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "jobcond.h"
-
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -35,7 +33,16 @@ enum DevId
 };
 
 /* ------------------------------- Data types ------------------------------ */
+typedef struct JobCond JobCond;
 typedef struct Device Device;
+typedef int (*TestOper)(Device *const me);
+
+struct JobCond
+{
+    TestOper test;
+    Device *dev;
+};
+
 struct Device
 {
     int id;

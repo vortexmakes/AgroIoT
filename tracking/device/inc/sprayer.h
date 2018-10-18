@@ -31,7 +31,7 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void sprayer_ctor(int sectionThd);
+Device *sprayer_ctor(int sectionThd);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
