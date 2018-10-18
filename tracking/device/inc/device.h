@@ -19,6 +19,8 @@
 #define __DEVICE_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "cbdata.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -36,6 +38,7 @@ enum DevId
 typedef struct JobCond JobCond;
 typedef struct Device Device;
 typedef int (*TestOper)(Device *const me);
+typedef void (*TransformOper)(Device *const me, CBOX_STR *rawData);
 
 struct JobCond
 {
@@ -47,12 +50,13 @@ struct Device
 {
     int id;
     JobCond *jobCond;
+    TransformOper transform;
 };
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void device_ctor(Device *const me, int id, JobCond *jobCond, 
-                 TestOper testOper);
+                 TestOper testOper, TransformOper transformOper);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -74,11 +74,22 @@ DevA_testJobCond(Device *const me)
 
     realMe = (DevA *)me;
     jc = (DevAJobCond *)(me->jobCond);
-    if (realMe->x > jc->xMax)
+    if ((realMe->x > jc->xMax) || (realMe->x < jc->xMin) || 
+        (realMe->y < jc->yMin))
     {
         result = 0;
     }
     return result;
+}
+
+static void
+DevA_transform(Device *const me, CBOX_STR *rawData)
+{
+    DevA *realMe;
+
+    realMe = (DevA *)me;
+    realMe->x = rawData->a.y;
+    realMe->y = rawData->a.z;
 }
 
 static Device *
@@ -87,7 +98,8 @@ DevA_ctor(int xMin, int xMax, int yMin)
     DevA *me = &devA;
     DevAJobCond *jc;
 
-    device_ctor((Device *)me, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond);
+    device_ctor((Device *)me, DEVA, (JobCond *)&devAJobCond, 
+                DevA_testJobCond, DevA_transform);
     me->x = 0; /* default initialization */
     me->y = 0;
     jc = (DevAJobCond *)(me->base.jobCond); /* it's not quite safe */
@@ -95,6 +107,15 @@ DevA_ctor(int xMin, int xMax, int yMin)
     jc->xMin = xMin;
     jc->yMin = yMin;
     return (Device *)me;
+}
+
+static void
+DevA_set(int x, int y)
+{
+    DevA *me = &devA;
+
+    me->x = x;
+    me->y = y;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -113,7 +134,8 @@ test_InitAttr(void)
 {
     Device *me = (Device *)&devA;
 
-    device_ctor(me, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond);
+    device_ctor(me, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond, 
+                DevA_transform);
 
     TEST_ASSERT_EQUAL(DEVA, me->id);
     TEST_ASSERT_EQUAL(&devAJobCond, me->jobCond);
@@ -130,15 +152,28 @@ test_InitConcreteDevice(void)
 void
 test_CallsTestOper(void)
 {
-    Device *me = (Device *)0;
+    Device *me;
     int result;
 
-    me = DevA_ctor(1, 8, 3);
-    devA.x = 5;
-    devA.y = 4;
+    me = DevA_ctor(2, 8, 3);
+    DevA_set(5, 4);
 
     result = (*me->jobCond->test)(me);
-    TEST_ASSERT_EQUAL(0, result);
+    TEST_ASSERT_EQUAL(1, result);
+}
+
+void
+test_TransformsReceivedRawDataToDeviceClass(void)
+{
+    Device *me;
+    CBOX_STR rawData;
+
+    me = DevA_ctor(2, 8, 3);
+	rawData.a.x = DEVA;
+	rawData.a.y = 4;
+	rawData.a.z = 5;
+
+    (*me->transform)(me, &rawData);
 }
 
 void
@@ -149,7 +184,8 @@ test_FailsWrongArgs(void)
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
 
-    device_ctor((Device *)0, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond);
+    device_ctor((Device *)0, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond, 
+                DevA_transform);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -30,15 +30,18 @@ RKH_MODULE_NAME(device)
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void 
-device_ctor(Device *const me, int id, JobCond *jobCond, TestOper testOper)
+device_ctor(Device *const me, int id, JobCond *jobCond, TestOper testOper, 
+            TransformOper transformOper)
 {
     RKH_REQUIRE((me != (Device *)0) && 
                 (jobCond != (JobCond *)0) &&
-                (testOper != (TestOper)0));
+                (testOper != (TestOper)0) &&
+                (transformOper != (TransformOper)0));
 
     me->id = id;
     me->jobCond = jobCond;
     me->jobCond->test = testOper;
+    me->transform = transformOper;
 }
 
 /* ------------------------------ End of file ------------------------------ */
