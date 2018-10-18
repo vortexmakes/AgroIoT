@@ -4,30 +4,28 @@
 #ifndef __CBDATA_H__
 #define __CBDATA_H__
 
-#include "mytypes.h"
-
 typedef struct
 {
 	short x;
 	short y;
 	short z;
-	uchar m;
+	unsigned char m;
 }ACCEL_T;
 
 typedef struct
 {
-	ushort hoard;	// grain hoard.
-	ushort pqty;     // pails quantity.
-	ushort flow;	// grain volume by second.
+	unsigned short hoard;	// grain hoard.
+	unsigned short pqty;     // pails quantity.
+	unsigned short flow;	// grain volume by second.
 } GRSENS_T;
 
 typedef struct
 {
-	uchar cmd;
-	uchar m;
+	unsigned char cmd;
+	unsigned char m;
 	GRSENS_T h;
 	ACCEL_T a;
-	uchar hum;
+	unsigned char hum;
 }CBOX_STR;
 
 #define CBOX_NOT_PRESENT		0xFFFF
