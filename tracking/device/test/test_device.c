@@ -83,23 +83,32 @@ DevA_testJobCond(Device *const me)
 }
 
 static void
-DevA_transform(Device *const me, CBOX_STR *rawData)
+DevA_makeEvt(Device *const me, CBOX_STR *rawData)
 {
     DevA *realMe;
 
+    /* allocates an Evt? object */
+    /* sets its attributes from rawData */
+    /* return the object address */
     realMe = (DevA *)me;
     realMe->x = rawData->a.y;
     realMe->y = rawData->a.z;
 }
 
 static Device *
+DevA_getInstance(void)
+{
+    return (Device *)&devA;
+}
+
+static Device *
 DevA_ctor(int xMin, int xMax, int yMin)
 {
-    DevA *me = &devA;
     DevAJobCond *jc;
 
+    DevA *me = &devA;
     device_ctor((Device *)me, DEVA, (JobCond *)&devAJobCond, 
-                DevA_testJobCond, DevA_transform);
+                DevA_testJobCond, DevA_makeEvt);
     me->x = 0; /* default initialization */
     me->y = 0;
     jc = (DevAJobCond *)(me->base.jobCond); /* it's not quite safe */
@@ -135,7 +144,7 @@ test_InitAttr(void)
     Device *me = (Device *)&devA;
 
     device_ctor(me, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond, 
-                DevA_transform);
+                DevA_makeEvt);
 
     TEST_ASSERT_EQUAL(DEVA, me->id);
     TEST_ASSERT_EQUAL(&devAJobCond, me->jobCond);
@@ -163,6 +172,18 @@ test_CallsTestOper(void)
 }
 
 void
+test_FailsWrongArgs(void)
+{
+    rkh_assert_Expect("device", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    device_ctor((Device *)0, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond, 
+                DevA_makeEvt);
+}
+
+void
 test_TransformsReceivedRawDataToDeviceClass(void)
 {
     Device *me;
@@ -173,19 +194,7 @@ test_TransformsReceivedRawDataToDeviceClass(void)
 	rawData.a.y = 4;
 	rawData.a.z = 5;
 
-    (*me->transform)(me, &rawData);
-}
-
-void
-test_FailsWrongArgs(void)
-{
-    rkh_assert_Expect("device", 0);
-    rkh_assert_IgnoreArg_file();
-    rkh_assert_IgnoreArg_line();
-    rkh_assert_StubWithCallback(MockAssertCallback);
-
-    device_ctor((Device *)0, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond, 
-                DevA_transform);
+    (*me->makeEvt)(me, &rawData);
 }
 
 /* ------------------------------ End of file ------------------------------ */

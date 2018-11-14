@@ -38,7 +38,7 @@ enum DevId
 typedef struct JobCond JobCond;
 typedef struct Device Device;
 typedef int (*TestOper)(Device *const me);
-typedef void (*TransformOper)(Device *const me, CBOX_STR *rawData);
+typedef void (*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
 
 struct JobCond
 {
@@ -50,13 +50,13 @@ struct Device
 {
     int id;
     JobCond *jobCond;
-    TransformOper transform;
+    MakeEvtOper makeEvt;
 };
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void device_ctor(Device *const me, int id, JobCond *jobCond, 
-                 TestOper testOper, TransformOper transformOper);
+                 TestOper testOper, MakeEvtOper makeEvt);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
