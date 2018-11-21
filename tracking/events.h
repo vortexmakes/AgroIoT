@@ -21,7 +21,7 @@
 #define __EVENTS_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
+#include "rkhevt.h"
 #include "epoch.h"
 #include "rmc.h"
 #include "gps.h"

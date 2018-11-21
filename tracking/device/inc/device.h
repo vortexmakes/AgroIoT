@@ -20,6 +20,7 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "cbdata.h"
+#include "rkhevt.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -38,7 +39,7 @@ enum DevId
 typedef struct JobCond JobCond;
 typedef struct Device Device;
 typedef int (*TestOper)(Device *const me);
-typedef void (*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
+typedef RKH_EVT_T *(*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
 
 struct JobCond
 {
@@ -57,6 +58,8 @@ struct Device
 /* -------------------------- Function prototypes -------------------------- */
 void device_ctor(Device *const me, int id, JobCond *jobCond, 
                  TestOper testOper, MakeEvtOper makeEvt);
+RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
+void device_udpate(Device *const me, RKH_EVT_T *evt);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

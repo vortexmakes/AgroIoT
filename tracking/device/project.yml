@@ -29,6 +29,7 @@
     - ../../third-party/rkh/source/portable/test
     - ../../third-party/rkh/source/fwk/inc
     - ../tpsens/cbox
+    - ../
   :support:
     - test/support
 

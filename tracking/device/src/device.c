@@ -38,10 +38,23 @@ device_ctor(Device *const me, int id, JobCond *jobCond, TestOper testOper,
                 (testOper != (TestOper)0) &&
                 (makeEvt!= (MakeEvtOper)0));
 
-    me->id = id;
     me->jobCond = jobCond;
     me->jobCond->test = testOper;
+    me->id = id;
     me->makeEvt = makeEvt;
+}
+
+RKH_EVT_T * 
+device_makeEvt(Device *const me, CBOX_STR *rawData)
+{
+    RKH_REQUIRE((me != (Device *)0) && (rawData != (CBOX_STR *)0) &&
+                (me->makeEvt != (MakeEvtOper)0));
+    return (*me->makeEvt)(me, rawData);
+}
+
+void 
+device_udpate(Device *const me, RKH_EVT_T *evt)
+{
 }
 
 /* ------------------------------ End of file ------------------------------ */
