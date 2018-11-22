@@ -30,18 +30,20 @@ RKH_MODULE_NAME(device)
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void 
-device_ctor(Device *const me, int id, JobCond *jobCond, TestOper testOper, 
-            MakeEvtOper makeEvt)
+device_ctor(Device *const me, int id, JobCond *jobCond, 
+            TestOper testOper, MakeEvtOper makeEvt, UpdateOper update)
 {
     RKH_REQUIRE((me != (Device *)0) && 
                 (jobCond != (JobCond *)0) &&
                 (testOper != (TestOper)0) &&
-                (makeEvt!= (MakeEvtOper)0));
+                (makeEvt!= (MakeEvtOper)0) &&
+                (update!= (UpdateOper)0));
 
     me->jobCond = jobCond;
     me->jobCond->test = testOper;
     me->id = id;
     me->makeEvt = makeEvt;
+    me->update = update;
 }
 
 RKH_EVT_T * 
@@ -53,8 +55,11 @@ device_makeEvt(Device *const me, CBOX_STR *rawData)
 }
 
 void 
-device_udpate(Device *const me, RKH_EVT_T *evt)
+device_update(Device *const me, RKH_EVT_T *evt)
 {
+    RKH_REQUIRE((me != (Device *)0) && (evt != (RKH_EVT_T *)0) &&
+                (me->update != (UpdateOper)0));
+    (*me->update)(me, evt);
 }
 
 /* ------------------------------ End of file ------------------------------ */

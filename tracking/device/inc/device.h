@@ -40,6 +40,7 @@ typedef struct JobCond JobCond;
 typedef struct Device Device;
 typedef int (*TestOper)(Device *const me);
 typedef RKH_EVT_T *(*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
+typedef void (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
 
 struct JobCond
 {
@@ -52,14 +53,15 @@ struct Device
     int id;
     JobCond *jobCond;
     MakeEvtOper makeEvt;
+    UpdateOper update;
 };
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void device_ctor(Device *const me, int id, JobCond *jobCond, 
-                 TestOper testOper, MakeEvtOper makeEvt);
+                 TestOper testOper, MakeEvtOper makeEvt, UpdateOper update);
 RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
-void device_udpate(Device *const me, RKH_EVT_T *evt);
+void device_update(Device *const me, RKH_EVT_T *evt);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

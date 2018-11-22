@@ -112,6 +112,18 @@ DevA_makeEvt(Device *const me, CBOX_STR *rawData)
     evtDevAData.param.y = rawData->a.z;
 }
 
+static void
+DevA_update(Device *const me, RKH_EVT_T *evt)
+{
+    DevA *dev;
+    EvtDevAData *devEvt;
+
+    devEvt = (EvtDevAData *)evt;
+    dev = (DevA *)(((EvtDevData *)devEvt)->dev);
+    dev->x = devEvt->param.x;
+    dev->y = devEvt->param.y;
+}
+
 static Device *
 DevA_getInstance(void)
 {
@@ -125,7 +137,7 @@ DevA_ctor(int xMin, int xMax, int yMin) /* Parameter of job condition */
 
     DevA *me = &devA;
     device_ctor((Device *)me, DEVA, (JobCond *)&devAJobCond, 
-                DevA_testJobCond, DevA_makeEvt);
+                DevA_testJobCond, DevA_makeEvt, DevA_update);
     me->x = 0; /* atttibute default initialization */
     me->y = 0;
     jc = (DevAJobCond *)(me->base.jobCond); /* it's not quite safe */
@@ -177,7 +189,7 @@ test_InitAttr(void)
     Device *me = (Device *)&devA;
 
     device_ctor(me, DEVA, (JobCond *)&devAJobCond, 
-                DevA_testJobCond, DevA_makeEvt);
+                DevA_testJobCond, DevA_makeEvt, DevA_update);
 
     TEST_ASSERT_EQUAL(DEVA, me->id);
     TEST_ASSERT_EQUAL(&devAJobCond, me->jobCond);
@@ -215,7 +227,7 @@ test_FailsWrongArgs(void)
     rkh_assert_StubWithCallback(MockAssertCallback);
 
     device_ctor((Device *)0, DEVA, (JobCond *)&devAJobCond, DevA_testJobCond, 
-                DevA_makeEvt);
+                DevA_makeEvt, DevA_update);
 }
 
 void
@@ -239,7 +251,7 @@ void
 test_updateDeviceAttributes(void)
 {
     Device *devAObj, *dev;          /* collector attribute */
-    RKH_EVT_T *evt;
+    RKH_EVT_T *evt;                 /* transition event */
 
     devAObj = DevA_ctor(2, 8, 3);   /* from main() */
     evtDevAData.base.dev = devAObj; /* from prosens */
