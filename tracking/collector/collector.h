@@ -1,11 +1,11 @@
 /**
- *  \file       device.h
- *  \brief      Specifies the interface of Device module
+ *  \file       collector.h
+ *  \brief      Specifies the interface of Collector module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.16.10  LeFr  v1.0.00  Initial version
+ *  2018.11.22  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -15,14 +15,12 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __DEVICE_H__
-#define __DEVICE_H__
+#ifndef __COLLECTOR_H__
+#define __COLLECTOR_H__
 
 /* ----------------------------- Include files ----------------------------- */
+/* #include "rkh.h" */
 #include "cbdata.h"
-#include "rkhevt.h"
-#include "rkhsma.h"
-#include "collector.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -31,51 +29,20 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-typedef enum DevId DevId;
-enum DevId
+/* ................................ Signals ................................ */
+/* ................................. Events ................................ */
+/* ........................ Declares active object ......................... */
+typedef struct Device Device;
+typedef struct Collector Collector;
+struct Collector
 {
-    SPRAYER, NUM_DEVS
+    CBOX_STR rawData;
+    Device *dev;
 };
 
 /* ------------------------------- Data types ------------------------------ */
-typedef struct JobCond JobCond;
-typedef struct Device Device;
-typedef struct DevVtbl DevVtbl;
-typedef int (*TestOper)(JobCond *const me);
-typedef RKH_EVT_T *(*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
-typedef void (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
-typedef void (*UpdateRawOper)(Device *const me);
-
-struct JobCond
-{
-    TestOper test;  /** Tests job condition */
-    Device *dev;
-    RKH_SMA_T *collector;
-};
-
-struct DevVtbl
-{
-    MakeEvtOper makeEvt;
-    UpdateOper update;
-    UpdateRawOper updateRaw;
-};
-
-struct Device
-{
-    int id;
-    JobCond *jobCond;
-    DevVtbl *vptr;
-};
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void device_ctor(Device *const me, int id, RKH_SMA_T *collector, 
-                 JobCond *jobCond, TestOper testOper, DevVtbl *vtbl);
-RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
-void device_update(Device *const me, RKH_EVT_T *evt);
-int device_test(Device *const me);
-void device_updateRaw(Device *const me);
-
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

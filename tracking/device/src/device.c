@@ -17,6 +17,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "device.h"
 #include "rkhassert.h"
+#include "rkhsma.h"
 #include "rkhitl.h"     /* It's needed to include platform files */
 
 RKH_MODULE_NAME(device)
@@ -30,36 +31,50 @@ RKH_MODULE_NAME(device)
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void 
-device_ctor(Device *const me, int id, JobCond *jobCond, 
-            TestOper testOper, MakeEvtOper makeEvt, UpdateOper update)
+device_ctor(Device *const me, int id, RKH_SMA_T *collector, JobCond *jobCond, 
+            TestOper testOper, DevVtbl *vtbl)
 {
-    RKH_REQUIRE((me != (Device *)0) && 
-                (jobCond != (JobCond *)0) &&
-                (testOper != (TestOper)0) &&
-                (makeEvt!= (MakeEvtOper)0) &&
-                (update!= (UpdateOper)0));
+    RKH_REQUIRE((me != (Device *)0) && (jobCond != (JobCond *)0) && 
+                (testOper != (TestOper)0) && (vtbl != (DevVtbl *)0));
 
     me->jobCond = jobCond;
     me->jobCond->test = testOper;
+    me->jobCond->dev = me;
+    me->jobCond->collector = collector;
+
     me->id = id;
-    me->makeEvt = makeEvt;
-    me->update = update;
+    me->vptr = vtbl;
 }
 
 RKH_EVT_T * 
 device_makeEvt(Device *const me, CBOX_STR *rawData)
 {
-    RKH_REQUIRE((me != (Device *)0) && (rawData != (CBOX_STR *)0) &&
-                (me->makeEvt != (MakeEvtOper)0));
-    return (*me->makeEvt)(me, rawData);
+    RKH_REQUIRE((me != (Device *)0) && (me->vptr->makeEvt != (MakeEvtOper)0));
+    return (*me->vptr->makeEvt)(me, rawData);
 }
 
 void 
 device_update(Device *const me, RKH_EVT_T *evt)
 {
     RKH_REQUIRE((me != (Device *)0) && (evt != (RKH_EVT_T *)0) &&
-                (me->update != (UpdateOper)0));
-    (*me->update)(me, evt);
+                (me->vptr->makeEvt != (MakeEvtOper)0));
+    (*me->vptr->update)(me, evt);
+}
+
+int
+device_test(Device *const me)
+{
+    RKH_REQUIRE((me != (Device *)0) && 
+                (me->jobCond->test != (TestOper)0));
+    (*me->jobCond->test)(me->jobCond);
+}
+
+void 
+device_updateRaw(Device *const me)
+{
+    RKH_REQUIRE((me != (Device *)0) && 
+                (me->vptr->updateRaw != (UpdateRawOper)0));
+    (*me->vptr->updateRaw)(me);
 }
 
 /* ------------------------------ End of file ------------------------------ */

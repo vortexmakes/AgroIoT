@@ -28,8 +28,11 @@
     - inc
     - ../../third-party/rkh/source/portable/test
     - ../../third-party/rkh/source/fwk/inc
+    - ../../third-party/rkh/source/sma/inc
+    - ../../third-party/rkh/source/sm/inc
+    - ../../third-party/rkh/source/queue/inc
     - ../tpsens/cbox
-    - ../
+    - ../collector
   :support:
     - test/support
 
