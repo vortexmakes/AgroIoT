@@ -41,20 +41,19 @@ enum DevId
 typedef struct JobCond JobCond;
 typedef struct Device Device;
 typedef struct DevVtbl DevVtbl;
-typedef int (*TestOper)(JobCond *const me);
+typedef int (*TestOper)(Device *const me);
 typedef RKH_EVT_T *(*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
 typedef void (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
 typedef void (*UpdateRawOper)(Device *const me);
 
 struct JobCond
 {
-    TestOper test;  /** Tests job condition */
-    Device *dev;
     RKH_SMA_T *collector;
 };
 
 struct DevVtbl
 {
+    TestOper test;
     MakeEvtOper makeEvt;
     UpdateOper update;
     UpdateRawOper updateRaw;
@@ -70,7 +69,7 @@ struct Device
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void device_ctor(Device *const me, int id, RKH_SMA_T *collector, 
-                 JobCond *jobCond, TestOper testOper, DevVtbl *vtbl);
+                 JobCond *jobCond, DevVtbl *vtbl);
 RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
 void device_update(Device *const me, RKH_EVT_T *evt);
 int device_test(Device *const me);

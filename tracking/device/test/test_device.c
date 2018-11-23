@@ -76,22 +76,15 @@ MockAssertCallback(const char* const file, int line, int cmock_num_calls)
     TEST_PASS();
 }
 
-static void
-MockJobCondCtorCallback(JobCond *const me, TestOper testOper, 
-                        int cmock_num_calls)
-{
-    me->test = testOper;
-}
-
 static int 
-DevA_testJobCond(JobCond *const me)
+DevA_test(Device *const me)
 {
     DevAJobCond *jc;
     DevA *realMe;
     int result = 1;
 
-    realMe = (DevA *)(me->dev);
-    jc = (DevAJobCond *)me;
+    jc = (DevAJobCond *)(me->jobCond);
+    realMe = (DevA *)me;
     if ((realMe->x > jc->xMax) || (realMe->x < jc->xMin) || 
         (realMe->y < jc->yMin))
     {
@@ -134,12 +127,14 @@ static Device *
 DevA_ctor(int xMin, int xMax, int yMin) /* Parameters of job condition */
 {
     DevAJobCond *jc;
-    static DevVtbl vtbl = {DevA_makeEvt, DevA_update, DevA_updateRaw};
+    static DevVtbl vtbl = {DevA_test, 
+                           DevA_makeEvt, 
+                           DevA_update, 
+                           DevA_updateRaw};
 
     DevA *me = &devA;
     device_ctor((Device *)me, DEVA, (RKH_SMA_T *)&collector, 
-                (JobCond *)&devAJobCond, 
-                DevA_testJobCond, &vtbl);
+                (JobCond *)&devAJobCond, &vtbl);
     me->x = 0; /* atttibute default initialization */
     me->y = 0;
     jc = (DevAJobCond *)(me->base.jobCond); /* it's not quite safe */
@@ -183,7 +178,7 @@ test_InitAttr(void)
     DevVtbl *vtbl;
 
     device_ctor(me, DEVA, (RKH_SMA_T *)&collector, (JobCond *)&devAJobCond, 
-                DevA_testJobCond, vtbl);
+                vtbl);
 
     TEST_ASSERT_EQUAL(DEVA, me->id);
     TEST_ASSERT_EQUAL(&devAJobCond, me->jobCond);
@@ -208,8 +203,7 @@ test_FailsWrongArgs(void)
     rkh_assert_StubWithCallback(MockAssertCallback);
 
     device_ctor((Device *)0, DEVA, (RKH_SMA_T *)&collector,
-                (JobCond *)&devAJobCond, DevA_testJobCond, 
-                (DevVtbl *)0);
+                (JobCond *)&devAJobCond, (DevVtbl *)0);
 }
 
 void

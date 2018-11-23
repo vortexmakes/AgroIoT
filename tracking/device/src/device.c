@@ -32,14 +32,12 @@ RKH_MODULE_NAME(device)
 /* ---------------------------- Global functions --------------------------- */
 void 
 device_ctor(Device *const me, int id, RKH_SMA_T *collector, JobCond *jobCond, 
-            TestOper testOper, DevVtbl *vtbl)
+            DevVtbl *vtbl)
 {
     RKH_REQUIRE((me != (Device *)0) && (jobCond != (JobCond *)0) && 
-                (testOper != (TestOper)0) && (vtbl != (DevVtbl *)0));
+                (vtbl != (DevVtbl *)0));
 
     me->jobCond = jobCond;
-    me->jobCond->test = testOper;
-    me->jobCond->dev = me;
     me->jobCond->collector = collector;
 
     me->id = id;
@@ -64,9 +62,8 @@ device_update(Device *const me, RKH_EVT_T *evt)
 int
 device_test(Device *const me)
 {
-    RKH_REQUIRE((me != (Device *)0) && 
-                (me->jobCond->test != (TestOper)0));
-    (*me->jobCond->test)(me->jobCond);
+    RKH_REQUIRE((me != (Device *)0) && (me->vptr->test != (TestOper)0));
+    return (*me->vptr->test)(me);
 }
 
 void 
