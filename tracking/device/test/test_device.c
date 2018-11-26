@@ -66,7 +66,8 @@ static DevAJobCond devAJobCond;
 static DevA devA;               /* It must be statically instantiated in a...*/
                                 /* ...concrete class (c source file) */
 static EvtDevAData evtDevAData;
-static Collector collector;
+static Collector collectorActObj;
+Collector *const collector = &collectorActObj;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -133,7 +134,7 @@ DevA_ctor(int xMin, int xMax, int yMin) /* Parameters of job condition */
                            DevA_updateRaw};
 
     DevA *me = &devA;
-    device_ctor((Device *)me, DEVA, (RKH_SMA_T *)&collector, 
+    device_ctor((Device *)me, DEVA, (RKH_SMA_T *)collector, 
                 (JobCond *)&devAJobCond, &vtbl);
     me->x = 0; /* atttibute default initialization */
     me->y = 0;
@@ -235,7 +236,7 @@ test_UpdateDeviceAttributes(void)
     evtDevAData.param.x = 4;
     evtDevAData.param.y = 5;
     evt = (RKH_EVT_T *)&evtDevAData;
-    dev = collector.dev = ((EvtDevData *)evt)->dev; /* from updateDevData() */
+    dev = collector->dev = ((EvtDevData *)evt)->dev; /* from updateDevData() */
     TEST_ASSERT_NOT_NULL(dev);
 
     device_update(dev, evt);
@@ -283,11 +284,11 @@ test_UpdateRawData(void)
     devAObj = (DevA *)dev;
     devAObj->x = 4;
     devAObj->y = 8;
-    collector.rawData.a.y = collector.rawData.a.z = 0;
+    collector->rawData.a.y = collector->rawData.a.z = 0;
 
     device_updateRaw(dev);
-    TEST_ASSERT_EQUAL(4, collector.rawData.a.y);
-    TEST_ASSERT_EQUAL(8, collector.rawData.a.z);
+    TEST_ASSERT_EQUAL(4, collector->rawData.a.y);
+    TEST_ASSERT_EQUAL(8, collector->rawData.a.z);
 }
 
 /* ------------------------------ End of file ------------------------------ */
