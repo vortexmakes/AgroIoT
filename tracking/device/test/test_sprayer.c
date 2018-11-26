@@ -20,12 +20,18 @@
 #include "sprayerSpy.h"
 #include "Mock_rkhassert.h"
 #include "Mock_device.h"
+#include "Mock_collector.h"
+#include "Mock_rkhfwk_dynevt.h"
+#include "Mock_signals.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static Collector collectorActObj;
+Collector *const collector = &collectorActObj;
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void 
@@ -34,10 +40,13 @@ MockAssertCallback(const char* const file, int line, int cmock_num_calls)
     TEST_PASS();
 }
 
-static int 
-DevA_test(JobCond *const me)
+static void 
+Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector, 
+                          JobCond *jobCond, DevVtbl *vtbl, 
+                          int cmock_num_calls)
 {
-    return 1;
+    me->jobCond = sprayerSpy_getJobCondObj();
+    me->vptr = sprayerSpy_getVtbl();
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -58,47 +67,63 @@ tearDown(void)
 }
 
 void
-test_InitAttr(void)
+test_InitAttributes(void)
 {
-    int sectionThd_Expect = 5;
-    Device *sprayer = (Device *)0;
+    Device *dev;
+    int nSectionMaxExpect = 5;
 
-    device_ctor_Expect(0, SPRAYER, 0, 0);
-    device_ctor_IgnoreArg_me();
+    device_ctor_Expect(sprayerSpy_getObj(), 
+                       SPRAYER, 
+                       (RKH_SMA_T *)collector, 
+                       (JobCond *)0, 
+                       (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
-    device_ctor_IgnoreArg_testOper();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    sprayer = sprayer_ctor(sectionThd_Expect);
+    dev = sprayer_ctor(nSectionMaxExpect);
 
-    TEST_ASSERT_EQUAL(0, sprayerSpy_getMaxNumSections());
-    TEST_ASSERT_EQUAL(0, sprayerSpy_getSection());
-    TEST_ASSERT_EQUAL(0, sprayerSpy_getDosage());
-    TEST_ASSERT_EQUAL(sectionThd_Expect, sprayerSpy_getSectionThd());
-    TEST_ASSERT_NOT_NULL(sprayer);
+    TEST_ASSERT_EQUAL(0, sprayerSpy_getNSection());
+    TEST_ASSERT_EQUAL(0, sprayerSpy_getDose());
+    TEST_ASSERT_EQUAL(nSectionMaxExpect, sprayerSpy_getNSectionMax());
+    TEST_ASSERT_NOT_NULL(dev->jobCond);
+    TEST_ASSERT_NOT_NULL(dev->vptr);
 }
 
 void
-test_FailsWrongArgs(void)
+test_MakeEventOperation(void)
 {
-#if 0
-    JobCond *me = (JobCond *)&devAJobCond;
+    Device *dev;
+    RKH_EVT_T *evt;
+    int nSectionExpect = 2;
+    int doseExpect = 4;
+    EvtSprayerData evtObj;
 
-    rkh_assert_Expect("jobcond", 0);
-    rkh_assert_IgnoreArg_file();
-    rkh_assert_IgnoreArg_line();
-    rkh_assert_StubWithCallback(MockAssertCallback);
+    device_ctor_Expect(sprayerSpy_getObj(), 
+                       SPRAYER, 
+                       (RKH_SMA_T *)collector, 
+                       (JobCond *)0, 
+                       (DevVtbl *)0);
+    device_ctor_IgnoreArg_jobCond();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
+    collector->rawData.hum = nSectionExpect;
+    collector->rawData.h.pqty = doseExpect;
 
-    jobcond_ctor((JobCond *)0, DevA_test);
+    dev = sprayer_ctor(0);
 
-    rkh_assert_Expect("jobcond", 0);
-    rkh_assert_IgnoreArg_file();
-    rkh_assert_IgnoreArg_line();
-    rkh_assert_StubWithCallback(MockAssertCallback);
+    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSprayerData), 
+                               (RKH_SIG_T)evDevData, 
+                               0,
+                               (RKH_EVT_T *)&evtObj);
+    rkh_fwk_ae_IgnoreArg_sender();
 
-    jobcond_ctor(me, (TestOper)0);
-#else
-    TEST_IGNORE();
-#endif
+    TEST_ASSERT_NOT_NULL(dev->vptr->makeEvt);
+    evt = (*dev->vptr->makeEvt)(dev, &collector->rawData);
+    TEST_ASSERT_NOT_NULL(evt);
+    TEST_ASSERT_EQUAL(dev, ((EvtSprayerData *)evt)->base.dev);
+    TEST_ASSERT_EQUAL(nSectionExpect, ((EvtSprayerData *)evt)->param.nSection);
+    TEST_ASSERT_EQUAL(doseExpect, ((EvtSprayerData *)evt)->param.dose);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -31,10 +31,12 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-int sprayerSpy_getMaxNumSections(void);
-int sprayerSpy_getSection(void);
-int sprayerSpy_getDosage(void);
-int sprayerSpy_getSectionThd(void);
+int sprayerSpy_getNSection(void);
+int sprayerSpy_getDose(void);
+int sprayerSpy_getNSectionMax(void);
+Device *sprayerSpy_getObj(void);
+JobCond *sprayerSpy_getJobCondObj(void);
+DevVtbl *sprayerSpy_getVtbl(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

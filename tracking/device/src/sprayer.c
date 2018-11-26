@@ -18,6 +18,9 @@
 #include "unity.h"
 #include "device.h"
 #include "sprayer.h"
+#include "collector.h"
+#include "rkhfwk_dynevt.h"
+#include "signals.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -26,16 +29,7 @@ typedef struct SprayerJobCond SprayerJobCond;
 struct SprayerJobCond
 {
     JobCond base;
-    int sectionThd;
-};
-
-typedef struct Sprayer Sprayer;
-struct Sprayer
-{
-    Device base;
-    int maxNumSections;
-    int section;
-    int dosage;
+    int nSectionMax;
 };
 
 /* ---------------------------- Global variables --------------------------- */
@@ -46,45 +40,88 @@ static Sprayer sprayer;
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static int 
-sprayer_test(JobCond *const me)
+sprayer_test(Device *const me)
 {
     return 1;
 }
 
+static RKH_EVT_T *
+sprayer_makeEvt(Device *const me, CBOX_STR *rawData)
+{
+    EvtSprayerData *evt;
+
+    evt = RKH_ALLOC_EVT(EvtSprayerData, evDevData, 0);
+    evt->base.dev = me;
+    evt->param.nSection = rawData->hum;
+    evt->param.dose = rawData->h.pqty;
+    return (RKH_EVT_T *)evt;
+}
+
+static void
+sprayer_update(Device *const me, RKH_EVT_T *evt)
+{
+}
+
+static void 
+sprayer_updateRaw(Device *const me)
+{
+}
+
+static DevVtbl vtbl = {sprayer_test, 
+                       sprayer_makeEvt, 
+                       sprayer_update, 
+                       sprayer_updateRaw};
+
 /* ---------------------------- Global functions --------------------------- */
 Device * 
-sprayer_ctor(int sectionThd)
+sprayer_ctor(int nSectionMax)
 {
+    SprayerJobCond *jc;
     Sprayer *me = &sprayer;
 
-    device_ctor((Device *)me, SPRAYER, (JobCond *)&sprayerJobCond, 
-                sprayer_test);
-    sprayerJobCond.sectionThd = sectionThd;
+    device_ctor((Device *)me, SPRAYER, (RKH_SMA_T *)collector, 
+                (JobCond *)&sprayerJobCond, &vtbl);
+    me->nSection = 0; /* atttibute default initialization */
+    me->dose = 0;
+    jc = (SprayerJobCond *)(me->base.jobCond); /* it's not quite safe */
+    jc->nSectionMax = nSectionMax; /* initializes job condition */
+    return (Device *)me;
+}
+
+int 
+sprayerSpy_getNSection(void)
+{
+    return sprayer.nSection;
+}
+
+int 
+sprayerSpy_getDose(void)
+{
+    return sprayer.dose;
+}
+
+int 
+sprayerSpy_getNSectionMax(void)
+{
+    return sprayerJobCond.nSectionMax;
+}
+
+Device *
+sprayerSpy_getObj(void)
+{
     return (Device *)&sprayer;
 }
 
-int 
-sprayerSpy_getMaxNumSections(void)
+JobCond *
+sprayerSpy_getJobCondObj(void)
 {
-    return sprayer.maxNumSections;
+    return (JobCond *)&sprayerJobCond;
 }
 
-int 
-sprayerSpy_getSection(void)
+DevVtbl *
+sprayerSpy_getVtbl(void)
 {
-    return sprayer.section;
-}
-
-int 
-sprayerSpy_getDosage(void)
-{
-    return sprayer.dosage;
-}
-
-int 
-sprayerSpy_getSectionThd(void)
-{
-    return sprayerJobCond.sectionThd;
+    return (DevVtbl *)&vtbl;
 }
 
 /* ------------------------------ End of file ------------------------------ */

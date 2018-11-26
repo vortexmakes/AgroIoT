@@ -19,7 +19,7 @@
 #define __COLLECTOR_H__
 
 /* ----------------------------- Include files ----------------------------- */
-/* #include "rkh.h" */
+#include "rkhsma.h"
 #include "cbdata.h"
 
 /* ---------------------- External C language linkage ---------------------- */
@@ -36,12 +36,15 @@ typedef struct Device Device;
 typedef struct Collector Collector;
 struct Collector
 {
+    RKH_SMA_T base;
     CBOX_STR rawData;
     Device *dev;
 };
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
+RKH_SMA_DCLR_TYPE(Collector, collector);
+
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

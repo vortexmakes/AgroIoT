@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario BaliÃ±a db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -19,8 +19,6 @@
 #define __SIGNALS_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
-
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +76,7 @@ enum Signals
 	evEndOfCycle,
 	evSensorData,
 	evTerminate,     /* press the key escape on the keyboard */
+    evDevData
 };
 
 /* ------------------------------- Data types ------------------------------ */

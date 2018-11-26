@@ -19,6 +19,7 @@
 #define __SPRAYER_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "rkhevt.h"
 #include "device.h"
 
 /* ---------------------- External C language linkage ---------------------- */
@@ -29,9 +30,31 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ------------------------------- Data types ------------------------------ */
+typedef struct Sprayer Sprayer;
+struct Sprayer
+{
+    Device base;
+    int nSection;
+    int dose;
+};
+
+typedef struct EvtDevData EvtDevData;
+struct EvtDevData
+{
+    RKH_EVT_T base;
+    Device *dev;
+};
+
+typedef struct EvtSprayerData EvtSprayerData;
+struct EvtSprayerData
+{
+    EvtDevData base;
+    Sprayer param;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-Device *sprayer_ctor(int sectionThd);
+Device *sprayer_ctor(int nSectionMax);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

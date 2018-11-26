@@ -33,6 +33,7 @@
     - ../../third-party/rkh/source/queue/inc
     - ../tpsens/cbox
     - ../collector
+    - ../
   :support:
     - test/support
 
