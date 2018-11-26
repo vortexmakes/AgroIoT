@@ -47,6 +47,7 @@ Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
 {
     me->jobCond = sprayerSpy_getJobCondObj();
     me->vptr = sprayerSpy_getVtbl();
+    me->jobCond->collector = collector;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -119,11 +120,45 @@ test_MakeEventOperation(void)
     rkh_fwk_ae_IgnoreArg_sender();
 
     TEST_ASSERT_NOT_NULL(dev->vptr->makeEvt);
+
     evt = (*dev->vptr->makeEvt)(dev, &collector->rawData);
+
     TEST_ASSERT_NOT_NULL(evt);
     TEST_ASSERT_EQUAL(dev, ((EvtSprayerData *)evt)->base.dev);
     TEST_ASSERT_EQUAL(nSectionExpect, ((EvtSprayerData *)evt)->param.nSection);
     TEST_ASSERT_EQUAL(doseExpect, ((EvtSprayerData *)evt)->param.dose);
+}
+
+void
+test_UpdateRawOperation(void)
+{
+    Device *dev;
+    int nSectionExpect = 2;
+    int doseExpect = 4;
+
+    device_ctor_Expect(sprayerSpy_getObj(), 
+                       SPRAYER, 
+                       (RKH_SMA_T *)collector, 
+                       (JobCond *)0, 
+                       (DevVtbl *)0);
+    device_ctor_IgnoreArg_jobCond();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
+    collector->rawData.hum = 0;
+    collector->rawData.h.pqty = 0;
+
+    dev = sprayer_ctor(0);
+
+    collector->dev = dev;
+    TEST_ASSERT_NOT_NULL(dev->vptr->updateRaw);
+    TEST_ASSERT_NOT_NULL(dev->jobCond->collector);
+    ((Sprayer *)dev)->nSection = nSectionExpect;
+    ((Sprayer *)dev)->dose = doseExpect;
+
+    (*dev->vptr->updateRaw)(dev);
+
+    TEST_ASSERT_EQUAL(nSectionExpect, collector->rawData.hum);
+    TEST_ASSERT_EQUAL(doseExpect, collector->rawData.h.pqty);
 }
 
 /* ------------------------------ End of file ------------------------------ */
