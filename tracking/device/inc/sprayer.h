@@ -38,13 +38,6 @@ struct Sprayer
     int dose;
 };
 
-typedef struct EvtDevData EvtDevData;
-struct EvtDevData
-{
-    RKH_EVT_T base;
-    Device *dev;
-};
-
 typedef struct EvtSprayerData EvtSprayerData;
 struct EvtSprayerData
 {
@@ -54,7 +47,7 @@ struct EvtSprayerData
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-Device *sprayer_ctor(int nSectionMax);
+Device *sprayer_ctor(int doseMax);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

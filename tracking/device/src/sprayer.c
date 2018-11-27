@@ -29,7 +29,7 @@ typedef struct SprayerJobCond SprayerJobCond;
 struct SprayerJobCond
 {
     JobCond base;
-    int nSectionMax;
+    int doseMax;
 };
 
 /* ---------------------------- Global variables --------------------------- */
@@ -42,7 +42,14 @@ static Sprayer sprayer;
 static int 
 sprayer_test(Device *const me)
 {
-    return 1;
+    SprayerJobCond *jc;
+    Sprayer *realMe;
+    int result;
+
+    realMe = (Sprayer *)me;
+    jc = (SprayerJobCond *)(me->jobCond);
+    result = (realMe->dose > jc->doseMax) ? 1 : 0;
+    return result;
 }
 
 static RKH_EVT_T *
@@ -60,15 +67,23 @@ sprayer_makeEvt(Device *const me, CBOX_STR *rawData)
 static void
 sprayer_update(Device *const me, RKH_EVT_T *evt)
 {
+    Sprayer *realMe, *currDev;
+    EvtSprayerData *realEvt;
+
+    realMe = (Sprayer *)me;
+    realEvt = (EvtSprayerData *)evt;
+
+    ((Collector *)(me->collector))->dev = realEvt->base.dev;
+    currDev = (Sprayer *)(((Collector *)(me->collector))->dev);
+    currDev->nSection = realEvt->param.nSection;
+    currDev->dose = realEvt->param.dose;
 }
 
 static void 
 sprayer_updateRaw(Device *const me)
 {
-    ((Collector *)(me->jobCond->collector))->rawData.hum = 
-        ((Sprayer *)me)->nSection;
-    ((Collector *)(me->jobCond->collector))->rawData.h.pqty = 
-        ((Sprayer *)me)->dose;
+    ((Collector *)(me->collector))->rawData.hum = ((Sprayer *)me)->nSection;
+    ((Collector *)(me->collector))->rawData.h.pqty = ((Sprayer *)me)->dose;
 }
 
 static DevVtbl vtbl = {sprayer_test, 
@@ -78,7 +93,7 @@ static DevVtbl vtbl = {sprayer_test,
 
 /* ---------------------------- Global functions --------------------------- */
 Device * 
-sprayer_ctor(int nSectionMax)
+sprayer_ctor(int doseMax)
 {
     SprayerJobCond *jc;
     Sprayer *me = &sprayer;
@@ -88,7 +103,7 @@ sprayer_ctor(int nSectionMax)
     me->nSection = 0; /* atttibute default initialization */
     me->dose = 0;
     jc = (SprayerJobCond *)(me->base.jobCond); /* it's not quite safe */
-    jc->nSectionMax = nSectionMax; /* initializes job condition */
+    jc->doseMax = doseMax; /* initializes job condition */
     return (Device *)me;
 }
 
@@ -107,7 +122,7 @@ sprayerSpy_getDose(void)
 int 
 sprayerSpy_getNSectionMax(void)
 {
-    return sprayerJobCond.nSectionMax;
+    return sprayerJobCond.doseMax;
 }
 
 Device *

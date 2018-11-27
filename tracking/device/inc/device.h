@@ -48,7 +48,7 @@ typedef void (*UpdateRawOper)(Device *const me);
 
 struct JobCond
 {
-    RKH_SMA_T *collector;
+    int id;
 };
 
 struct DevVtbl
@@ -64,6 +64,14 @@ struct Device
     int id;
     JobCond *jobCond;
     DevVtbl *vptr;
+    RKH_SMA_T *collector;
+};
+
+typedef struct EvtDevData EvtDevData;
+struct EvtDevData
+{
+    RKH_EVT_T base;
+    Device *dev;
 };
 
 /* -------------------------- External variables --------------------------- */

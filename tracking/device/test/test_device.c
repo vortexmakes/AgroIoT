@@ -46,13 +46,6 @@ struct DevA
     int y;
 };
 
-typedef struct EvtDevData EvtDevData;
-struct EvtDevData
-{
-    RKH_EVT_T base;
-    Device *dev;
-};
-
 typedef struct EvtDevAData EvtDevAData;
 struct EvtDevAData
 {
@@ -120,8 +113,8 @@ DevA_update(Device *const me, RKH_EVT_T *evt)
 static void 
 DevA_updateRaw(Device *const me)
 {
-    ((Collector *)(me->jobCond->collector))->rawData.a.y = ((DevA *)me)->x;
-    ((Collector *)(me->jobCond->collector))->rawData.a.z = ((DevA *)me)->y;
+    ((Collector *)(me->collector))->rawData.a.y = ((DevA *)me)->x;
+    ((Collector *)(me->collector))->rawData.a.z = ((DevA *)me)->y;
 }
 
 static Device *

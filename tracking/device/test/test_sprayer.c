@@ -47,7 +47,7 @@ Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
 {
     me->jobCond = sprayerSpy_getJobCondObj();
     me->vptr = sprayerSpy_getVtbl();
-    me->jobCond->collector = collector;
+    me->collector = collector;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -151,7 +151,7 @@ test_UpdateRawOperation(void)
 
     collector->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->updateRaw);
-    TEST_ASSERT_NOT_NULL(dev->jobCond->collector);
+    TEST_ASSERT_NOT_NULL(dev->collector);
     ((Sprayer *)dev)->nSection = nSectionExpect;
     ((Sprayer *)dev)->dose = doseExpect;
 
@@ -159,6 +159,76 @@ test_UpdateRawOperation(void)
 
     TEST_ASSERT_EQUAL(nSectionExpect, collector->rawData.hum);
     TEST_ASSERT_EQUAL(doseExpect, collector->rawData.h.pqty);
+}
+
+void
+test_UpdateOperation(void)
+{
+    Device *dev;
+    int nSectionExpect = 2;
+    int doseExpect = 4;
+    EvtSprayerData evtSprayerData;
+    RKH_EVT_T *evt;
+    Sprayer *sprayer;
+
+    device_ctor_Expect(sprayerSpy_getObj(), 
+                       SPRAYER, 
+                       (RKH_SMA_T *)collector, 
+                       (JobCond *)0, 
+                       (DevVtbl *)0);
+    device_ctor_IgnoreArg_jobCond();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
+
+    dev = sprayer_ctor(0);
+
+    evtSprayerData.base.dev = dev;
+    evtSprayerData.param.nSection = nSectionExpect;
+    evtSprayerData.param.dose = doseExpect;
+    evt = (RKH_EVT_T *)&evtSprayerData;
+
+    (*dev->vptr->update)(dev, evt);
+
+    sprayer = (Sprayer *)collector->dev;
+    TEST_ASSERT_EQUAL(dev, collector->dev);
+    TEST_ASSERT_EQUAL(nSectionExpect, sprayer->nSection);
+    TEST_ASSERT_EQUAL(doseExpect, sprayer->dose);
+}
+
+void
+test_TestOperation(void)
+{
+    Device *dev;
+    int nSectionExpect = 2;
+    int doseMax = 5;
+    Sprayer *sprayer;
+    int result = 0;
+
+    device_ctor_Expect(sprayerSpy_getObj(), 
+                       SPRAYER, 
+                       (RKH_SMA_T *)collector, 
+                       (JobCond *)0, 
+                       (DevVtbl *)0);
+    device_ctor_IgnoreArg_jobCond();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
+
+    dev = sprayer_ctor(doseMax);
+
+    collector->dev = dev;
+    TEST_ASSERT_NOT_NULL(dev->vptr->test);
+    TEST_ASSERT_NOT_NULL(dev->collector);
+    sprayer = (Sprayer *)dev;
+    sprayer->nSection = nSectionExpect;
+    sprayer->dose = doseMax - 1;
+
+    result = (*dev->vptr->test)(dev);
+    TEST_ASSERT_EQUAL(0, result);
+
+    sprayer->dose = doseMax + 1;
+
+    result = (*dev->vptr->test)(dev);
+    TEST_ASSERT_EQUAL(1, result);
 }
 
 /* ------------------------------ End of file ------------------------------ */

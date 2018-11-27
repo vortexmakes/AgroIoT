@@ -38,10 +38,10 @@ device_ctor(Device *const me, int id, RKH_SMA_T *collector, JobCond *jobCond,
                 (vtbl != (DevVtbl *)0));
 
     me->jobCond = jobCond;
-    me->jobCond->collector = collector;
 
     me->id = id;
     me->vptr = vtbl;
+    me->collector = collector;
 }
 
 RKH_EVT_T * 
