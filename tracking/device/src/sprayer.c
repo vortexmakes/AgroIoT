@@ -120,7 +120,7 @@ sprayerSpy_getDose(void)
 }
 
 int 
-sprayerSpy_getNSectionMax(void)
+sprayerSpy_getDoseMax(void)
 {
     return sprayerJobCond.doseMax;
 }
