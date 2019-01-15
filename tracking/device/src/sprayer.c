@@ -15,7 +15,6 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "unity.h"
 #include "device.h"
 #include "sprayer.h"
 #include "collector.h"

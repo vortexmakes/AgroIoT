@@ -17,7 +17,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "rkhfwk_pubsub.h"
-#include "din.h"
+#include "dIn.h"
 #include "mTimeCfg.h"
 #include "signals.h"
 #include "events.h"
