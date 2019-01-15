@@ -34,16 +34,24 @@ extern "C" {
 typedef enum DevId DevId;
 enum DevId
 {
-    SPRAYER, NUM_DEVS
+    SPRAYER, HARVEST, SAMPLER, DEVNULL, NUM_DEVS
 };
 
 /* ------------------------------- Data types ------------------------------ */
 typedef struct JobCond JobCond;
 typedef struct Device Device;
 typedef struct DevVtbl DevVtbl;
+
+/** Collector probes the device's job condition */
 typedef int (*TestOper)(Device *const me);
+
+/** DeviceServer makes an event from the device response */
 typedef RKH_EVT_T *(*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
+
+/** Collector updates device's data from received event */
 typedef void (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
+
+/** Collector transforms device's data to CBOX_STR class */
 typedef void (*UpdateRawOper)(Device *const me);
 
 struct JobCond
