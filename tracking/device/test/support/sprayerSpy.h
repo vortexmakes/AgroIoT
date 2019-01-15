@@ -33,7 +33,7 @@ extern "C" {
 /* -------------------------- Function prototypes -------------------------- */
 int sprayerSpy_getNSection(void);
 int sprayerSpy_getDose(void);
-int sprayerSpy_getNSectionMax(void);
+int sprayerSpy_getDoseMax(void);
 Device *sprayerSpy_getObj(void);
 JobCond *sprayerSpy_getJobCondObj(void);
 DevVtbl *sprayerSpy_getVtbl(void);

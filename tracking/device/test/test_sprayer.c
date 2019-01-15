@@ -86,7 +86,7 @@ test_InitAttributes(void)
 
     TEST_ASSERT_EQUAL(0, sprayerSpy_getNSection());
     TEST_ASSERT_EQUAL(0, sprayerSpy_getDose());
-    TEST_ASSERT_EQUAL(nSectionMaxExpect, sprayerSpy_getNSectionMax());
+    TEST_ASSERT_EQUAL(nSectionMaxExpect, sprayerSpy_getDoseMax());
     TEST_ASSERT_NOT_NULL(dev->jobCond);
     TEST_ASSERT_NOT_NULL(dev->vptr);
 }
