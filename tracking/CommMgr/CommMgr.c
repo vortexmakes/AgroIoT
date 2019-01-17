@@ -45,68 +45,103 @@
 typedef struct CommMgr CommMgr;
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Client_Disconnected, Client_Send, Client_Receive,
-                     Client_Idle; 
-RKH_DCLR_COMP_STATE Client_Connected; 
-RKH_DCLR_COND_STATE Client_CheckResp;
+RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingStatus, EndCycle,
+                     SendingHist, SendingEndOfHist;
+RKH_DCLR_COMP_STATE Active; 
+RKH_DCLR_CHOICE_STATE ChkRecv, ChkPendStatus, ChkHist, ChkEndOfBlock;
                     
 /* ........................ Declares initial action ........................ */
 static void init(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ Declares effect actions ........................ */
-static void updateGeoStamp(CommMgr *const me, RKH_EVT_T *pe);
-static void sendIo(CommMgr *const me, RKH_EVT_T *pe);
-static void sendSensor(CommMgr *const me, RKH_EVT_T *pe);
+static void activateSync(CommMgr *const me, RKH_EVT_T *pe);
+static void updateStatus(CommMgr *const me, RKH_EVT_T *pe);
+static void sendMsgFail(CommMgr *const me, RKH_EVT_T *pe);
+static void recvFail(CommMgr *const me, RKH_EVT_T *pe);
+static void parseRecv(CommMgr *const me, RKH_EVT_T *pe);
+static void parseError(CommMgr *const me, RKH_EVT_T *pe);
+static void initSendBlock(CommMgr *const me, RKH_EVT_T *pe);
+static void nextSend(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
-static void sendFail(CommMgr *const me);
-static void recvEntry(CommMgr *const me);
-static void recvFail(CommMgr *const me);
+static void receive(CommMgr *const me);
+static void sendStatus(CommMgr *const me);
+static void sendOneMsg(CommMgr *const me);
+static void sendEndOfHist(CommMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
-static void waitExit(CommMgr *const me);
-
 /* ............................ Declares guards ............................ */
-rbool_t checkResp(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t isAck(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t isPending(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t isThereMsg(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t isEndOfBlock(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ States and pseudostates ........................ */
-RKH_CREATE_BASIC_STATE(Client_Disconnected, NULL, NULL, RKH_ROOT, NULL);
-RKH_CREATE_TRANS_TABLE(Client_Disconnected)
-    RKH_TRREG(evNetConnected, NULL, NULL, &Client_Connected),
+RKH_CREATE_BASIC_STATE(Init, NULL, NULL, RKH_ROOT, NULL);
+RKH_CREATE_TRANS_TABLE(Init)
+    RKH_TRREG(evNetConnected, NULL, NULL, &Active),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_COMP_REGION_STATE(Client_Connected, NULL, NULL, RKH_ROOT, 
-                             &Client_Idle, NULL,
+RKH_CREATE_COMP_REGION_STATE(Active, NULL, NULL, RKH_ROOT, 
+                             &WaitSync, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_TRANS_TABLE(Client_Connected)
-    RKH_TRINT(evGeoStamp,        NULL, updateGeoStamp),
-    RKH_TRINT(evGeoStampInvalid, NULL, NULL),
-    RKH_TRREG(evNetDisconnected, NULL, NULL, &Client_Disconnected),
+RKH_CREATE_TRANS_TABLE(Active)
+    RKH_TRINT(evRawData,         NULL, updateStatus),
+    RKH_TRREG(evNetDisconnected, NULL, NULL, &Idle),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(Client_Idle, NULL, NULL, &Client_Connected, NULL);
-RKH_CREATE_TRANS_TABLE(Client_Idle)
-    RKH_TRREG(evSensorData,    NULL, sendSensor, &Client_Send),
-    RKH_TRREG(evIoChg,         NULL, sendIo, &Client_Send),
+RKH_CREATE_BASIC_STATE(WaitSync, NULL, NULL, &Active, NULL);
+RKH_CREATE_TRANS_TABLE(WaitSync)
+    RKH_TRREG(evSyncTime, NULL, NULL, &SendingStatus),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(Client_Send, NULL, NULL, &Client_Connected, NULL);
-RKH_CREATE_TRANS_TABLE(Client_Send)
-    RKH_TRREG(evSent,     NULL, NULL, &Client_Receive),
-    RKH_TRREG(evSendFail, NULL, sendFail, &Client_Idle),
+RKH_CREATE_BASIC_STATE(SendingStatus, sendStatus, NULL, &Active, NULL);
+RKH_CREATE_TRANS_TABLE(SendingStatus)
+    RKH_TRREG(evSent,     NULL, NULL, &ReceivingAck),
+    RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(Client_Receive, recvEntry, NULL, &Client_Connected, NULL);
-RKH_CREATE_TRANS_TABLE(Client_Receive)
-    RKH_TRREG(evReceived, NULL, NULL, &Client_CheckResp),
-    RKH_TRREG(evRecvFail, NULL, recvFail, &Client_Idle),
+RKH_CREATE_BASIC_STATE(ReceivingAck, receive, NULL, &Active, NULL);
+RKH_CREATE_TRANS_TABLE(ReceivingAck)
+    RKH_TRREG(evReceived, NULL, parseRecv, &ChkRecv),
+    RKH_TRREG(evRecvFail, NULL, recvFail, &EndCycle),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_COND_STATE(Client_CheckResp);
-RKH_CREATE_BRANCH_TABLE(Client_CheckResp)
-    RKH_BRANCH(checkResp,   NULL,   &Client_Idle),
-    RKH_BRANCH(ELSE,        NULL,   &Client_Receive),
+RKH_CREATE_CHOICE_STATE(ChkRecv);
+RKH_CREATE_BRANCH_TABLE(ChkRecv)
+    RKH_BRANCH(isAck, NULL, &ChkPendStatus),
+    RKH_BRANCH(ELSE,  parseError, &EndCycle),
 RKH_END_BRANCH_TABLE
+
+RKH_CREATE_CHOICE_STATE(ChkPendStatus);
+RKH_CREATE_BRANCH_TABLE(ChkPendStatus)
+    RKH_BRANCH(isPending, NULL, &SendingStatus),
+    RKH_BRANCH(ELSE,      NULL, &ChkHist),
+RKH_END_BRANCH_TABLE
+
+RKH_CREATE_CHOICE_STATE(ChkHist);
+RKH_CREATE_BRANCH_TABLE(ChkHist)
+    RKH_BRANCH(isThereMsg, initSendBlock, &SendingHist),
+    RKH_BRANCH(ELSE,       NULL, &EndCycle),
+RKH_END_BRANCH_TABLE
+
+RKH_CREATE_BASIC_STATE(SendingHist, sendOneMsg, NULL, &Active, NULL);
+RKH_CREATE_TRANS_TABLE(SendingHist)
+    RKH_TRREG(evSent,     NULL, nextSend, &ChkEndOfBlock),
+    RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_CHOICE_STATE(ChkEndOfBlock);
+RKH_CREATE_BRANCH_TABLE(ChkEndOfBlock)
+    RKH_BRANCH(isEndOfBlock, NULL, &SendingHist),
+    RKH_BRANCH(ELSE,         NULL, &SendingEndOfBlock),
+RKH_END_BRANCH_TABLE
+
+RKH_CREATE_BASIC_STATE(SendingEndOfBlock, sendEndOfBlock, NULL, &Active, NULL);
+RKH_CREATE_TRANS_TABLE(SendingEndOfBlock)
+    RKH_TRREG(evSent,     NULL, NULL, &ReceivingAck),
+    RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
+RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
 struct CommMgr
@@ -117,7 +152,7 @@ struct CommMgr
     CBOX_STR rawData;   /* Current raw data (GPS+IO, etc) */
 };
 
-RKH_SMA_CREATE(CommMgr, commMgr, 4, HCAL, &Client_Disconnected, init, NULL);
+RKH_SMA_CREATE(CommMgr, commMgr, 4, HCAL, &Idle, init, NULL);
 RKH_SMA_DEF_PTR(commMgr);
 
 /* ------------------------------- Constants ------------------------------- */
@@ -141,9 +176,6 @@ init(CommMgr *const me, RKH_EVT_T *pe)
 	(void)pe;
 
     rkh_pubsub_subscribe(ConnectionTopic, RKH_UPCAST(RKH_SMA_T, me));
-    rkh_pubsub_subscribe(tpGeo, RKH_UPCAST(RKH_SMA_T, me));
-    rkh_pubsub_subscribe(tpIoChg, RKH_UPCAST(RKH_SMA_T, me));
-    rkh_pubsub_subscribe(tpSensor, RKH_UPCAST(RKH_SMA_T, me));
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->timer);
@@ -160,130 +192,96 @@ init(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 /* ............................ Effect actions ............................. */
-static void
-updateGeoStamp(CommMgr *const me, RKH_EVT_T *pe)
+static void 
+activateSync(CommMgr *const me, RKH_EVT_T *pe)
 {
-    me->geo = (((GeoStampEvt *)pe)->gps);
 }
 
 static void
-sendFrame(CommMgr *const me)
+updateStatus(CommMgr *const me, RKH_EVT_T *pe)
 {
-    char buff[10];
-
-    char *p;
-
-    p = (char *)evSendObj.buf;
-
-    sprintf(p, "%s", TEST_FRAME_HEADER);
-    strcat(p, ConMgr_Imei());
-    strcat(p, ",");
-    strcat(p, me->geo.utc);
-    strcat(p, ",");
-	strcat(p, me->geo.latInd);
-	strcat(p, me->geo.latitude);
-    strcat(p, ",");
-	strcat(p, me->geo.longInd);
-	strcat(p, me->geo.longitude);
-    strcat(p, ",");
-    strcat(p, me->geo.speed);
-    strcat(p, ",");
-    strcat(p, me->geo.course);
-    strcat(p, ",");
-    strcat(p, me->geo.date);
-    strcat(p, ",");
-
-    sprintf(buff, "%02x%02x,", dout, din );
-    strcat(p, buff);
-
-    sprintf(buff, "%04x,", cbox.h.hoard );
-    strcat(p, buff);
-    sprintf(buff, "%02x,", cbox.h.pqty );
-    strcat(p, buff);
-
-    sprintf(buff, "%02x,", cbox.hum );
-    strcat(p, buff);
-
-    sprintf(buff, "%04x,", cbox.a.x );
-    strcat(p, buff);
-    sprintf(buff, "%04x,", cbox.a.y );
-    strcat(p, buff);
-    sprintf(buff, "%04x,", cbox.a.z );
-    strcat(p, buff);
-
-    strcat(p, TEST_FRAME_TAIL);
-
-    evSendObj.size = strlen((char *)evSendObj.buf);
-    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &evSendObj),
-                                        RKH_UPCAST(RKH_SMA_T, me));
+    me->rawData = *((RawDataEvt *)pe);
 }
 
-static void
-sendIo(CommMgr *const me, RKH_EVT_T *pe)
+static void 
+sendMsgFail(CommMgr *const me, RKH_EVT_T *pe)
 {
-    IoChgEvt *pio;
-
-    pio = RKH_DOWNCAST(IoChgEvt, pe);
-    din = pio->din;
-
-    sendFrame(me);
 }
 
-static void
-sendSensor(CommMgr *const me, RKH_EVT_T *pe)
+static void 
+recvFail(CommMgr *const me, RKH_EVT_T *pe)
 {
-    SensorData *ps;
+}
 
-    ps = RKH_DOWNCAST(SensorData, pe);
-    cbox = ps->cbox;
-    
-    sendFrame(me);
+static void 
+parseRecv(CommMgr *const me, RKH_EVT_T *pe)
+{
+}
+
+static void 
+parseError(CommMgr *const me, RKH_EVT_T *pe)
+{
+}
+
+static void 
+initSendBlock(CommMgr *const me, RKH_EVT_T *pe)
+{
+}
+
+static void 
+nextSend(CommMgr *const me, RKH_EVT_T *pe)
+{
 }
 
 /* ............................. Entry actions ............................. */
 static void
-sendFail(CommMgr *const me)
-{
-    (void)me;
-
-    bsp_sendFail();
-}
-
-static void
-recvEntry(CommMgr *const me)
+receive(CommMgr *const me)
 {
     rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &evRecvObj),
                                         RKH_UPCAST(RKH_SMA_T, me));
 }
 
-static void
-recvFail(CommMgr *const me)
+static void 
+sendStatus(CommMgr *const me)
 {
     (void)me;
-
-    bsp_recvFail();
 }
 
+static void 
+sendOneMsg(CommMgr *const me)
+{
+    (void)me;
+}
+
+static void 
+sendEndOfHist(CommMgr *const me)
+{
+    (void)me;
+}
 
 /* ............................. Exit actions .............................. */
-static void
-waitExit(CommMgr *const me)
-{
-    rkh_tmr_stop(&me->timer);
-}
-
-
 /* ................................ Guards ................................. */
 rbool_t
-checkResp(CommMgr *const me, RKH_EVT_T *pe)
+isAck(CommMgr *const me, RKH_EVT_T *pe)
 {
     ReceivedEvt *evt;
 
     (void)me;
-    
     evt = RKH_DOWNCAST(ReceivedEvt, pe);
-
     return (evt->size != 0) ? RKH_TRUE : RKH_FALSE;
+}
+
+rbool_t isPending(CommMgr *const me, RKH_EVT_T *pe)
+{
+}
+
+rbool_t isThereMsg(CommMgr *const me, RKH_EVT_T *pe)
+{
+}
+
+rbool_t 
+isEndOfBlock(CommMgr *const me, RKH_EVT_T *pe)
+{
 }
 
 /* ---------------------------- Global functions --------------------------- */
