@@ -103,9 +103,6 @@
     <ClCompile Include="..\bsp\modpwr.c">
       <Filter>bsp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\trkClient\trkClient.c">
-      <Filter>tracking\trkClient</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_rdygrp.c">
       <Filter>rkh</Filter>
     </ClCompile>
@@ -172,6 +169,9 @@
     <ClCompile Include="..\..\..\collector\collector.c">
       <Filter>collector</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\CommMgr\CommMgr.c">
+      <Filter>CommMgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -210,9 +210,6 @@
     <Filter Include="tracking\parser">
       <UniqueIdentifier>{fe14fea3-8785-4a4d-8be0-f5e70d94a5f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="tracking\trkClient">
-      <UniqueIdentifier>{ea3a0de7-30de-4c7a-a2b3-da537c3bbe1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="tracking\geomgr">
       <UniqueIdentifier>{0fb18af6-a058-49e5-aedb-1c1816dcb9f2}</UniqueIdentifier>
     </Filter>
@@ -249,46 +246,13 @@
     <Filter Include="geomgr">
       <UniqueIdentifier>{570fee03-3175-4f3e-9af0-ae1b61ff0f2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="deviceServer">
-      <UniqueIdentifier>{b1afe3f5-3284-47ab-ab6e-6a466385de99}</UniqueIdentifier>
+    <Filter Include="CommMgr">
+      <UniqueIdentifier>{b362e676-410c-456f-b6d0-442f4b58555a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\rkhcfg.h">
-      <Filter>tracking</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\bsp.h">
-      <Filter>tracking</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\mTime\mTime.h">
-      <Filter>mTime</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\mTime\mTimeCfg.h">
-      <Filter>mTime</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\geoMgr\geoMgr.h">
       <Filter>tracking\geomgr</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\gps\ubx.h">
-      <Filter>gps</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\gps\rmc.h">
-      <Filter>gps</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\gps\gps.h">
-      <Filter>gps</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\config\config.h">
-      <Filter>config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\ioChg\dIn.h">
-      <Filter>ioChg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\ioChg\dOut.h">
-      <Filter>ioChg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\ioChg\ioChg.h">
-      <Filter>ioChg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

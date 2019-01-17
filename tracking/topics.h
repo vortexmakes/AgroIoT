@@ -29,13 +29,6 @@ extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
-#define tpConnection_subscribe(me)   rkh_pubsub_subscribe(tpConnection, \
-                                                RKH_UPCAST(RKH_SMA_T, (me)))
-
-#define tpConnection_publish(ev, me) rkh_pubsub_publish(tpConnection, \
-                                                RKH_UPCAST(RKH_EVT_T, (ev)), \
-                                                RKH_UPCAST(RKH_SMA_T, (me)))
-
 #define tpModURC_subscribe(me)       rkh_pubsub_subscribe(tpModURC, \
                                                 RKH_UPCAST(RKH_SMA_T, (me)))
 
@@ -69,7 +62,7 @@ extern "C" {
 typedef enum Topics Topics;
 enum Topics
 {
-	tpConnection,
+	ConnectionTopic,
     tpModURC,
 	tpGeo,
     tpIoChg,

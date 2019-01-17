@@ -1,16 +1,18 @@
 /**
- *  \file       trkClient.c
- *  \brief      Yipies Tracking Client.
+ *  \file       CommMgr.c
+ *  \brief      Communication Manager active object implementation.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
  *  2018.06.05  DaBa  v1.0.00   Initial version
+ *  2019.16.01  LeFr  v2.0.00   
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
  *  DaBa  Dario Baliña db@vortexmakes.com
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -24,7 +26,7 @@
 #include "signals.h"
 #include "events.h"
 #include "topics.h"
-#include "trkClient.h"
+#include "CommMgr.h"
 #include "epoch.h"
 #include "date.h"
 #include "conMgr.h"
@@ -40,7 +42,7 @@
 //#define TEST_FRAME_TAIL     "00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
 /* ......................... Declares active object ........................ */
-typedef struct TrkClient TrkClient;
+typedef struct CommMgr CommMgr;
 
 /* ................... Declares states and pseudostates .................... */
 RKH_DCLR_BASIC_STATE Client_Disconnected, Client_Send, Client_Receive,
@@ -49,23 +51,23 @@ RKH_DCLR_COMP_STATE Client_Connected;
 RKH_DCLR_COND_STATE Client_CheckResp;
                     
 /* ........................ Declares initial action ........................ */
-static void init(TrkClient *const me, RKH_EVT_T *pe);
+static void init(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ Declares effect actions ........................ */
-static void updateGeoStamp(TrkClient *const me, RKH_EVT_T *pe);
-static void sendIo(TrkClient *const me, RKH_EVT_T *pe);
-static void sendSensor(TrkClient *const me, RKH_EVT_T *pe);
+static void updateGeoStamp(CommMgr *const me, RKH_EVT_T *pe);
+static void sendIo(CommMgr *const me, RKH_EVT_T *pe);
+static void sendSensor(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
-static void sendFail(TrkClient *const me);
-static void recvEntry(TrkClient *const me);
-static void recvFail(TrkClient *const me);
+static void sendFail(CommMgr *const me);
+static void recvEntry(CommMgr *const me);
+static void recvFail(CommMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
-static void waitExit(TrkClient *const me);
+static void waitExit(CommMgr *const me);
 
 /* ............................ Declares guards ............................ */
-rbool_t checkResp(TrkClient *const me, RKH_EVT_T *pe);
+rbool_t checkResp(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(Client_Disconnected, NULL, NULL, RKH_ROOT, NULL);
@@ -107,15 +109,16 @@ RKH_CREATE_BRANCH_TABLE(Client_CheckResp)
 RKH_END_BRANCH_TABLE
 
 /* ............................. Active object ............................. */
-struct TrkClient
+struct CommMgr
 {
-    RKH_SMA_T ao;       /* Base structure */
+    RKH_SMA_T ao;
     RKH_TMR_T timer;    
     GeoStamp geo;
+    CBOX_STR rawData;   /* Current raw data (GPS+IO, etc) */
 };
 
-RKH_SMA_CREATE(TrkClient, trkClient, 4, HCAL, &Client_Disconnected, init, NULL);
-RKH_SMA_DEF_PTR(trkClient);
+RKH_SMA_CREATE(CommMgr, commMgr, 4, HCAL, &Client_Disconnected, init, NULL);
+RKH_SMA_DEF_PTR(commMgr);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -133,14 +136,14 @@ static CBOX_STR cbox;
 /* ---------------------------- Local functions ---------------------------- */
 /* ............................ Initial action ............................. */
 static void
-init(TrkClient *const me, RKH_EVT_T *pe)
+init(CommMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    tpConnection_subscribe(me);
-    tpGeo_subscribe(me);
-    tpIoChg_subscribe(me);
-	tpSensor_subscribe(me);
+    rkh_pubsub_subscribe(ConnectionTopic, RKH_UPCAST(RKH_SMA_T, me));
+    rkh_pubsub_subscribe(tpGeo, RKH_UPCAST(RKH_SMA_T, me));
+    rkh_pubsub_subscribe(tpIoChg, RKH_UPCAST(RKH_SMA_T, me));
+    rkh_pubsub_subscribe(tpSensor, RKH_UPCAST(RKH_SMA_T, me));
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->timer);
@@ -158,13 +161,13 @@ init(TrkClient *const me, RKH_EVT_T *pe)
 
 /* ............................ Effect actions ............................. */
 static void
-updateGeoStamp(TrkClient *const me, RKH_EVT_T *pe)
+updateGeoStamp(CommMgr *const me, RKH_EVT_T *pe)
 {
     me->geo = (((GeoStampEvt *)pe)->gps);
 }
 
 static void
-sendFrame(TrkClient *const me)
+sendFrame(CommMgr *const me)
 {
     char buff[10];
 
@@ -195,7 +198,6 @@ sendFrame(TrkClient *const me)
 
     sprintf(buff, "%04x,", cbox.h.hoard );
     strcat(p, buff);
-
     sprintf(buff, "%02x,", cbox.h.pqty );
     strcat(p, buff);
 
@@ -212,11 +214,12 @@ sendFrame(TrkClient *const me)
     strcat(p, TEST_FRAME_TAIL);
 
     evSendObj.size = strlen((char *)evSendObj.buf);
-    tpConnection_publish(&evSendObj, me);
+    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &evSendObj),
+                                        RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
-sendIo(TrkClient *const me, RKH_EVT_T *pe)
+sendIo(CommMgr *const me, RKH_EVT_T *pe)
 {
     IoChgEvt *pio;
 
@@ -227,7 +230,7 @@ sendIo(TrkClient *const me, RKH_EVT_T *pe)
 }
 
 static void
-sendSensor(TrkClient *const me, RKH_EVT_T *pe)
+sendSensor(CommMgr *const me, RKH_EVT_T *pe)
 {
     SensorData *ps;
 
@@ -239,7 +242,7 @@ sendSensor(TrkClient *const me, RKH_EVT_T *pe)
 
 /* ............................. Entry actions ............................. */
 static void
-sendFail(TrkClient *const me)
+sendFail(CommMgr *const me)
 {
     (void)me;
 
@@ -247,13 +250,14 @@ sendFail(TrkClient *const me)
 }
 
 static void
-recvEntry(TrkClient *const me)
+recvEntry(CommMgr *const me)
 {
-    tpConnection_publish(&evRecvObj, me);
+    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &evRecvObj),
+                                        RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
-recvFail(TrkClient *const me)
+recvFail(CommMgr *const me)
 {
     (void)me;
 
@@ -263,7 +267,7 @@ recvFail(TrkClient *const me)
 
 /* ............................. Exit actions .............................. */
 static void
-waitExit(TrkClient *const me)
+waitExit(CommMgr *const me)
 {
     rkh_tmr_stop(&me->timer);
 }
@@ -271,7 +275,7 @@ waitExit(TrkClient *const me)
 
 /* ................................ Guards ................................. */
 rbool_t
-checkResp(TrkClient *const me, RKH_EVT_T *pe)
+checkResp(CommMgr *const me, RKH_EVT_T *pe)
 {
     ReceivedEvt *evt;
 

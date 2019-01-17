@@ -1,5 +1,5 @@
 /**
- *  \file       trkClient.h
+ *  \file       CommMgr.h
  *  \brief      Yipies Tracking Client.
  */
 
@@ -30,7 +30,7 @@ extern "C" {
 /* -------------------------------- Constants ------------------------------ */
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */
-RKH_SMA_DCLR(trkClient);
+RKH_SMA_DCLR(commMgr);
 
 /* ------------------------------- Data types ------------------------------ */
 typedef struct AppData AppData;

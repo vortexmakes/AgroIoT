@@ -22,7 +22,7 @@
 #include "rkhfwk_pubsub.h"
 #include "bsp.h"
 #include "signals.h"
-#include "trkClient.h"
+#include "CommMgr.h"
 #include "conmgr.h"
 #include "modmgr.h"
 #include "geoMgr.h"
@@ -85,7 +85,7 @@ setupTraceFilters(void)
     //RKH_FILTER_OFF_SMA(conMgr);
 	//RKH_FILTER_OFF_SMA(geoMgr);
 	RKH_FILTER_OFF_SMA(deviceServer);
-	RKH_FILTER_OFF_SMA(trkClient);
+	RKH_FILTER_OFF_SMA(commMgr);
 	RKH_FILTER_OFF_ALL_SIGNALS();
 }
 
@@ -122,7 +122,7 @@ main(int argc, char *argv[])
 	RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(deviceServer, DevSvr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
 
-    RKH_SMA_ACTIVATE(trkClient, TrkCLient_qsto, TRKCLIENT_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(commMgr, TrkCLient_qsto, TRKCLIENT_QSTO_SIZE, 0, 0);
 
     RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);
 	RKH_SMA_POST_FIFO(deviceServer, &e_Open, 0);
