@@ -131,6 +131,13 @@ struct IoChgEvt
     ruint din;
 };
 
+typedef struct RawDataEvt RawDataEvt;
+struct RawDataEvt
+{
+    RKH_EVT_T evt;
+    CBOX_STR rawData;
+};
+
 typedef struct SensorData SensorData;
 struct SensorData
 {

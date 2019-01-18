@@ -76,7 +76,9 @@ enum Signals
 	evEndOfCycle,
 	evSensorData,
 	evTerminate,     /* press the key escape on the keyboard */
-    evDevData
+    evDevData,
+    evRawData,
+    evSyncTout
 };
 
 /* ------------------------------- Data types ------------------------------ */

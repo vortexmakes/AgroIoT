@@ -45,7 +45,7 @@
 typedef struct CommMgr CommMgr;
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingStatus, EndCycle,
+RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingAck, EndCycle,
                      SendingHist, SendingEndOfHist;
 RKH_DCLR_COMP_STATE Active; 
 RKH_DCLR_CHOICE_STATE ChkRecv, ChkPendStatus, ChkHist, ChkEndOfBlock;
@@ -77,8 +77,8 @@ rbool_t isThereMsg(CommMgr *const me, RKH_EVT_T *pe);
 rbool_t isEndOfBlock(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ States and pseudostates ........................ */
-RKH_CREATE_BASIC_STATE(Init, NULL, NULL, RKH_ROOT, NULL);
-RKH_CREATE_TRANS_TABLE(Init)
+RKH_CREATE_BASIC_STATE(Idle, NULL, NULL, RKH_ROOT, NULL);
+RKH_CREATE_TRANS_TABLE(Idle)
     RKH_TRREG(evNetConnected, NULL, NULL, &Active),
 RKH_END_TRANS_TABLE
 
@@ -92,7 +92,7 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(WaitSync, NULL, NULL, &Active, NULL);
 RKH_CREATE_TRANS_TABLE(WaitSync)
-    RKH_TRREG(evSyncTime, NULL, NULL, &SendingStatus),
+    RKH_TRREG(evSyncTout, NULL, NULL, &SendingStatus),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(SendingStatus, sendStatus, NULL, &Active, NULL);
@@ -134,13 +134,18 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_CHOICE_STATE(ChkEndOfBlock);
 RKH_CREATE_BRANCH_TABLE(ChkEndOfBlock)
     RKH_BRANCH(isEndOfBlock, NULL, &SendingHist),
-    RKH_BRANCH(ELSE,         NULL, &SendingEndOfBlock),
+    RKH_BRANCH(ELSE,         NULL, &SendingEndOfHist),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_BASIC_STATE(SendingEndOfBlock, sendEndOfBlock, NULL, &Active, NULL);
-RKH_CREATE_TRANS_TABLE(SendingEndOfBlock)
+RKH_CREATE_BASIC_STATE(SendingEndOfHist, sendEndOfHist, NULL, &Active, NULL);
+RKH_CREATE_TRANS_TABLE(SendingEndOfHist)
     RKH_TRREG(evSent,     NULL, NULL, &ReceivingAck),
     RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_BASIC_STATE(EndCycle, NULL, NULL, RKH_ROOT, NULL);
+RKH_CREATE_TRANS_TABLE(EndCycle)
+    RKH_TRCOMPLETION(NULL, NULL, &WaitSync),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
@@ -181,11 +186,14 @@ init(CommMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_TIMER(&me->timer);
 
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
-    RKH_TR_FWK_STATE(me, &Client_Disconnected);
-    RKH_TR_FWK_STATE(me, &Client_Connected);
-    RKH_TR_FWK_STATE(me, &Client_Idle);
-    RKH_TR_FWK_STATE(me, &Client_Send);
-    RKH_TR_FWK_STATE(me, &Client_Receive);
+    RKH_TR_FWK_STATE(me, &Idle);
+    RKH_TR_FWK_STATE(me, &WaitSync);
+    RKH_TR_FWK_STATE(me, &SendingStatus);
+    RKH_TR_FWK_STATE(me, &ReceivingAck);
+    RKH_TR_FWK_STATE(me, &EndCycle);
+    RKH_TR_FWK_STATE(me, &SendingHist);
+    RKH_TR_FWK_STATE(me, &SendingEndOfHist);
+    RKH_TR_FWK_STATE(me, &Active);
 
     RKH_SET_STATIC_EVENT(RKH_UPCAST(RKH_EVT_T, &evSendObj), evSend);
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
@@ -200,7 +208,7 @@ activateSync(CommMgr *const me, RKH_EVT_T *pe)
 static void
 updateStatus(CommMgr *const me, RKH_EVT_T *pe)
 {
-    me->rawData = *((RawDataEvt *)pe);
+    me->rawData = ((RawDataEvt *)pe)->rawData;
 }
 
 static void 
@@ -273,15 +281,18 @@ isAck(CommMgr *const me, RKH_EVT_T *pe)
 
 rbool_t isPending(CommMgr *const me, RKH_EVT_T *pe)
 {
+    return RKH_FALSE;
 }
 
 rbool_t isThereMsg(CommMgr *const me, RKH_EVT_T *pe)
 {
+    return RKH_FALSE;
 }
 
 rbool_t 
 isEndOfBlock(CommMgr *const me, RKH_EVT_T *pe)
 {
+    return RKH_FALSE;
 }
 
 /* ---------------------------- Global functions --------------------------- */

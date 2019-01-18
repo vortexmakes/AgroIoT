@@ -161,16 +161,16 @@
       <Filter>tracking\deviceServer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\device\src\device.c">
-      <Filter>device</Filter>
+      <Filter>tracking\device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\device\src\sprayer.c">
-      <Filter>device</Filter>
+      <Filter>tracking\device</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\collector\collector.c">
       <Filter>collector</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\CommMgr\CommMgr.c">
-      <Filter>CommMgr</Filter>
+      <Filter>tracking\CommMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,17 +237,17 @@
     <Filter Include="tracking\deviceServer">
       <UniqueIdentifier>{d33fa21a-77df-40df-8897-af9d9c3fcba4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="device">
-      <UniqueIdentifier>{0360a7fd-3eaf-4dac-8d2c-6d57f4f4c9d0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="collector">
       <UniqueIdentifier>{b371901a-54aa-4f4d-9e3d-7fca4ccbb1f4}</UniqueIdentifier>
     </Filter>
     <Filter Include="geomgr">
       <UniqueIdentifier>{570fee03-3175-4f3e-9af0-ae1b61ff0f2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CommMgr">
+    <Filter Include="tracking\CommMgr">
       <UniqueIdentifier>{b362e676-410c-456f-b6d0-442f4b58555a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tracking\device">
+      <UniqueIdentifier>{0360a7fd-3eaf-4dac-8d2c-6d57f4f4c9d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
