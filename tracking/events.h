@@ -26,6 +26,7 @@
 #include "rmc.h"
 #include "gps.h"
 #include "cbox.h"
+#include "RawData.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -135,7 +136,7 @@ typedef struct RawDataEvt RawDataEvt;
 struct RawDataEvt
 {
     RKH_EVT_T evt;
-    CBOX_STR rawData;
+    RawData rawData;
 };
 
 typedef struct SensorData SensorData;

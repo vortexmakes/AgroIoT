@@ -30,6 +30,7 @@
 #include "epoch.h"
 #include "date.h"
 #include "conMgr.h"
+#include "RawData.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WAIT_TIME    RKH_TIME_MS(2000)
@@ -68,8 +69,11 @@ static void receive(CommMgr *const me);
 static void sendStatus(CommMgr *const me);
 static void sendOneMsg(CommMgr *const me);
 static void sendEndOfHist(CommMgr *const me);
+static void enWaitSync(CommMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
+static void exWaitSync(CommMgr *const me);
+
 /* ............................ Declares guards ............................ */
 rbool_t isAck(CommMgr *const me, RKH_EVT_T *pe);
 rbool_t isPending(CommMgr *const me, RKH_EVT_T *pe);
@@ -90,7 +94,7 @@ RKH_CREATE_TRANS_TABLE(Active)
     RKH_TRREG(evNetDisconnected, NULL, NULL, &Idle),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(WaitSync, NULL, NULL, &Active, NULL);
+RKH_CREATE_BASIC_STATE(WaitSync, enWaitSync, exWaitSync, &Active, NULL);
 RKH_CREATE_TRANS_TABLE(WaitSync)
     RKH_TRREG(evSyncTout, NULL, NULL, &SendingStatus),
 RKH_END_TRANS_TABLE
@@ -152,9 +156,8 @@ RKH_END_TRANS_TABLE
 struct CommMgr
 {
     RKH_SMA_T ao;
-    RKH_TMR_T timer;    
-    GeoStamp geo;
-    CBOX_STR rawData;   /* Current raw data (GPS+IO, etc) */
+    RKH_TMR_T syncTmr;    
+    RawData rawData;   /* Current status (in old and raw format) */
 };
 
 RKH_SMA_CREATE(CommMgr, commMgr, 4, HCAL, &Idle, init, NULL);
@@ -164,7 +167,7 @@ RKH_SMA_DEF_PTR(commMgr);
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_STATIC_EVENT(e_tout, evTimeout);
+static RKH_STATIC_EVENT(evSyncToutObj, evSyncTout);
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static SendEvt evSendObj;
 static char *testFrame = TEST_FRAME;
@@ -183,7 +186,7 @@ init(CommMgr *const me, RKH_EVT_T *pe)
     rkh_pubsub_subscribe(ConnectionTopic, RKH_UPCAST(RKH_SMA_T, me));
 
     RKH_TR_FWK_AO(me);
-    RKH_TR_FWK_TIMER(&me->timer);
+    RKH_TR_FWK_TIMER(&me->syncTmr);
 
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
     RKH_TR_FWK_STATE(me, &Idle);
@@ -196,7 +199,7 @@ init(CommMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &Active);
 
     RKH_SET_STATIC_EVENT(RKH_UPCAST(RKH_EVT_T, &evSendObj), evSend);
-    RKH_TMR_INIT(&me->timer, &e_tout, NULL);
+    RKH_TMR_INIT(&me->syncTmr, &evSyncToutObj, NULL);
 }
 
 /* ............................ Effect actions ............................. */
@@ -267,7 +270,19 @@ sendEndOfHist(CommMgr *const me)
     (void)me;
 }
 
+static void 
+enWaitSync(CommMgr *const me)
+{
+    RKH_TMR_ONESHOT(&me->syncTmr, RKH_UPCAST(RKH_SMA_T, me), RKH_TIME_SEC(1));
+}
+
 /* ............................. Exit actions .............................. */
+static void 
+exWaitSync(CommMgr *const me)
+{
+    rkh_tmr_stop(&me->syncTmr);
+}
+
 /* ................................ Guards ................................. */
 rbool_t
 isAck(CommMgr *const me, RKH_EVT_T *pe)
