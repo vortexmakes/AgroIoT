@@ -107,7 +107,7 @@ main(int argc, char *argv[])
 
     signals_publishSymbols();
 
-    RKH_TR_FWK_ACTOR(&ioChg, "ioChg");
+    RKH_TR_FWK_ACTOR(&inChg, "ioChg");
     RKH_TR_FWK_ACTOR(&sim900parser, "sim900parser");
     RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
 	RKH_TR_FWK_ACTOR(&tpSens, "tpSens");

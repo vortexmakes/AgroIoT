@@ -26,7 +26,7 @@ typedef struct
 {
     ruint val;
     rui16_t timer;
-}DigitalTimerOutput;
+} DigitalTimerOutput;
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */

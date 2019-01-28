@@ -19,8 +19,9 @@
 #define __RAWDATA_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "cbdata.h"
 #include "gps.h"
+#include "cbdata.h"
+#include "IOStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -36,7 +37,9 @@ typedef struct RawData RawData;
 struct RawData 
 {
     GeoStamp position;
-    CBOX_STR data;
+    CBOX_STR devData;
+    IOStatus ioStatus;
+    //BatChStatus batChStatus;
 };
 
 /* ------------------------------- Data types ------------------------------ */

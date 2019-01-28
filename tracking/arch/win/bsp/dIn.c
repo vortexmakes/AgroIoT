@@ -27,13 +27,13 @@
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
-ruint ioChg;
+ruint inChg;
 
 /* ---------------------------- Local variables ---------------------------- */
 static unsigned char dIns[NUM_DIN_SIGNALS];
 static unsigned char dInsKb[NUM_DIN_SIGNALS];
 
-static IoChgEvt ioChgEvt;
+static InChgEvt inChgEvt;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -53,8 +53,8 @@ dIn_init(void)
 {
     memset(dIns, 0, sizeof(dIns));
     memset(dInsKb, 0, sizeof(dIns));
-    RKH_SET_STATIC_EVENT((RKH_EVT_T *)&ioChgEvt, evIoChg);
-    ioChgEvt.din = 0;
+    RKH_SET_STATIC_EVENT((RKH_EVT_T *)&inChgEvt, evIoChg);
+    inChgEvt.din = 0;
 }
 
 void
@@ -67,9 +67,9 @@ dIn_scan(void)
         if(dIns[i] != dInsKb[i])
         {
             dIns[i] = dInsKb[i];
-            ioChgEvt.din &= ~(1 << i);
-            ioChgEvt.din |= dIns[i] ? (1 << i) : 0;
-            tpIoChg_publish(&ioChgEvt, &ioChg);
+            inChgEvt.din &= ~(1 << i);
+            inChgEvt.din |= dIns[i] ? (1 << i) : 0;
+            tpIoChg_publish(&inChgEvt, &inChg);
         }
     }
 }
@@ -77,7 +77,7 @@ dIn_scan(void)
 ruint
 dIn_get(void)
 {
-    return ioChgEvt.din;
+    return inChgEvt.din;
 }
 
 /* ------------------------------ End of file ------------------------------ */

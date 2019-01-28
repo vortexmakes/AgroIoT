@@ -1,26 +1,25 @@
 /**
- *  \file       dIn.h
- *  \brief      Specification of Digital Inputs HAL and change detection.
+ *  \file       IOStatus.h
+ *  \brief      Specifies the interface of IOStatus module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.17  DaBa  v1.0.00  Initial version
+ *  2019.28.01  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __IOCHG_H__
-#define __IOCHG_H__
+#ifndef __IOSTATUS_H_
+#define __IOSTATUS_H_
 
 /* ----------------------------- Include files ----------------------------- */
-#include "dIn.h"
-#include "dOut.h"
+#include "rkh.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -29,10 +28,18 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+/* ................................ Signals ................................ */
+/* ................................. Events ................................ */
+/* ........................ Declares active object ......................... */
+typedef struct IOStatus IOStatus;
+struct IOStatus 
+{
+    ruint dIn;
+    ruint dOut;
+};
+
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
-extern ruint inChg;
-
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

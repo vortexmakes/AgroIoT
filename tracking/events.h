@@ -125,11 +125,18 @@ struct GeoStampEvt
     GeoStamp gps;
 };
 
-typedef struct IoChgEvt IoChgEvt;
-struct IoChgEvt
+typedef struct InChgEvt InChgEvt;
+struct InChgEvt
 {
     RKH_EVT_T evt;
     ruint din;
+};
+
+typedef struct OutChgEvt OutChgEvt;
+struct OutChgEvt
+{
+    RKH_EVT_T evt;
+    ruint dout;
 };
 
 typedef struct RawDataEvt RawDataEvt;
