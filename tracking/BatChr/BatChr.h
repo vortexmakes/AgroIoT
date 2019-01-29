@@ -1,11 +1,11 @@
 /**
- *  \file       RawData.h
- *  \brief      Specifies the interface of RawData module.
+ *  \file       BatChr.h
+ *  \brief      Specifies the interface of battery charger module
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2019.25.01  LeFr  v1.0.00  Initial version
+ *  2019.29.01  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -15,14 +15,10 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __RAWDATA_H__
-#define __RAWDATA_H__
+#ifndef __BATCHR_H__
+#define __BATCHR_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "gps.h"
-#include "cbdata.h"
-#include "IOStatus.h"
-#include "BatChr.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -31,19 +27,20 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-/* ................................ Signals ................................ */
-/* ................................. Events ................................ */
-/* ........................ Declares active object ......................... */
-typedef struct RawData RawData;
-struct RawData 
+typedef enum BatChrStatus BatChrStatus;
+enum BatChrStatus 
 {
-    GeoStamp position;
-    CBOX_STR devData;
-    IOStatus ioStatus;
-    BatChrStatus batChrStatus;
+    EXT_POWER_FAIL
 };
 
 /* ------------------------------- Data types ------------------------------ */
+typedef struct BatChrEvt BatChrEvt;
+struct BatChrEvt
+{
+    RKH_EVT_T base;
+    BatChrStatus status;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

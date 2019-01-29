@@ -15,8 +15,9 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
+#include "rkhtype.h"
 #include "rkhfwk_pubsub.h"
+#include "rkhfwk_dynevt.h"
 #include "dIn.h"
 #include "mTimeCfg.h"
 #include "signals.h"
@@ -27,25 +28,27 @@
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
-ruint inChg;
+ruint inChg;    /* Identifies this module */
 
 /* ---------------------------- Local variables ---------------------------- */
 static unsigned char dIns[NUM_DIN_SIGNALS];
 static unsigned char dInsKb[NUM_DIN_SIGNALS];
-
-static InChgEvt inChgEvt;
+static ruint dInStatus;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void keyb_dIn_parser(char c)
+void
+keyb_dIn_parser(char c)
 {
-	c = c - '0';
+    c = c - '0';
 
-	if (c > NUM_DIN_SIGNALS)
-		return;
+    if (c > NUM_DIN_SIGNALS)
+    {
+        return;
+    }
 
-	dInsKb[c] ^= 1;
+    dInsKb[c] ^= 1;
 }
 
 void
@@ -53,31 +56,33 @@ dIn_init(void)
 {
     memset(dIns, 0, sizeof(dIns));
     memset(dInsKb, 0, sizeof(dIns));
-    RKH_SET_STATIC_EVENT((RKH_EVT_T *)&inChgEvt, evIoChg);
-    inChgEvt.din = 0;
+    dInStatus = 0;
 }
 
 void
 dIn_scan(void)
 {
     unsigned char i;
-
-    for(i=0; i < NUM_DIN_SIGNALS; ++i)
+    InChgEvt *inChgEvt;
+    
+    inChgEvt = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
+    for (i=0; i < NUM_DIN_SIGNALS; ++i)
     {
-        if(dIns[i] != dInsKb[i])
+        if (dIns[i] != dInsKb[i])
         {
             dIns[i] = dInsKb[i];
-            inChgEvt.din &= ~(1 << i);
-            inChgEvt.din |= dIns[i] ? (1 << i) : 0;
-            tpIoChg_publish(&inChgEvt, &inChg);
+            inChgEvt->din &= ~(1 << i);
+            inChgEvt->din |= dIns[i] ? (1 << i) : 0;
         }
     }
+    dInStatus = inChgEvt->din;
+    tpIoChg_publish(inChgEvt, &inChg);
 }
 
 ruint
 dIn_get(void)
 {
-    return inChgEvt.din;
+    return dInStatus;
 }
 
 /* ------------------------------ End of file ------------------------------ */
