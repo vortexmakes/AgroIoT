@@ -37,9 +37,19 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>app/main.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/main.c</locationURI>
+			<name>app/blinky</name>
+			<type>2</type>
+			<locationURI>PARENT-4-PROJECT_LOC/blinky</locationURI>
+		</link>
+		<link>
+			<name>app/third-party</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>bsp/CubeMX</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>bsp/STM32Cube</name>
@@ -47,24 +57,34 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>bsp/stm32f4xx_it.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32Cube_FW_F4_V1.23.0/stm32f4xx_it.c</locationURI>
+			<name>app/third-party/rkh</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>bsp/stm32f4xx_it.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32Cube_FW_F4_V1.23.0/stm32f4xx_it.h</locationURI>
+			<name>app/third-party/ssp</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>bsp/syscalls.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32Cube_FW_F4_V1.23.0/syscalls.c</locationURI>
+			<name>bsp/CubeMX/Inc</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/Inc</locationURI>
 		</link>
 		<link>
-			<name>bsp/system_stm32f4xx.c</name>
+			<name>bsp/CubeMX/Src</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/Src</locationURI>
+		</link>
+		<link>
+			<name>bsp/CubeMX/startup</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/startup</locationURI>
+		</link>
+		<link>
+			<name>bsp/CubeMX/syscalls.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32Cube_FW_F4_V1.23.0/system_stm32f4xx.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/syscalls.c</locationURI>
 		</link>
 		<link>
 			<name>bsp/STM32Cube/CMSIS</name>
@@ -77,9 +97,114 @@
 			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver</locationURI>
 		</link>
 		<link>
-			<name>bsp/STM32Cube/startup</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32Cube_FW_F4_V1.23.0/startup</locationURI>
+			<name>app/third-party/rkh/rkhfwk_bittbl.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/fwk/src/rkhfwk_bittbl.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhfwk_dynevt.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/fwk/src/rkhfwk_dynevt.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhfwk_evtpool.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/fwk/src/rkhfwk_evtpool.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhfwk_pubsub.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/fwk/src/rkhfwk_pubsub.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhfwk_rdygrp.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/fwk/src/rkhfwk_rdygrp.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhfwk_sched.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/fwk/src/rkhfwk_sched.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhfwk_version.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/fwk/src/rkhfwk_version.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhmempool.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/mempool/src/rkhmempool.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhport.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp/rkhport.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhport.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp/rkhport.h</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhqueue.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/queue/src/rkhqueue.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhsm.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/sm/src/rkhsm.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhsma.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/sma/src/rkhsma.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhsma_prio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/sma/src/rkhsma_prio.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhsma_sync.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/sma/src/rkhsma_sync.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkht.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp/rkht.h</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhtmr.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/tmr/src/rkhtmr.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhtrc_filter.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/trc/src/rkhtrc_filter.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhtrc_record.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/trc/src/rkhtrc_record.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/rkhtrc_stream.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/trc/src/rkhtrc_stream.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/ssp/ssp.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/ssp/src/ssp.c</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/ssp/ssp.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/third-party/ssp/src/ssp.h</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
