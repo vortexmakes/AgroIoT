@@ -1,5 +1,5 @@
 /**
- *  \file       dout.c
+ *  \file       dOut.c
  *  \brief      Implementation of Digital Outputs Control HAL.
  */
 
@@ -46,15 +46,17 @@ dOut_set(ruint out, ruint val, rui16_t tmr)
 {
     RKH_SR_ALLOC();
 
-    if(out >= NUM_DOUT_SIGNALS)
+    if (out >= NUM_DOUT_SIGNALS)
+    {
         return;
+    }
 
     printf("dOut[%d]:%d\r\n", out, val);
 
-    RKH_ENTER_CRITICAL_();    
+    RKH_ENTER_CRITICAL_();
     dOuts[out].val = val != 0 ? 1 : 0;
     dOuts[out].timer = tmr;
-    RKH_EXIT_CRITICAL_();    
+    RKH_EXIT_CRITICAL_();
 }
 
 ruint
@@ -67,15 +69,13 @@ void
 dOut_process(void)
 {
     DigitalTimerOutput *p;
-    ruint i;
+    rInt i;
 
-    p = dOuts;
-
-	for(p=dOuts, i=0; p < &dOuts[NUM_DOUT_SIGNALS]; ++p, ++i)
+    for (p = dOuts, i = 0; p < &dOuts[NUM_DOUT_SIGNALS]; ++p, ++i)
     {
-		if(p->timer > 0 && !(--(p->timer)))
+        if ((p->timer > 0) && !(--(p->timer)))
         {
-			p->val ^= 1;
+            p->val ^= 1;
             printf("dOut[%d]:%d\r\n", i, p->val);
         }
     }

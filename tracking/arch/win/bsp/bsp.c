@@ -215,7 +215,7 @@ bsp_keyParser(int c)
             break;
 
         case 'q':
-            dOut_set(0, 1, DOUT_TIME(1000));
+            dOut_set(dOut0, 1, DOUT_TIME(1000));
             break;
 
         case 'o':

@@ -40,7 +40,7 @@ static ruint dInStatus;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static unsigned char 
+static unsigned char
 getInStatus(rInt nDigIn)
 {
     RKH_ASSERT(nDigIn < NUM_DIN_SIGNALS);
@@ -73,7 +73,7 @@ dIn_scan(void)
     rInt i;
     InChgEvt *inChgEvt;
     ruint dInCurrStatus;
-    
+
     for (dInCurrStatus = dInStatus, i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
         if (dIns[i] != getInStatus(i))
