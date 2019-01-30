@@ -46,7 +46,7 @@
 #define SIZEOF_EP0_BLOCK    sizeof(RKH_EVT_T)
 
 #define SIZEOF_EP1_BLOCK    sizeof(RmcEvt)
-#define SIZEOF_EP1STO       (4*SIZEOF_EP1_BLOCK)
+#define SIZEOF_EP1STO       (8*SIZEOF_EP1_BLOCK)
 
 #define SIZEOF_EP2_BLOCK    sizeof(ModMgrEvt)
 #define SIZEOF_EP2STO       (4*SIZEOF_EP2_BLOCK)
