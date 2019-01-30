@@ -36,10 +36,6 @@
 									<listOptionValue builtIn="false" value="__CIAANXP__=1"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.675484694" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/CMSIS/core"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/CMSIS/device"/>
 									<listOptionValue builtIn="false" value="../../bsp"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
@@ -62,6 +58,10 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/CMSIS/Include"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1726576784" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -80,11 +80,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.archiver.1549590923" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.1076674029" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler">
 								<option id="gnu.both.asm.option.include.paths.1923867530" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/CMSIS/core"/>
 									<listOptionValue builtIn="false" value="../../bsp"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/CMSIS/device"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/sm/inc"/>
@@ -106,6 +102,10 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/CMSIS/Include"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1379635670" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -114,7 +114,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
-						<entry excluding="STM32Cube/HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c|STM32Cube/HAL_Driver/Src/stm32f4xx_hal_timebase_tim_template.c|STM32Cube/HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_wakeup_template.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
+						<entry excluding="CubeMX/Src/main.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -154,10 +154,6 @@
 									<listOptionValue builtIn="false" value="__CIAANXP__=1"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.871960899" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/CMSIS/core"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/CMSIS/device"/>
 									<listOptionValue builtIn="false" value="../../bsp"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
@@ -180,6 +176,10 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/CMSIS/Include"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.618148146" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -198,11 +198,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.archiver.856295713" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release.1649225213" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release">
 								<option id="gnu.both.asm.option.include.paths.1632190880" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/CMSIS/core"/>
 									<listOptionValue builtIn="false" value="../../bsp"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32Cube_FW_F4_V1.23.0/Drivers/CMSIS/device"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/sm/inc"/>
@@ -224,6 +220,10 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX_GenereatedCode/Drivers/CMSIS/Include"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.803142745" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -232,7 +232,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
+						<entry excluding="CubeMX/Src/main.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

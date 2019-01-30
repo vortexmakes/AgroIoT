@@ -5,6 +5,8 @@
 #ifndef __CUBEMX_H__
 #define __CUBEMX_H__
 
+#include "stm32f4xx_it.h"
+
 #include "main.h"
 #include "gpio.h"
 #include "usart.h"
