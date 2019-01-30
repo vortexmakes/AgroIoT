@@ -18,11 +18,14 @@
 #include "rkhtype.h"
 #include "rkhfwk_pubsub.h"
 #include "rkhfwk_dynevt.h"
+#include "rkhassert.h"
 #include "dIn.h"
 #include "mTimeCfg.h"
 #include "signals.h"
 #include "events.h"
 #include "topics.h"
+
+RKH_MODULE_NAME(dIn)
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -37,6 +40,13 @@ static ruint dInStatus;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static unsigned char 
+getInStatus(rInt nDigIn)
+{
+    RKH_ASSERT(nDigIn < NUM_DIN_SIGNALS);
+    return dInsKb[nDigIn];
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 keyb_dIn_parser(char c)
@@ -68,9 +78,9 @@ dIn_scan(void)
     
     for (dInCurrStatus = dInStatus, i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
-        if (dIns[i] != dInsKb[i])
+        if (dIns[i] != getInStatus(i))
         {
-            dIns[i] = dInsKb[i];
+            dIns[i] = getInStatus(i);
             dInCurrStatus &= ~(1 << i);
             dInCurrStatus |= dIns[i] ? (1 << i) : 0;
         }
