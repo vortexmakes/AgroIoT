@@ -62,21 +62,25 @@ dIn_init(void)
 void
 dIn_scan(void)
 {
-    unsigned char i;
+    rInt i;
     InChgEvt *inChgEvt;
+    ruint dInCurrStatus;
     
-    inChgEvt = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
-    for (i=0; i < NUM_DIN_SIGNALS; ++i)
+    for (dInCurrStatus = dInStatus, i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
         if (dIns[i] != dInsKb[i])
         {
             dIns[i] = dInsKb[i];
-            inChgEvt->din &= ~(1 << i);
-            inChgEvt->din |= dIns[i] ? (1 << i) : 0;
+            dInCurrStatus &= ~(1 << i);
+            dInCurrStatus |= dIns[i] ? (1 << i) : 0;
         }
     }
-    dInStatus = inChgEvt->din;
-    tpIoChg_publish(inChgEvt, &inChg);
+    if (dInCurrStatus != dInStatus)
+    {
+        inChgEvt = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
+        dInStatus = inChgEvt->din = dInCurrStatus;
+        tpIoChg_publish(inChgEvt, &inChg);
+    }
 }
 
 ruint
