@@ -29,9 +29,9 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 typedef enum dInSignalId
 {
-    dIn0, dIn1, dIn2, dIn3, dIn4, dIn5, dIn6, dIn7,
+    dIn0, dIn1,
     NUM_DIN_SIGNALS
-}dInSignalId;
+} dInSignalId;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
