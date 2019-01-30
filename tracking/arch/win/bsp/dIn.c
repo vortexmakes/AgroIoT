@@ -53,12 +53,10 @@ keyb_dIn_parser(char c)
 {
     c = c - '0';
 
-    if (c > NUM_DIN_SIGNALS)
+    if ((c >= 0) && (c < NUM_DIN_SIGNALS))
     {
-        return;
+        dInsKb[c] ^= 1;
     }
-
-    dInsKb[c] ^= 1;
 }
 
 void
