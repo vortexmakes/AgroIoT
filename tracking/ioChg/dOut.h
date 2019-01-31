@@ -19,7 +19,7 @@
 #define __DOUT_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
+#include "rkhtype.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -33,17 +33,17 @@ extern "C" {
 #define DOUT_BASE_TIME      100
 
 /* ------------------------------- Data types ------------------------------ */
-typedef enum dOutSignalId
+typedef enum DigOutSignalId
 {
     dOut0, dOut1,
     NUM_DOUT_SIGNALS
-} dOutSignalId;
+} DigOutSignalId;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void dOut_init(void);
-void dOut_set(ruint out, ruint val, rui16_t tmr);
-ruint dOut_get(ruint out);
+void dOut_set(DigOutSignalId out, ruint val, rui16_t tmr);
+rui32_t dOut_get(DigOutSignalId out);
 void dOut_process(void);
 
 /* -------------------- External C language linkage end -------------------- */

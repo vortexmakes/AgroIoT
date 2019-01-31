@@ -19,6 +19,8 @@
 #include "rkh.h"
 #include "dOut.h"
 
+RKH_MODULE_NAME(dOut)
+
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -31,36 +33,50 @@ typedef struct
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 static DigitalTimerOutput dOuts[NUM_DOUT_SIGNALS];
+static rui32_t dOutStatus;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+void
+setStatus(DigOutSignalId out, ruint val)
+{
+    RKH_ASSERT(out < NUM_DOUT_SIGNALS);
+
+    if (val != 0)
+    {
+        RKH_BIT_SET_32(dOutStatus, RKH_BIT32(out));
+        dOuts[out].val = 1;
+    }
+    else
+    {
+        RKH_BIT_CLR_32(dOutStatus, RKH_BIT32(out));
+        dOuts[out].val = 0;
+    }
+    printf("dOut[%d]:%d\r\n", out, val);
+    printf("dOutStatus = %x\r\n", dOutStatus);
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 dOut_init(void)
 {
-    memset(dOuts, 0, sizeof(dOuts));
+    memset(dOuts, 0, sizeof(dOuts));    /* default values */
+    dOutStatus = 0;
 }
 
 void
-dOut_set(ruint out, ruint val, rui16_t tmr)
+dOut_set(DigOutSignalId out, ruint val, rui16_t tmr)
 {
     RKH_SR_ALLOC();
 
-    if (out >= NUM_DOUT_SIGNALS)
-    {
-        return;
-    }
-
-    printf("dOut[%d]:%d\r\n", out, val);
-
     RKH_ENTER_CRITICAL_();
-    dOuts[out].val = val != 0 ? 1 : 0;
+    setStatus(out, val);
     dOuts[out].timer = tmr;
     RKH_EXIT_CRITICAL_();
 }
 
-ruint
-dOut_get(ruint out)
+rui32_t
+dOut_get(DigOutSignalId out)
 {
     return dOuts[out].val;
 }
@@ -68,15 +84,14 @@ dOut_get(ruint out)
 void
 dOut_process(void)
 {
-    DigitalTimerOutput *p;
+    DigitalTimerOutput *out;
     rInt i;
 
-    for (p = dOuts, i = 0; p < &dOuts[NUM_DOUT_SIGNALS]; ++p, ++i)
+    for (out = dOuts, i = 0; out < &dOuts[NUM_DOUT_SIGNALS]; ++out, ++i)
     {
-        if ((p->timer > 0) && !(--(p->timer)))
+        if ((out->timer > 0) && !(--(out->timer)))
         {
-            p->val ^= 1;
-            printf("dOut[%d]:%d\r\n", i, p->val);
+            setStatus(i, out->val ^ 1);
         }
     }
 }
