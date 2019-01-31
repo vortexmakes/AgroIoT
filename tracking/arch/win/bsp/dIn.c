@@ -36,7 +36,7 @@ ruint inChg;    /* Identifies this module */
 /* ---------------------------- Local variables ---------------------------- */
 static unsigned char dIns[NUM_DIN_SIGNALS];
 static unsigned char dInsKb[NUM_DIN_SIGNALS];
-static ruint dInStatus;
+static rui32_t dInStatus;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -72,15 +72,21 @@ dIn_scan(void)
 {
     rInt i;
     InChgEvt *inChgEvt;
-    ruint dInCurrStatus;
+    rui32_t dInCurrStatus;
 
     for (dInCurrStatus = dInStatus, i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
         if (dIns[i] != getInStatus(i))
         {
             dIns[i] = getInStatus(i);
-            dInCurrStatus &= ~(1 << i);
-            dInCurrStatus |= dIns[i] ? (1 << i) : 0;
+            if (dIns[i] == 1)
+            {
+                RKH_BIT_SET_32(dInCurrStatus, RKH_BIT32(i));
+            }
+            else
+            {
+                RKH_BIT_CLR_32(dInCurrStatus, RKH_BIT32(i));
+            }
         }
     }
     if (dInCurrStatus != dInStatus)
@@ -91,8 +97,8 @@ dIn_scan(void)
     }
 }
 
-ruint
-dIn_get(void)
+rui32_t
+dIn_getAll(void)
 {
     return dInStatus;
 }
