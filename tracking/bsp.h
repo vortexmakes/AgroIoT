@@ -21,6 +21,8 @@
 #define __BSP_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "rkh.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {

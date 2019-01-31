@@ -26,6 +26,8 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
+#ifdef MODPWR_CTRL_ENABLE
+
 void
 modPwr_init(void)
 {
@@ -49,5 +51,7 @@ modPwr_on(void)
      * TODO:
      */
 }
+
+#endif
 
 /* ------------------------------ End of file ------------------------------ */

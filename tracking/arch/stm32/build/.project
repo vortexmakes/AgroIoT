@@ -37,9 +37,44 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>app/blinky</name>
-			<type>2</type>
-			<locationURI>PARENT-4-PROJECT_LOC/blinky</locationURI>
+			<name>app/bsp.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/bsp.h</locationURI>
+		</link>
+		<link>
+			<name>app/events.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/events.h</locationURI>
+		</link>
+		<link>
+			<name>app/main.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/main.c</locationURI>
+		</link>
+		<link>
+			<name>app/rkhcfg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/rkhcfg.h</locationURI>
+		</link>
+		<link>
+			<name>app/settings.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/settings.h</locationURI>
+		</link>
+		<link>
+			<name>app/signals.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/signals.c</locationURI>
+		</link>
+		<link>
+			<name>app/signals.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/signals.h</locationURI>
+		</link>
+		<link>
+			<name>app/sspcfg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sspcfg.h</locationURI>
 		</link>
 		<link>
 			<name>app/third-party</name>
@@ -47,9 +82,44 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>app/topics.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/topics.h</locationURI>
+		</link>
+		<link>
 			<name>bsp/STM32CubeMX</name>
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX</locationURI>
+		</link>
+		<link>
+			<name>bsp/assert.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/assert.c</locationURI>
+		</link>
+		<link>
+			<name>bsp/bsp.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/bsp.c</locationURI>
+		</link>
+		<link>
+			<name>bsp/cubemx.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/cubemx.h</locationURI>
+		</link>
+		<link>
+			<name>bsp/hook.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/hook.c</locationURI>
+		</link>
+		<link>
+			<name>bsp/modpwr.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/modpwr.c</locationURI>
+		</link>
+		<link>
+			<name>bsp/trace_io.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/trace_io.c</locationURI>
 		</link>
 		<link>
 			<name>app/third-party/rkh</name>

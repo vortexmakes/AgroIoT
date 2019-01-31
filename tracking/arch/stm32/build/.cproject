@@ -45,7 +45,6 @@
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/tmr/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/trc/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/ssp/src"/>
-									<listOptionValue builtIn="false" value="../../../../../blinky"/>
 									<listOptionValue builtIn="false" value="../../../../modpwr"/>
 									<listOptionValue builtIn="false" value="../../../../modcmd"/>
 									<listOptionValue builtIn="false" value="../../../../conmgr"/>
@@ -62,6 +61,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1726576784" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -89,7 +89,6 @@
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/trc/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/ssp/src"/>
-									<listOptionValue builtIn="false" value="../../../../../blinky"/>
 									<listOptionValue builtIn="false" value="../../../../modpwr"/>
 									<listOptionValue builtIn="false" value="../../../../modcmd"/>
 									<listOptionValue builtIn="false" value="../../../../conmgr"/>
@@ -106,6 +105,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1379635670" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -163,7 +163,6 @@
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/tmr/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/trc/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/ssp/src"/>
-									<listOptionValue builtIn="false" value="../../../../../blinky"/>
 									<listOptionValue builtIn="false" value="../../../../modpwr"/>
 									<listOptionValue builtIn="false" value="../../../../modcmd"/>
 									<listOptionValue builtIn="false" value="../../../../conmgr"/>
@@ -180,6 +179,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.618148146" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -207,7 +207,6 @@
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/trc/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/ssp/src"/>
-									<listOptionValue builtIn="false" value="../../../../../blinky"/>
 									<listOptionValue builtIn="false" value="../../../../modpwr"/>
 									<listOptionValue builtIn="false" value="../../../../modcmd"/>
 									<listOptionValue builtIn="false" value="../../../../conmgr"/>
@@ -224,6 +223,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.803142745" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>

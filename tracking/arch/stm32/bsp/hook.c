@@ -1,44 +1,13 @@
-/*
- *  --------------------------------------------------------------------------
- *
- *                                Framework RKH
- *                                -------------
- *
- *            State-machine framework for reactive embedded systems
- *
- *                      Copyright (C) 2010 Leandro Francucci.
- *          All rights reserved. Protected by international copyright laws.
- *
- *
- *  RKH is free software: you can redistribute it and/or modify it under the
- *  terms of the GNU General Public License as published by the Free Software
- *  Foundation, either version 3 of the License, or (at your option) any
- *  later version.
- *
- *  RKH is distributed in the hope that it will be useful, but WITHOUT ANY
- *  WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- *  more details.
- *
- *  You should have received a copy of the GNU General Public License along
- *  with RKH, see copying.txt file.
- *
- *  Contact information:
- *  RKH web site:   http://sourceforge.net/projects/rkh-reactivesys/
- *  e-mail:         francuccilea@gmail.com
- *  ---------------------------------------------------------------------------
- */
-
 /**
  *  \file       hook.c
- *  \brief      RKH hooks functions for STM32
+ *  \brief      RKH hooks functions for Tracking-STM32
  *
  *  \ingroup    bsp
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2017.04.14  DaBa  v2.4.05  Initial version
+ *  2019.01.31  DaBa  v2.4.05  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -47,8 +16,8 @@
  */
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
 #include "bsp.h"
+#include "cubemx.h"
 
 RKH_THIS_MODULE
 
@@ -59,31 +28,32 @@ RKH_THIS_MODULE
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-#if defined(RKH_USE_TRC_SENDER)
+#if defined(RKH_CFG_SMA_TRC_SNDR_EN)
 static rui8_t rkhtick;
 #endif
 
+static ruint tickCounter;
+
 /* ----------------------- Local function prototypes ----------------------- */
-static bool_t tickHook(void *p);
+static void tickHook(void);
 
 /* ---------------------------- Local functions ---------------------------- */
-static bool_t
-tickHook(void *p)
+static void
+SystickHook(void)
 {
-    RKH_TIM_TICK(&rkhtick);
-    return 0;
+    if(tickCounter && (--tickCounter == 0))
+    {
+        tickCounter = BSP_TICK_RATE_MS;
+        RKH_TIM_TICK(&rkhtick);
+    }
 }
 
 /* ---------------------------- Global functions --------------------------- */
 void
 rkh_hook_start(void)
 {    
-    /* 
-     * TODO: Configure and start Systick Isr
-     * at BST_TICK_RATE_MS
-     *
-     * Ex: tickConfig(BSP_TICK_RATE_MS, tickHook);
-     */
+    tickCounter = BSP_TICK_RATE_MS;
+    Systick_setCallback(SystickHook);
     RKH_TR_FWK_ACTOR(&rkhtick, "rkhtick");
 }
 

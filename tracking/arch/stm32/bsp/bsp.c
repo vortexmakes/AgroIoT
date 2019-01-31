@@ -1,26 +1,26 @@
 /**
  *  \file       bsp.c
- *  \brief      BSP for STM32 Prototype
+ *  \brief      BSP for Tracking STM32
  *
  *  \ingroup    bsp
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2017.04.14  DaBa  v0.0.01  Initial version
+ *  2019.01.31  DaBa  v0.0.01  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
  *  DaBa  Dario Baliña       db@vortexmakes.com
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
 #include "rkh.h"
-#include "uartisr.h"
+#include "cubemx.h"
+//#include "uartisr.h"
 #include "bsp.h"
 
 #include "signals.h"
@@ -35,6 +35,8 @@
 RKH_THIS_MODULE
 
 /* ----------------------------- Local macros ------------------------------ */
+#define BlinkLed(b) HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, b)
+
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -51,15 +53,23 @@ bsp_init(int argc, char *argv[])
     (void)argc;
     (void)argv;
 
-    /* 
-     * TODO: initialize Board
-     *
-     * Ex: boardConfig()
-     *
-     */
+    HAL_Init();
+
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_USART2_UART_Init();
+    MX_USART3_UART_Init();
+    MX_USB_OTG_HS_HCD_Init();
+    MX_USART6_UART_Init();
+    MX_USART1_UART_Init();
+    MX_SPI1_Init();
+    MX_CAN1_Init();
+    MX_ADC1_Init();
+    MX_SPI3_Init();
+
     modPwr_init();
 
-    rtime_init();
+//    rtime_init();
 }
 
 void
@@ -67,7 +77,7 @@ bsp_timeTick(void)
 {
     ++tstamp;
     modPwr_ctrl();
-    mTime_tick();
+//    mTime_tick();
 }
 
 RKH_TS_T
