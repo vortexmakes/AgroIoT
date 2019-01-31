@@ -15,9 +15,9 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include <stdio.h>
 #include "rkh.h"
 #include "dOut.h"
+#include "bsp.h"
 
 RKH_MODULE_NAME(dOut)
 
@@ -52,8 +52,7 @@ setStatus(DigOutSignalId out, ruint val)
         RKH_BIT_CLR_32(dOutStatus, RKH_BIT32(out));
         dOuts[out].val = 0;
     }
-    printf("dOut[%d]:%d\r\n", out, val);
-    printf("dOutStatus = %x\r\n", dOutStatus);
+    bsp_setDigOut(out, val);
 }
 
 /* ---------------------------- Global functions --------------------------- */

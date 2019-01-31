@@ -123,6 +123,7 @@
     <ClCompile Include="..\..\..\geoMgr\geoMgr.c" />
     <ClCompile Include="..\..\..\gps\gps.c" />
     <ClCompile Include="..\..\..\gps\rmc.c" />
+    <ClCompile Include="..\..\..\ioChg\dOut.c" />
     <ClCompile Include="..\..\..\main.c" />
     <ClCompile Include="..\..\..\modcmd\modcmdSim900.c" />
     <ClCompile Include="..\..\..\modmgr\modmgr.c" />
@@ -142,7 +143,6 @@
     <ClCompile Include="..\bsp\assert.c" />
     <ClCompile Include="..\bsp\bsp.c" />
     <ClCompile Include="..\bsp\dIn.c" />
-    <ClCompile Include="..\bsp\dOut.c" />
     <ClCompile Include="..\bsp\getopt.c" />
     <ClCompile Include="..\bsp\hook.c" />
     <ClCompile Include="..\bsp\modpwr.c" />

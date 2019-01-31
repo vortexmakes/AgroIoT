@@ -21,6 +21,8 @@
 #define __BSP_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "dOut.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -77,6 +79,7 @@ void bsp_sendFail(void);
 void bsp_recvFail(void);
 
 void bsp_gpsParserHandler_set(void *p);
+void bsp_setDigOut(DigOutSignalId out, ruint val);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -124,9 +124,6 @@
     <ClCompile Include="..\..\..\config\config.c">
       <Filter>config</Filter>
     </ClCompile>
-    <ClCompile Include="..\bsp\dOut.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
     <ClCompile Include="..\bsp\dIn.c">
       <Filter>bsp</Filter>
     </ClCompile>
@@ -171,6 +168,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\CommMgr\CommMgr.c">
       <Filter>tracking\CommMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ioChg\dOut.c">
+      <Filter>ioChg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

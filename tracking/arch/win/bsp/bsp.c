@@ -344,4 +344,10 @@ bsp_gpsParserHandler_set(void *p)
     gpsParser = (GpsRcvHandler)p;
 }
 
+void
+bsp_setDigOut(DigOutSignalId out, ruint val)
+{
+    printf("dOut[%d]:%d\r\n", out, val);
+}
+
 /* ------------------------------ File footer ------------------------------ */
