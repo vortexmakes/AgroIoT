@@ -47,9 +47,9 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>bsp/CubeMX</name>
+			<name>bsp/STM32CubeMX</name>
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX</locationURI>
 		</link>
 		<link>
 			<name>app/third-party/rkh</name>
@@ -60,31 +60,6 @@
 			<name>app/third-party/ssp</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>bsp/CubeMX/Drivers</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/Drivers</locationURI>
-		</link>
-		<link>
-			<name>bsp/CubeMX/Inc</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/Inc</locationURI>
-		</link>
-		<link>
-			<name>bsp/CubeMX/Src</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/Src</locationURI>
-		</link>
-		<link>
-			<name>bsp/CubeMX/startup</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/startup</locationURI>
-		</link>
-		<link>
-			<name>bsp/CubeMX/syscalls.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/STM32CubeMX_GenereatedCode/syscalls.c</locationURI>
 		</link>
 		<link>
 			<name>app/third-party/rkh/inc</name>
