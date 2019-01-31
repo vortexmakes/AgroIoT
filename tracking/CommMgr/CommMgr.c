@@ -39,6 +39,7 @@
 
 #define TEST_FRAME_HEADER   "!0|12"
 #define TEST_FRAME_TAIL     "+0"
+#define FrameSeparator      ","
 
 //#define TEST_FRAME_TAIL     "00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
@@ -201,6 +202,32 @@ init(CommMgr *const me, RKH_EVT_T *pe)
     RKH_TMR_INIT(&me->syncTmr, &evSyncToutObj, NULL);
 }
 
+static void
+convertToFrame(RawData *currStatus, char *buf)
+{
+    char *frame;
+    GeoStamp *position;
+
+    frame = buf;
+    position = &currStatus->position;
+
+    strcat(frame, TEST_FRAME_HEADER);
+    strcat(frame, ConMgr_Imei());
+    strcat(frame, FrameSeparator);
+    strcat(frame, position->latInd);
+    strcat(frame, position->latitude);
+    strcat(frame, FrameSeparator);
+    strcat(frame, position->longInd);
+    strcat(frame, position->longitude);
+    strcat(frame, FrameSeparator);
+    strcat(frame, position->speed);
+    strcat(frame, FrameSeparator);
+    strcat(frame, position->course);
+    strcat(frame, FrameSeparator);
+    strcat(frame, position->date);
+    strcat(frame, FrameSeparator);
+}
+
 /* ............................ Effect actions ............................. */
 static void 
 activateSync(CommMgr *const me, RKH_EVT_T *pe)
@@ -211,6 +238,7 @@ static void
 updateStatus(CommMgr *const me, RKH_EVT_T *pe)
 {
     me->currStatus = ((RawDataEvt *)pe)->rawData;
+    convertToFrame(&(me->currStatus), (char *)evSendObj.buf);
 }
 
 static void 
