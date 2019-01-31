@@ -16,13 +16,23 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
+#include "rkhfwk_pubsub.h"
+#include "rkhfwk_dynevt.h"
 #include "dOut.h"
 #include "bsp.h"
+#include "events.h"
+#include "signals.h"
+#include "topics.h"
 
 RKH_MODULE_NAME(dOut)
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
+enum
+{
+    ON_INIT, ON_SET
+};
+
 /* ---------------------------- Local data types --------------------------- */
 typedef struct
 {
@@ -31,14 +41,16 @@ typedef struct
 } DigitalTimerOutput;
 
 /* ---------------------------- Global variables --------------------------- */
+ruint outChg;    /* Identifies this module */
+
 /* ---------------------------- Local variables ---------------------------- */
 static DigitalTimerOutput dOuts[NUM_DOUT_SIGNALS];
 static rui32_t dOutStatus;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-void
-setStatus(DigOutSignalId out, ruint val)
+static void
+setStatus(DigOutSignalId out, ruint val, int context)
 {
     RKH_ASSERT(out < NUM_DOUT_SIGNALS);
 
@@ -53,14 +65,26 @@ setStatus(DigOutSignalId out, ruint val)
         dOuts[out].val = 0;
     }
     bsp_setDigOut(out, val);
+    if (context == ON_SET)
+    {
+        OutChgEvt *outChgObj = RKH_ALLOC_EVT(OutChgEvt, evOutChg, &outChg);
+        outChgObj->dout = dOutStatus;
+        tpIoChg_publish(outChgObj, &outChg);
+    }
 }
 
 /* ---------------------------- Global functions --------------------------- */
 void
 dOut_init(void)
 {
-    memset(dOuts, 0, sizeof(dOuts));    /* default values */
-    dOutStatus = 0;
+    DigitalTimerOutput *out;
+    rInt i;
+
+    for (out = dOuts, i = 0; out < &dOuts[NUM_DOUT_SIGNALS]; ++out, ++i)
+    {
+        setStatus(i, 0, ON_INIT);
+        out->timer = 0;
+    }
 }
 
 void
@@ -69,7 +93,7 @@ dOut_set(DigOutSignalId out, ruint val, rui16_t tmr)
     RKH_SR_ALLOC();
 
     RKH_ENTER_CRITICAL_();
-    setStatus(out, val);
+    setStatus(out, val, ON_SET);
     dOuts[out].timer = tmr;
     RKH_EXIT_CRITICAL_();
 }
@@ -90,7 +114,7 @@ dOut_process(void)
     {
         if ((out->timer > 0) && !(--(out->timer)))
         {
-            setStatus(i, out->val ^ 1);
+            setStatus(i, out->val ^ 1, ON_SET);
         }
     }
 }
