@@ -30,7 +30,7 @@ RKH_MODULE_NAME(dOut)
 /* ------------------------------- Constants ------------------------------- */
 enum
 {
-    ON_INIT, ON_SET
+    OnInit, OnSet
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -65,7 +65,7 @@ setStatus(DigOutSignalId out, ruint val, int context)
         dOuts[out].val = 0;
     }
     bsp_setDigOut(out, val);
-    if (context == ON_SET)
+    if (context == OnSet)
     {
         OutChgEvt *outChgObj = RKH_ALLOC_EVT(OutChgEvt, evOutChg, &outChg);
         outChgObj->dout = dOutStatus;
@@ -82,7 +82,7 @@ dOut_init(void)
 
     for (out = dOuts, i = 0; out < &dOuts[NUM_DOUT_SIGNALS]; ++out, ++i)
     {
-        setStatus(i, 0, ON_INIT);
+        setStatus(i, 0, OnInit);
         out->timer = 0;
     }
 }
@@ -93,7 +93,7 @@ dOut_set(DigOutSignalId out, ruint val, rui16_t tmr)
     RKH_SR_ALLOC();
 
     RKH_ENTER_CRITICAL_();
-    setStatus(out, val, ON_SET);
+    setStatus(out, val, OnSet);
     dOuts[out].timer = tmr;
     RKH_EXIT_CRITICAL_();
 }
@@ -114,7 +114,7 @@ dOut_process(void)
     {
         if ((out->timer > 0) && !(--(out->timer)))
         {
-            setStatus(i, out->val ^ 1, ON_SET);
+            setStatus(i, out->val ^ 1, OnSet);
         }
     }
 }
