@@ -25,7 +25,7 @@
 #include "modmgr.h"
 #include "modcmd.h"
 #include "signals.h"
-#include "topics.h"
+#include "topic.h"
 #include "rtime.h"
 #include "bsp.h"
 
@@ -400,8 +400,8 @@ init(ConMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    rkh_pubsub_subscribe(ConnectionTopic, RKH_UPCAST(RKH_SMA_T, me));
-    tpModURC_subscribe(me);
+    rkh_pubsub_subscribe(TopicConnection, RKH_UPCAST(RKH_SMA_T, me));
+    rkh_pubsub_subscribe(TopicModURC, RKH_UPCAST(RKH_SMA_T, me));
 
     RKH_TR_FWK_AO(me);
 
@@ -604,7 +604,7 @@ sendOk(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_Sent), 
+    rkh_pubsub_publish(TopicConnection, RKH_UPCAST(RKH_EVT_T, &e_Sent), 
                                      RKH_UPCAST(RKH_SMA_T, me));
 }
 
@@ -614,7 +614,7 @@ recvOk(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_Received), 
+    rkh_pubsub_publish(TopicConnection, RKH_UPCAST(RKH_EVT_T, &e_Received), 
                                      RKH_UPCAST(RKH_SMA_T, me));
 }
 
@@ -624,7 +624,7 @@ sendFail(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_SendFail), 
+    rkh_pubsub_publish(TopicConnection, RKH_UPCAST(RKH_EVT_T, &e_SendFail), 
                                      RKH_UPCAST(RKH_SMA_T, me));
 	ModCmd_init();
 }
@@ -635,7 +635,7 @@ recvFail(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_RecvFail), 
+    rkh_pubsub_publish(TopicConnection, RKH_UPCAST(RKH_EVT_T, &e_RecvFail), 
                                      RKH_UPCAST(RKH_SMA_T, me));
 	ModCmd_init();
 }
@@ -783,7 +783,7 @@ socketConnected(ConMgr *const me)
 {
     (void)me;
 
-    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_NetConnected), 
+    rkh_pubsub_publish(TopicConnection, RKH_UPCAST(RKH_EVT_T, &e_NetConnected), 
                                      RKH_UPCAST(RKH_SMA_T, me));
     bsp_netStatus(ConnectedSt);
 }
@@ -869,7 +869,7 @@ socketDisconnected(ConMgr *const me)
 {
     (void)me;
 
-    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_NetDisconnected), 
+    rkh_pubsub_publish(TopicConnection, RKH_UPCAST(RKH_EVT_T, &e_NetDisconnected), 
                                      RKH_UPCAST(RKH_SMA_T, me));
     bsp_netStatus(DisconnectedSt);
 }

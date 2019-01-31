@@ -20,7 +20,7 @@
 #include "rkh.h"
 #include "rkhfwk_pubsub.h"
 #include "signals.h"
-#include "topics.h"
+#include "topic.h"
 #include "modmgr.h"
 #include "conmgr.h"
 #include "bsp.h"
@@ -178,14 +178,12 @@ static void
 notifyURC(ModMgr *const me, RKH_EVT_T *pe)
 {
     (void)me;
-
     ModMgrResp *presp;
 
     presp = (ModMgrResp *)(pe);
-
     presp->evt.e = presp->fwdEvt;
-
-    tpModURC_publish(presp, me);
+    rkh_pubsub_publish(TopicModURC, RKH_UPCAST(RKH_EVT_T, presp), 
+                                 RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void

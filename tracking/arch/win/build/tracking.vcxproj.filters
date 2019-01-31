@@ -249,6 +249,9 @@
     <Filter Include="tracking\device">
       <UniqueIdentifier>{0360a7fd-3eaf-4dac-8d2c-6d57f4f4c9d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="topic">
+      <UniqueIdentifier>{cea5a93e-cb88-4e44-9c0d-fb95edbf056f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\geoMgr\geoMgr.h">

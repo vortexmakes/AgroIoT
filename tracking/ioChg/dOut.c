@@ -22,7 +22,7 @@
 #include "bsp.h"
 #include "events.h"
 #include "signals.h"
-#include "topics.h"
+#include "topic.h"
 
 RKH_MODULE_NAME(dOut)
 
@@ -69,7 +69,8 @@ setStatus(DigOutSignalId out, ruint val, int context)
     {
         OutChgEvt *outChgObj = RKH_ALLOC_EVT(OutChgEvt, evOutChg, &outChg);
         outChgObj->dout = dOutStatus;
-        tpIoChg_publish(outChgObj, &outChg);
+        rkh_pubsub_publish(TopicIoChg, RKH_UPCAST(RKH_EVT_T, outChgObj),
+                                    RKH_UPCAST(RKH_SMA_T, &outChg));
     }
 }
 

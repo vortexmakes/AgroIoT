@@ -24,7 +24,7 @@
 #include "config.h"
 #include "signals.h"
 #include "events.h"
-#include "topics.h"
+#include "topic.h"
 #include "geoMgr.h"
 #include "rmc.h"
 #include "ubx.h"
@@ -296,7 +296,9 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
     /* date: like NMEA date [degrees], decimals discarded */
     strncpy(pGps->date, pRmc->date, DATE_LENGTH);
 
-    tpGeo_publish(geoStampEvt, me);
+    rkh_pubsub_publish(TopicGeo, RKH_UPCAST(RKH_EVT_T, geoStampEvt),
+                              RKH_UPCAST(RKH_SMA_T, me));
+
 }
 
 
@@ -305,7 +307,8 @@ publishInvRmc(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    tpGeo_publish(&geoStampInvalidEvt, me);
+    rkh_pubsub_publish(TopicGeo, RKH_UPCAST(RKH_EVT_T, &geoStampInvalidEvt),
+                              RKH_UPCAST(RKH_SMA_T, me));
 }
 
 /* ............................. Entry actions ............................. */
@@ -357,7 +360,8 @@ turnsDetect(GeoMgr *const me)
 
 		if(cog > cfg->brlimit)
         {
-            tpGeo_publish(&turnEvt, me);
+            rkh_pubsub_publish(TopicGeo, RKH_UPCAST(RKH_EVT_T, &turnEvt),
+                                      RKH_UPCAST(RKH_SMA_T, me));
         }
     }
 }

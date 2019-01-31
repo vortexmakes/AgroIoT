@@ -25,7 +25,7 @@
 #include "bsp.h"
 #include "signals.h"
 #include "events.h"
-#include "topics.h"
+#include "topic.h"
 #include "CommMgr.h"
 #include "epoch.h"
 #include "date.h"
@@ -183,7 +183,7 @@ init(CommMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    rkh_pubsub_subscribe(ConnectionTopic, RKH_UPCAST(RKH_SMA_T, me));
+    rkh_pubsub_subscribe(TopicConnection, RKH_UPCAST(RKH_SMA_T, me));
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->syncTmr);
@@ -248,7 +248,7 @@ nextSend(CommMgr *const me, RKH_EVT_T *pe)
 static void
 receive(CommMgr *const me)
 {
-    rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &evRecvObj),
+    rkh_pubsub_publish(TopicConnection, RKH_UPCAST(RKH_EVT_T, &evRecvObj),
                                         RKH_UPCAST(RKH_SMA_T, me));
 }
 

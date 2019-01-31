@@ -1,5 +1,5 @@
 /**
- *  \file       topic.h
+ *  \file       topics.h
  *  \brief      Event topics definitions.
  */
 
@@ -17,8 +17,8 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __TOPIC_H__
-#define __TOPIC_H__
+#ifndef __TOPICS_H__
+#define __TOPICS_H__
 
 /* ----------------------------- Include files ----------------------------- */
 /* ---------------------- External C language linkage ---------------------- */
@@ -28,14 +28,15 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-typedef enum Topic Topic;
-enum Topic
+/* ................................ Signals ................................ */
+typedef enum Topics Topics;
+enum Topics
 {
-	ConnectionTopic,
-    tpModURC,
-	tpGeo,
-    tpIoChg,
-    tpSensor
+	TopicConnection,
+    TopicModURC,
+	TopicGeo,
+    TopicIoChg,
+    TopicSensor
 };
 
 /* ------------------------------- Data types ------------------------------ */
