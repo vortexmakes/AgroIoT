@@ -27,17 +27,17 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ------------------------------- Data types ------------------------------ */
-typedef enum dInSignalId
+typedef enum DigInSignalId
 {
     dIn0, dIn1,
     NUM_DIN_SIGNALS
-} dInSignalId;
+} DigInSignalId;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void dIn_init(void);
 void dIn_scan(void);
-ruint dIn_get(void);
+rui32_t dIn_getAll(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -129,14 +129,14 @@ typedef struct InChgEvt InChgEvt;
 struct InChgEvt
 {
     RKH_EVT_T evt;
-    ruint din;
+    rui32_t din;
 };
 
 typedef struct OutChgEvt OutChgEvt;
 struct OutChgEvt
 {
     RKH_EVT_T evt;
-    ruint dout;
+    rui32_t dout;
 };
 
 typedef struct RawDataEvt RawDataEvt;
