@@ -157,7 +157,7 @@ struct CommMgr
 {
     RKH_SMA_T ao;
     RKH_TMR_T syncTmr;    
-    RawData rawData;   /* Current status (in old and raw format) */
+    RawData currStatus;
 };
 
 RKH_SMA_CREATE(CommMgr, commMgr, 4, HCAL, &Idle, init, NULL);
@@ -187,7 +187,6 @@ init(CommMgr *const me, RKH_EVT_T *pe)
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->syncTmr);
-
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
     RKH_TR_FWK_STATE(me, &Idle);
     RKH_TR_FWK_STATE(me, &WaitSync);
@@ -211,7 +210,7 @@ activateSync(CommMgr *const me, RKH_EVT_T *pe)
 static void
 updateStatus(CommMgr *const me, RKH_EVT_T *pe)
 {
-    me->rawData = ((RawDataEvt *)pe)->rawData;
+    me->currStatus = ((RawDataEvt *)pe)->rawData;
 }
 
 static void 
@@ -248,8 +247,10 @@ nextSend(CommMgr *const me, RKH_EVT_T *pe)
 static void
 receive(CommMgr *const me)
 {
+#if 0
     rkh_pubsub_publish(TopicConnection, RKH_UPCAST(RKH_EVT_T, &evRecvObj),
                                         RKH_UPCAST(RKH_SMA_T, me));
+#endif
 }
 
 static void 
@@ -273,14 +274,18 @@ sendEndOfHist(CommMgr *const me)
 static void 
 enWaitSync(CommMgr *const me)
 {
+#if 0
     RKH_TMR_ONESHOT(&me->syncTmr, RKH_UPCAST(RKH_SMA_T, me), RKH_TIME_SEC(1));
+#endif
 }
 
 /* ............................. Exit actions .............................. */
 static void 
 exWaitSync(CommMgr *const me)
 {
+#if 0
     rkh_tmr_stop(&me->syncTmr);
+#endif
 }
 
 /* ................................ Guards ................................. */

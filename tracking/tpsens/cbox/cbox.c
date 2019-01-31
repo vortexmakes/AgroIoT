@@ -88,8 +88,8 @@ ps_on_stop( void )
 void 
 ps_on_endcycle( void )
 {
-    rkh_pubsub_publish(tpSensor, RKH_UPCAST(RKH_EVT_T, &endOfCycle),
-                                 RKH_UPCAST(RKH_SMA_T, &tpSens));
+    rkh_pubsub_publish(TopicStatus, RKH_UPCAST(RKH_EVT_T, &endOfCycle),
+                                    RKH_UPCAST(RKH_SMA_T, &tpSens));
 }
 
 CBOX_STR *

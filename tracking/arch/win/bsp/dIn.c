@@ -93,8 +93,8 @@ dIn_scan(void)
     {
         inChgEvt = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
         dInStatus = inChgEvt->din = dInCurrStatus;
-        rkh_pubsub_publish(TopicIoChg, RKH_UPCAST(RKH_EVT_T, inChgEvt),
-                                    RKH_UPCAST(RKH_SMA_T, &inChg));
+        rkh_pubsub_publish(TopicStatus, RKH_UPCAST(RKH_EVT_T, inChgEvt),
+                                        RKH_UPCAST(RKH_SMA_T, &inChg));
     }
 }
 

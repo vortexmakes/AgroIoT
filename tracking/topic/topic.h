@@ -34,9 +34,7 @@ enum Topics
 {
 	TopicConnection,
     TopicModURC,
-	TopicGeo,
-    TopicIoChg,
-    TopicSensor
+	TopicStatus
 };
 
 /* ------------------------------- Data types ------------------------------ */

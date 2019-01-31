@@ -32,8 +32,8 @@ extern "C" {
 typedef struct IOStatus IOStatus;
 struct IOStatus 
 {
-    ruint dIn;
-    ruint dOut;
+    rui32_t dIn;
+    rui32_t dOut;
 };
 
 /* -------------------------- External variables --------------------------- */
