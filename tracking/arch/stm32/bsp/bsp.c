@@ -30,7 +30,6 @@
 #include "conmgr.h"
 #include "mTime.h"
 #include "epoch.h"
-#include "rtime.h"
 
 RKH_THIS_MODULE
 
@@ -41,8 +40,10 @@ RKH_THIS_MODULE
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static rui8_t bsp;
 static RKH_TS_T tstamp;
-static ModCmdRcvHandler cmdParser;
+static ModCmdRcvHandler gsmCmdParser;
+static GpsRcvHandler    gpsParser;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -57,7 +58,6 @@ bsp_init(int argc, char *argv[])
 
     SystemClock_Config();
     MX_GPIO_Init();
-    MX_USART2_UART_Init();
     MX_USART3_UART_Init();
     MX_USB_OTG_HS_HCD_Init();
     MX_USART6_UART_Init();
@@ -69,7 +69,6 @@ bsp_init(int argc, char *argv[])
 
     modPwr_init();
 
-//    rtime_init();
 }
 
 void
@@ -77,7 +76,7 @@ bsp_timeTick(void)
 {
     ++tstamp;
     modPwr_ctrl();
-//    mTime_tick();
+    mTime_tick();
 }
 
 RKH_TS_T
@@ -86,11 +85,21 @@ rkh_trc_getts(void)
     return tstamp;
 }
 
-static
-void
-gsm_rx_isr( unsigned char byte )
+static uint8_t uart2RxBuff[10];
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-    cmdParser(byte);
+    ruint count;
+    uint8_t *p;
+
+    if(UartHandle->Instance == USART2)
+    {
+        count = UartHandle->RxXferCount;
+        p = UartHandle->pRxBuffPtr;
+
+        while(count--)
+            gsmCmdParser(*p++);
+    }
 }
 
 void
@@ -98,15 +107,26 @@ bsp_serial_open(int ch)
 {
     (void)ch;
 
-    cmdParser = ModCmd_init();
-    /* 
-     * TODO: Configure Serial Port
-     *
-     * Ex: 
-     * uartConfig(UART_232, 19200);
-     * uartIsr_rxEnable(UART_232, gsm_rx_isr);
-     *
-     */
+    switch(ch)
+    {
+        case GSM_PORT:
+            gsmCmdParser = ModCmd_init();
+            MX_USART2_UART_Init();
+            HAL_UART_Receive_IT(&huart2, uart2RxBuff, 1);
+            break;
+
+        case GPS_PORT:
+            gpsParser = NULL;
+			break;
+
+		case TPSENS_PORT:
+			break;
+
+		default:
+			break;
+    }
+        
+    RKH_TR_FWK_ACTOR(&bsp, "bsp");
 }
 
 void
@@ -120,11 +140,7 @@ bsp_serial_puts(int ch, char *p)
 {
     while(*p!='\0')
     {
-        /* 
-         * TODO: put char on  Serial Port
-         * Ex: 
-         * uartWriteByte(UART_232, *p);
-         */
+        bsp_serial_putchar(ch, *p);
         ++p;
     }
 }
@@ -134,13 +150,59 @@ bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata)
 {
     while(ndata && (ndata-- != 0))
     {
-        /* 
-         * TODO: put char on  Serial Port
-         * Ex: 
-         * uartWriteByte(UART_232, *p);
-         */
+        bsp_serial_putchar(ch, *p);
         ++p;
     }
+}
+
+void
+bsp_serial_putchar(int ch, unsigned char c)
+{
+    UART_HandleTypeDef *pUart;
+
+    switch(ch)
+    {
+        case GSM_PORT:
+            pUart = &huart2;
+            break;
+
+        case GPS_PORT:
+            gpsParser = NULL;
+			break;
+
+		case TPSENS_PORT:
+			break;
+
+		default:
+			break;
+    }
+    
+    HAL_UART_Transmit(pUart, &c, 1, 100);
+}
+
+void 
+bsp_netStatus(Status_t status)
+{
+//    printf("\r\nGprs Socket %s\r\n", 
+//            status == ConnectedSt ? "Connected" : "Disconnected");
+}
+
+void 
+bsp_sendFail(void)
+{
+//    printf("\r\nGprs Socket Sending Failure\r\n"); 
+}
+
+void 
+bsp_recvFail(void)
+{
+//    printf("\r\nGprs Socket Receiving Failure\r\n"); 
+}
+
+void
+bsp_gpsParserHandler_set(void *p)
+{
+    gpsParser = (GpsRcvHandler)p;
 }
 
 /* ------------------------------ File footer ------------------------------ */

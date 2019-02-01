@@ -35,7 +35,7 @@ static rui8_t rkhtick;
 static ruint tickCounter;
 
 /* ----------------------- Local function prototypes ----------------------- */
-static void tickHook(void);
+static void SystickHook(void);
 
 /* ---------------------------- Local functions ---------------------------- */
 static void

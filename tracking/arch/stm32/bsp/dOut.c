@@ -1,6 +1,6 @@
 /**
- *  \file       rtime.c
- *  \brief      Implementation of RTC abstraction for STM32 bsp.
+ *  \file       dout.c
+ *  \brief      Implementation of Digital Outputs Control HAL.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -15,67 +15,70 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rtime.h"
+#include <stdio.h>
+#include "rkh.h"
+#include "dOut.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
+typedef struct
+{
+    ruint val;
+    rui16_t timer;
+}DigitalTimerOutput;
+
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static Time t;
+static DigitalTimerOutput dOuts[NUM_DOUT_SIGNALS];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
-rtime_init(void)
+dOut_init(void)
 {
-    /* 
-     * TODO: initialize RTC
-     *
-     */
-}
-
-Time *
-rtime_get(void)
-{
-    /* 
-     * TODO: Read RTC
-     *
-     * Ex:
-        rtcRead(&rtc);
-
-        t.tm_sec = rtc.sec;
-        t.tm_min = rtc.min;
-        t.tm_hour = rtc.hour;
-        t.tm_mday = rtc.mday;
-        t.tm_mon = rtc.month;
-        t.tm_year = rtc.year;
-        t.tm_wday = rtc.wday;
-        t.tm_isdst = 0;
-     */
-    return &t;
+    memset(dOuts, 0, sizeof(dOuts));
 }
 
 void
-rtime_set(Time *pt)
+dOut_set(ruint out, ruint val, rui16_t tmr)
 {
-    /*
-     * TODO: Write RTC
-     *
-     * Ex:
-     *
-     *    rtc.sec = pt->tm_sec;
-   	   	  rtc.min = pt->tm_min;
-   	   	  rtc.hour = pt->tm_hour;
-          rtc.wday = pt->tm_wday;
-          rtc.mday = pt->tm_mday;
-          rtc.month = pt->tm_mon;
-          rtc.year = pt->tm_year;
+    RKH_SR_ALLOC();
 
-          rtcWrite(&rtc);
-     */
+    if(out >= NUM_DOUT_SIGNALS)
+        return;
 
+    //printf("dOut[%d]:%d\r\n", out, val);
+
+    RKH_ENTER_CRITICAL_();    
+    dOuts[out].val = val != 0 ? 1 : 0;
+    dOuts[out].timer = tmr;
+    RKH_EXIT_CRITICAL_();    
+}
+
+ruint
+dOut_get(ruint out)
+{
+    return dOuts[out].val;
+}
+
+void
+dOut_process(void)
+{
+    DigitalTimerOutput *p;
+    ruint i;
+
+    p = dOuts;
+
+	for(p=dOuts, i=0; p < &dOuts[NUM_DOUT_SIGNALS]; ++p, ++i)
+    {
+		if(p->timer > 0 && !(--(p->timer)))
+        {
+			p->val ^= 1;
+            //printf("dOut[%d]:%d\r\n", i, p->val);
+        }
+    }
 }
 
 /* ------------------------------ End of file ------------------------------ */

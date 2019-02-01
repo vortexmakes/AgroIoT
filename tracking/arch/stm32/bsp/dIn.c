@@ -1,6 +1,6 @@
 /**
- *  \file       rtime.c
- *  \brief      Implementation of RTC abstraction for STM32 bsp.
+ *  \file       dIn.c
+ *  \brief      Implementation of Digital Inputs HAL and change detection.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -15,67 +15,69 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rtime.h"
+#include "rkh.h"
+#include "rkhfwk_pubsub.h"
+#include "dIn.h"
+#include "mTimeCfg.h"
+#include "signals.h"
+#include "events.h"
+#include "topics.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+ruint ioChg;
+
 /* ---------------------------- Local variables ---------------------------- */
-static Time t;
+static unsigned char dIns[NUM_DIN_SIGNALS];
+static unsigned char dInsKb[NUM_DIN_SIGNALS];
+
+static IoChgEvt ioChgEvt;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void
-rtime_init(void)
+void keyb_dIn_parser(char c)
 {
-    /* 
-     * TODO: initialize RTC
-     *
-     */
-}
+/*	c = c - '0';
 
-Time *
-rtime_get(void)
-{
-    /* 
-     * TODO: Read RTC
-     *
-     * Ex:
-        rtcRead(&rtc);
+	if (c > NUM_DIN_SIGNALS)
+		return;
 
-        t.tm_sec = rtc.sec;
-        t.tm_min = rtc.min;
-        t.tm_hour = rtc.hour;
-        t.tm_mday = rtc.mday;
-        t.tm_mon = rtc.month;
-        t.tm_year = rtc.year;
-        t.tm_wday = rtc.wday;
-        t.tm_isdst = 0;
-     */
-    return &t;
+	dInsKb[c] ^= 1;*/
 }
 
 void
-rtime_set(Time *pt)
+dIn_init(void)
 {
-    /*
-     * TODO: Write RTC
-     *
-     * Ex:
-     *
-     *    rtc.sec = pt->tm_sec;
-   	   	  rtc.min = pt->tm_min;
-   	   	  rtc.hour = pt->tm_hour;
-          rtc.wday = pt->tm_wday;
-          rtc.mday = pt->tm_mday;
-          rtc.month = pt->tm_mon;
-          rtc.year = pt->tm_year;
+/*    memset(dIns, 0, sizeof(dIns));
+    memset(dInsKb, 0, sizeof(dIns));
+    RKH_SET_STATIC_EVENT((RKH_EVT_T *)&ioChgEvt, evIoChg);
+    ioChgEvt.din = 0;*/
+}
 
-          rtcWrite(&rtc);
-     */
+void
+dIn_scan(void)
+{
+    unsigned char i;
 
+    for(i=0; i < NUM_DIN_SIGNALS; ++i)
+    {
+        if(dIns[i] != dInsKb[i])
+        {
+            dIns[i] = dInsKb[i];
+            ioChgEvt.din &= ~(1 << i);
+            ioChgEvt.din |= dIns[i] ? (1 << i) : 0;
+            tpIoChg_publish(&ioChgEvt, &ioChg);
+        }
+    }
+}
+
+ruint
+dIn_get(void)
+{
+    return ioChgEvt.din;
 }
 
 /* ------------------------------ End of file ------------------------------ */

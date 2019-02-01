@@ -20,8 +20,11 @@
 #include "mTimeCfg.h"
 #include "epoch.h"
 #include "modpwr.h"
-#include "dIn.h"
-#include "dOut.h"
+//#include "dIn.h"
+//#include "dOut.h"
+
+void dIn_scan(void);
+void dOut_process(void);
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -33,7 +36,7 @@ static void(* const actions_100[])( void ) =
 #ifdef MODPWR_CTRL_ENABLE
 	modPwr_ctrl, 
 #endif
-    epoch_updateByStep,
+    (void(*)(void))epoch_updateByStep,
 	dIn_scan,
     dOut_process,
     NULL
