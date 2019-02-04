@@ -19,7 +19,7 @@
 #define __DEVICE_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "cbdata.h"
+#include "cbox.h"
 #include "rkhevt.h"
 #include "rkhsma.h"
 #include "collector.h"

@@ -111,6 +111,7 @@
     <ClCompile Include="..\..\..\..\third-party\rkh\source\trc\src\rkhtrc_record.c" />
     <ClCompile Include="..\..\..\..\third-party\rkh\source\trc\src\rkhtrc_stream.c" />
     <ClCompile Include="..\..\..\..\third-party\ssp\src\ssp.c" />
+    <ClCompile Include="..\..\..\BatChr\BatChr.c" />
     <ClCompile Include="..\..\..\collector\collector.c" />
     <ClCompile Include="..\..\..\CommMgr\CommMgr.c" />
     <ClCompile Include="..\..\..\config\config.c" />
@@ -121,7 +122,7 @@
     <ClCompile Include="..\..\..\device\src\sprayer.c" />
     <ClCompile Include="..\..\..\epoch\epoch.c" />
     <ClCompile Include="..\..\..\geoMgr\geoMgr.c" />
-    <ClCompile Include="..\..\..\gps\gps.c" />
+    <ClCompile Include="..\..\..\gps\Geo.c" />
     <ClCompile Include="..\..\..\gps\rmc.c" />
     <ClCompile Include="..\..\..\ioChg\dOut.c" />
     <ClCompile Include="..\..\..\main.c" />

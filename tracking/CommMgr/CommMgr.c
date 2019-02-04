@@ -31,17 +31,22 @@
 #include "date.h"
 #include "conMgr.h"
 #include "RawData.h"
+#include "cbox.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WAIT_TIME    RKH_TIME_MS(2000)
 #define TEST_FRAME   "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
                      "000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
-#define TEST_FRAME_HEADER   "!0|12"
-#define TEST_FRAME_TAIL     "+0"
-#define FrameSeparator      ","
+#define YFRAME_SEPARATOR        ","
+#define YFRAME_MARK             "|"
 
-//#define TEST_FRAME_TAIL     "00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
+#define YFRAME_ID               "!"
+#define YFRAME_SGP_TYPE         "0"
+#define YFRAME_SEPARATOR        ","
+#define YFRAME_GPS_VALID        1
+#define YFRAME_HISTORY          2
+#define YFRAME_MOVING           4
 
 /* ......................... Declares active object ........................ */
 typedef struct CommMgr CommMgr;
@@ -202,30 +207,71 @@ init(CommMgr *const me, RKH_EVT_T *pe)
     RKH_TMR_INIT(&me->syncTmr, &evSyncToutObj, NULL);
 }
 
-static void
-convertToFrame(RawData *currStatus, char *buf)
+static unsigned char
+yframe_getFlags(RawData *const status)
 {
-    char *frame;
-    GeoStamp *position;
+    unsigned char flags;
+
+    flags = 0;
+    flags |= Geo_isValid(&status->position) ? YFRAME_GPS_VALID : 0;
+    flags |= cbox_isMoving(&status->dev) ? YFRAME_MOVING : 0;
+    flags |= BatChr_getStatus() << 3;
+
+    return flags;
+}
+
+static void
+get_frame(RawData *currStatus, char *buf)
+{
+    char *frame, temp[16];
+    Geo *position;
+    IOStatus *io;
+    CBOX_STR *dev;
 
     frame = buf;
     position = &currStatus->position;
+    io = &currStatus->io;
+    dev = &currStatus->dev;
 
-    strcat(frame, TEST_FRAME_HEADER);
+    strcat(frame, YFRAME_ID);
+    strcat(frame, YFRAME_SGP_TYPE);
+    strcat(frame, YFRAME_MARK);
+    sprintf(temp, "%02x", yframe_getFlags(currStatus));
+    strcat(frame, temp);
     strcat(frame, ConMgr_Imei());
-    strcat(frame, FrameSeparator);
+    strcat(frame, YFRAME_SEPARATOR);
+    strcat(frame, position->utc);
+    strcat(frame, YFRAME_SEPARATOR);
     strcat(frame, position->latInd);
     strcat(frame, position->latitude);
-    strcat(frame, FrameSeparator);
+    strcat(frame, YFRAME_SEPARATOR);
     strcat(frame, position->longInd);
     strcat(frame, position->longitude);
-    strcat(frame, FrameSeparator);
+    strcat(frame, YFRAME_SEPARATOR);
     strcat(frame, position->speed);
-    strcat(frame, FrameSeparator);
+    strcat(frame, YFRAME_SEPARATOR);
     strcat(frame, position->course);
-    strcat(frame, FrameSeparator);
+    strcat(frame, YFRAME_SEPARATOR);
     strcat(frame, position->date);
-    strcat(frame, FrameSeparator);
+    strcat(frame, YFRAME_SEPARATOR);
+    sprintf(temp, "%02x%02x,", io->digOut, io->digIn);
+    strcat(frame, temp);
+    sprintf(temp, "%04x,", dev->h.hoard );
+    strcat(frame, temp);
+    sprintf(temp, "%02x,", dev->h.pqty );
+    strcat(frame, temp);
+    sprintf(temp, "%02x,", dev->hum );
+    strcat(frame, temp);
+    sprintf(temp, "%04x,", dev->a.x );
+    strcat(frame, temp);
+    sprintf(temp, "%04x,", dev->a.y );
+    strcat(frame, temp);
+    sprintf(temp, "%04x,", dev->a.z );
+    strcat(frame, temp);
+    sprintf(temp, "%02,", BatChr_getStatus());
+    strcat(frame, temp);
+
+    evSendObj.size = strlen((char *)evSendObj.buf);
 }
 
 /* ............................ Effect actions ............................. */
@@ -238,7 +284,7 @@ static void
 updateStatus(CommMgr *const me, RKH_EVT_T *pe)
 {
     me->currStatus = ((RawDataEvt *)pe)->rawData;
-    convertToFrame(&(me->currStatus), (char *)evSendObj.buf);
+    get_frame(&(me->currStatus), (char *)evSendObj.buf);
 }
 
 static void 
@@ -344,4 +390,5 @@ isEndOfBlock(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 /* ---------------------------- Global functions --------------------------- */
-/* ------------------------------ End of file ------------------------------ */
+
+//#/* ------------------------------ End of file ------------------------------ */

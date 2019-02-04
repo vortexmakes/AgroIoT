@@ -26,6 +26,7 @@
 #include "topic.h"
 #include "deviceServer.h"
 #include "ps.h"
+#include "cbox.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
@@ -150,7 +151,7 @@ publishData(DeviceServer *const me, RKH_EVT_T *pe)
     (void)me;
     (void)pe;
 
-    sensorData.cbox = *get_cbdata();
+    sensorData.cbox = *cbox_getInstance();
     rkh_pubsub_publish(TopicStatus, RKH_UPCAST(RKH_EVT_T, &sensorData),
                                     RKH_UPCAST(RKH_SMA_T, me));
 }

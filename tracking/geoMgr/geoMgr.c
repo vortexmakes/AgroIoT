@@ -28,7 +28,7 @@
 #include "geoMgr.h"
 #include "rmc.h"
 #include "ubx.h"
-#include "gps.h"
+#include "Geo.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
@@ -134,6 +134,15 @@ RKH_SMA_DEF_PTR(geoMgr);
 
 /* ------------------------------- Constants ------------------------------- */
 #define GPS_ALIVE_TIME  RMC_PERIOD_TIMEOUT
+#define GEO_INVALID_GEOSTAMP    \
+                { \
+                    {GEO_INVALID_UTC}, {RMC_StatusInvalid}, \
+                    {GEO_INVALID_LATITUDE}, {GEO_INVALID_LATITUDE_IND}, \
+                    {GEO_INVALID_LONGITUDE}, {GEO_INVALID_LONGITUDE_IND}, \
+                    {GEO_INVALID_SPEED}, {GEO_INVALID_COURSE}, \
+                    {GEO_INVALID_DATE} \
+                }
+
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -159,10 +168,13 @@ static UBXCmd_t InitCmds[] =
 static RKH_ROM_STATIC_EVENT(toutEvt, evTimeout);
 static RKH_ROM_STATIC_EVENT(turnEvt, evTurn);
 
-static RKHROM GeoStampEvt geoStampInvalidEvt =
+static RKHROM GeoEvt geoInvalidEvt =
 {
-    RKH_INIT_STATIC_EVT( evGeoStampInvalid ),
-    GEO_INVALID_GEOSTAMP
+    RKH_INIT_STATIC_EVT( evGeoInvalid ),
+    {{GEO_INVALID_UTC}, {RMC_StatusInvalid}, {GEO_INVALID_LATITUDE}, 
+     {GEO_INVALID_LATITUDE_IND}, {GEO_INVALID_LONGITUDE}, 
+     {GEO_INVALID_LONGITUDE_IND}, {GEO_INVALID_SPEED}, {GEO_INVALID_COURSE},
+     {GEO_INVALID_DATE}}
 };
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -250,8 +262,8 @@ static void
 publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
 {
     Rmc *pRmc;
-    GeoStampEvt *geoStampEvt;
-    GeoStamp *pGps;
+    GeoEvt *geoEvt;
+    Geo *pGps;
     char *pchr;
 
 	(void)me;
@@ -261,10 +273,10 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
 
     me->rmc = *pRmc;
 
-    geoStampEvt = RKH_ALLOC_EVT(GeoStampEvt, evGeoStamp, &geoMgr);
-    pGps = &(geoStampEvt->gps);
+    geoEvt = RKH_ALLOC_EVT(GeoEvt, evGeo, &geoMgr);
+    pGps = &(geoEvt->gps);
 
-    memset(pGps, 0, sizeof(GeoStamp));
+    memset(pGps, 0, sizeof(Geo));
 
     /* utc: like NMEA utc, decimals discard */
     strncpy(pGps->utc, pRmc->utc, UTC_LENGTH);
@@ -296,7 +308,7 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
     /* date: like NMEA date [degrees], decimals discarded */
     strncpy(pGps->date, pRmc->date, DATE_LENGTH);
 
-    rkh_pubsub_publish(TopicStatus, RKH_UPCAST(RKH_EVT_T, geoStampEvt),
+    rkh_pubsub_publish(TopicStatus, RKH_UPCAST(RKH_EVT_T, geoEvt),
                                     RKH_UPCAST(RKH_SMA_T, me));
 
 }
@@ -307,7 +319,7 @@ publishInvRmc(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    rkh_pubsub_publish(TopicStatus, RKH_UPCAST(RKH_EVT_T, &geoStampInvalidEvt),
+    rkh_pubsub_publish(TopicStatus, RKH_UPCAST(RKH_EVT_T, &geoInvalidEvt),
                                     RKH_UPCAST(RKH_SMA_T, me));
 }
 

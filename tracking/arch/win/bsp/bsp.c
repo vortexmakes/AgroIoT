@@ -32,7 +32,7 @@
 #include "conmgr.h"
 #include "modpwr.h"
 #include "mTime.h"
-#include "gps.h"
+#include "Geo.h"
 #include "dIn.h"
 #include "dOut.h"
 #include "tplfsm.h"

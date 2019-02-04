@@ -19,6 +19,7 @@
 #define __BATCHR_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "rkhevt.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -30,7 +31,8 @@ extern "C" {
 typedef enum BatChrStatus BatChrStatus;
 enum BatChrStatus 
 {
-    EXT_POWER_FAIL
+    EXT_PWR_OK,
+    EXT_PWR_FAIL = 3
 };
 
 /* ------------------------------- Data types ------------------------------ */
@@ -43,6 +45,8 @@ struct BatChrEvt
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+BatChrStatus BatChr_getStatus(void);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

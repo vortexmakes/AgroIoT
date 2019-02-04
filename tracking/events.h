@@ -24,7 +24,7 @@
 #include "rkhevt.h"
 #include "epoch.h"
 #include "rmc.h"
-#include "gps.h"
+#include "Geo.h"
 #include "cbox.h"
 #include "RawData.h"
 
@@ -118,11 +118,11 @@ struct RmcEvt
     Rmc rmc;
 };
 
-typedef struct GeoStampEvt GeoStampEvt;
-struct GeoStampEvt
+typedef struct GeoEvt GeoEvt;
+struct GeoEvt
 {
     RKH_EVT_T evt;
-    GeoStamp gps;
+    Geo gps;
 };
 
 typedef struct InChgEvt InChgEvt;

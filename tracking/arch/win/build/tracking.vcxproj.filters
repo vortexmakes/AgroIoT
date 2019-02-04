@@ -112,9 +112,6 @@
     <ClCompile Include="..\..\..\geoMgr\geoMgr.c">
       <Filter>tracking\geomgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\gps\gps.c">
-      <Filter>gps</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\parser\ubxm8\ubxm8parser.c">
       <Filter>tracking\parser</Filter>
     </ClCompile>
@@ -171,6 +168,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ioChg\dOut.c">
       <Filter>ioChg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\gps\Geo.c">
+      <Filter>gps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\BatChr\BatChr.c">
+      <Filter>BatChr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +254,9 @@
     </Filter>
     <Filter Include="topic">
       <UniqueIdentifier>{cea5a93e-cb88-4e44-9c0d-fb95edbf056f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BatChr">
+      <UniqueIdentifier>{d206c330-ebe9-4e00-98e2-c73f1ec96c02}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
+#include "cbox.h"
 #include "rkhfwk_pubsub.h"
 #include "signals.h"
 #include "topic.h"
@@ -24,7 +25,6 @@
 #include "ps.h"
 #include "cboxcmd.h"
 #include "sleep.h"
-#include "cbdata.h"
 #include "mytypes.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -93,7 +93,7 @@ ps_on_endcycle( void )
 }
 
 CBOX_STR *
-get_cbdata(void)
+cbox_getInstance(void)
 {
     return &cbox;
 }
@@ -219,6 +219,12 @@ void
 tplink_onchkerr( void )
 {
 	ps_timeout();
+}
+
+rbool_t 
+cbox_isMoving(CBOX_STR *const me)
+{
+    return me->m != 0;
 }
 
 /* ------------------------------ End of file ------------------------------ */

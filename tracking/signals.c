@@ -67,8 +67,8 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evUnlocked);
     RKH_TR_FWK_SIG(evImei);
     RKH_TR_FWK_SIG(evRMC);
-    RKH_TR_FWK_SIG(evGeoStamp);
-    RKH_TR_FWK_SIG(evGeoStampInvalid);
+    RKH_TR_FWK_SIG(evGeo);
+    RKH_TR_FWK_SIG(evGeoInvalid);
     RKH_TR_FWK_SIG(evTurn);
     RKH_TR_FWK_SIG(evIoChg);
 	RKH_TR_FWK_SIG(evRestart);
