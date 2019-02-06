@@ -31,8 +31,13 @@ extern "C" {
 typedef enum BatChrStatus BatChrStatus;
 enum BatChrStatus 
 {
-    EXT_PWR_OK,
-    EXT_PWR_FAIL = 3
+	LINE_BATT, 
+    EXT_PWR_OK = LINE_BATT,
+	LINE_BATTCHG,
+	LINE_NOBATT,
+	NOLINE_BATT, 
+    EXT_PWR_FAIL = NOLINE_BATT,
+	NOLINE_BATTDIS
 };
 
 /* ------------------------------- Data types ------------------------------ */

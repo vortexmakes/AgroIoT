@@ -90,10 +90,10 @@ test_ValidGetFlags(void)
 
     flags = 0;
     Geo_isValid_ExpectAndReturn(&(defStatus.position), 1);
-    cbox_isMoving_ExpectAndReturn(&(defStatus.dev), 1);
-    BatChr_getStatus_ExpectAndReturn(EXT_PWR_FAIL);
+    cbox_isMoving_ExpectAndReturn(&(defStatus.dev), 0);
+    BatChr_getStatus_ExpectAndReturn(LINE_NOBATT);
 
-    err = YFrame_getFlags((RawData *)&defStatus, &flags, YFRAME_SGP_TYPE);
+    err = YFrame_getFlags((RawData *)&defStatus, &flags, YFRAME_MGP_TYPE);
     TEST_ASSERT_EQUAL(0, err);
     TEST_ASSERT_EQUAL(0x13, flags);
 }
