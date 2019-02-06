@@ -24,7 +24,7 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 static const char imei[] = "355826018345180";
-static RawData defStatus =
+static GStatus defStatus =
 {
     {
         "185124", "A", "37.8402883", "-", "057.6884350", "-", "0.078",
@@ -40,7 +40,7 @@ static const char pattern[] = "!0|19355826018345180,185124,-37.8402883,-057.6884
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static RawData status;
+static GStatus status;
 static char buf[256];
 static int size;
 
@@ -63,7 +63,7 @@ test_MakeInvalidArgs(void)
     size = YFrame_makeFrame(&status, (char *)0);
     TEST_ASSERT_EQUAL(0, size);
 
-    size = YFrame_makeFrame((RawData *)0, buf);
+    size = YFrame_makeFrame((GStatus *)0, buf);
     TEST_ASSERT_EQUAL(0, size);
 }
 
@@ -74,7 +74,7 @@ test_GetFlagsInvalidArgs(void)
     rInt err;
 
     flags = 0xad;
-    err = YFrame_getFlags((RawData *)0, &flags, 0);
+    err = YFrame_getFlags((GStatus *)0, &flags, 0);
     TEST_ASSERT_EQUAL(1, err);
     TEST_ASSERT_EQUAL(0xad, flags);
 
@@ -93,7 +93,7 @@ test_ValidGetFlags(void)
     cbox_isMoving_ExpectAndReturn(&(defStatus.dev), 0);
     BatChr_getStatus_ExpectAndReturn(LINE_NOBATT);
 
-    err = YFrame_getFlags((RawData *)&defStatus, &flags, YFRAME_MGP_TYPE);
+    err = YFrame_getFlags((GStatus *)&defStatus, &flags, YFRAME_MGP_TYPE);
     TEST_ASSERT_EQUAL(0, err);
     TEST_ASSERT_EQUAL(0x13, flags);
 }

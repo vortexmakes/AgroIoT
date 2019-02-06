@@ -20,7 +20,7 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhsma.h"
-#include "RawData.h"
+#include "GStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -37,7 +37,7 @@ typedef struct Collector Collector;
 struct Collector
 {
     RKH_SMA_T base;
-    RawData rawData;
+    GStatus rawData;
     Device *dev;
 };
 

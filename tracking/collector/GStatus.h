@@ -1,12 +1,11 @@
 /**
- *  \file       YFrame.h
- *  \brief      Specifies the interface of Yipies frame (remote protocol) 
- *              module
+ *  \file       GStatus.h
+ *  \brief      Specifies the interface of GStatus module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.02  LeFr  v1.0.00  Initial version
+ *  2019.25.01  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -16,12 +15,14 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __YFRAME_H__
-#define __YFRAME_H__
+#ifndef __GSTATUS_H__
+#define __GSTATUS_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkhtype.h"
-#include "GStatus.h"
+#include "Geo.h"
+#include "cbox.h"
+#include "IOStatus.h"
+#include "BatChr.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -30,15 +31,21 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define YFRAME_SGP_TYPE        0
-#define YFRAME_MGP_TYPE        1
+/* ................................ Signals ................................ */
+/* ................................. Events ................................ */
+/* ........................ Declares active object ......................... */
+typedef struct GStatus GStatus;
+struct GStatus 
+{
+    Geo position;
+    CBOX_STR dev;
+    IOStatus io;
+    BatChrStatus batChr;
+};
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-ruint YFrame_makeFrame(GStatus *from, char *to);
-rInt YFrame_getFlags(GStatus *from, rui8_t *flags, rui8_t type);
-
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

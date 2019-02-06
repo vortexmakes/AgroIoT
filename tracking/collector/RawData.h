@@ -1,6 +1,6 @@
 /**
- *  \file       RawData.h
- *  \brief      Specifies the interface of RawData module.
+ *  \file       GStatus.h
+ *  \brief      Specifies the interface of GStatus module.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -34,8 +34,8 @@ extern "C" {
 /* ................................ Signals ................................ */
 /* ................................. Events ................................ */
 /* ........................ Declares active object ......................... */
-typedef struct RawData RawData;
-struct RawData 
+typedef struct GStatus GStatus;
+struct GStatus 
 {
     Geo position;
     CBOX_STR dev;

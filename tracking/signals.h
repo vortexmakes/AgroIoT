@@ -77,7 +77,7 @@ enum Signals
 	evSensorData,
 	evTerminate,     /* press the key escape on the keyboard */
     evDevData,
-    evRawData,
+    evGStatus,
     evSyncTout,
     evOutChg
 };

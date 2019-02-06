@@ -30,7 +30,7 @@
 #include "epoch.h"
 #include "date.h"
 #include "conMgr.h"
-#include "RawData.h"
+#include "GStatus.h"
 #include "cbox.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -96,7 +96,7 @@ RKH_CREATE_COMP_REGION_STATE(Active, NULL, NULL, RKH_ROOT,
                              &WaitSync, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(Active)
-    RKH_TRINT(evRawData,         NULL, updateStatus),
+    RKH_TRINT(evGStatus,         NULL, updateStatus),
     RKH_TRREG(evNetDisconnected, NULL, NULL, &Idle),
 RKH_END_TRANS_TABLE
 
@@ -163,7 +163,7 @@ struct CommMgr
 {
     RKH_SMA_T ao;
     RKH_TMR_T syncTmr;    
-    RawData currStatus;
+    GStatus currStatus;
 };
 
 RKH_SMA_CREATE(CommMgr, commMgr, 4, HCAL, &Idle, init, NULL);
@@ -208,7 +208,7 @@ init(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 static unsigned char
-yframe_getFlags(RawData *const status)
+yframe_getFlags(GStatus *const status)
 {
     unsigned char flags;
 
@@ -221,7 +221,7 @@ yframe_getFlags(RawData *const status)
 }
 
 static void
-get_frame(RawData *currStatus, char *buf)
+get_frame(GStatus *currStatus, char *buf)
 {
     char *frame, temp[16];
     Geo *position;
@@ -283,7 +283,7 @@ activateSync(CommMgr *const me, RKH_EVT_T *pe)
 static void
 updateStatus(CommMgr *const me, RKH_EVT_T *pe)
 {
-    me->currStatus = ((RawDataEvt *)pe)->rawData;
+    me->currStatus = ((GStatusEvt *)pe)->rawData;
     get_frame(&(me->currStatus), (char *)evSendObj.buf);
 }
 

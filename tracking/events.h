@@ -26,7 +26,7 @@
 #include "rmc.h"
 #include "Geo.h"
 #include "cbox.h"
-#include "RawData.h"
+#include "GStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -139,11 +139,11 @@ struct OutChgEvt
     rui32_t dout;
 };
 
-typedef struct RawDataEvt RawDataEvt;
-struct RawDataEvt
+typedef struct GStatusEvt GStatusEvt;
+struct GStatusEvt
 {
     RKH_EVT_T evt;
-    RawData rawData;
+    GStatus rawData;
 };
 
 typedef struct SensorData SensorData;

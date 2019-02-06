@@ -30,11 +30,11 @@
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 ruint 
-YFrame_makeFrame(RawData *from, char *to)
+YFrame_makeFrame(GStatus *from, char *to)
 {
     ruint size;
 
-    if ((from != (RawData *)0) && (to != (char *)0))
+    if ((from != (GStatus *)0) && (to != (char *)0))
     {
         size += 1;
     }
@@ -46,14 +46,14 @@ YFrame_makeFrame(RawData *from, char *to)
 }
 
 rInt 
-YFrame_getFlags(RawData *from, rui8_t *flags, rui8_t type)
+YFrame_getFlags(GStatus *from, rui8_t *flags, rui8_t type)
 {
     rInt res;
     rui8_t flag;
 
     res = 0;
     flag = 0;
-    if ((from != (RawData *)0) && (flags != (rui8_t *)0))
+    if ((from != (GStatus *)0) && (flags != (rui8_t *)0))
     {
 	    flag |= (Geo_isValid(&from->position) == 1) ? FLG_GPS_VALID : 0;
     	flag |= (type == YFRAME_MGP_TYPE) ? FLG_HISTORY : 0;
