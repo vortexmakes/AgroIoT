@@ -29,11 +29,14 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ------------------------------- Data types ------------------------------ */
+typedef rui8_t DigIn;
+typedef rui8_t DigOut;
+
 typedef struct IOStatus IOStatus;
 struct IOStatus 
 {
-    rui32_t digIn;
-    rui32_t digOut;
+    DigIn digIn;
+    DigOut digOut;
 };
 
 /* -------------------------- External variables --------------------------- */

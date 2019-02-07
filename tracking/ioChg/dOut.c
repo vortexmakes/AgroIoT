@@ -45,7 +45,7 @@ ruint outChg;    /* Identifies this module */
 
 /* ---------------------------- Local variables ---------------------------- */
 static DigitalTimerOutput dOuts[NUM_DOUT_SIGNALS];
-static rui32_t dOutStatus;
+static DigOut dOutStatus;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -56,12 +56,12 @@ setStatus(DigOutSignalId out, ruint val, int context)
 
     if (val != 0)
     {
-        RKH_BIT_SET_32(dOutStatus, RKH_BIT32(out));
+        RKH_BIT_SET_08(dOutStatus, RKH_BIT08(out));
         dOuts[out].val = 1;
     }
     else
     {
-        RKH_BIT_CLR_32(dOutStatus, RKH_BIT32(out));
+        RKH_BIT_CLR_08(dOutStatus, RKH_BIT08(out));
         dOuts[out].val = 0;
     }
     bsp_setDigOut(out, val);

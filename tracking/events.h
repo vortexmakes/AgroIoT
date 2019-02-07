@@ -22,11 +22,13 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhevt.h"
+#include "rkhtmr.h"
 #include "epoch.h"
 #include "rmc.h"
 #include "Geo.h"
 #include "cbox.h"
 #include "GStatus.h"
+#include "IOStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -129,14 +131,14 @@ typedef struct InChgEvt InChgEvt;
 struct InChgEvt
 {
     RKH_EVT_T evt;
-    rui32_t din;
+    DigIn din;
 };
 
 typedef struct OutChgEvt OutChgEvt;
 struct OutChgEvt
 {
     RKH_EVT_T evt;
-    rui32_t dout;
+    DigOut dout;
 };
 
 typedef struct GStatusEvt GStatusEvt;
