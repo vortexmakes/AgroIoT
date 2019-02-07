@@ -15,11 +15,13 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <string.h>
 #include "unity.h"
 #include "YFrame.h"
 #include "Mock_cbox.h"
 #include "Mock_Geo.h"
 #include "Mock_BatChr.h"
+#include "Mock_conmgr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -30,12 +32,12 @@ static GStatus defStatus =
         "185124", "A", "37.8402883", "-", "057.6884350", "-", "0.078",
         "", "310119"
     },
-    {1, 1, {0, 0, 1}, {0xdddd, 0xffff, 0xffff}, 3},
+    {1, 1, {0, 0, 1}, {0xdddd, 0xffff, 0xffff}, 0},
     {0xff, 0x3f},
     3
 };
 
-static const char pattern[] = "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3|";
+static const char defFrame[] = "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3|";
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -60,10 +62,10 @@ tearDown(void)
 void
 test_MakeInvalidArgs(void)
 {
-    size = YFrame_makeFrame(&status, (char *)0);
+    size = YFrame_make(&status, (char *)0);
     TEST_ASSERT_EQUAL(0, size);
 
-    size = YFrame_makeFrame((GStatus *)0, buf);
+    size = YFrame_make((GStatus *)0, buf);
     TEST_ASSERT_EQUAL(0, size);
 }
 
@@ -91,17 +93,27 @@ test_ValidGetFlags(void)
     flags = 0;
     Geo_isValid_ExpectAndReturn(&(defStatus.position), 1);
     cbox_isMoving_ExpectAndReturn(&(defStatus.dev), 0);
-    BatChr_getStatus_ExpectAndReturn(LINE_NOBATT);
+    BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
 
-    err = YFrame_getFlags((GStatus *)&defStatus, &flags, YFRAME_MGP_TYPE);
+    err = YFrame_getFlags((GStatus *)&defStatus, &flags, YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL(0, err);
-    TEST_ASSERT_EQUAL(0x13, flags);
+    TEST_ASSERT_EQUAL_HEX(0x19, flags);
 }
 
 void
 test_MakeSingle(void)
 {
-    TEST_IGNORE();
+    int expLen;
+
+    expLen = strlen(defFrame);
+    Geo_isValid_ExpectAndReturn(&(defStatus.position), 1);
+    cbox_isMoving_ExpectAndReturn(&(defStatus.dev), 0);
+    BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
+    ConMgr_Imei_ExpectAndReturn("355826018345180");
+
+    size = YFrame_make(&defStatus, buf);
+    TEST_ASSERT_EQUAL_STRING(defFrame, buf);
+    TEST_ASSERT_EQUAL(expLen, size);
 }
 
 void

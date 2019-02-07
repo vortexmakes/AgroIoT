@@ -36,7 +36,7 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-ruint YFrame_makeFrame(GStatus *from, char *to);
+ruint YFrame_make(GStatus *from, char *to);
 rInt YFrame_getFlags(GStatus *from, rui8_t *flags, rui8_t type);
 
 /* -------------------- External C language linkage end -------------------- */

@@ -11,7 +11,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña      db@vortexmakes.com
+ *  DaBa  Dario Balina      db@vortexmakes.com
  *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
@@ -21,7 +21,7 @@
 #define __CONMGR_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
+#include "rkhsma.h"
 #include "events.h"
 
 /* ---------------------- External C language linkage ---------------------- */
