@@ -26,6 +26,7 @@
 #define YFRAME_ID               "!"
 #define YFRAME_MARK             "|"
 #define YFRAME_SEPARATOR        ","
+#define YFRAME_TERMINATOR       "#"
 
 #define FLG_GPS_VALID           1
 #define FLG_HISTORY             2
@@ -39,8 +40,65 @@ static const char *frameType[] = {"0", "1"};
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
+rInt 
+YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type)
+{
+    rInt res;
+    rui8_t flag;
+
+    res = 0;
+    flag = 0;
+    if ((from != (GStatus *)0) && (flags != (rui8_t *)0))
+    {
+	    flag |= (Geo_isValid(&from->position) == 1) ? FLG_GPS_VALID : 0;
+    	flag |= (type == YFRAME_MGP_TYPE) ? FLG_HISTORY : 0;
+	    flag |= (cbox_isMoving(&from->dev) == 1) ? FLG_MOVING : 0;
+    	flag |= (BatChr_getStatus() << 3);
+        *flags = flag;
+    }
+    else
+    {
+        res = 1;
+    }
+    return res;
+}
+
 ruint 
-YFrame_make(GStatus *from, char *to)
+YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type)
+{
+    ruint size;
+    char *frame, temp[16];
+    rui8_t flags;
+
+    size = 0;
+    frame = to;
+    if ((from != (GStatus *)0) && (to != (char *)0))
+    {
+        strcpy(frame, YFRAME_ID);
+        strcat(frame, frameType[type]);
+        strcat(frame, YFRAME_MARK);
+        if (type == YFRAME_MGP_TYPE)
+        {
+            sprintf(temp, "%04x", nFrames);
+            strcat(frame, temp);
+            strcat(frame, YFRAME_MARK);
+            strcat(frame, ConMgr_Imei());
+        }
+        else
+        {
+            (rInt)YFrame_getFlags(from, &flags, YFRAME_SGP_TYPE);
+            sprintf(temp, "%02x", flags);
+            strcat(frame, temp);
+            strcat(frame, ConMgr_Imei());
+            strcat(frame, YFRAME_SEPARATOR);
+        }
+        size = strlen(frame);
+    }
+    return size;
+}
+
+ruint 
+YFrame_data(GStatus *from, char *to, rInt type)
 {
     ruint size;
     char *frame, temp[16];
@@ -57,14 +115,14 @@ YFrame_make(GStatus *from, char *to)
 
     if ((from != (GStatus *)0) && (to != (char *)0))
     {
-        strcat(frame, YFRAME_ID);
-        strcat(frame, frameType[YFRAME_SGP_TYPE]);
-        strcat(frame, YFRAME_MARK);
-        (rInt)YFrame_getFlags(from, &flags, YFRAME_SGP_TYPE);
-        sprintf(temp, "%02x", flags);
-        strcat(frame, temp);
-        strcat(frame, ConMgr_Imei());
-        strcat(frame, YFRAME_SEPARATOR);
+        if (type == YFRAME_MGP_TYPE)
+        {
+            strcpy(frame, YFRAME_MARK);
+            (rInt)YFrame_getFlags(from, &flags, YFRAME_MGP_TYPE);
+            sprintf(temp, "%02x", flags);
+            strcat(frame, temp);
+            strcat(frame, YFRAME_SEPARATOR);
+        }
         strcat(frame, position->utc);
         strcat(frame, YFRAME_SEPARATOR);
         strcat(frame, position->latInd);
@@ -95,36 +153,24 @@ YFrame_make(GStatus *from, char *to)
         strcat(frame, temp);
         sprintf(temp, "%d", from->batChr);
         strcat(frame, temp);
-        strcat(frame, YFRAME_MARK);
         size = strlen(frame);
-    }
-    else
-    {
     }
     return size;
 }
 
-rInt 
-YFrame_getFlags(GStatus *from, rui8_t *flags, rui8_t type)
+ruint 
+YFrame_multipleTail(char *to)
 {
-    rInt res;
-    rui8_t flag;
+    ruint size;
+    char *frame, temp[16];
 
-    res = 0;
-    flag = 0;
-    if ((from != (GStatus *)0) && (flags != (rui8_t *)0))
+    size = 0;
+    frame = to;
+    if (to != (char *)0)
     {
-	    flag |= (Geo_isValid(&from->position) == 1) ? FLG_GPS_VALID : 0;
-    	flag |= (type == YFRAME_MGP_TYPE) ? FLG_HISTORY : 0;
-	    flag |= (cbox_isMoving(&from->dev) == 1) ? FLG_MOVING : 0;
-    	flag |= (BatChr_getStatus() << 3);
-        *flags = flag;
+        strcpy(frame, YFRAME_TERMINATOR);
+        size = strlen(frame);
     }
-    else
-    {
-        res = 1;
-    }
-    return res;
+    return size;
 }
-
 /* ------------------------------ End of file ------------------------------ */
