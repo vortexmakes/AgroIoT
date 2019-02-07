@@ -283,7 +283,7 @@ activateSync(CommMgr *const me, RKH_EVT_T *pe)
 static void
 updateStatus(CommMgr *const me, RKH_EVT_T *pe)
 {
-    me->currStatus = ((GStatusEvt *)pe)->rawData;
+    me->currStatus = ((GStatusEvt *)pe)->status;
     get_frame(&(me->currStatus), (char *)evSendObj.buf);
 }
 

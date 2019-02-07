@@ -67,7 +67,7 @@ ruint
 YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type)
 {
     ruint size;
-    char *frame, temp[16];
+    char *frame, temp[12];
     rui8_t flags;
 
     size = 0;
@@ -101,7 +101,7 @@ ruint
 YFrame_data(GStatus *from, char *to, rInt type)
 {
     ruint size;
-    char *frame, temp[16];
+    char *frame, temp[12];
     Geo *position;
     IOStatus *io;
     CBOX_STR *dev;
@@ -162,7 +162,7 @@ ruint
 YFrame_multipleTail(char *to)
 {
     ruint size;
-    char *frame, temp[16];
+    char *frame;
 
     size = 0;
     frame = to;
@@ -173,4 +173,5 @@ YFrame_multipleTail(char *to)
     }
     return size;
 }
+
 /* ------------------------------ End of file ------------------------------ */
