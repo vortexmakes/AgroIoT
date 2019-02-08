@@ -29,15 +29,21 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 typedef enum dInSignalId
 {
-    dIn0, dIn1, dIn2, dIn3, dIn4, dIn5, dIn6, dIn7,
+    dIn1, dIn2,
     NUM_DIN_SIGNALS
 }dInSignalId;
+
+typedef enum dInPullSelct
+{
+    pullSelect1, pullSelect2,
+    NUM_PULL_SELCT
+}pullSelectId;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void dIn_init(void);
 void dIn_scan(void);
-ruint dIn_get(void);
+void dIn_pullSelect(pullSelectId ps, uint8_t value);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

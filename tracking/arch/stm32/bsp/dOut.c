@@ -18,8 +18,12 @@
 #include <stdio.h>
 #include "rkh.h"
 #include "dOut.h"
+#include "cubemx.h"
 
 /* ----------------------------- Local macros ------------------------------ */
+#define Output1(b)      HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, b)
+#define Output2(b)      HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, b)
+
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 typedef struct
@@ -34,11 +38,29 @@ static DigitalTimerOutput dOuts[NUM_DOUT_SIGNALS];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static
+void gpioWrite(dOutSignalId pin, uint8_t value)
+{
+    switch(pin)
+    {
+        case dOut1:
+            return Output1(value);
+
+        case dOut2:
+            return Output2(value);
+
+        default:
+            return 0;
+    }
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 dOut_init(void)
 {
     memset(dOuts, 0, sizeof(dOuts));
+    Output1(0);
+    Output2(0);
 }
 
 void
@@ -48,8 +70,6 @@ dOut_set(ruint out, ruint val, rui16_t tmr)
 
     if(out >= NUM_DOUT_SIGNALS)
         return;
-
-    //printf("dOut[%d]:%d\r\n", out, val);
 
     RKH_ENTER_CRITICAL_();    
     dOuts[out].val = val != 0 ? 1 : 0;
@@ -67,7 +87,7 @@ void
 dOut_process(void)
 {
     DigitalTimerOutput *p;
-    ruint i;
+    dOutSignalId i;
 
     p = dOuts;
 
@@ -76,7 +96,7 @@ dOut_process(void)
 		if(p->timer > 0 && !(--(p->timer)))
         {
 			p->val ^= 1;
-            //printf("dOut[%d]:%d\r\n", i, p->val);
+            gpioWrite(i, p->val);
         }
     }
 }

@@ -35,7 +35,7 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 typedef enum dOutSignalId
 {
-    dOut0, dOut1, dOut2, dOut3, dOut4, dOut5,
+    dOut1, dOut2,
     NUM_DOUT_SIGNALS
 }dOutSignalId;
 

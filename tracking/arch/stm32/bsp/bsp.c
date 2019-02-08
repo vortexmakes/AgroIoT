@@ -20,11 +20,12 @@
 #include <stdio.h>
 #include "rkh.h"
 #include "cubemx.h"
-//#include "uartisr.h"
 #include "bsp.h"
 
 #include "signals.h"
 #include "modpwr.h"
+#include "dIn.h"
+#include "dOut.h"
 #include "modmgr.h"
 #include "modcmd.h"
 #include "conmgr.h"
@@ -67,7 +68,8 @@ bsp_init(int argc, char *argv[])
     MX_SPI3_Init();
 
     modPwr_init();
-
+    dIn_init();
+    dOut_init();
 }
 
 void
