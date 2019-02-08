@@ -58,7 +58,6 @@ bsp_init(int argc, char *argv[])
 
     SystemClock_Config();
     MX_GPIO_Init();
-    MX_USART3_UART_Init();
     MX_USB_OTG_HS_HCD_Init();
     MX_USART6_UART_Init();
     MX_USART1_UART_Init();
@@ -86,19 +85,27 @@ rkh_trc_getts(void)
 }
 
 static uint8_t uart2RxBuff[10];
+static uint8_t uart3RxBuff[10];
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-    ruint count;
-    uint8_t *p;
-
-    if(UartHandle->Instance == USART2)
+    if (UartHandle->Instance == USART2)
     {
-        count = UartHandle->RxXferCount;
-        p = UartHandle->pRxBuffPtr;
+        if (gsmCmdParser != NULL)
+        {
+            gsmCmdParser(uart2RxBuff[0]);
+        }
 
-        while(count--)
-            gsmCmdParser(*p++);
+        HAL_UART_Receive_IT(&huart2, uart2RxBuff, 1);
+    }
+    else if (UartHandle->Instance == USART3)
+    {
+        if (gpsParser != NULL)
+        {
+            gpsParser(uart3RxBuff[0]);
+        }
+
+        HAL_UART_Receive_IT(&huart3, uart3RxBuff, 1);
     }
 }
 
@@ -113,10 +120,13 @@ bsp_serial_open(int ch)
             gsmCmdParser = ModCmd_init();
             MX_USART2_UART_Init();
             HAL_UART_Receive_IT(&huart2, uart2RxBuff, 1);
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, 1);
             break;
 
         case GPS_PORT:
             gpsParser = NULL;
+            MX_USART3_UART_Init();
+            HAL_UART_Receive_IT(&huart3, uart3RxBuff, 1);
 			break;
 
 		case TPSENS_PORT:
@@ -167,7 +177,7 @@ bsp_serial_putchar(int ch, unsigned char c)
             break;
 
         case GPS_PORT:
-            gpsParser = NULL;
+            pUart = &huart3;
 			break;
 
 		case TPSENS_PORT:

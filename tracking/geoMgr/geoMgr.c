@@ -17,6 +17,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "rkh.h"
 #include "rkhfwk_pubsub.h"
 #include "rkhtmr.h"

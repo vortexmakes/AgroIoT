@@ -34,6 +34,7 @@
 									<listOptionValue builtIn="false" value="STM32F407xx"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 									<listOptionValue builtIn="false" value="__CIAANXP__=1"/>
+									<listOptionValue builtIn="false" value="MODPWR_CTRL_ENABLE=1"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.675484694" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
@@ -261,6 +262,7 @@
 									<listOptionValue builtIn="false" value="STM32F407xx"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 									<listOptionValue builtIn="false" value="__CIAANXP__=1"/>
+									<listOptionValue builtIn="false" value="MODPWR_CTRL_ENABLE=1"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.871960899" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>

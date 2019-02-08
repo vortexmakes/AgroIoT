@@ -17,4 +17,6 @@
 
 #include "rkhtype.h"
 
+void SystemClock_Config(void);
+
 #endif
