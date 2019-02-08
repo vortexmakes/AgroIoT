@@ -43,7 +43,7 @@ typedef enum dInPullSelct
 /* -------------------------- Function prototypes -------------------------- */
 void dIn_init(void);
 void dIn_scan(void);
-void dIn_pullSelect(pullSelectId ps, uint8_t value);
+void dIn_pullSelect(pullSelectId ps, rui8_t value);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
