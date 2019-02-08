@@ -69,6 +69,7 @@ struct GPS_STR
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 rInt GStatus_toGpsStr(GStatus *from, GPS_STR *to);
+rInt GStatus_fromGpsStr(GPS_STR *from, GStatus *to);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

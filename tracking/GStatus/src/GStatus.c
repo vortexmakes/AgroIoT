@@ -16,6 +16,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <string.h>
+#include <stdio.h>
 #include "GStatus.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -44,6 +45,42 @@ GStatus_toGpsStr(GStatus *from, GPS_STR *to)
         *token = '\0';
         strcpy(to->latdeg, temp);
         strcpy(to->latmin, (char *)(token + 1));
+        strcpy(to->lat_ind, pos->latInd);
+        strcpy(temp, pos->longitude);
+        token = strchr(temp, '.');
+        *token = '\0';
+        strcpy(to->longdeg, temp);
+        strcpy(to->longmin, (char *)(token + 1));
+        strcpy(to->long_ind, pos->longInd);
+        strcpy(to->speed, pos->speed);
+        strcpy(to->course, pos->course);
+        strcpy(to->date, pos->date);
+        sprintf(to->in_out_st, "%02X%02X", from->io.digOut, from->io.digIn);
+        sprintf(to->acbk_st, "%d", from->batChr);
+        to->cbox = from->dev;
+    }
+    else
+    {
+        res = 1;
+    }
+    return res;
+}
+
+rInt 
+GStatus_fromGpsStr(GPS_STR *from, GStatus *to)
+{
+    rInt res;
+    Geo *pos;
+    char temp[32];
+
+    res = 0;
+    if ((to != (GStatus *)0) && (from != (GPS_STR *)0))
+    {
+        pos = &(to->position);
+        strcpy(pos->utc, from->utc);
+        strcpy(pos->status, from->status);
+        sprintf(temp, "%s.%s", from->latdeg, from->latmin);
+        strcpy(pos->latitude, temp);
     }
     else
     {

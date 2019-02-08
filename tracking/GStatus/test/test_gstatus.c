@@ -91,7 +91,7 @@ test_InvalidArgs(void)
 }
 
 void
-test_init(void)
+test_ConvertGStatusToGpsStr(void)
 {
     rInt result;
     GPS_STR oldStatus;
@@ -102,6 +102,32 @@ test_init(void)
     TEST_ASSERT_EQUAL_STRING(status0.position.status, oldStatus.status);
     sprintf(temp, "%s.%s", oldStatus.latdeg, oldStatus.latmin);
     TEST_ASSERT_EQUAL_STRING(status0.position.latitude, temp);
+    TEST_ASSERT_EQUAL_STRING(status0.position.latInd, oldStatus.lat_ind);
+    sprintf(temp, "%s.%s", oldStatus.longdeg, oldStatus.longmin);
+    TEST_ASSERT_EQUAL_STRING(status0.position.longitude, temp);
+    TEST_ASSERT_EQUAL_STRING(status0.position.longInd, oldStatus.long_ind);
+    TEST_ASSERT_EQUAL_STRING(status0.position.speed, oldStatus.speed);
+    TEST_ASSERT_EQUAL_STRING(status0.position.course, oldStatus.course);
+    TEST_ASSERT_EQUAL_STRING(status0.position.date, oldStatus.date);
+    sprintf(temp, "%02X%02X", status0.io.digOut, status0.io.digIn);
+    TEST_ASSERT_EQUAL_STRING(temp, oldStatus.in_out_st);
+    sprintf(temp, "%d", status0.batChr);
+    TEST_ASSERT_EQUAL_STRING(temp, oldStatus.acbk_st);
+    TEST_ASSERT_EQUAL(0, result);
+}
+
+void
+test_ConvertGpsStrToGStatus(void)
+{
+    rInt result;
+    GStatus newStatus;
+    char temp[32];
+
+    result = GStatus_fromGpsStr(&status1, &newStatus);
+    TEST_ASSERT_EQUAL_STRING(status1.utc, newStatus.position.utc);
+    TEST_ASSERT_EQUAL_STRING(status1.status, newStatus.position.status);
+    sprintf(temp, "%s.%s", status1.latdeg, status1.latmin);
+    TEST_ASSERT_EQUAL_STRING(temp, newStatus.position.latitude);
     TEST_ASSERT_EQUAL(0, result);
 }
 
