@@ -38,6 +38,8 @@ extern "C" {
 #define LAT_IND_LENGTH      1
 #define LONGDEG_LENGTH      DEG_LENGTH
 #define LONGMIN_LENGTH      MIN_LENGTH
+#define LATDEG_LENGTH       DEG_LENGTH
+#define LATMIN_LENGTH       MIN_LENGTH
 #define LONGITUDE_LENGTH    11
 #define LONG_IND_LENGTH     1
 #define SPEED_LENGTH        7
