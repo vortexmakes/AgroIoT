@@ -35,7 +35,8 @@
 RKH_THIS_MODULE
 
 /* ----------------------------- Local macros ------------------------------ */
-#define BlinkLed(b) HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, b)
+#define BlinkLed(b)  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, b)
+#define ModemCTS(b)  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, b)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -86,12 +87,19 @@ rkh_trc_getts(void)
     return tstamp;
 }
 
+static uint8_t uart1RxBuff[10];
 static uint8_t uart2RxBuff[10];
 static uint8_t uart3RxBuff[10];
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-    if (UartHandle->Instance == USART2)
+    if (UartHandle->Instance == USART1)
+    {
+        tplink_rx_isr(uart1RxBuff[0]);
+
+        HAL_UART_Receive_IT(&huart1, uart1RxBuff, 1);
+    }
+    else if (UartHandle->Instance == USART2)
     {
         if (gsmCmdParser != NULL)
         {
@@ -122,7 +130,7 @@ bsp_serial_open(int ch)
             gsmCmdParser = ModCmd_init();
             MX_USART2_UART_Init();
             HAL_UART_Receive_IT(&huart2, uart2RxBuff, 1);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, 1);
+            ModemCTS(1);
             break;
 
         case GPS_PORT:
@@ -132,6 +140,8 @@ bsp_serial_open(int ch)
 			break;
 
 		case TPSENS_PORT:
+            MX_USART1_UART_Init();
+            HAL_UART_Receive_IT(&huart1, uart1RxBuff, 1);
 			break;
 
 		default:
