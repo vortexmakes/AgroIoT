@@ -69,10 +69,10 @@
 									<listOptionValue builtIn="false" value="../../../../config"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
-									<listOptionValue builtIn="false" value="../../../../parser/sim900"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
 									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
+									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1726576784" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -123,10 +123,10 @@
 									<listOptionValue builtIn="false" value="../../../../config"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
-									<listOptionValue builtIn="false" value="../../../../parser/sim900"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
 									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
+									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1379635670" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -223,7 +223,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry excluding="tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>
@@ -297,10 +297,10 @@
 									<listOptionValue builtIn="false" value="../../../../config"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
-									<listOptionValue builtIn="false" value="../../../../parser/sim900"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
 									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
+									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.618148146" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -351,10 +351,10 @@
 									<listOptionValue builtIn="false" value="../../../../config"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
-									<listOptionValue builtIn="false" value="../../../../parser/sim900"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
 									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
+									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.803142745" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -451,7 +451,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry excluding="tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>

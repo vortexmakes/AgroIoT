@@ -28,7 +28,7 @@
 #include "geoMgr.h"
 #include "ioChg.h"
 #include "DeviceServer.h"
-#include "sim900parser.h"
+#include "sim5320parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"
 
@@ -73,7 +73,7 @@ setupTraceFilters(void)
 {
     RKH_FILTER_ON_GROUP(RKH_TRC_ALL_GROUPS);
     RKH_FILTER_ON_EVENT(RKH_TRC_ALL_EVENTS);
-	//RKH_FILTER_OFF_EVENT(MODCMD_USR_TRACE);
+	RKH_FILTER_OFF_EVENT(MODCMD_USR_TRACE);
 	//RKH_FILTER_OFF_GROUP_ALL_EVENTS(RKH_TG_USR);
     RKH_FILTER_OFF_EVENT(RKH_TE_TMR_TOUT);
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_STATE);
@@ -82,7 +82,7 @@ setupTraceFilters(void)
     //RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
     //RKH_FILTER_OFF_SMA(modMgr);
-    //RKH_FILTER_OFF_SMA(conMgr);
+    RKH_FILTER_OFF_SMA(conMgr);
 	//RKH_FILTER_OFF_SMA(geoMgr);
 	RKH_FILTER_OFF_SMA(deviceServer);
 	RKH_FILTER_OFF_SMA(commMgr);
@@ -108,7 +108,7 @@ main(int argc, char *argv[])
     signals_publishSymbols();
 
     RKH_TR_FWK_ACTOR(&ioChg, "ioChg");
-    RKH_TR_FWK_ACTOR(&sim900parser, "sim900parser");
+    RKH_TR_FWK_ACTOR(&sim5320parser, "sim5320parser");
     RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
 	RKH_TR_FWK_ACTOR(&tpSens, "tpSens");
 	
