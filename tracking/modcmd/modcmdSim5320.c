@@ -64,9 +64,9 @@ static const CmdTbl cmdTbl =
      RKH_TIME_MS(2000), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "ATE1+CREG=1\r\n",
+     "ATE1+CREG=1;+STK=0\r\n",
      &conMgr, 
-     RKH_TIME_MS(5000), RKH_TIME_MS(100)},
+     RKH_TIME_MS(5000), RKH_TIME_MS(5000)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CPIN?\r\n", 
@@ -84,17 +84,17 @@ static const CmdTbl cmdTbl =
      RKH_TIME_MS(300), RKH_TIME_MS(500)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CLTS=1\r\n",
+     "AT+CTZR=1\r\n",
      &conMgr, 
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+GSN\r\n",
+     "AT+CGSN\r\n",
      &conMgr, 
      RKH_TIME_MS(500), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSHUT\r\n",
+     "AT+CGACT=0,1\r\n",
      &conMgr, 
      RKH_TIME_MS(3000), RKH_TIME_MS(200)},
 

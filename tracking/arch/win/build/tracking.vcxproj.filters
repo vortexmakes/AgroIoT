@@ -79,12 +79,6 @@
     <ClCompile Include="..\..\..\conmgr\conmgr.c">
       <Filter>tracking\conmgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\parser\sim900\sim900parser.c">
-      <Filter>tracking\parser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modcmd\modcmdSim900.c">
-      <Filter>tracking\modcmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\epoch\epoch.c">
       <Filter>epoch</Filter>
     </ClCompile>
@@ -171,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\CommMgr\CommMgr.c">
       <Filter>tracking\CommMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\parser\sim5320\sim5320parser.c">
+      <Filter>tracking\parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modcmd\modcmdSim5320.c">
+      <Filter>tracking\modcmd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -32,7 +32,7 @@
 ruint sim5320parser;
 
 /* ---------------------------- Local variables ---------------------------- */
-SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_ci, 
+SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_ci, 
                      at_plus_cip, at_plus_cips, 
                      at_plus_cipsta, at_plus_ciprxget,
                      at_plus_ciprxget_2, at_plus_ciprxget_2_wdata,
@@ -48,7 +48,7 @@ SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_ci,
                      at_plus_cclk, cclk_end;
 
 SSP_DCLR_TRN_NODE at_plus_ciprxget_data, cclk_year, cclk_month, cclk_day,
-                  cclk_hour, cclk_min, at_plus_gsn;
+                  cclk_hour, cclk_min, at_plus_cgsn;
 
 static rui8_t isURC;
 
@@ -106,6 +106,11 @@ static void imeiSet(unsigned char pos);
 
 /* ---------------------------- Local functions ---------------------------- */
 
+static void
+debug(unsigned char pos)
+{
+}
+
 SSP_CREATE_NORMAL_NODE(rootCmdParser);
 SSP_CREATE_BR_TABLE(rootCmdParser)
 	SSPBR("STATE",      NULL,     &rootCmdParser),
@@ -113,6 +118,10 @@ SSP_CREATE_BR_TABLE(rootCmdParser)
 	SSPBR("AT",         NULL,     &at),
 	SSPBR("+C",         NULL,     &plus_c),
 	SSPBR("*PSUTTZ",    isURC_set, &netClockSync),
+	SSPBR("OPL DONE",   NULL,     &rootCmdParser),
+	SSPBR("SMS DONE",   debug,     &rootCmdParser),
+	SSPBR("PNN DONE",   NULL,      &rootCmdParser),
+	SSPBR("VOICEMAIL:", NULL,     &rootCmdParser),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at);
@@ -124,7 +133,6 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus);
 SSP_CREATE_BR_TABLE(at_plus)
-	SSPBR("GSN\r\n\r\n", imeiInit,  &at_plus_gsn),
 	SSPBR("C",           NULL,      &at_plus_c),
 	SSPBR("OK\r\n",     cmd_ok,    &rootCmdParser),
 SSP_END_BR_TABLE
@@ -132,12 +140,20 @@ SSP_END_BR_TABLE
 SSP_CREATE_NORMAL_NODE(at_plus_c);
 SSP_CREATE_BR_TABLE(at_plus_c)
 	SSPBR("PIN",            NULL,   &at_plus_cpin),
-	SSPBR("REG?\r\n\r\n",   NULL,   &at_plus_creg),
+	SSPBR("REG?\r\n",       NULL,   &at_plus_creg),
 	SSPBR("STT=",           NULL,   &waitOK),
+	SSPBR("G",              NULL,   &at_plus_cg),
 	SSPBR("I",              NULL,   &at_plus_ci),
-	SSPBR("LTS=1",          NULL,   &waitOK),
+	SSPBR("TZR=1",          NULL,   &waitOK),
 	SSPBR("CLK?",           NULL,   &at_plus_cclk),
 	SSPBR("\r\n",   NULL,  &rootCmdParser),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_cg);
+SSP_CREATE_BR_TABLE(at_plus_cg)
+	SSPBR("SN\r\n",       imeiInit, &at_plus_cgsn),
+	SSPBR("ACT=0,1\r\n",    NULL,     &waitOK),
+	SSPBR("\r\n",         NULL,     &rootCmdParser),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_ci);
@@ -160,7 +176,6 @@ SSP_CREATE_NORMAL_NODE(at_plus_cips);
 SSP_CREATE_BR_TABLE(at_plus_cips)
 	SSPBR("TA",          NULL,  &at_plus_cipsta),
 	SSPBR("END",         NULL,  &at_plus_cipsend),
-	SSPBR("HUT",         NULL,  &waitOK),
 	SSPBR("\r\n",        NULL,  &rootCmdParser),
 SSP_END_BR_TABLE
 
@@ -175,7 +190,7 @@ SSP_END_BR_TABLE
 /* ---------------------------- AT+CPIN --------------------------- */
 SSP_CREATE_NORMAL_NODE(at_plus_cpin);
 SSP_CREATE_BR_TABLE(at_plus_cpin)
-	SSPBR("?\r\n\r\n",    NULL,  &pinStatus),
+	SSPBR("?\r\n",    debug,  &pinStatus),
 	SSPBR("=",            NULL,  &wpinSet),
 	SSPBR("\r\n",         NULL,  &rootCmdParser),
 SSP_END_BR_TABLE
@@ -203,8 +218,8 @@ SSP_END_BR_TABLE
 /* --------------------------- AT+CREG --------------------------- */
 SSP_CREATE_NORMAL_NODE(at_plus_creg);
 SSP_CREATE_BR_TABLE(at_plus_creg)
-	SSPBR("1,",      NULL,  &plus_creg),
-	SSPBR("\r\n",    NULL,  &rootCmdParser),
+	SSPBR("+CREG: 1,",  NULL,  &plus_creg),
+	SSPBR("\r\n",       NULL,  &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */
@@ -248,9 +263,9 @@ SSP_END_BR_TABLE
 /* ------------------------ AT+CIPRXGET -------------------------- */
 SSP_CREATE_NORMAL_NODE(at_plus_ciprxget);
 SSP_CREATE_BR_TABLE(at_plus_ciprxget)
-	SSPBR("1\r\n\r\nOK\r\n", cmd_ok,  &rootCmdParser),
-	SSPBR("2,",              NULL,    &at_plus_ciprxget_2),
-	SSPBR("\r\n",            NULL,    &rootCmdParser),
+	SSPBR("1\r\nOK\r\n",    cmd_ok,  &rootCmdParser),
+	SSPBR("2,",             NULL,    &at_plus_ciprxget_2),
+	SSPBR("\r\n",           NULL,    &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */
@@ -385,8 +400,8 @@ SSP_CREATE_BR_TABLE(netClockSync)
 SSP_END_BR_TABLE
 
 /* ---------------------------- AT+GSN --------------------------- */
-SSP_CREATE_TRN_NODE(at_plus_gsn, imeiCollect);
-SSP_CREATE_BR_TABLE(at_plus_gsn)
+SSP_CREATE_TRN_NODE(at_plus_cgsn, imeiCollect);
+SSP_CREATE_BR_TABLE(at_plus_cgsn)
 	SSPBR("OK\r\n", imeiSet, &rootCmdParser),
 SSP_END_BR_TABLE
 
