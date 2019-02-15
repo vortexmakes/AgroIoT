@@ -5,12 +5,12 @@
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.07  LeFr  v1.0.00  Initial version
+ *  2019.02.12  DaBa  v1.0.01  sync
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  LeFr  Leandro Francucci lf@vortexmakes.com
+ *  DaBa  Dario Baliña      db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -48,7 +48,7 @@ void ModCmd_cipShutdown(void);
 void ModCmd_setManualGet(void);
 void ModCmd_getLocalTime(void);
 void ModCmd_setupAPN(char *apn, char *usr, char *nm);
-void ModCmd_startGPRS(void);
+void ModCmd_startNetwork(void);
 void ModCmd_requestIP(void);
 void ModCmd_getConnStatus(void);
 void ModCmd_connect(char *prot, char *dmn, char *port);

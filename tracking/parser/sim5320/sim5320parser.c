@@ -32,8 +32,8 @@
 ruint sim5320parser;
 
 /* ---------------------------- Local variables ---------------------------- */
-SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_ci, 
-                     at_plus_cip, at_plus_cips, 
+SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_cgs,
+                     at_plus_ci, at_plus_cip, at_plus_cips, 
                      at_plus_cipsta, at_plus_ciprxget,
                      at_plus_ciprxget_2, at_plus_ciprxget_2_wdata,
                      at_plus_cipstatus, at_plus_cipstatus_ip,
@@ -133,15 +133,15 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus);
 SSP_CREATE_BR_TABLE(at_plus)
+	SSPBR("NETOPEN\r\n", NULL,      &waitOK),
 	SSPBR("C",           NULL,      &at_plus_c),
-	SSPBR("OK\r\n",     cmd_ok,    &rootCmdParser),
+	SSPBR("OK\r\n",      cmd_ok,    &rootCmdParser),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_c);
 SSP_CREATE_BR_TABLE(at_plus_c)
 	SSPBR("PIN",            NULL,   &at_plus_cpin),
 	SSPBR("REG?\r\n",       NULL,   &at_plus_creg),
-	SSPBR("STT=",           NULL,   &waitOK),
 	SSPBR("G",              NULL,   &at_plus_cg),
 	SSPBR("I",              NULL,   &at_plus_ci),
 	SSPBR("TZR=1",          NULL,   &waitOK),
@@ -151,15 +151,21 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_cg);
 SSP_CREATE_BR_TABLE(at_plus_cg)
-	SSPBR("SN\r\n",       imeiInit, &at_plus_cgsn),
-	SSPBR("ACT=0,1\r\n",    NULL,     &waitOK),
+	SSPBR("S",            NULL,     &at_plus_cgs),
+	SSPBR("ACT=0,1\r\n",  NULL,     &waitOK),
+	SSPBR("\r\n",         NULL,     &rootCmdParser),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_cgs);
+SSP_CREATE_BR_TABLE(at_plus_cgs)
+	SSPBR("N\r\n",        imeiInit, &at_plus_cgsn),
+	SSPBR("OCKCONT=",     NULL,     &waitOK),
 	SSPBR("\r\n",         NULL,     &rootCmdParser),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_ci);
 SSP_CREATE_BR_TABLE(at_plus_ci)
 	SSPBR("FSR\r\n",      NULL,  &at_plus_cifsr),
-	SSPBR("ICR\r\n",      NULL,  &waitOK),
 	SSPBR("P",            NULL,  &at_plus_cip),
 	SSPBR("\r\n",         NULL,  &rootCmdParser),
 SSP_END_BR_TABLE

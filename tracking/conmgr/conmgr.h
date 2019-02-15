@@ -91,7 +91,7 @@ extern "C" {
  * GSM Network Provider and Connection specific configurations.
  */
 /* .................................. APN .................................. */
-    #define MOVISTAR_APN_ADDR   "INTERNER.GPRS.UNIFON.COM.AR"  
+    #define MOVISTAR_APN_ADDR   "INTERNET.GPRS.UNIFON.COM.AR"  
     #define MOVISTAR_APN_USER   "WAP"
     #define MOVISTAR_APN_PASS   "WAP"
 

@@ -39,7 +39,7 @@ RKH_DCLR_BASIC_STATE ConMgr_inactive, ConMgr_sync,
                 ConMgr_getImei, ConMgr_cipShutdown, ConMgr_setManualGet,
                 ConMgr_waitReg, ConMgr_unregistered, ConMgr_failure,
                 ConMgr_waitNetClockSync, ConMgr_localTime,
-                ConMgr_setAPN, ConMgr_enableGPRS,
+                ConMgr_setAPN, ConMgr_enableNetwork,
                 ConMgr_checkIP, ConMgr_waitRetryConfig, ConMgr_waitingServer,
                 ConMgr_idle, ConMgr_waitPrompt, ConMgr_waitOk,
                 ConMgr_receiving, ConMgr_restarting, ConMgr_wReopen,
@@ -93,7 +93,7 @@ static void setupManualGet(ConMgr *const me);
 static void waitNetClockSyncEntry(ConMgr *const me);
 static void waitRetryConfigEntry(ConMgr *const me);
 static void setupAPN(ConMgr *const me);
-static void startGPRS(ConMgr *const me);
+static void startNetwork(ConMgr *const me);
 static void wReopenEntry(ConMgr *const me);
 static void waitRetryConnEntry(ConMgr *const me);
 static void getConnStatus(ConMgr *const me);
@@ -239,12 +239,12 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_BASIC_STATE(ConMgr_setAPN, setupAPN, NULL, 
                                                     &ConMgr_configure, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_setAPN)
-    RKH_TRREG(evOk,         NULL, NULL, &ConMgr_enableGPRS),
+    RKH_TRREG(evOk,         NULL, NULL, &ConMgr_enableNetwork),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(ConMgr_enableGPRS, startGPRS, NULL, 
+RKH_CREATE_BASIC_STATE(ConMgr_enableNetwork, startNetwork, NULL, 
                                                     &ConMgr_configure, NULL);
-RKH_CREATE_TRANS_TABLE(ConMgr_enableGPRS)
+RKH_CREATE_TRANS_TABLE(ConMgr_enableNetwork)
     RKH_TRREG(evOk,         NULL, NULL, &ConMgr_checkIP),
 RKH_END_TRANS_TABLE
 
@@ -427,7 +427,7 @@ init(ConMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &ConMgr_configureHist);
     RKH_TR_FWK_STATE(me, &ConMgr_setManualGet);
     RKH_TR_FWK_STATE(me, &ConMgr_setAPN);
-    RKH_TR_FWK_STATE(me, &ConMgr_enableGPRS);
+    RKH_TR_FWK_STATE(me, &ConMgr_enableNetwork);
     RKH_TR_FWK_STATE(me, &ConMgr_checkIP);
     RKH_TR_FWK_STATE(me, &ConMgr_checkConfigTry);
     RKH_TR_FWK_STATE(me, &ConMgr_waitRetryConfig);
@@ -754,11 +754,11 @@ setupAPN(ConMgr *const me)
 }
    
 static void
-startGPRS(ConMgr *const me)
+startNetwork(ConMgr *const me)
 {
     (void)me;
 
-    ModCmd_startGPRS();
+    ModCmd_startNetwork();
 }
 
 static void

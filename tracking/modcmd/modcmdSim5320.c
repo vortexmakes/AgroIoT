@@ -42,7 +42,7 @@ struct CmdTbl
     ModCmd setManualGet;
     ModCmd getLocalTime;
     ModCmd setAPN;
-    ModCmd startGPRS;
+    ModCmd startNetwork;
     ModCmd requestIP;
     ModCmd getConnStatus;
     ModCmd connect;
@@ -109,12 +109,12 @@ static const CmdTbl cmdTbl =
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CSTT=\"%s\",\"%s\",\"%s\"\r\n", 
+     "AT+CGSOCKCONT=1,\"IP\",\"%s\"\r\n", 
      &conMgr, 
      RKH_TIME_MS(1000), RKH_TIME_MS(500)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIICR\r\n", 
+     "AT+NETOPEN\r\n", 
      &conMgr, 
      RKH_TIME_MS(30000), RKH_TIME_MS(200)},
 
@@ -286,13 +286,23 @@ ModCmd_getLocalTime(void)
 void 
 ModCmd_setupAPN(char *apn, char *usr, char *nm)
 {
-    sendModCmd_3StrArgs(&cmdTbl.setAPN, apn, usr, nm);
+    //sendModCmd_3StrArgs(&cmdTbl.setAPN, apn, usr, nm);
+
+    const ModCmd *p;
+    ModMgrEvt *evtCmd;
+
+    p = &cmdTbl.setAPN;
+    evtCmd = RKH_ALLOC_EVT(ModMgrEvt, evCmd, *p->aoDest);
+    
+    snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, p->fmt, apn);
+
+    postFIFOEvtCmd(evtCmd, p, NULL, 0);
 }
 
 void 
-ModCmd_startGPRS(void)
+ModCmd_startNetwork(void)
 {
-    sendModCmd_noArgs(&cmdTbl.startGPRS);
+    sendModCmd_noArgs(&cmdTbl.startNetwork);
 }
 
 void 
