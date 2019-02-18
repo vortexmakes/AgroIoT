@@ -32,8 +32,11 @@
     - ../../third-party/rkh/source/sm/inc
     - ../../third-party/rkh/source/queue/inc
     - ../../third-party/rkh/source/tmr/inc
+    - ../tpsens/cbox
     - ../collector
     - ../gps
+    - ../BatChr
+    - ../GStatus/inc
     - ../ffile/source/include
     - ../ffile
     - ../

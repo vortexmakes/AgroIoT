@@ -1,6 +1,6 @@
 /**
  *  \file       StatQue.h
- *  \brief      Specifies status queue's interface.
+ *  \brief      Specifies the status queue's adapter.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -20,6 +20,7 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhtype.h"
+#include "GStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -32,6 +33,12 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void StatQue_init(void);
+rui16_t StatQue_getNumElem(void);
+rbool_t StatQue_isEmpty(void);
+rInt StatQue_remove(GPS_STR *elem);
+rInt StatQue_delete(rui16_t *nElem);
+rInt StatQue_read(GPS_STR *elem);
+rInt StatQue_put(GPS_STR *elem);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
