@@ -16,6 +16,8 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
+#include "Config.h"
+#include "settings.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -36,9 +38,29 @@ tearDown(void)
 }
 
 void
+test_Get(void)
+{
+    Config *config;
+
+    config = (Config *)0;
+    config = Config_get();
+
+    TEST_ASSERT_NOT_NULL(config);
+}
+
+void
 test_Init(void)
 {
-    TEST_IGNORE();
+    Config *cfg;
+
+    cfg = (Config *)0;
+    Config_init();
+    cfg = Config_get();
+
+    TEST_ASSERT_NOT_NULL(cfg);
+    TEST_ASSERT_EQUAL(0, cfg->status);
+    TEST_ASSERT_EQUAL(ACLIMIT_DFT, cfg->aclimit);
+    TEST_ASSERT_EQUAL(BRLIMIT_DFT, cfg->brlimit);
 }
 
 /* ------------------------------ End of file ------------------------------ */

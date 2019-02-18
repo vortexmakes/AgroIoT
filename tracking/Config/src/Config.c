@@ -17,24 +17,46 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rkhtypes.h"
+#include "rkhtype.h"
 #include "Config.h"
 #include "settings.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
+static const Config cfgDefault =
+{
+    ACLIMIT_DFT,
+    BRLIMIT_DFT,
+    1,
+    "\"216.75.55.101\"",
+    "33499",
+    60,
+    110,
+    8,
+    0,
+    3
+};
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static Config config =
-{
-    ACLIMIT_DFT,
-    BRLIMIT_DFT
-};
+static Config cfgObj;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
+Config *
+Config_get(void)
+{
+    return (Config *)&cfgObj;
+}
+
+Config *
+Config_init(void)
+{
+    return (Config *)&cfgObj;
+}
+
 Config *
 config_read(void)
 {
@@ -42,7 +64,7 @@ config_read(void)
      * Wired Configiguration Settings
      * TODO: update / store / recover non volatile configuration
      */
-    return &config;
+    return (Config *)&cfgObj;
 }
 
 /* ------------------------------ End of file ------------------------------ */
