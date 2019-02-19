@@ -32,6 +32,13 @@ extern "C" {
 /* Default configurations */
 #define ACLIMIT_DFT             6
 #define BRLIMIT_DFT             20
+#define IP_DFT                  "\"216.75.55.101\""
+#define PORT_DFT                "33499"
+#define CONNTIME_DFT            60
+#define TOTACTTIME              110
+#define GPSTTIME                8
+#define DIGOUT_DFT              0
+#define SMPTIME_DFT             3
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */

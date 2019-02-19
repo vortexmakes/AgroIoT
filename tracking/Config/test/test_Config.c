@@ -31,13 +31,13 @@ static const Config cfgDft =
     ACLIMIT_DFT,
     BRLIMIT_DFT,
     1,
-    "\"216.75.55.101\"",
-    "33499",
-    60,
-    110,
-    8,
-    0,
-    3
+    IP_DFT,
+    PORT_DFT,
+    CONNTIME_DFT,
+    TOTACTTIME,
+    GPSTTIME,
+    DIGOUT_DFT,
+    SMPTIME_DFT
 };
 
 /* ---------------------------- Local data types --------------------------- */
