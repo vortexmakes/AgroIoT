@@ -107,14 +107,4 @@ Config_set(Config *cfg)
     RKH_EXIT_CRITICAL_();
 }
 
-Config *
-config_read(void)
-{
-    /*
-     * Wired Configiguration Settings
-     * TODO: update / store / recover non volatile configuration
-     */
-    return (Config *)&cfgObj;
-}
-
 /* ------------------------------ End of file ------------------------------ */

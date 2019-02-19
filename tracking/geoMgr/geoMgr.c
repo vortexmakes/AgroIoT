@@ -21,7 +21,7 @@
 #include "rkhfwk_pubsub.h"
 #include "rkhtmr.h"
 #include "bsp.h"
-#include "config.h"
+#include "Config.h"
 #include "signals.h"
 #include "events.h"
 #include "topic.h"
@@ -358,7 +358,7 @@ turnsDetect(GeoMgr *const me)
     currSog = atol(me->rmc.sog);
     currCog = atol(me->rmc.cog);
 
-    cfg = config_read();
+    cfg = Config_get();
 
     if(me->cog < 0)
         me->cog = currCog;
