@@ -40,12 +40,17 @@ extern "C" {
 /**
  * Specifies the maximum tries seeking for GSM modem response. 
  */
-#define MAX_SYNC_RETRY      5
+#define MAX_SYNC_RETRY      10
 
 /**
  * Specifies time waiting for GSM modem network registration.
  */
-#define REGISTRATION_TIME   RKH_TIME_MS(60000)
+#define CHECK_REG_PERIOD   RKH_TIME_MS(2000)
+
+/**
+ * Specifies time waiting for GSM modem network registration.
+ */
+#define REGISTRATION_TIME   RKH_TIME_MS(90000)
 
 /**
  * Specifies a time delay after general failure before to restart connection.
@@ -83,21 +88,51 @@ extern "C" {
 #define REOPEN_DELAY        RKH_TIME_MS(5000)
 
 /**
- * Specifies connections statusÂ´s polling period.
+ * Specifies connections status´s polling period.
  */
 #define CONNSTATUS_PERIOD   RKH_TIME_MS(2000)
+
+/**
+ * Specifies connections status´s polling period.
+ */
+#define MAX_CONSTATUS_NORESP 2
+
+/**
+ * Specifies sizeof send / receive buffers.
+ */
+#define SEND_BUFF_SIZE      1024
+#define RECV_BUFF_SIZE      1024
+
+/**
+ *  ImeiEvt process definitions
+ */
+#define IMEI_LENGTH         15
+#define IMEI_BUF_SIZE       IMEI_LENGTH + 1
+
+/**
+ *  ImeiEvt process definitions
+ */
+#define OPER_LENGTH         10
+#define OPER_BUF_SIZE       OPER_LENGTH + 1
 
 /**
  * GSM Network Provider and Connection specific configurations.
  */
 /* .................................. APN .................................. */
-    #define MOVISTAR_APN_ADDR   "INTERNET.GPRS.UNIFON.COM.AR"  
-    #define MOVISTAR_APN_USER   "WAP"
-    #define MOVISTAR_APN_PASS   "WAP"
+#define MOVISTAR_OPERATOR       "72207"
+#define MOVISTAR_APN_ADDR       "INTERNET.GPRS.UNIFON.COM.AR"  
+#define MOVISTAR_APN_USER       "WAP"
+#define MOVISTAR_APN_PASS       "WAP"
 
-#define CONNECTION_APN          MOVISTAR_APN_ADDR
-#define CONNECTION_USER         MOVISTAR_APN_USER
-#define CONNECTION_PASSWORD     MOVISTAR_APN_PASS
+#define CLARO_OPERATOR          "722310"
+#define CLARO_APN_ADDR          "internet.ctimovil.com.ar"
+#define CLARO_APN_USER          "clarogprs"
+#define CLARO_APN_PASS          "clarogprs999"
+
+#define PERSONAL_OPERATOR       "72234"
+#define PERSONAL_APN_ADDR       "datos.personal.com"
+#define PERSONAL_APN_USER       "datos"
+#define PERSONAL_APN_PASS       "datos"
 
 /* .................................. SIM PIN .............................. */
 #define SIM_PIN_NUMBER          9474
@@ -123,6 +158,7 @@ RKH_SMA_DCLR(conMgr);
 ReceivedEvt * ConMgr_ReceiveDataGetRef(void);
 char * ConMgr_Imei(void);
 char * ConMgr_ImeiSNR(void);
+int ConMgr_sigLevel(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

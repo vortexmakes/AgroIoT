@@ -44,6 +44,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evSimPin);
     RKH_TR_FWK_SIG(evSimError);
     RKH_TR_FWK_SIG(evNoReg);
+    RKH_TR_FWK_SIG(evOper);
     RKH_TR_FWK_SIG(evReg);
     RKH_TR_FWK_SIG(evIP);
     RKH_TR_FWK_SIG(evIPInitial);

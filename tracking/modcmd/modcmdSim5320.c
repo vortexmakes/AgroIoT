@@ -41,6 +41,7 @@ struct CmdTbl
     ModCmd cipShutdown;
     ModCmd setManualGet;
     ModCmd getLocalTime;
+    ModCmd getOper;
     ModCmd setAPN;
     ModCmd startNetwork;
     ModCmd requestIP;
@@ -79,12 +80,12 @@ static const CmdTbl cmdTbl =
      RKH_TIME_MS(500), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CREG?\r\n", 
+     "AT+CREG?;+CSQ\r\n", 
      &conMgr, 
      RKH_TIME_MS(300), RKH_TIME_MS(500)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CTZR=1\r\n",
+     "AT+CTZR=1;+COPS=3,2\r\n",
      &conMgr, 
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
@@ -99,14 +100,23 @@ static const CmdTbl cmdTbl =
      RKH_TIME_MS(3000), RKH_TIME_MS(200)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
+#ifdef GPRS_QUICK_SEND
+     "AT+CIPRXGET=1;+CIPQSEND=1\r\n",
+#else
      "AT+CIPRXGET=1\r\n",
-     &conMgr, 
-     RKH_TIME_MS(300), RKH_TIME_MS(100)},
+#endif
+    &conMgr,
+    RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CCLK?\r\n",
      &conMgr, 
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
+
+    {RKH_INIT_STATIC_EVT(evCmd), 
+     "AT+COPS?\r\n",
+     &conMgr, 
+     RKH_TIME_MS(2000), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CGSOCKCONT=1,\"IP\",\"%s\"\r\n", 
@@ -124,12 +134,12 @@ static const CmdTbl cmdTbl =
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSTATUS\r\n", 
+     "AT+IPADDR;+CSQ\r\n", 
      &conMgr, 
      RKH_TIME_MS(100), RKH_TIME_MS(100)},
 
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSTART=\"%s\",\"%s\",\"%s\"\r\n", 
+     "AT+CIPOPEN=0,\"%s\",\"%s\",%s\r\n", 
      &conMgr, 
      RKH_TIME_MS(1000), RKH_TIME_MS(300)},
 
@@ -146,7 +156,11 @@ static const CmdTbl cmdTbl =
     {RKH_INIT_STATIC_EVT(evCmd), 
      "\x1A\r\n", 
      &conMgr, 
+#ifdef GPRS_QUICK_SEND
      RKH_TIME_MS(10000), RKH_TIME_MS(100)},
+#else
+     RKH_TIME_MS(1000), RKH_TIME_MS(100)},
+#endif
 
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CIPRXGET=2,1024\r\n", 
@@ -281,6 +295,12 @@ void
 ModCmd_getLocalTime(void)
 {
     sendModCmd_noArgs(&cmdTbl.getLocalTime);
+}
+
+void 
+ModCmd_getOper(void)
+{
+    sendModCmd_noArgs(&cmdTbl.getOper);
 }
 
 void 

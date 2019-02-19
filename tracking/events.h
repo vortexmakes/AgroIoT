@@ -46,6 +46,11 @@ extern "C" {
 #define SEND_BUFF_SIZE      1024
 #define RECV_BUFF_SIZE      1024
 
+/**
+ *  Oper process definitions
+ */
+#define OPER_LENGTH         10
+#define OPER_BUF_SIZE       OPER_LENGTH + 1
 
 /**
  * Specifies max modCmd length
@@ -108,6 +113,20 @@ struct ImeiEvt
 {
     ModMgrResp e;
     char buf[IMEI_BUF_SIZE];
+};
+
+typedef struct OperEvt OperEvt;
+struct OperEvt
+{
+    ModMgrResp e;
+    char buf[OPER_BUF_SIZE];
+};
+
+typedef struct SigLevelEvt SigLevelEvt;
+struct SigLevelEvt
+{
+    ModMgrResp e;
+    int value;
 };
 
 typedef struct RmcEvt RmcEvt;

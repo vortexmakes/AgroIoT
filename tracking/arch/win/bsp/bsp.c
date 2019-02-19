@@ -54,7 +54,7 @@ RKH_THIS_MODULE
 /* ---------------------------- Global variables --------------------------- */
 SERIAL_T serials[ NUM_CHANNELS ] =
 {
-	{	"COM1",	19200, 8, PAR_NONE, STOP_1, 0 },
+	{	"COM1",	115200, 8, PAR_NONE, STOP_1, 0 },
 	{	"COM2",	9600, 8, PAR_NONE, STOP_1, 0 },
 	{   "COM3",	9600, 8, PAR_NONE, STOP_1, 0 }
 };
@@ -163,7 +163,7 @@ void
 gsm_rx_isr( unsigned char byte )
 {
     gsmCmdParser(byte);
-	//putchar(byte);
+	putchar(byte);
 }
 
 static
@@ -317,6 +317,13 @@ void
 bsp_serial_putchar(int ch, unsigned char c)
 {
     tx_data(ch, c);
+}
+
+void
+bsp_regStatus(Status_t status)
+{
+    printf("\r\nGSM Network %s\r\n", 
+            status == ConnectedSt ? "Registered" : "Unregistered");
 }
 
 void 
