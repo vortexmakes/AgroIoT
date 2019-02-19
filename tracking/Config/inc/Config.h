@@ -55,6 +55,7 @@ struct Config
 Config *Config_init(void);
 Config *config_read(void);
 Config *Config_get(void);
+void Config_set(Config *cfg);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

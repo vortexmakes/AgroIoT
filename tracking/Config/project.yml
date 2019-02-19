@@ -35,6 +35,7 @@
     - ../GStatus/inc
     - ../ffile/source/include
     - ../ffile
+    - ../
   :support:
     - test/support
 
@@ -49,7 +50,7 @@
 
 :cmock:
   :when_no_prototypes: :warn
-  :plugins: [ignore_arg, ignore, callback]
+  :plugins: [ignore_arg, ignore, callback, return_thru_ptr]
   :mock_prefix: Mock_
   :callback_after_arg_check: TRUE
   :when_ptr: :compare_ptr
