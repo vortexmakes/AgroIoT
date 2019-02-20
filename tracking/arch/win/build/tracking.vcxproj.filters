@@ -118,9 +118,6 @@
     <ClCompile Include="..\..\..\gps\rmc.c">
       <Filter>gps</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\config\config.c">
-      <Filter>config</Filter>
-    </ClCompile>
     <ClCompile Include="..\bsp\dIn.c">
       <Filter>bsp</Filter>
     </ClCompile>
@@ -175,6 +172,27 @@
     <ClCompile Include="..\..\..\BatChr\BatChr.c">
       <Filter>BatChr</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Config\src\Config.c">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\YFrame\src\YFrame.c">
+      <Filter>YFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ffile\ffdata.c">
+      <Filter>ffile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ffile\source\devflash.c">
+      <Filter>ffile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ffile\source\ffile.c">
+      <Filter>ffile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ffile\source\rfile.c">
+      <Filter>ffile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ffile\source\portable\80x86\win32\vc08\ffport.c">
+      <Filter>ffile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -219,9 +237,6 @@
     <Filter Include="gps">
       <UniqueIdentifier>{243e14d6-e14a-466e-8ae1-2a7bb8407f63}</UniqueIdentifier>
     </Filter>
-    <Filter Include="config">
-      <UniqueIdentifier>{10e64840-7393-43b6-a09c-6c01898f398f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ioChg">
       <UniqueIdentifier>{9c21e863-2358-4894-9779-22ceacaa20c0}</UniqueIdentifier>
     </Filter>
@@ -257,6 +272,15 @@
     </Filter>
     <Filter Include="BatChr">
       <UniqueIdentifier>{d206c330-ebe9-4e00-98e2-c73f1ec96c02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{1ae70b72-ae2c-4297-9731-4ff3a50554c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YFrame">
+      <UniqueIdentifier>{c7303f78-fcea-4841-a10d-c206e151d2df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ffile">
+      <UniqueIdentifier>{e40ae3e4-a770-4296-80a8-3091c9c728ef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

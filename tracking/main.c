@@ -31,9 +31,10 @@
 #include "sim900parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"
-
 #include "mTime.h"
 #include "epoch.h"
+#include "ffile.h"
+#include "Config.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define TRKCLIENT_QSTO_SIZE 16
@@ -105,6 +106,8 @@ main(int argc, char *argv[])
 
     RKH_TRC_OPEN();
 
+    ffile_init();
+    (void)Config_init();
     signals_publishSymbols();
 
     RKH_TR_FWK_ACTOR(&inChg, "ioChg");

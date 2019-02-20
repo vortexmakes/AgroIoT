@@ -2,13 +2,9 @@
  *  devflash.c
  */
 
+#include <string.h>
 #include "ffile.h"
 #include "devflash.h"
-#include "trktrc.h"
-#include <string.h>
-#include "newslog.h"
-
-#include "genled.h"
 
 #define devflash_is_changed_page(pg) \
     ((pg) != cpage)
@@ -100,7 +96,7 @@ devflash_copy_page(SPG_T destp, SPG_T srcp)
 {
     FFILE_WATCHDOG();
 
-    if (is_ready_to_save_in_flash())
+    if (devflash_is_ready_to_save_in_flash())
     {
         devflash_read_page(srcp);
         devflash_set_page_address(destp);
@@ -210,7 +206,7 @@ devflash_format_pages(SPG_T start_page, SPG_T qty)
 {
     FFILE_WATCHDOG();
 
-    if (is_ready_to_save_in_flash())
+    if (devflash_is_ready_to_save_in_flash())
     {
         devflash_set_page_address(start_page);
 
@@ -228,7 +224,7 @@ devflash_write_data(SA_T desta, SPG_T destp, ffui8_t *data, ffui16_t size)
 {
     FFILE_WATCHDOG();
 
-    if (is_ready_to_save_in_flash())
+    if (devflash_is_ready_to_save_in_flash())
     {
         devflash_read_page(destp);
         memcpy(page_buff.data + desta, data, size);
@@ -285,7 +281,7 @@ devflash_page_dirty(SPG_T page)
 void
 devflash_copy_page_from_buff(SA_T dest_addr)
 {
-    if (is_ready_to_save_in_flash())
+    if (devflash_is_ready_to_save_in_flash())
     {
         flash_write_page(dest_addr, &page_buff);
     }
@@ -315,4 +311,11 @@ devflash_restore_directory(ffui8_t *status)
 #endif
     return page_buff.data;
 }
+
+int
+devflash_is_ready_to_save_in_flash(void)
+{
+    return 1;
+}
+
 /* ------------------------------ End of file ------------------------------ */

@@ -18,6 +18,8 @@
 
 #ifndef __FFILECFG_H__
 
+#include "ffplat.h"
+
 /**
  *	Size of sector flash in bytes.
  */

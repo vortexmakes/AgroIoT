@@ -55,8 +55,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\third-party\rkh\source\fwk\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\mempool\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\queue\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sm\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sma\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\tmr\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\trc\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\;$(ProjectDir)..\..\..\..\third-party\ssp\src;$(ProjectDir)..\bsp;$(ProjectDir)..\bsp\serial;$(ProjectDir)..\..\..;$(ProjectDir)..\..\..\parser\sim900;$(ProjectDir)..\..\..\parser\ubxm8;$(ProjectDir)..\..\..\modpwr;$(ProjectDir)..\..\..\geoMgr;$(ProjectDir)..\..\..\modcmd;$(ProjectDir)..\..\..\conmgr;$(ProjectDir)..\..\..\CommMgr;$(ProjectDir)..\..\..\epoch;$(ProjectDir)..\..\..\gps;$(ProjectDir)..\..\..\date;$(ProjectDir)..\..\..\rtime;$(ProjectDir)..\..\..\mTime;$(ProjectDir)..\..\..\config;$(ProjectDir)..\..\..\ioChg;$(ProjectDir)..\..\..\modmgr;$(ProjectDir)..\..\..\DeviceServer;$(ProjectDir)..\..\..\tpsens\cbox;$(ProjectDir)..\..\..\tpsens\ps;$(ProjectDir)..\..\..\tpsens\tplink;$(ProjectDir)..\..\..\device\inc;$(ProjectDir)..\..\..\collector;$(ProjectDir)..\..\..\BatChr;$(ProjectDir)..\..\..\topic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;__W32STVC__;CIPSHUT_ON_INIT;MODPWR_CTRL_ENABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\third-party\rkh\source\fwk\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\mempool\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\queue\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sm\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sma\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\tmr\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\trc\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\;$(ProjectDir)..\..\..\..\third-party\ssp\src;$(ProjectDir)..\bsp;$(ProjectDir)..\bsp\serial;$(ProjectDir)..\..\..;$(ProjectDir)..\..\..\parser\sim900;$(ProjectDir)..\..\..\parser\ubxm8;$(ProjectDir)..\..\..\modpwr;$(ProjectDir)..\..\..\geoMgr;$(ProjectDir)..\..\..\modcmd;$(ProjectDir)..\..\..\conmgr;$(ProjectDir)..\..\..\CommMgr;$(ProjectDir)..\..\..\epoch;$(ProjectDir)..\..\..\gps;$(ProjectDir)..\..\..\date;$(ProjectDir)..\..\..\rtime;$(ProjectDir)..\..\..\mTime;$(ProjectDir)..\..\..\Config\inc;$(ProjectDir)..\..\..\ioChg;$(ProjectDir)..\..\..\modmgr;$(ProjectDir)..\..\..\DeviceServer;$(ProjectDir)..\..\..\tpsens\cbox;$(ProjectDir)..\..\..\tpsens\ps;$(ProjectDir)..\..\..\tpsens\tplink;$(ProjectDir)..\..\..\device\inc;$(ProjectDir)..\..\..\collector;$(ProjectDir)..\..\..\BatChr;$(ProjectDir)..\..\..\topic;$(ProjectDir)..\..\..\ffile;$(ProjectDir)..\..\..\ffile\source\portable\80x86\win32\vc08;$(ProjectDir)..\..\..\ffile\source\include;$(ProjectDir)..\..\..\YFrame\inc;$(ProjectDir)..\..\..\GStatus\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;__W32STVC__;CIPSHUT_ON_INIT;MODPWR_CTRL_ENABLE; __W32VC08__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -114,13 +114,18 @@
     <ClCompile Include="..\..\..\BatChr\BatChr.c" />
     <ClCompile Include="..\..\..\collector\collector.c" />
     <ClCompile Include="..\..\..\CommMgr\CommMgr.c" />
-    <ClCompile Include="..\..\..\config\config.c" />
+    <ClCompile Include="..\..\..\Config\src\Config.c" />
     <ClCompile Include="..\..\..\conmgr\conmgr.c" />
     <ClCompile Include="..\..\..\date\date.c" />
     <ClCompile Include="..\..\..\deviceServer\deviceServer.c" />
     <ClCompile Include="..\..\..\device\src\device.c" />
     <ClCompile Include="..\..\..\device\src\sprayer.c" />
     <ClCompile Include="..\..\..\epoch\epoch.c" />
+    <ClCompile Include="..\..\..\ffile\ffdata.c" />
+    <ClCompile Include="..\..\..\ffile\source\devflash.c" />
+    <ClCompile Include="..\..\..\ffile\source\ffile.c" />
+    <ClCompile Include="..\..\..\ffile\source\portable\80x86\win32\vc08\ffport.c" />
+    <ClCompile Include="..\..\..\ffile\source\rfile.c" />
     <ClCompile Include="..\..\..\geoMgr\geoMgr.c" />
     <ClCompile Include="..\..\..\gps\Geo.c" />
     <ClCompile Include="..\..\..\gps\rmc.c" />
@@ -141,6 +146,7 @@
     <ClCompile Include="..\..\..\tpsens\tplink\tplhal.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tplink.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tpltbl.c" />
+    <ClCompile Include="..\..\..\YFrame\src\YFrame.c" />
     <ClCompile Include="..\bsp\assert.c" />
     <ClCompile Include="..\bsp\bsp.c" />
     <ClCompile Include="..\bsp\dIn.c" />

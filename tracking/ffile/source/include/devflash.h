@@ -23,6 +23,7 @@ ffui8_t devflash_verify_page(SPG_T page);
 ffui8_t *devflash_page_dump(SPG_T page);
 void devflash_page_dirty(SPG_T page);
 void devflash_read_page(SPG_T page);
+int devflash_is_ready_to_save_in_flash(void);
 
 #endif
 /* ------------------------------ End of file ------------------------------ */

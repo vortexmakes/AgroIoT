@@ -2,13 +2,10 @@
  *  rfile.c
  */
 
+#include <string.h>
 #include "ffile.h"
 #include "devflash.h"
 #include "ffdata.h"
-#include "trktrc.h"
-#include "genled.h"
-#include "newslog.h"
-#include <string.h>
 
 static FFILE_T dir[NUM_FLASH_FILES];
 static SA_T reg_addr;
@@ -18,7 +15,7 @@ void
 rfile_file_format(FFILE_T *pf)
 {
     FFDBG_FILE_FORMAT(pf);
-    if (is_ready_to_save_in_flash())
+    if (devflash_is_ready_to_save_in_flash())
     {
         devflash_format_pages(pf->begin_page, pf->num_pages);
         pf->pos_qty = pf->pos = pf->in = pf->out = pf->qty = 0;
@@ -46,7 +43,7 @@ rfile_init_directory(void)
             if (devflash_verify_page(page + pf->begin_page) == PAGE_BAD)
             {
                 ++page_error;
-/*				set_led( LED_BATT, LSTAGE1 ); */
+                /*set_led( LED_BATT, LSTAGE1 );*/
             }
             else
             {
@@ -59,7 +56,7 @@ rfile_init_directory(void)
             if (pf->page_error == pf->num_pages)
             {
                 rfile_file_format(pf);
-                trace_evt(file + TRC_FFD0_FORMAT);
+                /*trace_evt(file + TRC_FFD0_FORMAT);*/
             }
         }
         #endif
@@ -68,8 +65,8 @@ rfile_init_directory(void)
 
     if (r == DIR_BAD)
     {
-        trace_evt(TRC_DFLSH_DIR_BAD);
-        set_led(LED_SMS, LSTAGE4);
+        /*trace_evt(TRC_DFLSH_DIR_BAD);*/
+        /*set_led(LED_SMS, LSTAGE4);*/
     }
 }
 
@@ -79,7 +76,7 @@ rfile_update_directory(FFILE_T *pf)
     SA_T da;
     ffui8_t *sa;
     ffui8_t nfiles;
-    if (is_ready_to_save_in_flash())
+    if (devflash_is_ready_to_save_in_flash())
     {
         if (pf != (FFILE_T *)0)
         {

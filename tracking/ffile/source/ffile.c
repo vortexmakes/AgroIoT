@@ -3,7 +3,6 @@
  */
 
 #include "ffile.h"
-#include "gps.h"
 
 static RACC_T ra;
 

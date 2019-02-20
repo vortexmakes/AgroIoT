@@ -4,7 +4,8 @@
 
 #include "ffile.h"
 #include "ffdata.h"
-#include "gps.h"
+#include "GStatus.h"
+#include "Config.h"
 
 /*
  *  The memory layout of file flash system is wired, the
@@ -67,6 +68,7 @@ CREATE_DIR =
                  RFILE_TYPE,
                  FF1_NUM_PAGES,   /* 1 */
                  FF1_BEGIN_PAGE,   /* 8189 */
-                 sizeof(CONF_STR))
+                 sizeof(Config))
 };
+
 /* ------------------------------ End of file ------------------------------ */
