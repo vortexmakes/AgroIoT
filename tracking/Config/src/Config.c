@@ -77,6 +77,7 @@ Config_init(void)
         if (cfgObj.status != 1)
         {
             cfg = (Config *)&cfgDft;
+            Config_set(cfg);
         }
         else
         {
@@ -86,8 +87,8 @@ Config_init(void)
     else
     {
         cfg = (Config *)&cfgDft;
+        Config_set(cfg);
     }
-    Config_set(cfg);
     return cfg;
 }
 

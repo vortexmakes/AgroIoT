@@ -122,12 +122,6 @@ test_InitWithStoredSettings(void)
 	ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 1);
     ffile_random_access_IgnoreArg_preg();
     ffile_random_access_ReturnThruPtr_preg(&cfgFile);
-    rkh_enter_critical_Expect();
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, 0, 1, 1);
-    ffile_random_access_IgnoreArg_preg();
-	ffile_sync_Expect();
-    rkh_exit_critical_Expect();
 
     cfg = Config_init();
 
