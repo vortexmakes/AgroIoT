@@ -33,20 +33,17 @@
 ruint sim5320parser;
 
 /* ---------------------------- Local variables ---------------------------- */
-SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_cgs,
-                     at_plus_ci, at_plus_cip, at_plus_cips, 
+SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_cga,
+                     at_plus_cgs, at_plus_ci, at_plus_cip, at_plus_cips, 
                      at_plus_cipsta, at_plus_ciprxget,
                      at_plus_ciprxget_2, at_plus_ciprxget_2_wdata,
-                     at_plus_cipstatus, at_plus_cipstatus_ip,
-                     at_plus_cipstatus_sta, 
-                     at_plus_cipstatus_c, at_plus_cipstatus_connect,
-                     at_plus_cipopen,
-                     at_plus_cipclose,
+                     at_plus_cipstatus, at_plus_cipstatus_status,
+                     at_plus_cipopen, at_plus_cipclose,
                      at_plus_cipsend, at_plus_cipsending, at_plus_cipsent,
                      at_plus_cpin, at_plus_creg, pinStatus, wpinSet, pinSet,
                      plus_c, plus_creg, at_plus_cipstatus, at_plus_cifsr,
                      netClockSync,
-                     at_plus_cclk, at_plus_netopen, at_plus_ipaddr, 
+                     at_plus_cclk, w_netopen, at_plus_ipaddr, 
                      at_plus_cops, cclk_end;
 
 SSP_DCLR_TRN_NODE at_plus_ciprxget_data, cclk_year, cclk_month, cclk_day,
@@ -134,7 +131,7 @@ SSP_CREATE_BR_TABLE(rootCmdParser)
 	SSPBR("+C",         NULL,     &plus_c),
 	SSPBR("*PSUTTZ",    isURC_set, &netClockSync),
 	SSPBR("OPL DONE",   NULL,     &rootCmdParser),
-	SSPBR("SMS DONE",   debug,     &rootCmdParser),
+	SSPBR("SMS DONE",   NULL,     &rootCmdParser),
 	SSPBR("PNN DONE",   NULL,      &rootCmdParser),
 	SSPBR("VOICEMAIL:", NULL,     &rootCmdParser),
 SSP_END_BR_TABLE
@@ -148,7 +145,6 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus);
 SSP_CREATE_BR_TABLE(at_plus)
-	SSPBR("NETOPEN\r\n", NULL,      &at_plus_netopen),
 	SSPBR("IPADDR",      NULL,      &at_plus_ipaddr),
 	SSPBR("C",           NULL,      &at_plus_c),
 	SSPBR("OK\r\n",      cmd_ok,    &rootCmdParser),
@@ -168,8 +164,15 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_cg);
 SSP_CREATE_BR_TABLE(at_plus_cg)
+	SSPBR("A",            NULL,     &at_plus_cga),
 	SSPBR("S",            NULL,     &at_plus_cgs),
-	SSPBR("ACT=0,1\r\n",  NULL,     &waitOK),
+	SSPBR("\r\n",         NULL,     &rootCmdParser),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_cga);
+SSP_CREATE_BR_TABLE(at_plus_cga)
+	SSPBR("TT=1",         NULL,     &w_netopen),
+	SSPBR("CT=0,1\r\n",   NULL,     &waitOK),
 	SSPBR("\r\n",         NULL,     &rootCmdParser),
 SSP_END_BR_TABLE
 
@@ -205,17 +208,17 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_cipsta);
 SSP_CREATE_BR_TABLE(at_plus_cipsta)
-	SSPBR("TUS\r\n",      NULL,  &at_plus_cipstatus),
-	SSPBR("\r\n",         NULL,  &rootCmdParser),
+	SSPBR("TUS=0;+CSQ\r\n", NULL,  &at_plus_cipstatus),
+	SSPBR("\r\n",           NULL,  &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */
 /* ---------------------------- AT+CPIN --------------------------- */
 SSP_CREATE_NORMAL_NODE(at_plus_cpin);
 SSP_CREATE_BR_TABLE(at_plus_cpin)
-	SSPBR("?\r\n",    debug,  &pinStatus),
-	SSPBR("=",            NULL,  &wpinSet),
-	SSPBR("\r\n",         NULL,  &rootCmdParser),
+	SSPBR("?\r\n",    NULL,  &pinStatus),
+	SSPBR("=",        NULL,  &wpinSet),
+	SSPBR("\r\n",     NULL,  &rootCmdParser),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(pinStatus);
@@ -284,11 +287,10 @@ SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */
 /* ------------------------ AT+NETOPEN --------------------------- */
-SSP_CREATE_NORMAL_NODE(at_plus_netopen);
-SSP_CREATE_BR_TABLE(at_plus_netopen)
+SSP_CREATE_NORMAL_NODE(w_netopen);
+SSP_CREATE_BR_TABLE(w_netopen)
     SSPBR("+NETOPEN: 0",   cmd_ok,  &rootCmdParser),
-    SSPBR("OK",        NULL,    &at_plus_netopen),
-    SSPBR("ERROR",     NULL,    &rootCmdParser),
+    SSPBR("ERROR",         NULL,    &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */
@@ -327,7 +329,7 @@ SSP_END_BR_TABLE
 SSP_CREATE_NORMAL_NODE(at_plus_ciprxget_2);
 SSP_CREATE_BR_TABLE(at_plus_ciprxget_2)
     SSPBR("ERROR",             cmd_error, &rootCmdParser),
-	SSPBR("+CIPRXGET: 2",      NULL,   &at_plus_ciprxget_2_wdata),
+	SSPBR("+CIPRXGET: 2",      debug/*NULL*/,   &at_plus_ciprxget_2_wdata),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_ciprxget_2_wdata);
@@ -352,33 +354,15 @@ SSP_END_BR_TABLE
 /* ------------------------ AT+CIPSTATUS ------------------------- */
 SSP_CREATE_NORMAL_NODE(at_plus_cipstatus);
 SSP_CREATE_BR_TABLE(at_plus_cipstatus)
-	SSPBR("IP ",    NULL,  &at_plus_cipstatus_ip),
-	SSPBR("C",      NULL,  &at_plus_cipstatus_c),
+	SSPBR("STATUS: ",   NULL,      &at_plus_cipstatus_status),
+	SSPBR("ERROR: ",    ipInitial, &rootCmdParser),
 SSP_END_BR_TABLE
 
-SSP_CREATE_NORMAL_NODE(at_plus_cipstatus_ip);
-SSP_CREATE_BR_TABLE(at_plus_cipstatus_ip)
-	SSPBR("INITIAL",    ipInitial,  &rootCmdParser),
-	SSPBR("STA",        NULL,       &at_plus_cipstatus_sta),
-	SSPBR("GPRSACT",    ipGprsAct,  &rootCmdParser),
-SSP_END_BR_TABLE
-
-SSP_CREATE_NORMAL_NODE(at_plus_cipstatus_sta);
-SSP_CREATE_BR_TABLE(at_plus_cipstatus_sta)
-	SSPBR("TUS",     ipStatus,   &rootCmdParser),
-	SSPBR("RT",      ipStart,    &rootCmdParser),
-SSP_END_BR_TABLE
-
-SSP_CREATE_NORMAL_NODE(at_plus_cipstatus_c);
-SSP_CREATE_BR_TABLE(at_plus_cipstatus_c)
-	SSPBR("LOSED",     closed,     &rootCmdParser),
-	SSPBR("ONNECT",    NULL,       &at_plus_cipstatus_connect),
-SSP_END_BR_TABLE
-
-SSP_CREATE_NORMAL_NODE(at_plus_cipstatus_connect);
-SSP_CREATE_BR_TABLE(at_plus_cipstatus_connect)
-	SSPBR("ING",     connecting,     &rootCmdParser),
-	SSPBR(" OK",     connected,      &rootCmdParser),
+SSP_CREATE_NORMAL_NODE(at_plus_cipstatus_status);
+SSP_CREATE_BR_TABLE(at_plus_cipstatus_status)
+	SSPBR("0",    closed,  &rootCmdParser),
+	SSPBR("1",    connected,     &rootCmdParser),
+	SSPBR("\r\n", NULL,          &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */
@@ -405,7 +389,7 @@ SSP_CREATE_BR_TABLE(at_plus_cipsent)
 #ifdef GPRS_QUICK_SEND
     SSPBR("DATA ACCEPT", cmd_ok,  &rootCmdParser),
 #else
-    SSPBR("SEND OK\r\n", cmd_ok,  &rootCmdParser),
+    SSPBR("+CIPSEND", cmd_ok,  &rootCmdParser),
 #endif
 SSP_END_BR_TABLE
 

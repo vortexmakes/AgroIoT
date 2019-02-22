@@ -44,7 +44,10 @@ RKH_THIS_MODULE
 #define ESC                 0x1B
 #define TRK_CFG_OPTIONS     "st:f:p:m:g:c:h"
 
-#define TEST_TX_PACKET      "----o Ping"
+#define YIPIES_TEST_FRAME   "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
+							"000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
+
+#define TEST_TX_PACKET       YIPIES_TEST_FRAME
 #define TEST_RX_PACKET      "o---- Pong"
 
 #define NUM_AN_SAMPLES_GET  10

@@ -45,6 +45,7 @@ struct CmdTbl
     ModCmd setAPN;
     ModCmd startNetwork;
     ModCmd requestIP;
+    ModCmd getIpStatus;
     ModCmd getConnStatus;
     ModCmd connect;
     ModCmd disconnect;
@@ -59,46 +60,55 @@ static SSP sim5320Parser;
 
 static const CmdTbl cmdTbl =
 {
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    /* sync */
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT\r\n", 
      &conMgr, 
      RKH_TIME_MS(2000), RKH_TIME_MS(100)},
 
+    /* initStr */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "ATE1+CREG=1;+STK=0\r\n",
      &conMgr, 
      RKH_TIME_MS(5000), RKH_TIME_MS(5000)},
 
+    /* getPinStatus */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CPIN?\r\n", 
      &conMgr, 
      RKH_TIME_MS(1500), RKH_TIME_MS(100)},
 
+    /* setPin */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CPIN=%d\r\n", 
      &conMgr, 
      RKH_TIME_MS(500), RKH_TIME_MS(100)},
 
+    /* getRegStatus */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CREG?;+CSQ\r\n", 
      &conMgr, 
      RKH_TIME_MS(300), RKH_TIME_MS(500)},
 
+    /* enableNetTime */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CTZR=1;+COPS=3,2\r\n",
      &conMgr, 
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
+    /* getImei */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CGSN\r\n",
      &conMgr, 
      RKH_TIME_MS(500), RKH_TIME_MS(100)},
 
+    /* cipShutdown */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CGACT=0,1\r\n",
      &conMgr, 
      RKH_TIME_MS(3000), RKH_TIME_MS(200)},
 
+    /* setManualGet */
     {RKH_INIT_STATIC_EVT(evCmd), 
 #ifdef GPRS_QUICK_SEND
      "AT+CIPRXGET=1;+CIPQSEND=1\r\n",
@@ -108,51 +118,67 @@ static const CmdTbl cmdTbl =
     &conMgr,
     RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
+    /* getLocalTime */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CCLK?\r\n",
      &conMgr, 
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
+    /* getOper */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+COPS?\r\n",
      &conMgr, 
      RKH_TIME_MS(2000), RKH_TIME_MS(100)},
 
+    /* setAPN */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CGSOCKCONT=1,\"IP\",\"%s\"\r\n", 
      &conMgr, 
      RKH_TIME_MS(1000), RKH_TIME_MS(500)},
 
+    /* startNetwork */
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+NETOPEN\r\n", 
+     "AT+CGATT=1;+CGACT=1,1;+NETOPEN\r\n", 
      &conMgr, 
-     RKH_TIME_MS(30000), RKH_TIME_MS(200)},
+     RKH_TIME_MS(10000), RKH_TIME_MS(200)},
 
+    /* requestIP */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CIFSR\r\n", 
      &conMgr, 
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
+    /* getIpStatus */
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+IPADDR;+CSQ\r\n", 
+     "AT+IPADDR\r\n", 
+     &conMgr, 
+     RKH_TIME_MS(1000), RKH_TIME_MS(100)},
+
+    /* getConnStatus */
+    {RKH_INIT_STATIC_EVT(evCmd), 
+     "AT+CIPSTATUS=0;+CSQ\r\n", 
      &conMgr, 
      RKH_TIME_MS(100), RKH_TIME_MS(100)},
 
+    /* connect */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CIPOPEN=0,\"%s\",\"%s\",%s\r\n", 
      &conMgr, 
      RKH_TIME_MS(1000), RKH_TIME_MS(300)},
 
+    /* disconnect */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CIPCLOSE\r\n", 
      &conMgr, 
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
+    /* sendDataRequest */
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSEND=%d\r\n", 
+     "AT+CIPSEND=0,%d\r\n", 
      &conMgr, 
      RKH_TIME_MS(3000), RKH_TIME_MS(100)},
 
+    /* sendData */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "\x1A\r\n", 
      &conMgr, 
@@ -162,8 +188,9 @@ static const CmdTbl cmdTbl =
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 #endif
 
+    /* readData */
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPRXGET=2,1024\r\n", 
+     "AT+CIPRXGET=2,0,1024\r\n", 
      &conMgr, 
      RKH_TIME_MS(3000), RKH_TIME_MS(100)},
 };
@@ -329,6 +356,12 @@ void
 ModCmd_requestIP(void)
 {
     sendModCmd_noArgs(&cmdTbl.requestIP);
+}
+
+void 
+ModCmd_getIpStatus(void)
+{
+    sendModCmd_noArgs(&cmdTbl.getIpStatus);
 }
 
 void 

@@ -105,6 +105,7 @@ static void setupAPN(ConMgr *const me);
 static void startNetwork(ConMgr *const me);
 static void wReopenEntry(ConMgr *const me);
 static void waitRetryConnEntry(ConMgr *const me);
+static void getIpStatus(ConMgr *const me);
 static void getConnStatus(ConMgr *const me);
 static void isConnected(ConMgr *const me);
 static void connectingEntry(ConMgr *const me);
@@ -269,7 +270,7 @@ RKH_CREATE_TRANS_TABLE(ConMgr_enableNetwork)
     RKH_TRREG(evOk,         NULL, NULL, &ConMgr_checkIP),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(ConMgr_checkIP, getConnStatus, NULL, 
+RKH_CREATE_BASIC_STATE(ConMgr_checkIP, getIpStatus, NULL, 
                                                     &ConMgr_configure, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_checkIP)
     RKH_TRREG(evIPGprsAct,  requestIp,    NULL, &ConMgr_checkIP),
@@ -925,6 +926,14 @@ startNetwork(ConMgr *const me)
     (void)me;
 
     ModCmd_startNetwork();
+}
+
+static void
+getIpStatus(ConMgr *const me)
+{
+    (void)me;
+
+    ModCmd_getIpStatus();
 }
 
 static void

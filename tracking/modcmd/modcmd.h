@@ -51,6 +51,7 @@ void ModCmd_getOper(void);
 void ModCmd_setupAPN(char *apn, char *usr, char *nm);
 void ModCmd_startNetwork(void);
 void ModCmd_requestIP(void);
+void ModCmd_getIpStatus(void);
 void ModCmd_getConnStatus(void);
 void ModCmd_connect(char *prot, char *dmn, char *port);
 void ModCmd_disconnect(void);
