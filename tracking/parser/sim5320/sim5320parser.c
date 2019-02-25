@@ -23,7 +23,7 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-#define END_OF_RECV_STR     "\r\nOK\r\n"
+#define END_OF_RECV_STR     "\r\n\r\nOK\r\n"
 #define YEAR2K              2000
 #define LTBUFF_SIZE         5
 #define CSQ_LENGTH          4

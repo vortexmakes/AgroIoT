@@ -231,6 +231,16 @@ bsp_keyParser(int c)
             RKH_SMA_POST_FIFO(conMgr, &e_Close, &bsp);
             break;
 
+		case '1':
+			printf("Module Power ON\r\n");
+			modPwr_on();
+			break;
+
+		case '2':
+			printf("Module Power OFF\r\n");
+			modPwr_off();
+			break;
+
         case 'r':
             printf("Read GPRS Socket\r\n");
             RKH_SMA_POST_FIFO(conMgr, &e_Recv, &bsp);

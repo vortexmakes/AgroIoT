@@ -34,8 +34,8 @@
         }
 
 /* ------------------------------- Constants ------------------------------- */
-#define SIM53200_PWR_ON_TIME     (200/(100/MTIME_TIME_TICK))
-#define SIM53200_PWR_OFF_TIME    (1000/(100/MTIME_TIME_TICK))
+#define SIM53200_PWR_ON_TIME     (20/(100/MTIME_TIME_TICK))
+#define SIM53200_PWR_OFF_TIME    (100/(100/MTIME_TIME_TICK))
 
 /* ---------------------------- Local data types --------------------------- */
 typedef enum ModPwrStates
