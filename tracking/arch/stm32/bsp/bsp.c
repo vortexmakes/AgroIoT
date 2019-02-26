@@ -202,6 +202,13 @@ bsp_serial_putchar(int ch, unsigned char c)
     HAL_UART_Transmit(pUart, &c, 1, 100);
 }
 
+void
+bsp_regStatus(Status_t status)
+{
+//    printf("\r\nGSM Network %s\r\n", 
+//            status == ConnectedSt ? "Registered" : "Unregistered");
+}
+
 void 
 bsp_netStatus(Status_t status)
 {
