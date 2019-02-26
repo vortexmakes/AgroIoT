@@ -34,8 +34,8 @@
         }
 
 /* ------------------------------- Constants ------------------------------- */
-#define SIM53200_PWR_ON_TIME     (20/(100/MTIME_TIME_TICK))
-#define SIM53200_PWR_OFF_TIME    (100/(100/MTIME_TIME_TICK))
+#define SIM53200_PWR_ON_TIME     (200/MTIME_MODPWR_SCAN_PERIOD)
+#define SIM53200_PWR_OFF_TIME    (2000/MTIME_MODPWR_SCAN_PERIOD)
 
 /* ---------------------------- Local data types --------------------------- */
 typedef enum ModPwrStates
@@ -55,9 +55,9 @@ void
 ModemPwrOn(ruint b)
 {
     if(b)
-        reset_dtr(GSM_PORT);
+		reset_dtr(GSM_PORT);
     else
-        set_dtr(GSM_PORT);
+		set_dtr(GSM_PORT);
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -99,6 +99,15 @@ void
 modPwr_on(void)
 {
     ModemPwrOn_toggle(SIM53200_PWR_ON_TIME);
+}
+
+void
+modPwr_OffNow(void)
+{
+	ModemPwrOn(0);
+	Sleep(SIM53200_PWR_OFF_TIME*MTIME_MODPWR_SCAN_PERIOD);
+	ModemPwrOn(1);
+	Sleep(100);
 }
 
 #endif

@@ -54,9 +54,9 @@ static void(* const actions_10000[])( void ) =
 
 const timerChain_t timerChain[] =
 {
-	{ MTIME_EPOCH_SCAN_PERIOD, actions_100 },
-	{ MTIME_1SEC_SCAN_PERIOD, actions_1000 },
-	{ MTIME_10SEC_SCAN_PERIOD, actions_10000 }
+	{ MTIME_100MSEC/MTIME_TIME_TICK, actions_100 },
+	{ MTIME_1SEC/MTIME_TIME_TICK, actions_1000 },
+	{ MTIME_10SEC/MTIME_TIME_TICK, actions_10000 }
 };
 
 /* ----------------------- Local function prototypes ----------------------- */

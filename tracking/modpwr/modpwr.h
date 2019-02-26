@@ -35,6 +35,7 @@ void modPwr_init(void);
 void modPwr_ctrl(void);
 void modPwr_on(void);
 void modPwr_off(void);
+void modPwr_OffNow(void);
 
 #else
 
@@ -42,6 +43,7 @@ void modPwr_off(void);
 #define modPwr_ctrl();
 #define modPwr_on();
 #define modPwr_off();
+#define modPwr_OffNow();
 
 #endif
 

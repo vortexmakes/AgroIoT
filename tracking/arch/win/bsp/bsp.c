@@ -277,24 +277,25 @@ bsp_serial_open(int ch)
         case GSM_PORT:
             gsmCmdParser = ModCmd_init();
 			init_serial_hard(ch, &gsm_ser_cback);
-            break;
+			connect_serial(ch);
+			modPwr_OffNow();
+			break;
 
         case GPS_PORT:
             gpsParser = NULL;
 			init_serial_hard(ch, &gps_ser_cback);
+			connect_serial(ch);
 			break;
 
 		case TPSENS_PORT:
 			init_serial_hard(ch, &tplink_cback);
+			connect_serial(ch);
 			break;
 
 		default:
 			break;
     }
         
-    connect_serial(ch);
-	set_dtr(ch);
-	Sleep(500);
     RKH_TR_FWK_ACTOR(&bsp, "bsp");
 }
 
