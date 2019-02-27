@@ -20,6 +20,7 @@
 #include "cubemx.h"
 #include "modpwr.h"
 #include "mTimeCfg.h"
+#include "genled.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define ModemPowerEnable(b) HAL_GPIO_WritePin(MODEM_PWR_ENABLE_GPIO_Port, \
@@ -32,13 +33,27 @@
         { \
 			RKH_SR_ALLOC(); \
             RKH_ENTER_CRITICAL_(); \
-            counter = SIM900_PWR_TIME; \
+            counter = SIM5320_PWR_OFF_TIME; \
             state = Toggling; \
             RKH_EXIT_CRITICAL_(); \
         }
 
+#define ModemSimSelect(b)   \
+        { \
+            HAL_GPIO_WritePin(SIM_SELECT_GPIO_Port, \
+                              SIM_SELECT_Pin, b); \
+            simSelection = b; \
+        }
+
+#define ModemSimChange()    \
+        { \
+            HAL_GPIO_TogglePin(SIM_SELECT_GPIO_Port, \
+                               SIM_SELECT_Pin); \
+            simSelection ^= 1; \
+        }
+
 /* ------------------------------- Constants ------------------------------- */
-#define SIM900_PWR_TIME     (1000/(100/MTIME_TIME_TICK))
+#define SIM5320_PWR_OFF_TIME     (200/MTIME_MODPWR_SCAN_PERIOD)
 
 /* ---------------------------- Local data types --------------------------- */
 typedef enum ModPwrStates
@@ -49,7 +64,7 @@ typedef enum ModPwrStates
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static ruint state, counter;
+static ruint state, counter, simSelection;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -60,6 +75,8 @@ void
 modPwr_init(void)
 {
     state = OnOff;
+
+    ModemSimSelect(0);
 }
 
 void
@@ -86,6 +103,10 @@ void
 modPwr_off(void)
 {
     ModemPowerEnable(0);
+
+    ModemSimChange();
+
+    set_led( LED_SIM, simSelection ? LSTAGE2 : LSTAGE1 );
 }
 
 void
@@ -94,6 +115,8 @@ modPwr_on(void)
     ModemPowerEnable(1);
 
     ModemPwrOn_toggle();
+
+    set_led( LED_SIM, simSelection ? LSTAGE2 : LSTAGE1 );
 }
 
 #endif

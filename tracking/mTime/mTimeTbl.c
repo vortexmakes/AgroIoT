@@ -20,8 +20,12 @@
 #include "mTimeCfg.h"
 #include "epoch.h"
 #include "modpwr.h"
+//#include "seqchbak.h"
 //#include "dIn.h"
 //#include "dOut.h"
+
+#include "mytypes.h"
+MUInt sequence_interrupt( void );
 
 void dIn_scan(void);
 void dOut_process(void);
@@ -33,10 +37,11 @@ void dOut_process(void);
 /* ---------------------------- Local variables ---------------------------- */
 static void(* const actions_100[])( void ) =
 {
+	(void(*)(void))epoch_updateByStep,
 #ifdef MODPWR_CTRL_ENABLE
 	modPwr_ctrl, 
 #endif
-    (void(*)(void))epoch_updateByStep,
+    (void(*)(void))sequence_interrupt,
 	dIn_scan,
     dOut_process,
     NULL

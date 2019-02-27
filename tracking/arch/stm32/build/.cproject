@@ -73,6 +73,7 @@
 									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
+									<listOptionValue builtIn="false" value="../../../../sequence"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1726576784" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -127,9 +128,70 @@
 									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
+									<listOptionValue builtIn="false" value="../../../../sequence"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1379635670" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<folderInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1331245554.1120440684" name="/" resourcePath="app">
+						<toolChain id="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug.554933247" name="Ac6 STM32 MCU GCC" superClass="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug" unusedChildren="">
+							<option id="fr.ac6.managedbuild.option.gnu.cross.mcu.1841453771.966681119" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu.1841453771"/>
+							<option id="fr.ac6.managedbuild.option.gnu.cross.fpu.1910448026.696567436" name="Floating point hardware" superClass="fr.ac6.managedbuild.option.gnu.cross.fpu.1910448026"/>
+							<option id="fr.ac6.managedbuild.option.gnu.cross.floatabi.876715626.1546527560" name="Floating-point ABI" superClass="fr.ac6.managedbuild.option.gnu.cross.floatabi.876715626"/>
+							<option id="fr.ac6.managedbuild.option.gnu.cross.board.1868532290.231942694" name="Board" superClass="fr.ac6.managedbuild.option.gnu.cross.board.1868532290"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="fr.ac6.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="fr.ac6.managedbuild.targetPlatform.gnu.cross"/>
+							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1628974728" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.2101217126">
+								<option id="gnu.c.compiler.option.include.paths.2086077315" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/sm/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/sma/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/tmr/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/trc/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../third-party/ssp/src"/>
+									<listOptionValue builtIn="false" value="../../../../modpwr"/>
+									<listOptionValue builtIn="false" value="../../../../modcmd"/>
+									<listOptionValue builtIn="false" value="../../../../conmgr"/>
+									<listOptionValue builtIn="false" value="../../../../mTime"/>
+									<listOptionValue builtIn="false" value="../../../../epoch"/>
+									<listOptionValue builtIn="false" value="../../../../rtime"/>
+									<listOptionValue builtIn="false" value="../../../../modmgr"/>
+									<listOptionValue builtIn="false" value="../../../../gps"/>
+									<listOptionValue builtIn="false" value="../../../../tpsens/cbox"/>
+									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
+									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../tracking"/>
+									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../device/inc"/>
+									<listOptionValue builtIn="false" value="../../../../collector"/>
+									<listOptionValue builtIn="false" value="../../../../config"/>
+									<listOptionValue builtIn="false" value="../../../../ioChg"/>
+									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
+									<listOptionValue builtIn="false" value="../../../../date"/>
+									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
+									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
+									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
+									<listOptionValue builtIn="false" value="../../../../sequence"/>
+								</option>
+								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.819050743" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
+								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.950737101" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
+							</tool>
+							<tool id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.1397394727" name="MCU G++ Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.874167338"/>
+							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.linker.2001931116" name="MCU GCC Linker" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.linker.428026137"/>
+							<tool id="fr.ac6.managedbuild.tool.gnu.cross.cpp.linker.1836354789" name="MCU G++ Linker" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.linker.1555626191"/>
+							<tool id="fr.ac6.managedbuild.tool.gnu.archiver.1796568488" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver.1549590923"/>
+							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.1629403591" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.1076674029">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.549312719" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.715467808" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
@@ -301,6 +363,7 @@
 									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
+									<listOptionValue builtIn="false" value="../../../../sequence"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.618148146" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -355,6 +418,7 @@
 									<listOptionValue builtIn="false" value="../../../../CommMgr"/>
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
+									<listOptionValue builtIn="false" value="../../../../sequence"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.803142745" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>

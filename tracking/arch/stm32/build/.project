@@ -97,6 +97,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/rtime</locationURI>
 		</link>
 		<link>
+			<name>app/sequence</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sequence</locationURI>
+		</link>
+		<link>
 			<name>app/signals.c</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/signals.c</locationURI>
@@ -160,6 +165,11 @@
 			<name>bsp/rtime.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/bsp/rtime.c</locationURI>
+		</link>
+		<link>
+			<name>bsp/seqlog.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/bsp/seqlog.c</locationURI>
 		</link>
 		<link>
 			<name>bsp/trace_io.c</name>

@@ -33,6 +33,7 @@
 #include "cbox.h"
 
 #include "mTime.h"
+#include "sequence.h"
 #include "epoch.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -96,6 +97,7 @@ main(int argc, char *argv[])
     bsp_init(argc, argv);
 
     epoch_init();
+    init_seqs();
     mTime_init();
 
     rkh_fwk_init();

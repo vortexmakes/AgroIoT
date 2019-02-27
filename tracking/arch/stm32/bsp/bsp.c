@@ -23,7 +23,6 @@
 #include "bsp.h"
 
 #include "signals.h"
-#include "modpwr.h"
 #include "dIn.h"
 #include "dOut.h"
 #include "modmgr.h"
@@ -77,7 +76,6 @@ void
 bsp_timeTick(void)
 {
     ++tstamp;
-    modPwr_ctrl();
     mTime_tick();
 }
 
