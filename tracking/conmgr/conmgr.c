@@ -558,6 +558,7 @@ open(ConMgr *const me, RKH_EVT_T *pe)
 
     RKH_SMA_POST_FIFO(modMgr, &e_Open, conMgr);
 
+    bsp_SIMSelect(MainSIM);
     modPwr_on();
 }
 
@@ -1023,6 +1024,7 @@ failureExit(ConMgr *const me)
 {
     (void)me;
 
+    bsp_SIMChange();
     modPwr_on();
     ModCmd_init();
     rkh_tmr_stop(&me->timer);

@@ -23,6 +23,7 @@
 #include "bsp.h"
 
 #include "signals.h"
+#include "modpwr.h"
 #include "dIn.h"
 #include "dOut.h"
 #include "modmgr.h"
@@ -30,6 +31,7 @@
 #include "conmgr.h"
 #include "mTime.h"
 #include "epoch.h"
+#include "genled.h"
 
 RKH_THIS_MODULE
 
@@ -45,6 +47,7 @@ static rui8_t bsp;
 static RKH_TS_T tstamp;
 static ModCmdRcvHandler gsmCmdParser;
 static GpsRcvHandler    gpsParser;
+static SIMSelect_t      simSelect;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -198,6 +201,30 @@ bsp_serial_putchar(int ch, unsigned char c)
     }
     
     HAL_UART_Transmit(pUart, &c, 1, 100);
+}
+
+void 
+bsp_SIMSelect(SIMSelect_t sim)
+{
+    simSelect = sim;
+
+    HAL_GPIO_WritePin(SIM_SELECT_GPIO_Port,
+                              SIM_SELECT_Pin, 
+                              sim == MainSIM ? 0 : 1);
+
+    set_led( LED_SIM, simSelect ? LSTAGE2 : LSTAGE1 );
+}
+
+void
+bsp_SIMChange(void)
+{
+    simSelect = (simSelect == MainSIM) ? SecSIM : MainSIM;
+
+    HAL_GPIO_WritePin(SIM_SELECT_GPIO_Port,
+                              SIM_SELECT_Pin, 
+                              simSelect == MainSIM ? 0 : 1);
+
+    set_led( LED_SIM, simSelect ? LSTAGE2 : LSTAGE1 );
 }
 
 void
