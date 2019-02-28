@@ -39,7 +39,7 @@ typedef struct ConMgr ConMgr;
 RKH_DCLR_BASIC_STATE ConMgr_inactive, ConMgr_sync,
                 ConMgr_init, ConMgr_pin, ConMgr_setPin, ConMgr_enableNetTime,
                 ConMgr_getImei, ConMgr_cipShutdown, ConMgr_setManualGet,
-                ConMgr_waitReg, ConMgr_unregistered, ConMgr_failure,
+                ConMgr_unregistered, ConMgr_failure,
                 ConMgr_waitNetClockSync, ConMgr_localTime, ConMgr_getOper,
                 ConMgr_setAPN, ConMgr_enableNetwork,
                 ConMgr_checkIP, ConMgr_waitRetryConfig, ConMgr_waitingServer,
@@ -764,6 +764,7 @@ recvOk(ConMgr *const me, RKH_EVT_T *pe)
 
     rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_Received), 
                                      RKH_UPCAST(RKH_SMA_T, me));
+    bsp_recvOk();
 }
 
 static void
@@ -811,6 +812,8 @@ sendInit(ConMgr *const me)
 {
     (void)me;
 
+    bsp_GSMModemFound();
+
     ModCmd_initStr();
 }
 
@@ -834,6 +837,8 @@ static void
 netTimeEnable(ConMgr *const me)
 {
     (void)me;
+
+    bsp_SIMReady();
 
     ModCmd_enableNetTime();
 }

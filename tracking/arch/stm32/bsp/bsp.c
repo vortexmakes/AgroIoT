@@ -204,6 +204,18 @@ bsp_serial_putchar(int ch, unsigned char c)
 }
 
 void 
+bsp_GSMModemFound(void)
+{
+    set_led(LED_GSM, LSTAGE1);
+}
+
+void 
+bsp_SIMReady(void)
+{
+    set_led(LED_GSM, LSTAGE2);
+}
+
+void 
 bsp_SIMSelect(SIMSelect_t sim)
 {
     simSelect = sim;
@@ -212,7 +224,7 @@ bsp_SIMSelect(SIMSelect_t sim)
                               SIM_SELECT_Pin, 
                               sim == MainSIM ? 0 : 1);
 
-    set_led( LED_SIM, simSelect ? LSTAGE2 : LSTAGE1 );
+    set_led(LED_SIM, simSelect ? LSTAGE2 : LSTAGE1);
 }
 
 void
@@ -226,27 +238,37 @@ bsp_SIMChange(void)
 void
 bsp_regStatus(Status_t status)
 {
-//    printf("\r\nGSM Network %s\r\n", 
-//            status == ConnectedSt ? "Registered" : "Unregistered");
+    set_led(LED_GSM, status == RegisteredSt ? LSTAGE3 : LSTAGE2);
 }
 
 void 
 bsp_netStatus(Status_t status)
 {
-//    printf("\r\nGprs Socket %s\r\n", 
-//            status == ConnectedSt ? "Connected" : "Disconnected");
+    set_led(LED_GSM, status == ConnectedSt ? LSTAGE4 : LSTAGE3);
 }
 
 void 
 bsp_sendFail(void)
 {
-//    printf("\r\nGprs Socket Sending Failure\r\n"); 
+    set_led(LED_GSM, LSTAGE4);
 }
 
 void 
 bsp_recvFail(void)
 {
-//    printf("\r\nGprs Socket Receiving Failure\r\n"); 
+    set_led(LED_GSM, LSTAGE4);
+}
+
+void 
+bsp_recvOk(void)
+{
+    set_led(LED_GSM, LIT);
+}
+
+void 
+bsp_GPSStatus(char status)
+{
+    set_led(LED_GPS, status == RMC_StatusValid ? LIT : LSTAGE2);
 }
 
 void

@@ -87,15 +87,16 @@ void bsp_serial_puts(int ch, char *p);
 void bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata);
 void bsp_serial_putchar(int ch, unsigned char c);
 
+void bsp_GSMModemFound(void);
+void bsp_SIMReady(void);
 void bsp_SIMSelect(SIMSelect_t sim);
 void bsp_SIMChange();
-
 void bsp_netStatus(Status_t status);
 void bsp_regStatus(Status_t status);
-
-
 void bsp_sendFail(void);
 void bsp_recvFail(void);
+void bsp_recvOk(void);
+void bsp_GPSStatus(char status);
 
 void bsp_gpsParserHandler_set(void *p);
 

@@ -49,16 +49,13 @@ enum
  * 	Minor indices
  */
 
-enum
-{
-    LED_POWER,
-    LED_GSM,
-    LED_STORAGE,
-    LED_GPS,
-    LED_WORK,
-    LED_SIM,
-	NUM_LEDS_CHN
-};
+#define LED_POWER       0x02
+#define LED_GSM         0x04
+#define LED_STORAGE     0x08
+#define LED_GPS         0x10
+#define LED_WORK        0x20
+#define LED_SIM         0x40
+#define NUM_LEDS_CHN    6
 	
 /*
  * 	Major indices
