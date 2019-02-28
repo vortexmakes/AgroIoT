@@ -865,7 +865,7 @@ unregEntry(ConMgr *const me)
     ModCmd_getRegStatus();
 
     RKH_SET_STATIC_EVENT(&e_tout, evTimeout);
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), CHECK_REG_PERIOD);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), RKH_TIME_MS(2000));
 
     RKH_SET_STATIC_EVENT(&e_regTout, evRegTimeout);
     RKH_TMR_ONESHOT(&me->timerReg, RKH_UPCAST(RKH_SMA_T, me), REGISTRATION_TIME);

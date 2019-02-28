@@ -227,6 +227,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/parser</locationURI>
 		</link>
 		<link>
+			<name>app/tracking/trkClient</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/trkClient</locationURI>
+		</link>
+		<link>
 			<name>app/third-party/rkh/inc</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>

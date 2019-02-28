@@ -1,5 +1,5 @@
 /**
- *  \file       CommMgr.h
+ *  \file       trkClient.h
  *  \brief      Yipies Tracking Client.
  */
 
@@ -10,13 +10,13 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario BaliÃ±a db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __COMMMGR_H__
-#define __COMMMGR_H__
+#ifndef __TRKCLIENT_H__
+#define __TRKCLIENT_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
@@ -30,9 +30,16 @@ extern "C" {
 /* -------------------------------- Constants ------------------------------ */
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */
-RKH_SMA_DCLR(commMgr);
+RKH_SMA_DCLR(trkClient);
 
 /* ------------------------------- Data types ------------------------------ */
+typedef struct AppData AppData;
+struct AppData
+{
+    rui8_t *data;
+    rui16_t size;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */
