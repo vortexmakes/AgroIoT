@@ -220,11 +220,7 @@ bsp_SIMChange(void)
 {
     simSelect = (simSelect == MainSIM) ? SecSIM : MainSIM;
 
-    HAL_GPIO_WritePin(SIM_SELECT_GPIO_Port,
-                              SIM_SELECT_Pin, 
-                              simSelect == MainSIM ? 0 : 1);
-
-    set_led( LED_SIM, simSelect ? LSTAGE2 : LSTAGE1 );
+    bsp_SIMSelect(simSelect);
 }
 
 void

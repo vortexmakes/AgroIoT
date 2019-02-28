@@ -11,10 +11,6 @@ set_hard_leds( unsigned short minor, MUInt arga, MUInt argb )
 {
     (void)argb;
   
-#ifdef __PRINTF__
-	printf( "set_hard_tone: %u, %d, %d\n", minor, arga, argb );:enb
-#endif
-
     switch(minor)
     {
         case LED_POWER:

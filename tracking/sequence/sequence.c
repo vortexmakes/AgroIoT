@@ -168,7 +168,8 @@ static
 void
 load_next( const MAJOR_T *pmajor, SEQ_VT *pwork )
 {
-	pwork->seq_t = pmajor->pseq_t[ pwork->seq_t.index ];	/*	Transfer data from table to RAM	*/
+    /*	Transfer data from table to RAM	*/
+	pwork->seq_t = pmajor->pseq_t[ pwork->seq_t.index ];	
 	pwork->running = 0;
 	pwork->count_time = pwork->seq_t.ton;
 	(*pmajor->phard)( pwork->minor, pwork->seq_t.arg0 & ~UNIQ, pwork->seq_t.arg1 );	
@@ -184,14 +185,16 @@ static
 MUInt
 tst_sil( SEQ_T *pimage )
 {
-	return pimage->toff ? 0 : ( pimage->index < 0 ? 1 : ( pimage->num_pulse ? 2 : 3 ) );
+	return pimage->toff ? 0 : 
+            ( pimage->index < 0 ? 1 : ( pimage->num_pulse ? 2 : 3 ) );
 }
 
 static
 MUInt
 tst_new( SEQ_T *pimage )
 {
-	return pimage->num_pulse && --pimage->num_pulse ? 0 : ( pimage->index < 0 ? 1 : ( pimage->period <= 0 ? 2 : 3 ) );
+	return pimage->num_pulse && --pimage->num_pulse ? 0 : 
+            ( pimage->index < 0 ? 1 : ( pimage->period <= 0 ? 2 : 3 ) );
 }
 
 /*
@@ -237,15 +240,21 @@ unsigned
 kill_devices( SEQ_VT *p, unsigned minor )
 {
 	unsigned to_switch_off;
-	
-	if( ( to_switch_off = ( p->minor & minor ) ) != 0 )				/* 	some to shut off ?	*/
+
+    /* 	some to shut off ?	*/
+	if( ( to_switch_off = ( p->minor & minor ) ) != 0 )
 	{
-		minor &= ~p->minor;			/*	Devices that remains to shut off					*/
-		( *majors_t[ p->major ].phard )( to_switch_off, NO_ARG, NO_ARG );	/* shut it off!	*/
-		p->minor &= ~to_switch_off;	/*	Set in slot which devices are still running			*/
-		if( p->minor == 0 )			/*	Are there devices running with this code ?			*/
+        /*	Devices that remains to shut off */
+		minor &= ~p->minor;			
+        /* shut it off!	*/
+		( *majors_t[ p->major ].phard )( to_switch_off, NO_ARG, NO_ARG );	
+        /*	Set in slot which devices are still running	*/
+		p->minor &= ~to_switch_off;	
+        /*	Are there devices running with this code ?	*/
+		if( p->minor == 0 )			
 		{
-			p->running = 0;			/*	Dispose slot, free channel							*/
+        /*  Dispose slot, free channel	*/
+			p->running = 0;			
 			p->code = NOT_USED;
 		}
 	}
@@ -261,9 +270,9 @@ install_new( MUInt major, unsigned minor, MUInt code )
 
 	if( minor == 0 )
 		return;
-	prun = NULL;							/*	to remember running slot							*/
-	minor_to_off = minor;					/*	devices to shut off		   							*/
-
+    
+	prun = NULL;            /*	to remember running slot */	
+	minor_to_off = minor;	/*	devices to shut off */
 			/*	
 			 *	Sweep all channels.
 			 *	Kill devices running with different code
@@ -273,16 +282,16 @@ install_new( MUInt major, unsigned minor, MUInt code )
 
 	for( p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS ; ++p )
 	{
-		if( p->code == NOT_USED )			/*	slot free ?											*/
+		if( p->code == NOT_USED ) /*	slot free ?											*/
 			continue;
-		if( p->major != major )				/*	if not same major number, not interested !			*/
+		if( p->major != major )	 /*	if not same major number, not interested ! */
 			continue;
-		if( code != 0 && p->code == code )	/*	Same code executing ?								*/
-			prun = p;						/*	Remember which slot has same code					*/
+		if( code != 0 && p->code == code )	/*	Same code executing ? */
+			prun = p;			/*	Remember which slot has same code */
 		else if( minor_to_off != 0 )
 			minor_to_off = kill_devices( p, minor_to_off );
 	}
-	if( code == 0 )							/*	If kill code, done !								*/
+	if( code == 0 )     /* If kill code, done ! */
 		return;
 	/*
 	 * 	Exists an slot with the same code and sequence
@@ -302,7 +311,7 @@ install_new( MUInt major, unsigned minor, MUInt code )
 	 */
 	for( p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS ; ++p )
 	{
-		if( p->code == NOT_USED )			/*	slot free ?											*/
+		if( p->code == NOT_USED )   /* slot free ?	*/
 		{
 			p->running	= 0;
 			p->major	= major;
@@ -420,7 +429,8 @@ sequence_interrupt( void )
 #endif
     sync = 0;
 
-	for( p = sequence_channels, count = 0; p < sequence_channels + NUM_SEQ_CHANNELS ; ++p )
+	for( p = sequence_channels, count = 0; p 
+         < sequence_channels + NUM_SEQ_CHANNELS ; ++p )
 	{
 		if( !p->running )
 			continue;

@@ -36,6 +36,7 @@
 #include "dIn.h"
 #include "dOut.h"
 #include "tplfsm.h"
+#include "genled.h"
 
 RKH_THIS_MODULE
 
@@ -66,6 +67,7 @@ SERIAL_T serials[ NUM_CHANNELS ] =
 static rui8_t bsp;
 static ModCmdRcvHandler gsmCmdParser;
 static GpsRcvHandler    gpsParser;
+static SIMSelect_t      simSelect;
 static char *opts = (char *)TRK_CFG_OPTIONS;
 static const char *helpMessage =
 {
@@ -325,6 +327,25 @@ bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata)
         tx_data(ch, *p);
         ++p;
     }
+}
+
+void 
+bsp_SIMSelect(SIMSelect_t sim)
+{
+    simSelect = sim;
+
+    printf("\r\nGSM SIM %s\r\n", 
+            simSelect == MainSIM ? "Main" : "Secondary");
+
+    set_led(LED_SIM, simSelect ? LSTAGE2 : LSTAGE1);
+}
+
+void
+bsp_SIMChange(void)
+{
+    simSelect = (simSelect == MainSIM) ? SecSIM : MainSIM;
+
+    bsp_SIMSelect(simSelect);
 }
 
 void

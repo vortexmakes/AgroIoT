@@ -172,6 +172,15 @@
     <ClCompile Include="..\..\..\modcmd\modcmdSim5320.c">
       <Filter>tracking\modcmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\sequence\sequence.c">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\sequence\seqtbl.c">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\bsp\seqlog.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
@@ -249,10 +258,34 @@
     <Filter Include="tracking\device">
       <UniqueIdentifier>{0360a7fd-3eaf-4dac-8d2c-6d57f4f4c9d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sequence">
+      <UniqueIdentifier>{419e309c-ca5e-412b-8454-7eeeec1902de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\geoMgr\geoMgr.h">
       <Filter>tracking\geomgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\sequence.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqtbl.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqlog.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqerr.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqdefs.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqchbak.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\genled.h">
+      <Filter>sequence</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
