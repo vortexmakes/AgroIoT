@@ -141,6 +141,7 @@
     <ClCompile Include="..\..\..\tpsens\tplink\tplhal.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tplink.c" />
     <ClCompile Include="..\..\..\tpsens\tplink\tpltbl.c" />
+    <ClCompile Include="..\..\..\trkClient\trkClient.c" />
     <ClCompile Include="..\bsp\assert.c" />
     <ClCompile Include="..\bsp\bsp.c" />
     <ClCompile Include="..\bsp\dIn.c" />
@@ -162,6 +163,7 @@
     <ClInclude Include="..\..\..\sequence\seqlog.h" />
     <ClInclude Include="..\..\..\sequence\seqtbl.h" />
     <ClInclude Include="..\..\..\sequence\sequence.h" />
+    <ClInclude Include="..\..\..\trkClient\trkClient.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\bsp\serial\winbsp.lib" />
