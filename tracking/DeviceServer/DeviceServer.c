@@ -24,7 +24,7 @@
 #include "signals.h"
 #include "events.h"
 #include "topics.h"
-#include "deviceServer.h"
+#include "DeviceServer.h"
 #include "ps.h"
 
 /* ----------------------------- Local macros ------------------------------ */

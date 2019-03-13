@@ -85,7 +85,7 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_BASIC_STATE(Client_Idle, NULL, NULL, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Idle)
 	RKH_TRREG(evTimeout,       NULL, sendIo, &Client_Send),
-    RKH_TRREG(evSensorData,    NULL, sendSensor, &Client_Send),
+    //RKH_TRREG(evSensorData,    NULL, sendSensor, &Client_Send),
     RKH_TRREG(evIoChg,         NULL, sendIo, &Client_Send),
 RKH_END_TRANS_TABLE
 

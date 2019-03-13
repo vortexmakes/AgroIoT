@@ -476,7 +476,7 @@ getAPNbyOper(char *oper)
 {
     Operator *pOper;
     
-    for( pOper = &operTable[0]; pOper != NULL; ++pOper)
+    for( pOper = &operTable[0]; pOper->netCode != NULL; ++pOper)
     {
         if(strcmp(oper, pOper->netCode) == 0)
             return &(pOper->apn);

@@ -104,6 +104,8 @@ static SERIAL_CBACK_T gps_ser_cback =
 static SERIAL_CBACK_T tplink_cback =
 { tplink_rx_isr, NULL, NULL, tplink_tx_isr, NULL, NULL, NULL };
 
+static char gpsCurrStatus = -1;
+
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -412,7 +414,10 @@ bsp_recvOk(void)
 void 
 bsp_GPSStatus(char status)
 {
-    printf("\r\nGPS %s\r\n", status == RMC_StatusValid ? "Active" : "Void" );
+	if(status != gpsCurrStatus)
+		printf("\r\nGPS %s\r\n", status == RMC_StatusValid ? "Active" : "Void" );
+
+	gpsCurrStatus = status;
     set_led(LED_GPS, status == RMC_StatusValid ? LIT : LSTAGE2);
 }
 
