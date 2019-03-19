@@ -34,8 +34,12 @@
 #define TEST_FRAME   "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
                      "000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
-#define TEST_FRAME_HEADER   "!0|12"
-#define TEST_FRAME_TAIL     "+0"
+#define TEST_FRAME_FLAGS         "12"
+#define TEST_FRAME_HEADER		 "!0|"
+#define TEST_MULTIFRAME_QTY      0x10
+#define TEST_MULTIFRAME_HEADER   "!1|"
+#define TEST_FRAME_TAIL			 "1"
+#define MULTIFRAME_COUNT         2
 
 //#define TEST_FRAME_TAIL     "00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
@@ -129,6 +133,7 @@ static char *testFrame = TEST_FRAME;
 static ruint din;
 static ruint dout;
 static CBOX_STR cbox;
+static ruint cntSingle;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -158,6 +163,8 @@ init(TrkClient *const me, RKH_EVT_T *pe)
 
     RKH_TMR_PERIODIC(&me->timer, RKH_UPCAST(RKH_SMA_T, me),
     							RKH_TIME_MS(5000),  RKH_TIME_MS(5000));
+
+	cntSingle = MULTIFRAME_COUNT;
 }
 
 /* ............................ Effect actions ............................. */
@@ -177,6 +184,7 @@ sendFrame(TrkClient *const me)
     p = (char *)evSendObj.buf;
 
     sprintf(p, "%s", TEST_FRAME_HEADER);
+	strcat(p, TEST_FRAME_FLAGS);
     strcat(p, ConMgr_Imei());
     strcat(p, ",");
     strcat(p, me->geo.utc);
@@ -220,14 +228,82 @@ sendFrame(TrkClient *const me)
 }
 
 static void
+sendMultiFrame(TrkClient *const me)
+{
+	char buff[10];
+	char i;
+
+	char *p;
+
+	p = (char *)evSendObj.buf;
+
+	sprintf(p, "%s%04x|", TEST_MULTIFRAME_HEADER, TEST_MULTIFRAME_QTY);
+	strcat(p, ConMgr_Imei());
+	for (i = 0; i < TEST_MULTIFRAME_QTY; ++i)
+	{
+		strcat(p, "|");
+		strcat(p, TEST_FRAME_FLAGS);
+		strcat(p, ",");
+		strcat(p, me->geo.utc);
+		strcat(p, ",");
+		strcat(p, me->geo.latInd);
+		strcat(p, me->geo.latitude);
+		strcat(p, ",");
+		strcat(p, me->geo.longInd);
+		strcat(p, me->geo.longitude);
+		strcat(p, ",");
+		strcat(p, me->geo.speed);
+		strcat(p, ",");
+		strcat(p, me->geo.course);
+		strcat(p, ",");
+		strcat(p, me->geo.date);
+		strcat(p, ",");
+
+		sprintf(buff, "%02x%02x,", dout, din);
+		strcat(p, buff);
+
+		sprintf(buff, "%04x,", cbox.h.hoard);
+		strcat(p, buff);
+
+		sprintf(buff, "%02x,", cbox.h.pqty);
+		strcat(p, buff);
+
+		sprintf(buff, "%02x,", cbox.hum);
+		strcat(p, buff);
+
+		sprintf(buff, "%04x,", cbox.a.x);
+		strcat(p, buff);
+		sprintf(buff, "%04x,", cbox.a.y);
+		strcat(p, buff);
+		sprintf(buff, "%04x,", cbox.a.z);
+		strcat(p, buff);
+
+		strcat(p, TEST_FRAME_TAIL);
+	}
+
+	strcat(p, "#");
+
+	evSendObj.size = strlen((char *)evSendObj.buf);
+	ConnectionTopic_publish(&evSendObj, me);
+}
+
+
+static void
 sendIo(TrkClient *const me, RKH_EVT_T *pe)
 {
-    IoChgEvt *pio;
+	IoChgEvt *pio;
 
-    pio = RKH_DOWNCAST(IoChgEvt, pe);
-    din = pio->din;
+	pio = RKH_DOWNCAST(IoChgEvt, pe);
+	din = pio->din;
 
-    sendFrame(me);
+	if (cntSingle && --cntSingle == 0)
+	{
+		cntSingle = MULTIFRAME_COUNT;
+		sendMultiFrame(me);
+	}
+	else
+		sendFrame(me);
+
 }
 
 static void
