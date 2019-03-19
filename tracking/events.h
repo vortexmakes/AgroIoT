@@ -43,7 +43,7 @@ extern "C" {
 /**
  * Specifies sizeof send / receive buffers.
  */
-#define SEND_BUFF_SIZE      1024
+#define SEND_BUFF_SIZE      2048
 #define RECV_BUFF_SIZE      1024
 
 /**
