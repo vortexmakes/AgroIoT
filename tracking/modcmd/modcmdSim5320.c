@@ -64,7 +64,7 @@ static const CmdTbl cmdTbl =
     {RKH_INIT_STATIC_EVT(evCmd),
      "AT\r\n", 
      &conMgr, 
-     RKH_TIME_MS(2000), RKH_TIME_MS(100)},
+     RKH_TIME_MS(2000), RKH_TIME_MS(2000)},
 
     /* initStr */
     {RKH_INIT_STATIC_EVT(evCmd), 
@@ -185,7 +185,7 @@ static const CmdTbl cmdTbl =
 #ifdef GPRS_QUICK_SEND
      RKH_TIME_MS(10000), RKH_TIME_MS(100)},
 #else
-     RKH_TIME_MS(1000), RKH_TIME_MS(100)},
+     RKH_TIME_MS(3000), RKH_TIME_MS(100)},
 #endif
 
     /* readData */

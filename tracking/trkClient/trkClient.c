@@ -30,13 +30,14 @@
 #include "conMgr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define WAIT_TIME    RKH_TIME_MS(2000)
+#define SEND_TIME    RKH_TIME_MS(5000)
+#define RECV_TIME    RKH_TIME_MS(2000)
 #define TEST_FRAME   "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
                      "000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
 #define TEST_FRAME_FLAGS         "12"
 #define TEST_FRAME_HEADER		 "!0|"
-#define TEST_MULTIFRAME_QTY      0x10
+#define TEST_MULTIFRAME_QTY      5
 #define TEST_MULTIFRAME_HEADER   "!1|"
 #define TEST_FRAME_TAIL			 "1"
 #define MULTIFRAME_COUNT         2
@@ -58,15 +59,18 @@ static void init(TrkClient *const me, RKH_EVT_T *pe);
 /* ........................ Declares effect actions ........................ */
 static void updateGeoStamp(TrkClient *const me, RKH_EVT_T *pe);
 static void sendIo(TrkClient *const me, RKH_EVT_T *pe);
+static void sendTime(TrkClient *const me, RKH_EVT_T *pe);
 static void sendSensor(TrkClient *const me, RKH_EVT_T *pe);
+static void doRecv(TrkClient *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
+static void idleEntry(TrkClient *const me);
 static void sendFail(TrkClient *const me);
 static void recvEntry(TrkClient *const me);
 static void recvFail(TrkClient *const me);
 
 /* ......................... Declares exit actions ......................... */
-static void waitExit(TrkClient *const me);
+static void idleExit(TrkClient *const me);
 
 /* ............................ Declares guards ............................ */
 rbool_t checkResp(TrkClient *const me, RKH_EVT_T *pe);
@@ -86,9 +90,9 @@ RKH_CREATE_TRANS_TABLE(Client_Connected)
     RKH_TRREG(evNetDisconnected, NULL, NULL, &Client_Disconnected),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(Client_Idle, NULL, NULL, &Client_Connected, NULL);
+RKH_CREATE_BASIC_STATE(Client_Idle, idleEntry, idleExit, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Idle)
-	RKH_TRREG(evTimeout,       NULL, sendIo, &Client_Send),
+	RKH_TRREG(evTimeout,       NULL, sendTime, &Client_Send),
     //RKH_TRREG(evSensorData,    NULL, sendSensor, &Client_Send),
     RKH_TRREG(evIoChg,         NULL, sendIo, &Client_Send),
 RKH_END_TRANS_TABLE
@@ -101,6 +105,7 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(Client_Receive, recvEntry, NULL, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Receive)
+	RKH_TRINT(evTimeout,  NULL, doRecv),
     RKH_TRREG(evReceived, NULL, NULL, &Client_CheckResp),
     RKH_TRREG(evRecvFail, NULL, recvFail, &Client_Idle),
 RKH_END_TRANS_TABLE
@@ -161,9 +166,6 @@ init(TrkClient *const me, RKH_EVT_T *pe)
     RKH_SET_STATIC_EVENT(RKH_UPCAST(RKH_EVT_T, &evSendObj), evSend);
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
 
-    RKH_TMR_PERIODIC(&me->timer, RKH_UPCAST(RKH_SMA_T, me),
-    							RKH_TIME_MS(5000),  RKH_TIME_MS(5000));
-
 	cntSingle = MULTIFRAME_COUNT;
 }
 
@@ -177,7 +179,7 @@ updateGeoStamp(TrkClient *const me, RKH_EVT_T *pe)
 static void
 sendFrame(TrkClient *const me)
 {
-    char buff[10];
+    char buff[20];
 
     char *p;
 
@@ -296,6 +298,14 @@ sendIo(TrkClient *const me, RKH_EVT_T *pe)
 	pio = RKH_DOWNCAST(IoChgEvt, pe);
 	din = pio->din;
 
+    sendFrame(me);
+}
+
+static void
+sendTime(TrkClient *const me, RKH_EVT_T *pe)
+{
+	(void)pe;
+
 	if (cntSingle && --cntSingle == 0)
 	{
 		cntSingle = MULTIFRAME_COUNT;
@@ -303,7 +313,6 @@ sendIo(TrkClient *const me, RKH_EVT_T *pe)
 	}
 	else
 		sendFrame(me);
-
 }
 
 static void
@@ -317,7 +326,21 @@ sendSensor(TrkClient *const me, RKH_EVT_T *pe)
     sendFrame(me);
 }
 
+static void
+doRecv(TrkClient *const me, RKH_EVT_T *pe)
+{
+    (void)pe;
+
+    ConnectionTopic_publish(&evRecvObj, me);
+}
+
 /* ............................. Entry actions ............................. */
+static void
+idleEntry(TrkClient *const me)
+{
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), SEND_TIME);
+}
+
 static void
 sendFail(TrkClient *const me)
 {
@@ -329,7 +352,7 @@ sendFail(TrkClient *const me)
 static void
 recvEntry(TrkClient *const me)
 {
-    ConnectionTopic_publish(&evRecvObj, me);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), RECV_TIME);
 }
 
 static void
@@ -343,7 +366,7 @@ recvFail(TrkClient *const me)
 
 /* ............................. Exit actions .............................. */
 static void
-waitExit(TrkClient *const me)
+idleExit(TrkClient *const me)
 {
     rkh_tmr_stop(&me->timer);
 }
