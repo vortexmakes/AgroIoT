@@ -24,90 +24,35 @@
 #include "mTimeCfg.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define ModemPwrOn_toggle(t) \
-        { \
-			RKH_SR_ALLOC(); \
-            RKH_ENTER_CRITICAL_(); \
-            counter = (t); \
-            state = Toggling; \
-            RKH_EXIT_CRITICAL_(); \
-        }
-
 /* ------------------------------- Constants ------------------------------- */
-#define SIM53200_PWR_ON_TIME     (200/MTIME_MODPWR_SCAN_PERIOD)
-#define SIM53200_PWR_OFF_TIME    (2000/MTIME_MODPWR_SCAN_PERIOD)
-
 /* ---------------------------- Local data types --------------------------- */
-typedef enum ModPwrStates
-{
-    OnOff,
-    Toggling
-}ModPwrStates;
-
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static ruint state, counter;
-
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static
-void
-ModemPwrOn(ruint b)
-{
-    if(b)
-		reset_dtr(GSM_PORT);
-    else
-		set_dtr(GSM_PORT);
-}
-
 /* ---------------------------- Global functions --------------------------- */
 #ifdef MODPWR_CTRL_ENABLE
 
 void
 modPwr_init(void)
 {
-    state = OnOff;
 }
 
 void
 modPwr_ctrl(void)
 {
-    switch(state)
-    {
-        case OnOff:
-            ModemPwrOn(1);
-            break;
-
-        case Toggling:
-            ModemPwrOn(0);
-            if(counter && (--counter == 0))
-            {
-                state = OnOff;
-            }
-
-            break;
-    }
 }
 
 void
 modPwr_off(void)
 {
-    ModemPwrOn_toggle(SIM53200_PWR_OFF_TIME);
+	set_dtr(GSM_PORT);
 }
 
 void
 modPwr_on(void)
 {
-    ModemPwrOn_toggle(SIM53200_PWR_ON_TIME);
-}
-
-void
-modPwr_OffNow(void)
-{
-	ModemPwrOn(0);
-	Sleep(SIM53200_PWR_OFF_TIME*MTIME_MODPWR_SCAN_PERIOD);
-	ModemPwrOn(1);
-	Sleep(100);
+	reset_dtr(GSM_PORT);
 }
 
 #endif

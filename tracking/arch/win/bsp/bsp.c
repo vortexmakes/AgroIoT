@@ -291,7 +291,7 @@ bsp_serial_open(int ch)
             gsmCmdParser = ModCmd_init();
 			init_serial_hard(ch, &gsm_ser_cback);
 			connect_serial(ch);
-			modPwr_OffNow();
+			modPwr_off();
 			break;
 
         case GPS_PORT:
