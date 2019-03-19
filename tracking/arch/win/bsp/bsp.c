@@ -106,6 +106,8 @@ static SERIAL_CBACK_T tplink_cback =
 
 static char gpsCurrStatus = -1;
 
+static char gsmDebug;
+
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -170,7 +172,8 @@ void
 gsm_rx_isr( unsigned char byte )
 {
     gsmCmdParser(byte);
-	putchar(byte);
+	if(gsmDebug)
+		putchar(byte);
 }
 
 static
@@ -205,6 +208,8 @@ bsp_init(int argc, char *argv[])
     printBanner();
 
     processCmdLineOpts(argc, argv);
+	
+	gsmDebug = 1;
 
     modPwr_init();
 	dIn_init();
@@ -220,6 +225,10 @@ bsp_keyParser(int c)
             RKH_SMA_POST_FIFO(modMgr, &e_Term, &bsp);
             rkhport_fwk_stop();
             break;
+
+		case 'v':
+			gsmDebug ^= 1;
+			break;
 
         case 'q':
             dOut_set(0, 1, DOUT_TIME(1000));
@@ -292,8 +301,8 @@ bsp_serial_open(int ch)
 			break;
 
 		case TPSENS_PORT:
-			init_serial_hard(ch, &tplink_cback);
-			connect_serial(ch);
+			//init_serial_hard(ch, &tplink_cback);
+			//connect_serial(ch);
 			break;
 
 		default:
@@ -369,7 +378,8 @@ bsp_SIMChange(void)
 void
 bsp_serial_putchar(int ch, unsigned char c)
 {
-    tx_data(ch, c);
+	if(ch!= TPSENS_PORT)
+		tx_data(ch, c);
 }
 
 void
