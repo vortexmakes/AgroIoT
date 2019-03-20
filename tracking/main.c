@@ -89,7 +89,7 @@ setupTraceFilters(void)
     RKH_FILTER_OFF_SMA(conMgr);
 	//RKH_FILTER_OFF_SMA(geoMgr);
 	//RKH_FILTER_OFF_SMA(deviceServer);
-	RKH_FILTER_OFF_SMA(commMgr);
+	//RKH_FILTER_OFF_SMA(commMgr);
 	RKH_FILTER_OFF_SMA(trkClient);
 	RKH_FILTER_OFF_ALL_SIGNALS();
 }

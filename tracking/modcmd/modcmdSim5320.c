@@ -68,7 +68,7 @@ static const CmdTbl cmdTbl =
 
     /* initStr */
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "ATE1+CREG=1;+STK=0\r\n",
+     "ATE1+CREG=1;+STK=0;+CIPSRIP=0;+CIPHEAD=0\r\n",
      &conMgr, 
      RKH_TIME_MS(5000), RKH_TIME_MS(5000)},
 
@@ -183,16 +183,16 @@ static const CmdTbl cmdTbl =
      "\x1A\r\n", 
      &conMgr, 
 #ifdef GPRS_QUICK_SEND
-     RKH_TIME_MS(10000), RKH_TIME_MS(100)},
+     RKH_TIME_MS(10000), RKH_TIME_MS(500)},
 #else
-     RKH_TIME_MS(3000), RKH_TIME_MS(100)},
+     RKH_TIME_MS(3000), RKH_TIME_MS(500)},
 #endif
 
     /* readData */
     {RKH_INIT_STATIC_EVT(evCmd), 
      "AT+CIPRXGET=2,0,1024\r\n", 
      &conMgr, 
-     RKH_TIME_MS(3000), RKH_TIME_MS(100)},
+     RKH_TIME_MS(3000), RKH_TIME_MS(500)},
 };
 
 /* ----------------------- Local function prototypes ----------------------- */

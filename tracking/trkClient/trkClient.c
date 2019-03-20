@@ -31,7 +31,7 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 #define SEND_TIME    RKH_TIME_MS(5000)
-#define RECV_TIME    RKH_TIME_MS(2000)
+#define RECV_TIME    RKH_TIME_MS(5000)
 #define TEST_FRAME   "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
                      "000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
@@ -61,11 +61,12 @@ static void updateGeoStamp(TrkClient *const me, RKH_EVT_T *pe);
 static void sendIo(TrkClient *const me, RKH_EVT_T *pe);
 static void sendTime(TrkClient *const me, RKH_EVT_T *pe);
 static void sendSensor(TrkClient *const me, RKH_EVT_T *pe);
+static void sendOk(TrkClient *const me, RKH_EVT_T *pe);
+static void sendFail(TrkClient *const me, RKH_EVT_T *pe);
 static void doRecv(TrkClient *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void idleEntry(TrkClient *const me);
-static void sendFail(TrkClient *const me);
 static void recvEntry(TrkClient *const me);
 static void recvFail(TrkClient *const me);
 
@@ -99,7 +100,7 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(Client_Send, NULL, NULL, &Client_Connected, NULL);
 RKH_CREATE_TRANS_TABLE(Client_Send)
-    RKH_TRREG(evSent,     NULL, NULL, &Client_Receive),
+    RKH_TRREG(evSent,     NULL, sendOk, &Client_Receive),
     RKH_TRREG(evSendFail, NULL, sendFail, &Client_Idle),
 RKH_END_TRANS_TABLE
 
@@ -327,6 +328,22 @@ sendSensor(TrkClient *const me, RKH_EVT_T *pe)
 }
 
 static void
+sendOk(TrkClient *const me, RKH_EVT_T *pe)
+{
+    (void)me;
+
+    bsp_sendOk();
+}
+
+static void
+sendFail(TrkClient *const me, RKH_EVT_T *pe)
+{
+    (void)me;
+
+    bsp_sendFail();
+}
+
+static void
 doRecv(TrkClient *const me, RKH_EVT_T *pe)
 {
     (void)pe;
@@ -339,14 +356,6 @@ static void
 idleEntry(TrkClient *const me)
 {
     RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), SEND_TIME);
-}
-
-static void
-sendFail(TrkClient *const me)
-{
-    (void)me;
-
-    bsp_sendFail();
 }
 
 static void

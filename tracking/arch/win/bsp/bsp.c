@@ -37,6 +37,7 @@
 #include "dOut.h"
 #include "tplfsm.h"
 #include "genled.h"
+#include "gsmlog.h"
 
 RKH_THIS_MODULE
 
@@ -172,6 +173,8 @@ void
 gsm_rx_isr( unsigned char byte )
 {
     gsmCmdParser(byte);
+    gsmlog_write(byte);
+
 	if(gsmDebug)
 		putchar(byte);
 }
@@ -209,11 +212,19 @@ bsp_init(int argc, char *argv[])
 
     processCmdLineOpts(argc, argv);
 	
-	gsmDebug = 1;
-
     modPwr_init();
 	dIn_init();
 	dOut_init();
+}
+
+void
+bsp_close(void)
+{
+    gsmlog_close();
+
+    bsp_serial_close(GSM_PORT);
+    bsp_serial_close(GPS_PORT);
+    //bsp_serial_close(TPSENS_PORT);
 }
 
 void
@@ -292,6 +303,7 @@ bsp_serial_open(int ch)
 			init_serial_hard(ch, &gsm_ser_cback);
 			connect_serial(ch);
 			modPwr_off();
+            gsmlog_open("gsmlog");
 			break;
 
         case GPS_PORT:
@@ -315,7 +327,6 @@ bsp_serial_open(int ch)
 void
 bsp_serial_close(int ch)
 {
-	set_dtr(ch);
 	disconnect_serial(ch);
 	deinit_serial_hard(ch);
 }
@@ -325,6 +336,7 @@ bsp_serial_puts(int ch, char *p)
 {
     while(*p!='\0')
     {
+        gsmlog_write(*p);
         tx_data(ch, *p);
         ++p;
     }
@@ -335,6 +347,7 @@ bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata)
 {
     while(ndata && (ndata-- != 0))
     {
+        gsmlog_write(*p);
         tx_data(ch, *p);
         ++p;
     }
@@ -378,8 +391,11 @@ bsp_SIMChange(void)
 void
 bsp_serial_putchar(int ch, unsigned char c)
 {
-	if(ch!= TPSENS_PORT)
-		tx_data(ch, c);
+	if(ch == TPSENS_PORT)
+        return;
+
+    gsmlog_write(c);
+    tx_data(ch, c);
 }
 
 void
@@ -401,6 +417,14 @@ bsp_netStatus(Status_t status)
 }
 
 void 
+bsp_sendOk(void)
+{
+    //printf("\r\nGSM Socket Send Ok\r\n"); 
+	printf("/"); 
+    set_led(LED_GSM, LSTAGE4);
+}
+
+void 
 bsp_sendFail(void)
 {
     printf("\r\nGSM Socket Sending Failure\r\n"); 
@@ -417,7 +441,8 @@ bsp_recvFail(void)
 void 
 bsp_recvOk(void)
 {
-    printf("\r\nGSM Socket Receiving Ok\r\n"); 
+    //printf("\r\nGSM Socket Receive Ok\r\n"); 
+	printf("."); 
     set_led(LED_GSM, LSTAGE4);
 }
 

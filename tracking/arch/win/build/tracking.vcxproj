@@ -147,6 +147,7 @@
     <ClCompile Include="..\bsp\dIn.c" />
     <ClCompile Include="..\bsp\dOut.c" />
     <ClCompile Include="..\bsp\getopt.c" />
+    <ClCompile Include="..\bsp\gsmlog.c" />
     <ClCompile Include="..\bsp\hook.c" />
     <ClCompile Include="..\bsp\modpwr.c" />
     <ClCompile Include="..\bsp\rtime.c" />

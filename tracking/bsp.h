@@ -77,6 +77,7 @@ typedef enum
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void bsp_init(int argc, char *argv[]);
+void bsp_close(void);
 
 void bsp_keyParser(int c);
 void bsp_timeTick(void);
@@ -93,6 +94,7 @@ void bsp_SIMSelect(SIMSelect_t sim);
 void bsp_SIMChange();
 void bsp_netStatus(Status_t status);
 void bsp_regStatus(Status_t status);
+void bsp_sendOk(void);
 void bsp_sendFail(void);
 void bsp_recvFail(void);
 void bsp_recvOk(void);

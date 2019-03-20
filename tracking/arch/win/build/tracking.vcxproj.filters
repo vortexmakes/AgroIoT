@@ -184,6 +184,9 @@
     <ClCompile Include="..\..\..\DeviceServer\DeviceServer.c">
       <Filter>tracking\DeviceServer</Filter>
     </ClCompile>
+    <ClCompile Include="..\bsp\gsmlog.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="rkh">
