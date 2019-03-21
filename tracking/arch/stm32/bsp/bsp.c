@@ -254,6 +254,12 @@ bsp_sendFail(void)
 }
 
 void 
+bsp_sendOk(void)
+{
+
+}
+
+void
 bsp_recvFail(void)
 {
     set_led(LED_GSM, LSTAGE4);
