@@ -68,7 +68,7 @@ static const CmdTbl cmdTbl =
 
     /* initStr */
     {RKH_INIT_STATIC_EVT(evCmd), 
-     "ATE1+CREG=1;+STK=0;+CIPSRIP=0;+CIPHEAD=0\r\n",
+     "ATE1+CREG=1;V1;Q0;+STK=0;+IFC=0,0;+CIPSRIP=0;+CIPHEAD=0\r\n",
      &conMgr, 
      RKH_TIME_MS(5000), RKH_TIME_MS(5000)},
 

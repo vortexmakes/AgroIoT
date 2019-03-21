@@ -155,12 +155,14 @@ RKH_CREATE_COMP_REGION_STATE(ConMgr_initialize, NULL, NULL, &ConMgr_active,
 RKH_CREATE_TRANS_TABLE(ConMgr_initialize)
     RKH_TRCOMPLETION(NULL, NULL, &ConMgr_unregistered),
     RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_failure),
+    RKH_TRREG(evError,      NULL, NULL, &ConMgr_failure),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ConMgr_sync, sendSync, NULL, &ConMgr_initialize, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_sync)
     RKH_TRREG(evOk,         NULL, NULL, &ConMgr_init),
     RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_checkSyncTry),
+    RKH_TRREG(evError,      NULL, NULL, &ConMgr_checkSyncTry),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_COND_STATE(ConMgr_checkSyncTry);
@@ -213,6 +215,7 @@ RKH_CREATE_COMP_REGION_STATE(ConMgr_registered, regEntry, regExit, &ConMgr_activ
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_registered)
     RKH_TRREG(evNoReg, NULL, NULL,   &ConMgr_unregistered),
+    RKH_TRREG(evError, NULL, NULL,   &ConMgr_failure),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ConMgr_unregistered, unregEntry, unregExit,

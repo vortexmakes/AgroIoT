@@ -43,7 +43,7 @@ SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_cga,
                      at_plus_cpin, at_plus_creg, pinStatus, wpinSet, pinSet,
                      plus_c, plus_creg, at_plus_cipstatus, at_plus_cifsr,
                      netClockSync,
-                     at_plus_cclk, w_netopen, at_plus_ipaddr, 
+                     at_plus_cclk, w_netopen,netOpenError, at_plus_ipaddr, 
                      at_plus_cops, cclk_end;
 
 SSP_DCLR_TRN_NODE at_plus_ciprxget_data, cclk_year, cclk_month, cclk_day,
@@ -125,15 +125,15 @@ debug(unsigned char pos)
 
 SSP_CREATE_NORMAL_NODE(rootCmdParser);
 SSP_CREATE_BR_TABLE(rootCmdParser)
-	SSPBR("STATE",      NULL,     &rootCmdParser),
 	SSPBR("CONNECT OK", NULL,     &rootCmdParser),
 	SSPBR("AT",         NULL,     &at),
 	SSPBR("+C",         NULL,     &plus_c),
 	SSPBR("*PSUTTZ",    isURC_set, &netClockSync),
-	SSPBR("OPL DONE",   NULL,     &rootCmdParser),
-	SSPBR("SMS DONE",   NULL,     &rootCmdParser),
-	SSPBR("PNN DONE",   NULL,      &rootCmdParser),
-	SSPBR("VOICEMAIL:", NULL,     &rootCmdParser),
+	SSPBR("START",      cmd_error,     &rootCmdParser),
+	SSPBR("OPL DONE",   cmd_error,     &rootCmdParser),
+	SSPBR("SMS DONE",   cmd_error,     &rootCmdParser),
+	SSPBR("PNN DONE",   cmd_error,     &rootCmdParser),
+	SSPBR("VOICEMAIL:", cmd_error,     &rootCmdParser),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at);
@@ -289,8 +289,14 @@ SSP_END_BR_TABLE
 /* ------------------------ AT+NETOPEN --------------------------- */
 SSP_CREATE_NORMAL_NODE(w_netopen);
 SSP_CREATE_BR_TABLE(w_netopen)
-    SSPBR("+NETOPEN: 0",   cmd_ok,  &rootCmdParser),
-    SSPBR("ERROR",         NULL,    &rootCmdParser),
+    SSPBR("NETOPEN: 0",   cmd_ok,  &rootCmdParser),
+    SSPBR("IP ERROR:",    NULL,    &netOpenError),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(netOpenError);
+SSP_CREATE_BR_TABLE(netOpenError)
+    SSPBR("Network is already opened",  cmd_ok,  &rootCmdParser),
+    SSPBR("ERROR:",                     NULL,    &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */
