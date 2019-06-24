@@ -22,7 +22,6 @@
 #include "rkhfwk_pubsub.h"
 #include "bsp.h"
 #include "signals.h"
-#include "trkClient.h"
 #include "CommMgr.h"
 #include "conmgr.h"
 #include "modmgr.h"
@@ -38,7 +37,6 @@
 #include "epoch.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define TRKCLIENT_QSTO_SIZE 16
 #define COMMMGR_QSTO_SIZE	16
 #define CONMGR_QSTO_SIZE    8
 #define MODMGR_QSTO_SIZE    4
@@ -58,7 +56,6 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_EVT_T *TrkCLient_qsto[TRKCLIENT_QSTO_SIZE];
 static RKH_EVT_T *CommMgr_qsto[COMMMGR_QSTO_SIZE];
 static RKH_EVT_T *ConMgr_qsto[CONMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
@@ -90,7 +87,6 @@ setupTraceFilters(void)
 	//RKH_FILTER_OFF_SMA(geoMgr);
 	//RKH_FILTER_OFF_SMA(deviceServer);
 	//RKH_FILTER_OFF_SMA(commMgr);
-	RKH_FILTER_OFF_SMA(trkClient);
 	RKH_FILTER_OFF_ALL_SIGNALS();
 }
 
@@ -129,8 +125,6 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(deviceServer, DevSvr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
 
     RKH_SMA_ACTIVATE(commMgr, CommMgr_qsto, COMMMGR_QSTO_SIZE, 0, 0);
-
-    RKH_SMA_ACTIVATE(trkClient, TrkCLient_qsto, TRKCLIENT_QSTO_SIZE, 0, 0);
 
     RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);
 	RKH_SMA_POST_FIFO(deviceServer, &e_Open, 0);
