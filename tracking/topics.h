@@ -29,6 +29,13 @@ extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
+#define ConnectionTopic_subscribe(me)   rkh_pubsub_subscribe(ConnectionTopic, \
+                                                RKH_UPCAST(RKH_SMA_T, (me)))
+
+#define ConnectionTopic_publish(ev, me) rkh_pubsub_publish(ConnectionTopic, \
+                                                RKH_UPCAST(RKH_EVT_T, (ev)), \
+                                                RKH_UPCAST(RKH_SMA_T, (me)))
+
 #define tpModURC_subscribe(me)       rkh_pubsub_subscribe(tpModURC, \
                                                 RKH_UPCAST(RKH_SMA_T, (me)))
 

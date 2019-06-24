@@ -17,6 +17,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "rkh.h"
 #include "rkhfwk_pubsub.h"
 #include "rkhtmr.h"
@@ -257,6 +258,8 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
 	(void)me;
 	(void)pe;
 	
+    bsp_GPSStatus(RMC_StatusValid);
+
     pRmc = &(((RmcEvt *)(pe))->rmc);
 
     me->rmc = *pRmc;
@@ -304,6 +307,8 @@ static void
 publishInvRmc(GeoMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
+
+    bsp_GPSStatus(RMC_StatusInvalid);
 
     tpGeo_publish(&geoStampInvalidEvt, me);
 }

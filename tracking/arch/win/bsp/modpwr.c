@@ -18,6 +18,7 @@
 #include "wserial.h"
 
 #include "rkh.h"
+#include "rkhplat.h"
 #include "bsp.h"
 #include "modpwr.h"
 #include "mTimeCfg.h"
@@ -30,6 +31,8 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
+#ifdef MODPWR_CTRL_ENABLE
+
 void
 modPwr_init(void)
 {
@@ -40,17 +43,18 @@ modPwr_ctrl(void)
 {
 }
 
-
 void
 modPwr_off(void)
 {
-    set_dtr(GSM_PORT);
+	set_dtr(GSM_PORT);
 }
 
 void
 modPwr_on(void)
 {
-    reset_dtr(GSM_PORT);
+	reset_dtr(GSM_PORT);
 }
+
+#endif
 
 /* ------------------------------ End of file ------------------------------ */

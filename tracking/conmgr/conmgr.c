@@ -30,6 +30,8 @@
 #include "bsp.h"
 
 /* ----------------------------- Local macros ------------------------------ */
+#define SIZEOF_QDEFER   1
+
 /* ......................... Declares active object ........................ */
 typedef struct ConMgr ConMgr;
 
@@ -37,11 +39,11 @@ typedef struct ConMgr ConMgr;
 RKH_DCLR_BASIC_STATE ConMgr_inactive, ConMgr_sync,
                 ConMgr_init, ConMgr_pin, ConMgr_setPin, ConMgr_enableNetTime,
                 ConMgr_getImei, ConMgr_cipShutdown, ConMgr_setManualGet,
-                ConMgr_waitReg, ConMgr_unregistered, ConMgr_failure,
-                ConMgr_waitNetClockSync, ConMgr_localTime,
-                ConMgr_setAPN, ConMgr_enableGPRS,
+                ConMgr_unregistered, ConMgr_failure,
+                ConMgr_waitNetClockSync, ConMgr_localTime, ConMgr_getOper,
+                ConMgr_setAPN, ConMgr_enableNetwork,
                 ConMgr_checkIP, ConMgr_waitRetryConfig, ConMgr_waitingServer,
-                ConMgr_idle, ConMgr_waitPrompt, ConMgr_waitOk,
+                ConMgr_idle, ConMgr_getStatus, ConMgr_waitPrompt, ConMgr_waitOk,
                 ConMgr_receiving, ConMgr_restarting, ConMgr_wReopen,
                 ConMgr_waitRetryConnect, ConMgr_disconnecting;
 
@@ -59,8 +61,13 @@ static void init(ConMgr *const me, RKH_EVT_T *pe);
 /* ........................ Declares effect actions ........................ */
 static void open(ConMgr *const me, RKH_EVT_T *pe);
 static void close(ConMgr *const me, RKH_EVT_T *pe);
+static void defer(ConMgr *const me, RKH_EVT_T *pe);
+static void setSigLevel(ConMgr *const me, RKH_EVT_T *pe);
 static void initializeInit(ConMgr *const me, RKH_EVT_T *pe);
 static void storeImei(ConMgr *const me, RKH_EVT_T *pe);
+static void storeOper(ConMgr *const me, RKH_EVT_T *pe);
+static void checkRegStatus(ConMgr *const me, RKH_EVT_T *pe);
+static void startRegStatus(ConMgr *const me, RKH_EVT_T *pe);
 static void localTimeGet(ConMgr *const me, RKH_EVT_T *pe);
 static void rtimeSync(ConMgr *const me, RKH_EVT_T *pe);
 static void configureInit(ConMgr *const me, RKH_EVT_T *pe);
@@ -77,7 +84,7 @@ static void sendOk(ConMgr *const me, RKH_EVT_T *pe);
 static void recvOk(ConMgr *const me, RKH_EVT_T *pe);
 static void sendFail(ConMgr *const me, RKH_EVT_T *pe);
 static void recvFail(ConMgr *const me, RKH_EVT_T *pe);
-static void resetParser(ConMgr *const me, RKH_EVT_T *pe);
+static void tryGetStatus(ConMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void sendSync(ConMgr *const me);
@@ -88,21 +95,26 @@ static void netTimeEnable(ConMgr *const me);
 static void getImei(ConMgr *const me);
 static void cipShutdown(ConMgr *const me);
 static void unregEntry(ConMgr *const me);
+static void regEntry(ConMgr *const me);
 static void failureEntry(ConMgr *const me);
 static void setupManualGet(ConMgr *const me);
 static void waitNetClockSyncEntry(ConMgr *const me);
 static void waitRetryConfigEntry(ConMgr *const me);
+static void getOper(ConMgr *const me);
 static void setupAPN(ConMgr *const me);
-static void startGPRS(ConMgr *const me);
+static void startNetwork(ConMgr *const me);
 static void wReopenEntry(ConMgr *const me);
 static void waitRetryConnEntry(ConMgr *const me);
+static void getIpStatus(ConMgr *const me);
 static void getConnStatus(ConMgr *const me);
+static void isConnected(ConMgr *const me);
 static void connectingEntry(ConMgr *const me);
 static void socketConnected(ConMgr *const me);
 static void idleEntry(ConMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
 static void unregExit(ConMgr *const me);
+static void regExit(ConMgr *const me);
 static void waitNetClockSyncExit(ConMgr *const me);
 static void wReopenExit(ConMgr *const me);
 static void waitRetryConnExit(ConMgr *const me);
@@ -110,11 +122,13 @@ static void failureExit(ConMgr *const me);
 static void connectingExit(ConMgr *const me);
 static void socketDisconnected(ConMgr *const me);
 static void idleExit(ConMgr *const me);
+static void getStatusExit(ConMgr *const me);
 
 /* ............................ Declares guards ............................ */
 rbool_t checkSyncTry(ConMgr *const me, RKH_EVT_T *pe);
 rbool_t checkConfigTry(ConMgr *const me, RKH_EVT_T *pe);
 rbool_t checkConnectTry(ConMgr *const me, RKH_EVT_T *pe);
+rbool_t checkConnectedFailCounter(ConMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(ConMgr_inactive, NULL, NULL, RKH_ROOT, NULL);
@@ -128,6 +142,7 @@ RKH_CREATE_COMP_REGION_STATE(ConMgr_active, NULL, NULL, RKH_ROOT,
                              &ConMgr_initialize, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_active)
+    RKH_TRINT(evSigLevel, NULL, setSigLevel),
     RKH_TRINT(evSend, NULL, sendFail),
     RKH_TRINT(evRecv, NULL, recvFail),
     RKH_TRCOMPLETION(NULL, NULL, &ConMgr_inactive),
@@ -140,12 +155,14 @@ RKH_CREATE_COMP_REGION_STATE(ConMgr_initialize, NULL, NULL, &ConMgr_active,
 RKH_CREATE_TRANS_TABLE(ConMgr_initialize)
     RKH_TRCOMPLETION(NULL, NULL, &ConMgr_unregistered),
     RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_failure),
+    RKH_TRREG(evError,      NULL, NULL, &ConMgr_failure),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ConMgr_sync, sendSync, NULL, &ConMgr_initialize, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_sync)
     RKH_TRREG(evOk,         NULL, NULL, &ConMgr_init),
     RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_checkSyncTry),
+    RKH_TRREG(evError,      NULL, NULL, &ConMgr_checkSyncTry),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_COND_STATE(ConMgr_checkSyncTry);
@@ -193,17 +210,20 @@ RKH_CREATE_TRANS_TABLE(ConMgr_setManualGet)
     RKH_TRREG(evOk,         NULL, NULL, &ConMgr_initializeFinal),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_COMP_REGION_STATE(ConMgr_registered, NULL, NULL, &ConMgr_active, 
+RKH_CREATE_COMP_REGION_STATE(ConMgr_registered, regEntry, regExit, &ConMgr_active, 
                              &ConMgr_waitNetClockSync, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_registered)
     RKH_TRREG(evNoReg, NULL, NULL,   &ConMgr_unregistered),
+    RKH_TRREG(evError, NULL, NULL,   &ConMgr_failure),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ConMgr_unregistered, unregEntry, unregExit,
                             &ConMgr_active, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_unregistered)
-    RKH_TRREG(evTimeout,  NULL,    NULL, &ConMgr_failure),
+    RKH_TRINT(evTimeout,    NULL,    checkRegStatus),
+    RKH_TRINT(evNoReg,      NULL,    startRegStatus),
+    RKH_TRREG(evRegTimeout,  NULL,    NULL, &ConMgr_failure),
     RKH_TRREG(evReg, NULL, NULL,   &ConMgr_registered),
 RKH_END_TRANS_TABLE
 
@@ -216,19 +236,19 @@ RKH_CREATE_BASIC_STATE(ConMgr_waitNetClockSync,
                             waitNetClockSyncEntry, waitNetClockSyncExit,
                             &ConMgr_registered, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_waitNetClockSync)
-    RKH_TRREG(evTimeout,       NULL, localTimeGet, &ConMgr_localTime),
+    RKH_TRREG(evTimeout,       NULL, NULL, &ConMgr_getOper),
     RKH_TRREG(evNetClockSync,  NULL, localTimeGet, &ConMgr_localTime),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ConMgr_localTime, NULL, NULL, &ConMgr_registered, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_localTime)
-    RKH_TRREG(evLocalTime,     NULL, rtimeSync,  &ConMgr_configure),
-    RKH_TRREG(evNoResponse,    NULL, NULL,       &ConMgr_configure),
+    RKH_TRREG(evLocalTime,     NULL, rtimeSync,  &ConMgr_getOper),
+    RKH_TRREG(evNoResponse,    NULL, NULL,       &ConMgr_getOper),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_HISTORY_STORAGE(ConMgr_configure);
 RKH_CREATE_COMP_REGION_STATE(ConMgr_configure, NULL, NULL, &ConMgr_registered, 
-                             &ConMgr_setAPN, configureInit,
+                             &ConMgr_getOper, configureInit,
                              RKH_SHISTORY, NULL, NULL, NULL,
                              RKH_GET_HISTORY_STORAGE(ConMgr_configure));
 RKH_CREATE_TRANS_TABLE(ConMgr_configure)
@@ -236,19 +256,24 @@ RKH_CREATE_TRANS_TABLE(ConMgr_configure)
     RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_checkConfigTry),
 RKH_END_TRANS_TABLE
 
+RKH_CREATE_BASIC_STATE(ConMgr_getOper, getOper, NULL, &ConMgr_configure, NULL);
+RKH_CREATE_TRANS_TABLE(ConMgr_getOper)
+    RKH_TRREG(evOper,          NULL, storeOper,     &ConMgr_setAPN),
+RKH_END_TRANS_TABLE
+
 RKH_CREATE_BASIC_STATE(ConMgr_setAPN, setupAPN, NULL, 
                                                     &ConMgr_configure, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_setAPN)
-    RKH_TRREG(evOk,         NULL, NULL, &ConMgr_enableGPRS),
+    RKH_TRREG(evOk,         NULL, NULL, &ConMgr_enableNetwork),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(ConMgr_enableGPRS, startGPRS, NULL, 
+RKH_CREATE_BASIC_STATE(ConMgr_enableNetwork, startNetwork, NULL, 
                                                     &ConMgr_configure, NULL);
-RKH_CREATE_TRANS_TABLE(ConMgr_enableGPRS)
+RKH_CREATE_TRANS_TABLE(ConMgr_enableNetwork)
     RKH_TRREG(evOk,         NULL, NULL, &ConMgr_checkIP),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(ConMgr_checkIP, getConnStatus, NULL, 
+RKH_CREATE_BASIC_STATE(ConMgr_checkIP, getIpStatus, NULL, 
                                                     &ConMgr_configure, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_checkIP)
     RKH_TRREG(evIPGprsAct,  requestIp,    NULL, &ConMgr_checkIP),
@@ -277,7 +302,12 @@ RKH_CREATE_COMP_REGION_STATE(ConMgr_connecting, NULL, NULL,
 RKH_CREATE_TRANS_TABLE(ConMgr_connecting)
     RKH_TRREG(evClose,  NULL,  socketClose, &ConMgr_disconnecting),
     RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_checkConnectTry),
+    RKH_TRREG(evError,      NULL,  NULL, &ConMgr_checkConnectTry),
     RKH_TRREG(evClosed,     NULL,  NULL, &ConMgr_checkConnectTry),
+    RKH_TRREG(evIPStatus,   NULL,  NULL, &ConMgr_checkConnectTry),
+    RKH_TRREG(evIPInitial,  NULL,  NULL, &ConMgr_configure),
+    RKH_TRREG(evIPStart,    NULL,  NULL, &ConMgr_configure),
+    RKH_TRREG(evIPGprsAct,  NULL,  NULL, &ConMgr_configure),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ConMgr_waitingServer, connectingEntry, connectingExit,
@@ -299,10 +329,18 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_BASIC_STATE(ConMgr_idle, idleEntry, idleExit,
                                                 &ConMgr_connected, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_idle)
-    RKH_TRINT(evNoResponse, NULL, resetParser),
-    RKH_TRREG(evTimeout, NULL,  getConnStatus,  &ConMgr_idle),
+    RKH_TRREG(evTimeout, NULL,  getConnStatus,  &ConMgr_getStatus),
     RKH_TRREG(evSend,    NULL,  sendRequest,    &ConMgr_sending),
     RKH_TRREG(evRecv,    NULL,  readData,       &ConMgr_receiving),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_BASIC_STATE(ConMgr_getStatus, NULL, getStatusExit,
+                                                &ConMgr_connected, NULL);
+RKH_CREATE_TRANS_TABLE(ConMgr_getStatus)
+    RKH_TRINT(evSend,    NULL,  defer),
+    RKH_TRINT(evRecv,    NULL,  defer),
+    RKH_TRREG(evNoResponse, checkConnectedFailCounter, tryGetStatus, &ConMgr_idle),
+    RKH_TRREG(evConnected, NULL, isConnected,   &ConMgr_idle),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_COMP_REGION_STATE(ConMgr_sending, NULL, NULL, 
@@ -310,6 +348,7 @@ RKH_CREATE_COMP_REGION_STATE(ConMgr_sending, NULL, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_sending)
     RKH_TRCOMPLETION(NULL, NULL, &ConMgr_idle),
+    RKH_TRREG(evError, NULL, sendFail, &ConMgr_idle),
     RKH_TRREG(evNoResponse, NULL, sendFail, &ConMgr_idle),
 RKH_END_TRANS_TABLE
 
@@ -326,6 +365,7 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_BASIC_STATE(ConMgr_receiving, NULL, NULL, &ConMgr_connected, NULL);
 RKH_CREATE_TRANS_TABLE(ConMgr_receiving)
     RKH_TRREG(evOk, NULL,  recvOk, &ConMgr_idle),
+    RKH_TRREG(evError, NULL, recvFail, &ConMgr_idle),
 	RKH_TRREG(evNoResponse, NULL, recvFail, &ConMgr_idle),
 RKH_END_TRANS_TABLE
 
@@ -366,9 +406,26 @@ struct ConMgr
 {
     RKH_SMA_T ao;       /* base structure */
     RKH_TMR_T timer;
+    RKH_TMR_T timerReg;
     rui8_t retryCount; 
     SendEvt *psend;
+    int sigLevel;
+    char Imei[IMEI_BUF_SIZE];
+    char Oper[OPER_BUF_SIZE];
 };
+
+typedef struct Apn
+{
+    char *addr;
+    char *usr;
+    char *psw;
+}Apn;
+
+typedef struct Operator
+{
+    char *netCode;
+    Apn apn;
+}Operator;
 
 RKH_SMA_CREATE(ConMgr, conMgr, 1, HCAL, &ConMgr_inactive, init, NULL);
 RKH_SMA_DEF_PTR(conMgr);
@@ -379,7 +436,13 @@ RKH_SMA_DEF_PTR(conMgr);
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+/*
+ *  Declare and allocate the 'e_tout' event.
+ *  The 'e_tout' event with TIMEOUT signal never changes, so it can be
+ *  statically allocated just once by means of RKH_ROM_STATIC_EVENT() macro.
+ */
 static RKH_STATIC_EVENT(e_tout, evToutDelay);
+static RKH_STATIC_EVENT(e_regTout, evRegTimeout);
 static RKH_ROM_STATIC_EVENT(e_Open, evOpen);
 static RKH_ROM_STATIC_EVENT(e_Close, evClose);
 static RKH_ROM_STATIC_EVENT(e_NetConnected, evNetConnected);
@@ -390,10 +453,40 @@ static RKH_ROM_STATIC_EVENT(e_RecvFail, evRecvFail);
 
 ReceivedEvt e_Received;
 
-static char Imei[IMEI_BUF_SIZE];
+static RKH_QUEUE_T qDefer;
+static RKH_EVT_T *qDefer_sto[SIZEOF_QDEFER];
+
+static Operator operTable[] =
+{
+    { MOVISTAR_OPERATOR, 
+        { MOVISTAR_APN_ADDR, MOVISTAR_APN_USER, MOVISTAR_APN_PASS } 
+    },
+    { CLARO_OPERATOR, 
+        { CLARO_APN_ADDR, CLARO_APN_USER, CLARO_APN_PASS } 
+    },
+    { PERSONAL_OPERATOR, 
+        { PERSONAL_APN_ADDR, PERSONAL_APN_USER, PERSONAL_APN_PASS } 
+    },
+    { NULL }
+};
+
+static Apn *defaultAPN = &(operTable[0].apn);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static Apn *
+getAPNbyOper(char *oper)
+{
+    Operator *pOper;
+    
+    for( pOper = &operTable[0]; pOper->netCode != NULL; ++pOper)
+    {
+        if(strcmp(oper, pOper->netCode) == 0)
+            return &(pOper->apn);
+    }
+    return defaultAPN;
+}
+
 /* ............................ Initial action ............................. */
 static void
 init(ConMgr *const me, RKH_EVT_T *pe)
@@ -406,6 +499,7 @@ init(ConMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_AO(me);
 
     RKH_TR_FWK_TIMER(&me->timer);
+    RKH_TR_FWK_TIMER(&me->timerReg);
     RKH_TR_FWK_STATE(me, &ConMgr_inactive);
     RKH_TR_FWK_STATE(me, &ConMgr_active);
     RKH_TR_FWK_STATE(me, &ConMgr_initialize);
@@ -423,11 +517,12 @@ init(ConMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &ConMgr_failure);
     RKH_TR_FWK_STATE(me, &ConMgr_waitNetClockSync);
     RKH_TR_FWK_STATE(me, &ConMgr_localTime);
+    RKH_TR_FWK_STATE(me, &ConMgr_getOper);
     RKH_TR_FWK_STATE(me, &ConMgr_configure);
     RKH_TR_FWK_STATE(me, &ConMgr_configureHist);
     RKH_TR_FWK_STATE(me, &ConMgr_setManualGet);
     RKH_TR_FWK_STATE(me, &ConMgr_setAPN);
-    RKH_TR_FWK_STATE(me, &ConMgr_enableGPRS);
+    RKH_TR_FWK_STATE(me, &ConMgr_enableNetwork);
     RKH_TR_FWK_STATE(me, &ConMgr_checkIP);
     RKH_TR_FWK_STATE(me, &ConMgr_checkConfigTry);
     RKH_TR_FWK_STATE(me, &ConMgr_waitRetryConfig);
@@ -436,6 +531,7 @@ init(ConMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &ConMgr_waitingServer);
     RKH_TR_FWK_STATE(me, &ConMgr_connected);
     RKH_TR_FWK_STATE(me, &ConMgr_idle);
+    RKH_TR_FWK_STATE(me, &ConMgr_getStatus);
     RKH_TR_FWK_STATE(me, &ConMgr_sending);
     RKH_TR_FWK_STATE(me, &ConMgr_waitPrompt);
     RKH_TR_FWK_STATE(me, &ConMgr_waitOk);
@@ -448,7 +544,11 @@ init(ConMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &ConMgr_disconnecting);
     RKH_TR_FWK_TIMER(&me->timer);
 
+    rkh_queue_init(&qDefer, (const void **)qDefer_sto, SIZEOF_QDEFER, 
+                CV(0));
+
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
+    RKH_TMR_INIT(&me->timerReg, &e_regTout, NULL);
     me->retryCount = 0;
 }
 
@@ -461,6 +561,7 @@ open(ConMgr *const me, RKH_EVT_T *pe)
 
     RKH_SMA_POST_FIFO(modMgr, &e_Open, conMgr);
 
+    bsp_SIMSelect(MainSIM);
     modPwr_on();
 }
 
@@ -473,6 +574,25 @@ close(ConMgr *const me, RKH_EVT_T *pe)
     RKH_SMA_POST_FIFO(modMgr, &e_Close, conMgr);
 
     modPwr_off();
+}
+
+static void
+defer(ConMgr *const me, RKH_EVT_T *pe)
+{
+    (void)me;
+
+    if( rkh_queue_is_full(&qDefer) != RKH_TRUE )
+        rkh_sma_defer(&qDefer, pe);
+}
+
+static void
+setSigLevel(ConMgr *const me, RKH_EVT_T *pe)
+{
+    SigLevelEvt *p;
+    (void)me;
+    
+    p = RKH_UPCAST(SigLevelEvt, pe);
+    me->sigLevel = p->value;
 }
 
 static void
@@ -491,7 +611,36 @@ storeImei(ConMgr *const me, RKH_EVT_T *pe)
 	(void)me;
 
     p = RKH_UPCAST(ImeiEvt, pe);
-    strcpy(Imei, p->buf);
+    strcpy(me->Imei, p->buf);
+}
+
+static void
+storeOper(ConMgr *const me, RKH_EVT_T *pe)
+{
+    OperEvt *p;
+
+    (void)me;
+
+    p = RKH_UPCAST(OperEvt, pe);
+    strcpy(me->Oper, p->buf);
+}
+
+static void
+checkRegStatus(ConMgr *const me, RKH_EVT_T *pe)
+{
+    (void)me;
+    (void)pe;
+
+    ModCmd_getRegStatus();
+}
+
+static void
+startRegStatus(ConMgr *const me, RKH_EVT_T *pe)
+{
+    (void)me;
+    (void)pe;
+
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), CHECK_REG_PERIOD);
 }
 
 static void
@@ -525,6 +674,7 @@ configTry(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 
     ++me->retryCount;
+    ModCmd_init();
 }
 
 static void 
@@ -604,6 +754,7 @@ sendOk(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
+    me->retryCount = 0;
     rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_Sent), 
                                      RKH_UPCAST(RKH_SMA_T, me));
 }
@@ -616,6 +767,7 @@ recvOk(ConMgr *const me, RKH_EVT_T *pe)
 
     rkh_pubsub_publish(ConnectionTopic, RKH_UPCAST(RKH_EVT_T, &e_Received), 
                                      RKH_UPCAST(RKH_SMA_T, me));
+    bsp_recvOk();
 }
 
 static void
@@ -641,12 +793,12 @@ recvFail(ConMgr *const me, RKH_EVT_T *pe)
 }
 
 static void
-resetParser(ConMgr *const me, RKH_EVT_T *pe)
+tryGetStatus(ConMgr *const me, RKH_EVT_T *pe)
 {
     (void)pe;
-    (void)me;
 
-	ModCmd_init();
+    ++me->retryCount;
+    ModCmd_init();
 }
 
 /* ............................. Entry actions ............................. */
@@ -662,6 +814,8 @@ static void
 sendInit(ConMgr *const me)
 {
     (void)me;
+
+    bsp_GSMModemFound();
 
     ModCmd_initStr();
 }
@@ -686,6 +840,8 @@ static void
 netTimeEnable(ConMgr *const me)
 {
     (void)me;
+
+    bsp_SIMReady();
 
     ModCmd_enableNetTime();
 }
@@ -712,7 +868,17 @@ unregEntry(ConMgr *const me)
     ModCmd_getRegStatus();
 
     RKH_SET_STATIC_EVENT(&e_tout, evTimeout);
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), REGISTRATION_TIME);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), RKH_TIME_MS(2000));
+
+    RKH_SET_STATIC_EVENT(&e_regTout, evRegTimeout);
+    RKH_TMR_ONESHOT(&me->timerReg, RKH_UPCAST(RKH_SMA_T, me), REGISTRATION_TIME);
+}
+
+static void 
+regEntry(ConMgr *const me)
+{
+	(void)me;
+    bsp_regStatus(RegisteredSt);
 }
 
 static void 
@@ -746,19 +912,37 @@ waitNetClockSyncEntry(ConMgr *const me)
 }
 
 static void
-setupAPN(ConMgr *const me)
+getOper(ConMgr *const me)
 {
     (void)me;
 
-    ModCmd_setupAPN(CONNECTION_APN, CONNECTION_USER, CONNECTION_PASSWORD);
+    ModCmd_getOper();
 }
    
 static void
-startGPRS(ConMgr *const me)
+setupAPN(ConMgr *const me)
+{
+    Apn *apn;
+    (void)me;
+
+    apn = getAPNbyOper(me->Oper);
+    ModCmd_setupAPN(apn->addr, apn->usr, apn->psw);
+}
+   
+static void
+startNetwork(ConMgr *const me)
 {
     (void)me;
 
-    ModCmd_startGPRS();
+    ModCmd_startNetwork();
+}
+
+static void
+getIpStatus(ConMgr *const me)
+{
+    (void)me;
+
+    ModCmd_getIpStatus();
 }
 
 static void
@@ -767,6 +951,12 @@ getConnStatus(ConMgr *const me)
     (void)me;
 
     ModCmd_getConnStatus();
+}
+
+static void
+isConnected(ConMgr *const me)
+{
+    me->retryCount = 0;
 }
 
 static void
@@ -821,6 +1011,14 @@ static void
 unregExit(ConMgr *const me)
 {
     rkh_tmr_stop(&me->timer);
+    rkh_tmr_stop(&me->timerReg);
+}
+
+static void 
+regExit(ConMgr *const me)
+{
+	(void)me;
+    bsp_regStatus(UnregisteredSt);
 }
 
 static void
@@ -834,6 +1032,7 @@ failureExit(ConMgr *const me)
 {
     (void)me;
 
+    bsp_SIMChange();
     modPwr_on();
     ModCmd_init();
     rkh_tmr_stop(&me->timer);
@@ -882,6 +1081,14 @@ idleExit(ConMgr *const me)
     rkh_tmr_stop(&me->timer);
 }
 
+static void
+getStatusExit(ConMgr *const me)
+{
+    (void)me;
+
+    rkh_sma_recall((RKH_SMA_T *)me, &qDefer);
+}
+
 /* ................................ Guards ................................. */
 rbool_t
 checkSyncTry(ConMgr *const me, RKH_EVT_T *pe)
@@ -907,6 +1114,14 @@ checkConnectTry(ConMgr *const me, RKH_EVT_T *pe)
     return (me->retryCount < MAX_CONNECT_RETRY) ? RKH_TRUE : RKH_FALSE;
 }
 
+rbool_t
+checkConnectedFailCounter(ConMgr *const me, RKH_EVT_T *pe)
+{
+    (void)pe;
+    
+    return (me->retryCount < MAX_CONSTATUS_NORESP) ? RKH_TRUE : RKH_FALSE;
+}
+
 /* ---------------------------- Global functions --------------------------- */
 ReceivedEvt *
 ConMgr_ReceiveDataGetRef(void)
@@ -917,13 +1132,28 @@ ConMgr_ReceiveDataGetRef(void)
 char *
 ConMgr_Imei(void)
 {
-    return Imei;
+    ConMgr *me;
+
+    me = RKH_UPCAST(ConMgr, conMgr); 
+    return me->Imei;
 }
 
 char *
 ConMgr_ImeiSNR(void)
 {
-    return (Imei + IMEI_SNR_OFFSET);
+    ConMgr *me;
+
+    me = RKH_UPCAST(ConMgr, conMgr); 
+    return (me->Imei + IMEI_SNR_OFFSET);
+}
+
+int
+ConMgr_sigLevel(void)
+{
+    ConMgr *me;
+
+    me = RKH_UPCAST(ConMgr, conMgr); 
+    return me->sigLevel;
 }
 
 /* ------------------------------ End of file ------------------------------ */

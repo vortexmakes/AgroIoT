@@ -48,7 +48,7 @@
  *	##### Defines the critical section interface #####
  */
 
-#define ps_enter_critical()		RKH_ENTER_CRITICAL_()
+#define ps_enter_critical()		RKH_SR_ALLOC(); RKH_ENTER_CRITICAL_()
 #define ps_exit_critical()		RKH_EXIT_CRITICAL_()
 
 

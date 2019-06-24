@@ -36,6 +36,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evNoResponse);
     RKH_TR_FWK_SIG(evURC);
 	RKH_TR_FWK_SIG(evTimeout);
+	RKH_TR_FWK_SIG(evRegTimeout);
     RKH_TR_FWK_SIG(evToutWaitResponse);
     RKH_TR_FWK_SIG(evOk);
     RKH_TR_FWK_SIG(evError);
@@ -44,6 +45,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evSimPin);
     RKH_TR_FWK_SIG(evSimError);
     RKH_TR_FWK_SIG(evNoReg);
+    RKH_TR_FWK_SIG(evOper);
     RKH_TR_FWK_SIG(evReg);
     RKH_TR_FWK_SIG(evIP);
     RKH_TR_FWK_SIG(evIPInitial);
@@ -66,6 +68,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evLocalTime);
     RKH_TR_FWK_SIG(evUnlocked);
     RKH_TR_FWK_SIG(evImei);
+    RKH_TR_FWK_SIG(evSigLevel);
     RKH_TR_FWK_SIG(evRMC);
     RKH_TR_FWK_SIG(evGeoStamp);
     RKH_TR_FWK_SIG(evGeoStampInvalid);
@@ -73,7 +76,11 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evIoChg);
 	RKH_TR_FWK_SIG(evRestart);
 	RKH_TR_FWK_SIG(evEndOfCycle);
-	RKH_TR_FWK_SIG(evTerminate);     /* press the key escape on the keyboard */
+	RKH_TR_FWK_SIG(evSensorData);
+	RKH_TR_FWK_SIG(evTerminate);
+    RKH_TR_FWK_SIG(evDevData);
+    RKH_TR_FWK_SIG(evRawData);
+    RKH_TR_FWK_SIG(evSyncTout);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -17,7 +17,7 @@
  *	Specify the maximum number of state machine applications (SMA) to be used
  *	by the application (can be a number in the range [1..64]).
  */
-#define RKH_CFG_FWK_MAX_SMA             5u
+#define RKH_CFG_FWK_MAX_SMA             7u
 
 /**
  *	If the dynamic event support (see #RKH_CFG_FWK_DYN_EVT_EN) is set to
@@ -624,7 +624,7 @@
  *	rkh_rq_is_full() function that allows to known if a queue is full.
  *	See rkh_rq_is_full() function.
  */
-#define RKH_CFG_QUE_IS_FULL_EN           RKH_DISABLED
+#define RKH_CFG_QUE_IS_FULL_EN           RKH_ENABLED
 
 /**
  *	If the #RKH_CFG_QUE_GET_NELEMS_EN is set to 1 then RKH will include the

@@ -17,7 +17,7 @@ void tpl_xmit( uchar data );
 void tpl_stop_xmit( void );
 void tpl_eoftx( void );
 
-#define tpl_enter_critical()   RKH_ENTER_CRITICAL_()
+#define tpl_enter_critical()   RKH_SR_ALLOC(); RKH_ENTER_CRITICAL_()
 #define tpl_exit_critical()    RKH_EXIT_CRITICAL_()
 
 #if __TPLINK_DBG__ || TREO_DBG

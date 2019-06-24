@@ -23,7 +23,6 @@
 #include "tplhal.h"
 #include "ps.h"
 #include "cboxcmd.h"
-#include "sleep.h"
 #include "cbdata.h"
 #include "mytypes.h"
 

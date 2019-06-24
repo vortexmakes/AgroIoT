@@ -15,8 +15,8 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __TRKCLIENT_H__
-#define __TRKCLIENT_H__
+#ifndef __COMMMGR_H__
+#define __COMMMGR_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
@@ -33,13 +33,6 @@ extern "C" {
 RKH_SMA_DCLR(commMgr);
 
 /* ------------------------------- Data types ------------------------------ */
-typedef struct AppData AppData;
-struct AppData
-{
-    rui8_t *data;
-    rui16_t size;
-};
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

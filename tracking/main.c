@@ -28,15 +28,16 @@
 #include "geoMgr.h"
 #include "ioChg.h"
 #include "DeviceServer.h"
-#include "sim900parser.h"
+#include "sim5320parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"
 
 #include "mTime.h"
+#include "sequence.h"
 #include "epoch.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define TRKCLIENT_QSTO_SIZE 16
+#define COMMMGR_QSTO_SIZE	16
 #define CONMGR_QSTO_SIZE    8
 #define MODMGR_QSTO_SIZE    4
 #define GEOMGR_QSTO_SIZE    4
@@ -46,16 +47,16 @@
 #define SIZEOF_EP0_BLOCK    sizeof(RKH_EVT_T)
 
 #define SIZEOF_EP1_BLOCK    sizeof(RmcEvt)
-#define SIZEOF_EP1STO       (4*SIZEOF_EP1_BLOCK)
+#define SIZEOF_EP1STO       (16*SIZEOF_EP1_BLOCK)
 
 #define SIZEOF_EP2_BLOCK    sizeof(ModMgrEvt)
-#define SIZEOF_EP2STO       (4*SIZEOF_EP2_BLOCK)
+#define SIZEOF_EP2STO       (16*SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_EVT_T *TrkCLient_qsto[TRKCLIENT_QSTO_SIZE];
+static RKH_EVT_T *CommMgr_qsto[COMMMGR_QSTO_SIZE];
 static RKH_EVT_T *ConMgr_qsto[CONMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
 static RKH_EVT_T *GeoMgr_qsto[GEOMGR_QSTO_SIZE];
@@ -73,7 +74,7 @@ setupTraceFilters(void)
 {
     RKH_FILTER_ON_GROUP(RKH_TRC_ALL_GROUPS);
     RKH_FILTER_ON_EVENT(RKH_TRC_ALL_EVENTS);
-	//RKH_FILTER_OFF_EVENT(MODCMD_USR_TRACE);
+	RKH_FILTER_OFF_EVENT(MODCMD_USR_TRACE);
 	//RKH_FILTER_OFF_GROUP_ALL_EVENTS(RKH_TG_USR);
     RKH_FILTER_OFF_EVENT(RKH_TE_TMR_TOUT);
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_STATE);
@@ -82,10 +83,10 @@ setupTraceFilters(void)
     //RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
     //RKH_FILTER_OFF_SMA(modMgr);
-    //RKH_FILTER_OFF_SMA(conMgr);
+    RKH_FILTER_OFF_SMA(conMgr);
 	//RKH_FILTER_OFF_SMA(geoMgr);
-	RKH_FILTER_OFF_SMA(deviceServer);
-	RKH_FILTER_OFF_SMA(commMgr);
+	//RKH_FILTER_OFF_SMA(deviceServer);
+	//RKH_FILTER_OFF_SMA(commMgr);
 	RKH_FILTER_OFF_ALL_SIGNALS();
 }
 
@@ -96,6 +97,7 @@ main(int argc, char *argv[])
     bsp_init(argc, argv);
 
     epoch_init();
+    init_seqs();
     mTime_init();
 
     rkh_fwk_init();
@@ -108,7 +110,7 @@ main(int argc, char *argv[])
     signals_publishSymbols();
 
     RKH_TR_FWK_ACTOR(&ioChg, "ioChg");
-    RKH_TR_FWK_ACTOR(&sim900parser, "sim900parser");
+    RKH_TR_FWK_ACTOR(&sim5320parser, "sim5320parser");
     RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
 	RKH_TR_FWK_ACTOR(&tpSens, "tpSens");
 	
@@ -122,7 +124,7 @@ main(int argc, char *argv[])
 	RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(deviceServer, DevSvr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
 
-    RKH_SMA_ACTIVATE(commMgr, TrkCLient_qsto, TRKCLIENT_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(commMgr, CommMgr_qsto, COMMMGR_QSTO_SIZE, 0, 0);
 
     RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);
 	RKH_SMA_POST_FIFO(deviceServer, &e_Open, 0);

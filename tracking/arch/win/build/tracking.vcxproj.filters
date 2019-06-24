@@ -79,12 +79,6 @@
     <ClCompile Include="..\..\..\conmgr\conmgr.c">
       <Filter>tracking\conmgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\parser\sim900\sim900parser.c">
-      <Filter>tracking\parser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modcmd\modcmdSim900.c">
-      <Filter>tracking\modcmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\epoch\epoch.c">
       <Filter>epoch</Filter>
     </ClCompile>
@@ -157,9 +151,6 @@
     <ClCompile Include="..\..\..\tpsens\ps\psport.c">
       <Filter>tpsens\ps</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\deviceServer\deviceServer.c">
-      <Filter>tracking\deviceServer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\device\src\device.c">
       <Filter>tracking\device</Filter>
     </ClCompile>
@@ -171,6 +162,30 @@
     </ClCompile>
     <ClCompile Include="..\..\..\CommMgr\CommMgr.c">
       <Filter>tracking\CommMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\parser\sim5320\sim5320parser.c">
+      <Filter>tracking\parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\modcmd\modcmdSim5320.c">
+      <Filter>tracking\modcmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\sequence\sequence.c">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\sequence\seqtbl.c">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\bsp\seqlog.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\trkClient\trkClient.c">
+      <Filter>trkClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DeviceServer\DeviceServer.c">
+      <Filter>tracking\DeviceServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\bsp\gsmlog.c">
+      <Filter>bsp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -234,9 +249,6 @@
     <Filter Include="tpsens\tplink">
       <UniqueIdentifier>{a49ebf66-1fda-4e14-b082-fbfd0a587cd9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="tracking\deviceServer">
-      <UniqueIdentifier>{d33fa21a-77df-40df-8897-af9d9c3fcba4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="collector">
       <UniqueIdentifier>{b371901a-54aa-4f4d-9e3d-7fca4ccbb1f4}</UniqueIdentifier>
     </Filter>
@@ -249,10 +261,43 @@
     <Filter Include="tracking\device">
       <UniqueIdentifier>{0360a7fd-3eaf-4dac-8d2c-6d57f4f4c9d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sequence">
+      <UniqueIdentifier>{419e309c-ca5e-412b-8454-7eeeec1902de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="trkClient">
+      <UniqueIdentifier>{9ae6be0f-68e8-4af4-963d-cfccb9453a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tracking\DeviceServer">
+      <UniqueIdentifier>{a8d560ca-1790-4dcc-85b6-cd495930cf07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\geoMgr\geoMgr.h">
       <Filter>tracking\geomgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\sequence.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqtbl.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqlog.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqerr.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqdefs.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\seqchbak.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sequence\genled.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\trkClient\trkClient.h">
+      <Filter>trkClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -117,6 +117,8 @@ char rmc_status(Rmc *p);
 
 int rmc_timeUpdate(Rmc *p);
 
+Time *rmc_timeGet(void);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

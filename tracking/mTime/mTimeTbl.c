@@ -20,8 +20,15 @@
 #include "mTimeCfg.h"
 #include "epoch.h"
 #include "modpwr.h"
-#include "dIn.h"
-#include "dOut.h"
+//#include "seqchbak.h"
+//#include "dIn.h"
+//#include "dOut.h"
+
+#include "mytypes.h"
+MUInt sequence_interrupt( void );
+
+void dIn_scan(void);
+void dOut_process(void);
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -30,10 +37,11 @@
 /* ---------------------------- Local variables ---------------------------- */
 static void(* const actions_100[])( void ) =
 {
+	(void(*)(void))epoch_updateByStep,
 #ifdef MODPWR_CTRL_ENABLE
 	modPwr_ctrl, 
 #endif
-    epoch_updateByStep,
+    (void(*)(void))sequence_interrupt,
 	dIn_scan,
     dOut_process,
     NULL
@@ -51,9 +59,9 @@ static void(* const actions_10000[])( void ) =
 
 const timerChain_t timerChain[] =
 {
-	{ MTIME_EPOCH_SCAN_PERIOD, actions_100 },
-	{ MTIME_1SEC_SCAN_PERIOD, actions_1000 },
-	{ MTIME_10SEC_SCAN_PERIOD, actions_10000 }
+	{ MTIME_100MSEC/MTIME_TIME_TICK, actions_100 },
+	{ MTIME_1SEC/MTIME_TIME_TICK, actions_1000 },
+	{ MTIME_10SEC/MTIME_TIME_TICK, actions_10000 }
 };
 
 /* ----------------------- Local function prototypes ----------------------- */

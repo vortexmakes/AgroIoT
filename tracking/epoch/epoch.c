@@ -16,7 +16,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "epoch.h"
-#include "rtime.h"
+#include "rmc.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -41,7 +41,7 @@ updStep_start(void)
 {
     Time *currTime;
 
-    currTime = rtime_get();
+    currTime = rmc_timeGet();
     nextTime = *currTime;
     updatingEpoch = 0;
     return updatingEpoch;
@@ -144,7 +144,7 @@ epoch_updateNow(void)
 {
     Time *currTime;
 
-    currTime = rtime_get();
+    currTime = rmc_timeGet();
     currEpoch = epoch_mktime(currTime);
 }
 

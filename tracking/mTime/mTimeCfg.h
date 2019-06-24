@@ -29,9 +29,12 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /*
- * 	Here define the time of interrupt in us
+ * 	Here define the time of interrupt in ms
  */
 #define MTIME_TIME_TICK			RKH_TICK_RATE_MS   /* Expressed in msec */
+#define MTIME_100MSEC			100 
+#define MTIME_1SEC			    1000
+#define MTIME_10SEC	    		10000
 
 /*
  * 	Number of slots in table 'timerChain'declared in 'mTimeTbl.h' and
@@ -42,9 +45,11 @@ extern "C" {
 /*
  * Scaled time slots constants
  */
-#define MTIME_EPOCH_SCAN_PERIOD			(100/MTIME_TIME_TICK)
-#define MTIME_1SEC_SCAN_PERIOD			(1000/MTIME_TIME_TICK)
-#define MTIME_10SEC_SCAN_PERIOD         (10000/MTIME_TIME_TICK)
+#define MTIME_EPOCH_SCAN_PERIOD			MTIME_100MSEC
+#define MTIME_SEQUENCE_SCAN_PERIOD	    MTIME_100MSEC
+#define MTIME_MODPWR_SCAN_PERIOD	    MTIME_100MSEC
+#define MTIME_1SEC_SCAN_PERIOD			MTIME_1SEC
+#define MTIME_10SEC_SCAN_PERIOD         MTIME_10SEC
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */

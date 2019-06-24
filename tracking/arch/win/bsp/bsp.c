@@ -36,6 +36,8 @@
 #include "dIn.h"
 #include "dOut.h"
 #include "tplfsm.h"
+#include "genled.h"
+#include "gsmlog.h"
 
 RKH_THIS_MODULE
 
@@ -44,7 +46,10 @@ RKH_THIS_MODULE
 #define ESC                 0x1B
 #define TRK_CFG_OPTIONS     "st:f:p:m:g:c:h"
 
-#define TEST_TX_PACKET      "----o Ping"
+#define YIPIES_TEST_FRAME   "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
+							"000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
+
+#define TEST_TX_PACKET       YIPIES_TEST_FRAME
 #define TEST_RX_PACKET      "o---- Pong"
 
 #define NUM_AN_SAMPLES_GET  10
@@ -54,7 +59,7 @@ RKH_THIS_MODULE
 /* ---------------------------- Global variables --------------------------- */
 SERIAL_T serials[ NUM_CHANNELS ] =
 {
-	{	"COM1",	19200, 8, PAR_NONE, STOP_1, 0 },
+	{	"COM1",	115200, 8, PAR_NONE, STOP_1, 0 },
 	{	"COM2",	9600, 8, PAR_NONE, STOP_1, 0 },
 	{   "COM3",	9600, 8, PAR_NONE, STOP_1, 0 }
 };
@@ -63,6 +68,7 @@ SERIAL_T serials[ NUM_CHANNELS ] =
 static rui8_t bsp;
 static ModCmdRcvHandler gsmCmdParser;
 static GpsRcvHandler    gpsParser;
+static SIMSelect_t      simSelect;
 static char *opts = (char *)TRK_CFG_OPTIONS;
 static const char *helpMessage =
 {
@@ -98,6 +104,10 @@ static SERIAL_CBACK_T gps_ser_cback =
 { gps_rx_isr, NULL, NULL, gps_tx_isr, NULL, NULL, NULL };
 static SERIAL_CBACK_T tplink_cback =
 { tplink_rx_isr, NULL, NULL, tplink_tx_isr, NULL, NULL, NULL };
+
+static char gpsCurrStatus = -1;
+
+static char gsmDebug;
 
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -163,7 +173,10 @@ void
 gsm_rx_isr( unsigned char byte )
 {
     gsmCmdParser(byte);
-	//putchar(byte);
+    gsmlog_write(byte);
+
+	if(gsmDebug)
+		putchar(byte);
 }
 
 static
@@ -198,10 +211,20 @@ bsp_init(int argc, char *argv[])
     printBanner();
 
     processCmdLineOpts(argc, argv);
-
+	
     modPwr_init();
 	dIn_init();
 	dOut_init();
+}
+
+void
+bsp_close(void)
+{
+    gsmlog_close();
+
+    bsp_serial_close(GSM_PORT);
+    bsp_serial_close(GPS_PORT);
+    //bsp_serial_close(TPSENS_PORT);
 }
 
 void
@@ -213,6 +236,10 @@ bsp_keyParser(int c)
             RKH_SMA_POST_FIFO(modMgr, &e_Term, &bsp);
             rkhport_fwk_stop();
             break;
+
+		case 'v':
+			gsmDebug ^= 1;
+			break;
 
         case 'q':
             dOut_set(0, 1, DOUT_TIME(1000));
@@ -227,6 +254,16 @@ bsp_keyParser(int c)
             printf("Close GPRS Socket\r\n");
             RKH_SMA_POST_FIFO(conMgr, &e_Close, &bsp);
             break;
+
+		case '1':
+			printf("Module Power ON\r\n");
+			modPwr_on();
+			break;
+
+		case '2':
+			printf("Module Power OFF\r\n");
+			modPwr_off();
+			break;
 
         case 'r':
             printf("Read GPRS Socket\r\n");
@@ -264,31 +301,32 @@ bsp_serial_open(int ch)
         case GSM_PORT:
             gsmCmdParser = ModCmd_init();
 			init_serial_hard(ch, &gsm_ser_cback);
-            break;
+			connect_serial(ch);
+			modPwr_off();
+            gsmlog_open("gsmlog");
+			break;
 
         case GPS_PORT:
             gpsParser = NULL;
 			init_serial_hard(ch, &gps_ser_cback);
+			connect_serial(ch);
 			break;
 
 		case TPSENS_PORT:
-			init_serial_hard(ch, &tplink_cback);
+			//init_serial_hard(ch, &tplink_cback);
+			//connect_serial(ch);
 			break;
 
 		default:
 			break;
     }
         
-    connect_serial(ch);
-	set_dtr(ch);
-	Sleep(500);
     RKH_TR_FWK_ACTOR(&bsp, "bsp");
 }
 
 void
 bsp_serial_close(int ch)
 {
-	set_dtr(ch);
 	disconnect_serial(ch);
 	deinit_serial_hard(ch);
 }
@@ -298,6 +336,7 @@ bsp_serial_puts(int ch, char *p)
 {
     while(*p!='\0')
     {
+        gsmlog_write(*p);
         tx_data(ch, *p);
         ++p;
     }
@@ -308,34 +347,113 @@ bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata)
 {
     while(ndata && (ndata-- != 0))
     {
+        gsmlog_write(*p);
         tx_data(ch, *p);
         ++p;
     }
 }
 
+void 
+bsp_GSMModemFound(void)
+{
+    printf("\r\nGSM Modem Found\r\n"); 
+
+    set_led(LED_GSM, LSTAGE1);
+}
+
+void 
+bsp_SIMReady(void)
+{
+    printf("\r\nGSM SIM Ready\r\n"); 
+
+    set_led(LED_GSM, LSTAGE2);
+}
+
+void 
+bsp_SIMSelect(SIMSelect_t sim)
+{
+    simSelect = sim;
+
+    printf("\r\nGSM SIM %s\r\n", 
+            simSelect == MainSIM ? "Main" : "Secondary");
+
+    set_led(LED_SIM, simSelect ? LSTAGE2 : LSTAGE1);
+}
+
+void
+bsp_SIMChange(void)
+{
+    simSelect = (simSelect == MainSIM) ? SecSIM : MainSIM;
+
+    bsp_SIMSelect(simSelect);
+}
+
 void
 bsp_serial_putchar(int ch, unsigned char c)
 {
+	if(ch == TPSENS_PORT)
+        return;
+
+    gsmlog_write(c);
     tx_data(ch, c);
+}
+
+void
+bsp_regStatus(Status_t status)
+{
+    printf("\r\nGSM Network %s\r\n", 
+            status == RegisteredSt ? "Registered" : "Unregistered");
+
+    set_led(LED_GSM, status == RegisteredSt ? LSTAGE3 : LSTAGE2);
 }
 
 void 
 bsp_netStatus(Status_t status)
 {
-    printf("\r\nGprs Socket %s\r\n", 
+    printf("\r\nGSM Socket %s\r\n", 
             status == ConnectedSt ? "Connected" : "Disconnected");
+
+    set_led(LED_GSM, status == ConnectedSt ? LSTAGE4 : LSTAGE3);
+}
+
+void 
+bsp_sendOk(void)
+{
+    //printf("\r\nGSM Socket Send Ok\r\n"); 
+	printf("/"); 
+    set_led(LED_GSM, LSTAGE4);
 }
 
 void 
 bsp_sendFail(void)
 {
-    printf("\r\nGprs Socket Sending Failure\r\n"); 
+    printf("\r\nGSM Socket Sending Failure\r\n"); 
+    set_led(LED_GSM, LSTAGE4);
 }
 
 void 
 bsp_recvFail(void)
 {
-    printf("\r\nGprs Socket Receiving Failure\r\n"); 
+    printf("\r\nGSM Socket Receiving Failure\r\n"); 
+    set_led(LED_GSM, LSTAGE4);
+}
+
+void 
+bsp_recvOk(void)
+{
+    //printf("\r\nGSM Socket Receive Ok\r\n"); 
+	printf("."); 
+    set_led(LED_GSM, LSTAGE4);
+}
+
+void 
+bsp_GPSStatus(char status)
+{
+	if(status != gpsCurrStatus)
+		printf("\r\nGPS %s\r\n", status == RMC_StatusValid ? "Active" : "Void" );
+
+	gpsCurrStatus = status;
+    set_led(LED_GPS, status == RMC_StatusValid ? LIT : LSTAGE2);
 }
 
 void
