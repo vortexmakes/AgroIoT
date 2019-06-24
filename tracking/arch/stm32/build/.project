@@ -339,7 +339,7 @@
 		<link>
 			<name>app/third-party/rkh/inc/rkhport.h</name>
 			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp/rkhport.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/RKH/source/portable/arm-cortex/rkhs/arm_cm4f/stm32/rkhport.h</locationURI>
 		</link>
 		<link>
 			<name>app/third-party/rkh/inc/rkhqueue.h</name>
@@ -365,6 +365,11 @@
 			<name>app/third-party/rkh/inc/rkhsma_sync.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/sma/inc/rkhsma_sync.h</locationURI>
+		</link>
+		<link>
+			<name>app/third-party/rkh/inc/rkht.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/RKH/source/portable/arm-cortex/rkhs/arm_cm4f/stm32/rkht.h</locationURI>
 		</link>
 		<link>
 			<name>app/third-party/rkh/inc/rkhtmr.h</name>
@@ -449,7 +454,7 @@
 		<link>
 			<name>app/third-party/rkh/src/rkhport.c</name>
 			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp/rkhport.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/RKH/source/portable/arm-cortex/rkhs/arm_cm4f/stm32/rkhport.c</locationURI>
 		</link>
 		<link>
 			<name>app/third-party/rkh/src/rkhqueue.c</name>
@@ -475,11 +480,6 @@
 			<name>app/third-party/rkh/src/rkhsma_sync.c</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/sma/src/rkhsma_sync.c</locationURI>
-		</link>
-		<link>
-			<name>app/third-party/rkh/src/rkht.h</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp/rkht.h</locationURI>
 		</link>
 		<link>
 			<name>app/third-party/rkh/src/rkhtmr.c</name>
