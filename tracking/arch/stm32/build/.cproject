@@ -28,6 +28,7 @@
 								<option id="gnu.c.compiler.option.debugging.level.1437298633" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.13485509" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
+									<listOptionValue builtIn="false" value="__DF_AT45DB321D__"/>
 									<listOptionValue builtIn="false" value="STM32F4"/>
 									<listOptionValue builtIn="false" value="STM32F407VETx"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
@@ -35,6 +36,7 @@
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 									<listOptionValue builtIn="false" value="__STM32__=1"/>
 									<listOptionValue builtIn="false" value="MODPWR_CTRL_ENABLE=1"/>
+									<listOptionValue builtIn="false" value="__DATAFLASH__"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.675484694" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
@@ -74,7 +76,8 @@
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
-									<listOptionValue builtIn="false" value="../../../../trkClient"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1726576784" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -130,7 +133,8 @@
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
-									<listOptionValue builtIn="false" value="../../../../trkClient"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1379635670" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -183,7 +187,8 @@
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
-									<listOptionValue builtIn="false" value="../../../../trkClient"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.819050743" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.950737101" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -288,7 +293,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry excluding="ffile/portable/80x86|ffile/portable/test|ffile/test|ffile/build|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>
@@ -322,12 +327,15 @@
 								<option id="gnu.c.compiler.option.debugging.level.904150065" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.496107955" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
+									<listOptionValue builtIn="false" value="__DF_AT45DB321D__"/>
 									<listOptionValue builtIn="false" value="STM32F4"/>
 									<listOptionValue builtIn="false" value="STM32F407VETx"/>
+									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="STM32F407xx"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
-									<listOptionValue builtIn="false" value="__CIAANXP__=1"/>
+									<listOptionValue builtIn="false" value="__STM32__=1"/>
 									<listOptionValue builtIn="false" value="MODPWR_CTRL_ENABLE=1"/>
+									<listOptionValue builtIn="false" value="__DATAFLASH__"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.871960899" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
@@ -367,7 +375,8 @@
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
-									<listOptionValue builtIn="false" value="../../../../trkClient"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.618148146" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -423,7 +432,8 @@
 									<listOptionValue builtIn="false" value="../../../../DeviceServer"/>
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
-									<listOptionValue builtIn="false" value="../../../../trkClient"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.803142745" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -520,7 +530,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry excluding="ffile/portable/80x86|ffile/portable/test|ffile/test|ffile/build|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>

@@ -67,6 +67,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/events.h</locationURI>
 		</link>
 		<link>
+			<name>app/ffile</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/ffile</locationURI>
+		</link>
+		<link>
 			<name>app/gps</name>
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/gps</locationURI>
