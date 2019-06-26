@@ -32,6 +32,7 @@
 #include "ubxm8parser.h"
 #include "cbox.h"
 
+#include "ffile.h"
 #include "mTime.h"
 #include "sequence.h"
 #include "epoch.h"
@@ -95,6 +96,10 @@ int
 main(int argc, char *argv[])
 {
     bsp_init(argc, argv);
+
+    ffile_init();
+
+    for(;;);
 
     epoch_init();
     init_seqs();
