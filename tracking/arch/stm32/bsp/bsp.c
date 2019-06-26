@@ -65,7 +65,6 @@ bsp_init(int argc, char *argv[])
     MX_USB_OTG_HS_HCD_Init();
     MX_USART6_UART_Init();
     MX_USART1_UART_Init();
-    MX_SPI1_Init();
     MX_CAN1_Init();
     MX_ADC1_Init();
     MX_SPI3_Init();
@@ -73,6 +72,8 @@ bsp_init(int argc, char *argv[])
     modPwr_init();
     dIn_init();
     dOut_init();
+
+    ffile_init();
 }
 
 void

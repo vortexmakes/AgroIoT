@@ -18,7 +18,7 @@
 
 #include "dflash.h"
 
-#define FFILE_WATCHDOG()		kick_watchdog()
+#define FFILE_WATCHDOG()		;//kick_watchdog()
 
 
 /*

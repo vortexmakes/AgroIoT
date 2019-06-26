@@ -40,6 +40,7 @@
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.675484694" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
@@ -66,6 +67,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -97,6 +99,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.1076674029" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler">
 								<option id="gnu.both.asm.option.include.paths.1923867530" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/sm/inc"/>
@@ -123,6 +126,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -151,6 +155,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1628974728" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.2101217126">
 								<option id="gnu.c.compiler.option.include.paths.2086077315" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
@@ -177,6 +182,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -213,6 +219,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1454312543" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.2101217126">
 								<option id="gnu.c.compiler.option.include.paths.1725342133" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
@@ -239,6 +246,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -255,6 +263,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.1516975469" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.1076674029">
 								<option id="gnu.both.asm.option.include.paths.2003699282" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/sm/inc"/>
@@ -281,6 +290,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -293,7 +303,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ffile/portable/80x86|ffile/portable/test|ffile/test|ffile/build|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry excluding="GStatus/test|GStatus/build|ffile/portable/80x86|ffile/portable/test|ffile/test|ffile/build|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>
@@ -339,6 +349,7 @@
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.871960899" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
@@ -365,6 +376,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -396,6 +408,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release.1649225213" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release">
 								<option id="gnu.both.asm.option.include.paths.1632190880" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/sm/inc"/>
@@ -422,6 +435,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -450,6 +464,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1367193794" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1716626894">
 								<option id="gnu.c.compiler.option.include.paths.914954041" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
@@ -476,6 +491,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -492,6 +508,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release.1771550971" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release.1649225213">
 								<option id="gnu.both.asm.option.include.paths.480185072" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../bsp"/>
+									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/sm/inc"/>
@@ -518,6 +535,7 @@
 									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
+									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
 									<listOptionValue builtIn="false" value="../../../../config"/>
@@ -530,7 +548,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ffile/portable/80x86|ffile/portable/test|ffile/test|ffile/build|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry excluding="GStatus/test|GStatus/build|ffile/portable/80x86|ffile/portable/test|ffile/test|ffile/build|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>

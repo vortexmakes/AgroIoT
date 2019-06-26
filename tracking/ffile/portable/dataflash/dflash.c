@@ -5,10 +5,8 @@
  */
 
 #include "mytypes.h"
-
 #include "dflash.h"
-
-#include "spihal.h"
+#include "dfspi.h"
 
 #define RDY				0x80
 #define ERROR0_MEMORY	0x00
@@ -120,7 +118,7 @@ dflash_flush_command( MUInt len)
 
 	p = cmd_buf;
 	while( len-- )
-		spi_send_byte( *p++ );
+		dfspi_send_byte( *p++ );
 }
 
 /*
@@ -134,9 +132,9 @@ dflash_flush_command( MUInt len)
  */
 
 void
-dflash_init( void )
+dflash_init(void)
 {
-	spihal_init();
+	dfspi_init();
 }
 
 
@@ -151,13 +149,13 @@ dflash_init( void )
  */
 
 void 
-dflash_send_command( MUInt command, int page_address, int byte_address )
+dflash_send_command(MUInt command, int page_address, int byte_address)
 {
 	OPC_T const *p;
 
 	p = &opc_actions[ command ];
 
-	spi_select_channel();
+	dfspi_select_channel();
 	if( page_address != DFNULL )
 		dflash_compose_address( page_address, byte_address );
 	*cmd_buf = p->opcode;
@@ -165,7 +163,7 @@ dflash_send_command( MUInt command, int page_address, int byte_address )
 	if( p->additional )
 		dflash_flush_command( p->additional );
 	if( !p->read_write )
-		spi_deselect_channel();
+		dfspi_deselect_channel();
 }
 
 /*
@@ -175,16 +173,16 @@ dflash_send_command( MUInt command, int page_address, int byte_address )
  */
 
 MUInt
-dflash_read_status()
+dflash_read_status(void)
 {
 	MUInt status;
 
 
-	spi_select_channel();
+	dfspi_select_channel();
 	*cmd_buf = opc_actions[ STATUS_READ ].opcode;
 	dflash_flush_command( 1 );
-	status = spi_get_byte();
-	spi_deselect_channel();
+	status = dfspi_get_byte();
+	dfspi_deselect_channel();
 	return status;
 }
 
@@ -195,15 +193,15 @@ dflash_read_status()
  */
 
 void
-dflash_set_binary_page_size( void )
+dflash_set_binary_page_size(void)
 {
-	spi_select_channel();
+	dfspi_select_channel();
 	cmd_buf[0] = 0x3D;
 	cmd_buf[1] = 0x2A;
 	cmd_buf[2] = 0x80;
 	cmd_buf[3] = 0xA6;
 	dflash_flush_command( 4 );
-	spi_deselect_channel();
+	dfspi_deselect_channel();
 }
 
 
@@ -213,7 +211,7 @@ dflash_set_binary_page_size( void )
  */
 
 void
-dflash_wait_ready()
+dflash_wait_ready(void)
 {
 	ushort wait_resp_count;
 	MUInt status;
@@ -250,8 +248,8 @@ void
 dflash_read( uchar *prx, uint qty )
 {
 	while( qty-- )
-		*prx++ = (uchar)spi_get_byte();
-	spi_deselect_channel();
+		*prx++ = (uchar)dfspi_get_byte();
+	dfspi_deselect_channel();
 }
 
 /*
@@ -264,8 +262,8 @@ void
 dflash_write( uchar *ptx, uint qty )
 {
 	while( qty-- )
-		spi_send_byte( *ptx++ );
-	spi_deselect_channel();
+		dfspi_send_byte( *ptx++ );
+	dfspi_deselect_channel();
 }
 
 
