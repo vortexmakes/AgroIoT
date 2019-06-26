@@ -1,25 +1,29 @@
 /**
- *  \file gps.h
- *
- *	This module contains functions for manipulating GPS serial port and
- *	process NMEA and Ublox frames
+ *  \file       GStatus.h
+ *  \brief      Specifies the interface of GStatus module.
  */
+
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.09.06  DaBa  v1.0.00   Initial version
+ *  2019.25.01  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __GPS_H__
-#define __GPS_H__
+#ifndef __GSTATUS_H__
+#define __GSTATUS_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "Geo.h"
+#include "cbox.h"
+#include "IOStatus.h"
+#include "BatChr.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -27,44 +31,45 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define DEG_LENGTH			7
-#define MIN_LENGTH			8
-    
-#define UTC_LENGTH          6
-#define STATUS_LENGTH       1
-//#define LATDEG_LENGTH       DEG_LENGTH
-//#define LATMIN_LENGTH       MIN_LENGTH
-#define LATITUDE_LENGTH      10
-#define LAT_IND_LENGTH      1
-#define LONGDEG_LENGTH      DEG_LENGTH
-#define LONGMIN_LENGTH      MIN_LENGTH
-
-#define LONGITUDE_LENGTH    11
-
-#define LONG_IND_LENGTH     1
-#define SPEED_LENGTH        7
-#define COURSE_LENGTH       3
-#define DATE_LENGTH         6
+#define INOUT_LENGTH    4
+#define ACCELBR_LENGHT  4
 
 /* ------------------------------- Data types ------------------------------ */
-typedef struct
+typedef struct GStatus GStatus;
+struct GStatus
 {
-    char utc[UTC_LENGTH+1];
-    char status[STATUS_LENGTH+1];
-    char latitude[LATITUDE_LENGTH+1];
-    char latInd[LAT_IND_LENGTH+1];
-    char longitude[LONGITUDE_LENGTH+1];
-    char longInd[LONG_IND_LENGTH+1];
-    char speed[SPEED_LENGTH+1];
-    char course[COURSE_LENGTH+1];
-    char date[DATE_LENGTH+1];
-} GeoStamp;
+    Geo position;
+    CBOX_STR dev;
+    IOStatus io;
+    BatChrStatus batChr;
+};
 
-typedef void (*GpsRcvHandler)(unsigned char c);
+/**
+ * \warning It must be deprecated in future versions
+ */
+typedef struct GPS_STR GPS_STR;
+struct GPS_STR
+{
+    char utc[UTC_LENGTH + 1];
+    char status[STATUS_LENGTH + 1];
+    char latdeg[LATDEG_LENGTH + 1];
+    char latmin[LATMIN_LENGTH + 1];
+    char lat_ind[LAT_IND_LENGTH + 1];
+    char longdeg[LONGDEG_LENGTH + 1];
+    char longmin[LONGMIN_LENGTH + 1];
+    char long_ind[LONG_IND_LENGTH + 1];
+    char speed[SPEED_LENGTH + 1];
+    char course[COURSE_LENGTH + 1];
+    char date[DATE_LENGTH + 1];
+    char in_out_st[INOUT_LENGTH + 1];
+    char acbk_st[ACCELBR_LENGHT + 1];
+    CBOX_STR cbox;
+};
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-GpsRcvHandler gps_parserInit(void);
+rInt GStatus_toGpsStr(GStatus *from, GPS_STR *to);
+rInt GStatus_fromGpsStr(GPS_STR *from, GStatus *to);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

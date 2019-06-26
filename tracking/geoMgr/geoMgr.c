@@ -29,7 +29,7 @@
 #include "geoMgr.h"
 #include "rmc.h"
 #include "ubx.h"
-#include "gps.h"
+#include "Geo.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
@@ -252,7 +252,7 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
 {
     Rmc *pRmc;
     GeoStampEvt *geoStampEvt;
-    GeoStamp *pGps;
+    Geo *pGps;
     char *pchr;
 
 	(void)me;
@@ -267,7 +267,7 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
     geoStampEvt = RKH_ALLOC_EVT(GeoStampEvt, evGeoStamp, &geoMgr);
     pGps = &(geoStampEvt->gps);
 
-    memset(pGps, 0, sizeof(GeoStamp));
+    memset(pGps, 0, sizeof(Geo));
 
     /* utc: like NMEA utc, decimals discard */
     strncpy(pGps->utc, pRmc->utc, UTC_LENGTH);

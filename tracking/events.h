@@ -24,7 +24,7 @@
 #include "rkhevt.h"
 #include "epoch.h"
 #include "rmc.h"
-#include "gps.h"
+#include "Geo.h"
 #include "cbox.h"
 
 /* ---------------------- External C language linkage ---------------------- */
@@ -140,7 +140,7 @@ typedef struct GeoStampEvt GeoStampEvt;
 struct GeoStampEvt
 {
     RKH_EVT_T evt;
-    GeoStamp gps;
+    Geo gps;
 };
 
 typedef struct IoChgEvt IoChgEvt;

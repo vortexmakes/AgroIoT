@@ -153,7 +153,7 @@ struct CommMgr
 {
     RKH_SMA_T ao;
     RKH_TMR_T timer;    
-    GeoStamp geo;
+    Geo geo;
     CBOX_STR rawData;   /* Current raw data (GPS+IO, etc) */
 };
 

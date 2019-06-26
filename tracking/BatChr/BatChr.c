@@ -1,52 +1,34 @@
 /**
- *  \file gps.c
- *
- *	This module contains functions for manipulating GPS serial port and
- *	process NMEA and Ublox frames
+ *  \file       BatChr.c
+ *  \brief      Implementation of battery charger module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.09.06  DaBa  v1.0.00   Initial version
+ *  2018.04.02  LeFr  v1.0.00  ---
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
-#include "ssp.h"
-#include "gps.h"
-#include "ubxm8parser.h"
+#include "BatChr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static SSP gpsParser;
-
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static void
-doSearch(unsigned char c)
-{
-    ssp_doSearch(&gpsParser, c);
-}
-
 /* ---------------------------- Global functions --------------------------- */
-GpsRcvHandler
-gps_parserInit(void)
+BatChrStatus 
+BatChr_getStatus(void)
 {
-    RKH_SR_ALLOC();
-
-    RKH_ENTER_CRITICAL_();
-  	ssp_init(&gpsParser, &rootGpsParser);
-    RKH_EXIT_CRITICAL_();
-    return &doSearch;
+    return EXT_PWR_FAIL;
 }
 
 /* ------------------------------ End of file ------------------------------ */
