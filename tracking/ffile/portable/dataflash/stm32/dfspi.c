@@ -29,25 +29,13 @@
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
-static uchar spi_xfer(uchar b);
-
 /* ---------------------------- Local functions ---------------------------- */
-static
-uchar
-spi_xfer(uchar b)
-{
-    uchar r;
-    HAL_StatusTypeDef res;
-
-    res = HAL_SPI_TransmitReceive(&hspi1, &b, &r, 1, 100);
-
-    return (res == HAL_OK) ? r : 0;
-}
-
 /* ---------------------------- Global functions --------------------------- */
 void
 dfspi_init(void)
 {
+    uchar dummy = DUMMY_DATA;
+
     dfspi_cs(1);
 
     MX_SPI1_Init();
@@ -57,7 +45,7 @@ dfspi_init(void)
      * then a dummy not CS asserted transfer is needed to force SPI_CLK
      * go to high before first assertion of CS.
      */
-    spi_xfer(DUMMY_DATA);
+    HAL_SPI_Transmit(&hspi1, &dummy, 1, 100);
 }
 
 void
@@ -73,15 +61,27 @@ dfspi_deselect_channel(void)
 }
 
 void
-dfspi_send_byte(uchar b)
+dfspi_write_byte(uchar b)
 {
-    spi_xfer(b);
+    HAL_SPI_Transmit(&hspi1, &b, 1, 100);
 }
 
-uchar
-dfspi_get_byte(void)
+void
+dfspi_read_byte(uchar *p)
 {
-    return spi_xfer(DUMMY_DATA);
+    HAL_SPI_Receive(&hspi1, p, 1, 100);
+}
+
+void
+dfspi_write(uchar *p, uint qty)
+{
+    HAL_SPI_Transmit(&hspi1, p, qty, 100);
+}
+
+void
+dfspi_read(uchar *p, uint qty)
+{
+    HAL_SPI_Receive(&hspi1, p, qty, 100);
 }
 
 /* ------------------------------ End of file ------------------------------ */

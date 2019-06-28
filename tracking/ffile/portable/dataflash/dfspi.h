@@ -41,8 +41,11 @@ void dfspi_init(void);
 void dfspi_select_channel(void);
 void dfspi_deselect_channel(void);
 
-void dfspi_send_byte(uchar b);
-uchar dfspi_get_byte(void);
+void dfspi_write_byte(uchar b);
+void dfspi_read_byte(uchar *p);
+
+void dfspi_write(uchar *p, uint qty);
+void dfspi_read(uchar *p, uint qty);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

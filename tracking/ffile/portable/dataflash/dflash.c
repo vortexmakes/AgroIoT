@@ -114,11 +114,7 @@ static
 void
 dflash_flush_command( MUInt len)
 {
-	uchar *p;
-
-	p = cmd_buf;
-	while( len-- )
-		dfspi_send_byte( *p++ );
+    dfspi_write(cmd_buf, len);
 }
 
 /*
@@ -181,7 +177,7 @@ dflash_read_status(void)
 	dfspi_select_channel();
 	*cmd_buf = opc_actions[ STATUS_READ ].opcode;
 	dflash_flush_command( 1 );
-	status = dfspi_get_byte();
+	dfspi_read_byte(&status);
 	dfspi_deselect_channel();
 	return status;
 }
@@ -247,8 +243,7 @@ dflash_wait_ready(void)
 void
 dflash_read( uchar *prx, uint qty )
 {
-	while( qty-- )
-		*prx++ = (uchar)dfspi_get_byte();
+    dfspi_read(prx, qty);
 	dfspi_deselect_channel();
 }
 
@@ -261,8 +256,7 @@ dflash_read( uchar *prx, uint qty )
 void
 dflash_write( uchar *ptx, uint qty )
 {
-	while( qty-- )
-		dfspi_send_byte( *ptx++ );
+    dfspi_write(ptx, qty);
 	dfspi_deselect_channel();
 }
 
