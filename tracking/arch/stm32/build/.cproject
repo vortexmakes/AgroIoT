@@ -79,6 +79,7 @@
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash/stm32"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
@@ -138,6 +139,7 @@
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash/stm32"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -194,6 +196,7 @@
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash/stm32"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.819050743" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
@@ -388,6 +391,7 @@
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash/stm32"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
@@ -447,6 +451,7 @@
 									<listOptionValue builtIn="false" value="../../../../parser/sim5320"/>
 									<listOptionValue builtIn="false" value="../../../../sequence"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash/stm32"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>

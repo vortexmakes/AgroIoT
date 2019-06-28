@@ -162,11 +162,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/bsp/dOut.c</locationURI>
 		</link>
 		<link>
-			<name>bsp/dfspi.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/dfspi.c</locationURI>
-		</link>
-		<link>
 			<name>bsp/ffdata.c</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/ffdata.c</locationURI>
