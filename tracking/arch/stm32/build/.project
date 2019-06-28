@@ -37,6 +37,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>app/Config</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/Config</locationURI>
+		</link>
+		<link>
 			<name>app/GStatus</name>
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/GStatus</locationURI>
@@ -50,11 +55,6 @@
 			<name>app/collector</name>
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/collector</locationURI>
-		</link>
-		<link>
-			<name>app/config</name>
-			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/config</locationURI>
 		</link>
 		<link>
 			<name>app/date</name>

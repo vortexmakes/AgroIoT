@@ -22,7 +22,6 @@
 #include "rkhfwk_pubsub.h"
 #include "rkhtmr.h"
 #include "bsp.h"
-#include "config.h"
 #include "signals.h"
 #include "events.h"
 #include "topics.h"
@@ -30,6 +29,7 @@
 #include "rmc.h"
 #include "ubx.h"
 #include "Geo.h"
+#include "Config.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
@@ -160,9 +160,9 @@ static UBXCmd_t InitCmds[] =
 static RKH_ROM_STATIC_EVENT(toutEvt, evTimeout);
 static RKH_ROM_STATIC_EVENT(turnEvt, evTurn);
 
-static RKHROM GeoStampEvt geoStampInvalidEvt =
+static RKHROM GeoEvt geoInvalidEvt =
 {
-    RKH_INIT_STATIC_EVT( evGeoStampInvalid ),
+    RKH_INIT_STATIC_EVT( evGeoInvalid ),
     GEO_INVALID_GEOSTAMP
 };
 
@@ -251,7 +251,7 @@ static void
 publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
 {
     Rmc *pRmc;
-    GeoStampEvt *geoStampEvt;
+    GeoEvt *geoEvt;
     Geo *pGps;
     char *pchr;
 
@@ -264,8 +264,8 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
 
     me->rmc = *pRmc;
 
-    geoStampEvt = RKH_ALLOC_EVT(GeoStampEvt, evGeoStamp, &geoMgr);
-    pGps = &(geoStampEvt->gps);
+    geoEvt = RKH_ALLOC_EVT(GeoEvt, evGeo, &geoMgr);
+    pGps = &(geoEvt->gps);
 
     memset(pGps, 0, sizeof(Geo));
 
@@ -299,7 +299,7 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
     /* date: like NMEA date [degrees], decimals discarded */
     strncpy(pGps->date, pRmc->date, DATE_LENGTH);
 
-    tpGeo_publish(geoStampEvt, me);
+    tpGeo_publish(geoEvt, me);
 }
 
 
@@ -310,7 +310,7 @@ publishInvRmc(GeoMgr *const me, RKH_EVT_T *pe)
 
     bsp_GPSStatus(RMC_StatusInvalid);
 
-    tpGeo_publish(&geoStampInvalidEvt, me);
+    tpGeo_publish(&geoInvalidEvt, me);
 }
 
 /* ............................. Entry actions ............................. */
@@ -348,7 +348,7 @@ turnsDetect(GeoMgr *const me)
     currSog = atol(me->rmc.sog);
     currCog = atol(me->rmc.cog);
 
-    cfg = config_read();
+    cfg = Config_get();
 
     if(me->cog < 0)
         me->cog = currCog;

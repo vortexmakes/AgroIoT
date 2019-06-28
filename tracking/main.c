@@ -33,6 +33,7 @@
 #include "cbox.h"
 
 #include "ffile.h"
+#include "Config.h"
 #include "mTime.h"
 #include "sequence.h"
 #include "epoch.h"
@@ -97,13 +98,11 @@ main(int argc, char *argv[])
 {
     bsp_init(argc, argv);
 
-    ffile_init();
-
-    for(;;);
-
     epoch_init();
     init_seqs();
     mTime_init();
+    ffile_init();
+    Config_init();
 
     rkh_fwk_init();
     rkh_pubsub_init();

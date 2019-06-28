@@ -38,8 +38,8 @@ typedef unsigned char 	ffui8_t;
 typedef unsigned short 	ffui16_t;
 typedef unsigned long	ffui32_t;
 
-typedef unsigned char	FFUInt;
-typedef signed char		FFInt;
+typedef unsigned int	FFUInt;
+typedef signed int		FFInt;
 
 
 #endif

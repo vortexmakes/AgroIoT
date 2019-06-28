@@ -70,7 +70,7 @@
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
-									<listOptionValue builtIn="false" value="../../../../config"/>
+									<listOptionValue builtIn="false" value="../../../../Config/inc"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
@@ -129,7 +129,7 @@
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
-									<listOptionValue builtIn="false" value="../../../../config"/>
+									<listOptionValue builtIn="false" value="../../../../Config/inc"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
@@ -185,7 +185,7 @@
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
-									<listOptionValue builtIn="false" value="../../../../config"/>
+									<listOptionValue builtIn="false" value="../../../../Config/inc"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
@@ -303,7 +303,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="GStatus/test|GStatus/build|ffile/portable/80x86|ffile/portable/test|ffile/test|ffile/build|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry excluding="Config/test|Config/build|tracking/device/test|ffile/build|GStatus/build|ffile/portable/test|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|ffile/test|GStatus/test|ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>
@@ -379,7 +379,7 @@
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
-									<listOptionValue builtIn="false" value="../../../../config"/>
+									<listOptionValue builtIn="false" value="../../../../Config/inc"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
@@ -438,7 +438,7 @@
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
 									<listOptionValue builtIn="false" value="../../../../collector"/>
-									<listOptionValue builtIn="false" value="../../../../config"/>
+									<listOptionValue builtIn="false" value="../../../../Config/inc"/>
 									<listOptionValue builtIn="false" value="../../../../ioChg"/>
 									<listOptionValue builtIn="false" value="../../../../parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../../date"/>
@@ -548,7 +548,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="GStatus/test|GStatus/build|ffile/portable/80x86|ffile/portable/test|ffile/test|ffile/build|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|tracking/device/test" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
+						<entry excluding="Config/test|Config/build|tracking/device/test|ffile/build|GStatus/build|ffile/portable/test|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|ffile/test|GStatus/test|ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
 					</sourceEntries>
 				</configuration>

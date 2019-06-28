@@ -26,6 +26,7 @@
 #include "rmc.h"
 #include "Geo.h"
 #include "cbox.h"
+#include "IOStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -136,18 +137,25 @@ struct RmcEvt
     Rmc rmc;
 };
 
-typedef struct GeoStampEvt GeoStampEvt;
-struct GeoStampEvt
+typedef struct GeoEvt GeoEvt;
+struct GeoEvt
 {
     RKH_EVT_T evt;
     Geo gps;
 };
 
-typedef struct IoChgEvt IoChgEvt;
-struct IoChgEvt
+typedef struct InChgEvt InChgEvt;
+struct InChgEvt
 {
     RKH_EVT_T evt;
-    ruint din;
+    DigIn din;
+};
+
+typedef struct OutChgEvt OutChgEvt;
+struct OutChgEvt
+{
+    RKH_EVT_T evt;
+    DigOut dout;
 };
 
 typedef struct RawDataEvt RawDataEvt;

@@ -89,7 +89,7 @@ dIn_scan(void)
 {
     dInSignalId i;
     uint8_t din;
-    IoChgEvt *p;
+    InChgEvt *p;
 
     for(i=0; i < NUM_DIN_SIGNALS; ++i)
     {
@@ -100,7 +100,7 @@ dIn_scan(void)
         {
             dInsSt[i] = 1;
 
-            p = RKH_ALLOC_EVT(IoChgEvt, evIoChg, &ioChg);
+            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &ioChg);
             p->din |= 1 << i;
 
             tpIoChg_publish(p, &ioChg);
@@ -110,7 +110,7 @@ dIn_scan(void)
         {
             dInsSt[i] = 0;
 
-            p = RKH_ALLOC_EVT(IoChgEvt, evIoChg, &ioChg);
+            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &ioChg);
             p->din &= ~(1 << i);
 
             tpIoChg_publish(p, &ioChg);
