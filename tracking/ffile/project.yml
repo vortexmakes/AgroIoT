@@ -27,12 +27,19 @@
   :include:
     - inc
     - portable/test
-    - ../
+    - ../GStatus/inc
+    - ../gps
+    - ../../third-party/rkh/source/portable/test
+    - ../../third-party/rkh/source/fwk/inc
+    - ../tpsens/cbox
+    - ../collector
+    - ../BatChr
+    - ../Config/inc
   :support:
     - test/support
 
 :defines:
-  :common: &common_defines [__FFILETEST__]
+  :common: &common_defines [__FFILETEST__, __TEST__]
   :test:
     - *common_defines
     - TEST
@@ -78,3 +85,8 @@
     - module_generator
     - gcov
 
+:flags:
+    :test:
+        :compile:
+            :*:
+                - -Wall
