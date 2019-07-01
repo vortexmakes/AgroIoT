@@ -38,6 +38,7 @@ dfspi_init(void)
 
     dfspi_cs(1);
 
+
     MX_SPI1_Init();
 
     /* 
@@ -75,13 +76,17 @@ dfspi_read_byte(uchar *p)
 void
 dfspi_write(uchar *p, uint qty)
 {
-    HAL_SPI_Transmit(&hspi1, p, qty, 100);
+    HAL_SPI_Transmit_DMA(&hspi1, p, qty);
+
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
 }
 
 void
 dfspi_read(uchar *p, uint qty)
 {
-    HAL_SPI_Receive(&hspi1, p, qty, 100);
+    HAL_SPI_Receive_DMA(&hspi1, p, qty);
+
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
 }
 
 /* ------------------------------ End of file ------------------------------ */

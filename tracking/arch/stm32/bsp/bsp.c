@@ -62,6 +62,7 @@ bsp_init(int argc, char *argv[])
 
     SystemClock_Config();
     MX_GPIO_Init();
+    MX_DMA_Init();
     MX_USB_OTG_HS_HCD_Init();
     MX_USART6_UART_Init();
     MX_USART1_UART_Init();
@@ -72,8 +73,6 @@ bsp_init(int argc, char *argv[])
     modPwr_init();
     dIn_init();
     dOut_init();
-
-    ffile_init();
 }
 
 void
