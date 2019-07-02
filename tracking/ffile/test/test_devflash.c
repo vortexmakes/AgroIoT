@@ -1,11 +1,11 @@
 /**
- *  \file       test_rfile.c
- *  \brief      Unit test for rfile module.
+ *  \file       test_devflash.c
+ *  \brief      Unit test for devflash module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2019.07.01  LeFr  v1.0.00
+ *  2019.07.02  LeFr  v1.0.00
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -17,9 +17,9 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
 #include "ffdata.h"
-#include "rfile.h"
+#include "devflash.h"
 #include "Mock_ffile.h"
-#include "Mock_devflash.h"
+#include "Mock_ffport.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -40,24 +40,9 @@ tearDown(void)
 }
 
 void
-test_RestoreDirBothPageBad(void)
+test_FirstTest(void)
 {
-    ffui8_t result;
-    const FFILE_T *dir;
-    PageRes mainPage, backPage;
-
-    mainPage.result = PAGE_BAD;
-    mainPage.checksum = 0;
-    backPage.result = PAGE_BAD;
-    backPage.checksum = 0;
-
-    devflash_setInvalidPage_Expect();
-    devflash_verify_page_ExpectAndReturn(RF_DIR_MAIN_PAGE, mainPage);
-    devflash_verify_page_ExpectAndReturn(RF_DIR_BACK_PAGE, backPage);
-
-    dir = rfile_restore_directory(&result);
-    TEST_ASSERT_EQUAL(DIR_BAD, result);
-    TEST_ASSERT_EQUAL_MEMORY(defdir, dir, sizeof(FFILE_T) * NUM_FLASH_FILES);
+    TEST_IGNORE();
 }
 
 /* ------------------------------ End of file ------------------------------ */

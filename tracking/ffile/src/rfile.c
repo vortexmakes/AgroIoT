@@ -10,6 +10,85 @@
 static FFILE_T dir[NUM_FLASH_FILES];
 static SA_T reg_addr;
 static SPG_T page_num;
+static ffui16_t main_check, back_check;
+
+/*
+ *  Recovery true table:
+ *
+ *  rmain: result of checksum from main page.
+ *  rback: result of checksum from backup page.
+ *
+ *  rmain		|	rback		|	Process
+ *  ---------------------------------------------------
+ *  CHECK_BAD	|	CHECK_BAD	|	DIR_BAD
+ *  CHECK_BAD	|	CHECK_OK	|	DIR_RECOVERY
+ *  CHECK_OK	|	CHECK_BAD	|	DIR_BACKUP
+ *  CHECK_OK	|	CHECK_OK	|	-> next true table
+ *
+ *  Checksum compare true table:
+ *  ---------------------------------------------------
+ *  NOT_MATCH	|	DIR_BACKUP
+ *  MATCH		|	-> next true table
+ *
+ *  Content compare true table:
+ *  ---------------------------------------------------
+ *	NOT_MATCH	|	DIR_BACKUP
+ *  MATCH		|	DIR_OK
+ */
+#if FF_DIR_BACKUP == 1
+typedef ffui8_t (*RECPROC_T)(void);
+
+static ffui8_t proc_page_in_error(void);
+static ffui8_t proc_page_recovery(void);
+static ffui8_t proc_page_backup(void);
+static ffui8_t proc_page_cmp(void);
+
+static const RECPROC_T recovery[] =
+{
+    proc_page_in_error,
+    proc_page_recovery,
+    proc_page_backup,
+    proc_page_cmp
+};
+#endif
+
+#if FF_DIR_BACKUP == 1
+static ffui8_t
+proc_page_in_error(void)
+{
+    return DIR_BAD;
+}
+
+static ffui8_t
+proc_page_recovery(void)
+{
+    devflash_copy_page(RF_DIR_MAIN_PAGE, RF_DIR_BACK_PAGE);
+    return DIR_RECOVERY;
+}
+
+static ffui8_t
+proc_page_backup(void)
+{
+    devflash_copy_page(RF_DIR_BACK_PAGE, RF_DIR_MAIN_PAGE);
+    return DIR_BACKUP;
+}
+
+static ffui8_t
+proc_page_cmp(void)
+{
+    if (main_check != back_check)
+    {
+        return proc_page_backup();
+    }
+
+    if (devflash_cmp_pages(main_page_addr, back_page_addr))
+    {
+        return DIR_OK;
+    }
+
+    return proc_page_backup();
+}
+#endif
 
 void
 rfile_file_format(FFILE_T *pf)
@@ -28,28 +107,25 @@ void
 rfile_init_directory(void)
 {
     ffui8_t file, r;
-    ffui8_t *pdir;
     SPG_T page, page_error;
     FFILE_T *pf;
+    PageRes res;
 
-    pdir = devflash_restore_directory(&r);
-    memcpy(dir, r != DIR_BAD ? pdir : (ffui8_t*)defdir,
-           sizeof(FFILE_T) * NUM_FLASH_FILES);
-    FFDBG_RESTORE_DIR(r);
-
+    rfile_restore_directory(&r);
     for (file = 0, pf = dir; file < NUM_FLASH_FILES; ++file, ++pf)
     {
         for (page = page_error = 0; page < pf->num_pages; ++page)
-            if (devflash_verify_page(page + pf->begin_page) == PAGE_BAD)
+        {
+            res = devflash_verify_page(page + pf->begin_page);
+            if (res.result == PAGE_BAD)
             {
                 ++page_error;
-                /*set_led( LED_BATT, LSTAGE1 );*/
             }
             else
             {
                 break;
             }
-
+        }
         pf->page_error = page_error;
         #if FF_AUTO_FILE_FORMAT == 1
         {
@@ -61,12 +137,6 @@ rfile_init_directory(void)
         }
         #endif
         rfile_update_directory(pf);
-    }
-
-    if (r == DIR_BAD)
-    {
-        /*trace_evt(TRC_DFLSH_DIR_BAD);*/
-        /*set_led(LED_SMS, LSTAGE4);*/
     }
 }
 
@@ -170,4 +240,39 @@ rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles)
 #endif
 }
 #endif
+
+FFILE_T *
+rfile_restore_directory(ffui8_t *status)
+{
+    ffui8_t r;
+    PageRes mainPage, backPage;
+
+    devflash_setInvalidPage();
+    mainPage = devflash_verify_page(RF_DIR_MAIN_PAGE);
+#if FF_DIR_BACKUP == 1
+    backPage = devflash_verify_page(RF_DIR_BACK_PAGE);
+    r = 0;
+    r = (mainPage.result << 1) | backPage.result;
+    *status = (*recovery[r])();
+#else
+    *status = (mainPage.result == CHECK_OK) ? DIR_OK : DIR_BAD;
+#endif
+    if (*status != DIR_BAD)
+    {
+        devflash_read_data((SA_T)0, 
+                           RF_DIR_MAIN_PAGE, 
+                           (ffui8_t *)dir, 
+                           sizeof(FFILE_T) * NUM_FLASH_FILES);
+    }
+    else
+    {
+        memcpy(dir, 
+               (ffui8_t *)defdir,
+               sizeof(FFILE_T) * NUM_FLASH_FILES);
+    }
+
+    FFDBG_RESTORE_DIR(r);
+    return dir;
+}
+
 /* ------------------------------ End of file ------------------------------ */

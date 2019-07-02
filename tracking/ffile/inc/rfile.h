@@ -332,7 +332,8 @@ typedef ffui8_t SPG_T;
 typedef ffui32_t SA_T;
 #endif
 
-typedef struct
+typedef struct FFILE_T FFILE_T;
+struct FFILE_T
 {
     /**
      *  File descriptor.
@@ -403,7 +404,7 @@ typedef struct
      *  Number of registers currently in the random file.
      */
     NR_T pos_qty;
-} FFILE_T;
+};
 
 typedef struct
 {
@@ -423,6 +424,7 @@ void rfile_access_register(RACC_T *pra);
 FFILE_T *rfile_get_file(FFD_T fd);
 void rfile_page_dirty(SPG_T page);
 void rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles);
+FFILE_T *rfile_restore_directory(ffui8_t *status);
 
 #endif
 /* ------------------------------ End of file ------------------------------ */
