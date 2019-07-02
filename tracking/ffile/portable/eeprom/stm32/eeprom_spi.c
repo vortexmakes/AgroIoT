@@ -77,25 +77,17 @@ eeprom_spi_read_byte(uchar *p)
 void
 eeprom_spi_write(uchar *p, uint qty)
 {
-#if 0
-    HAL_SPI_Transmit(&hspi3, p, qty, 100);
-#else
     HAL_SPI_Transmit_DMA(&hspi3, p, qty);
 
     while(HAL_SPI_GetState(&hspi3) != HAL_SPI_STATE_READY);
-#endif
 }
 
 void
 eeprom_spi_read(uchar *p, uint qty)
 {
-#if 0
-    HAL_SPI_Receive(&hspi3, p, qty, 100);
-#else
     HAL_SPI_Receive_DMA(&hspi3, p, qty);
 
     while(HAL_SPI_GetState(&hspi3) != HAL_SPI_STATE_READY);
-#endif
 }
 
 /* ------------------------------ End of file ------------------------------ */
