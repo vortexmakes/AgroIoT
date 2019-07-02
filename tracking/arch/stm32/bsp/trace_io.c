@@ -70,7 +70,9 @@ rkh_trc_flush(void)
 
         if ((blk != (rui8_t *)0))
         {
-            HAL_UART_Transmit(TRC_COM_PORT, blk, nbytes, 100);
+        	while(HAL_UART_GetState(TRC_COM_PORT) != HAL_UART_STATE_READY);
+
+            HAL_UART_Transmit_DMA(TRC_COM_PORT, blk, nbytes);
         }
         else
         {
