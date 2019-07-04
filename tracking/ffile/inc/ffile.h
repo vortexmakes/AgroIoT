@@ -1,10 +1,10 @@
 /**
  *  \file       ffile.h
  *  \brief      Implements a very simple flash file system.
- *  
- *  It offers a typical file system abstraction and interface. The files 
- *  are stored as a collection of records. Programs read and write whole 
- *  records, rather than bytes or arbitrary byte ranges, and can seek to 
+ *
+ *  It offers a typical file system abstraction and interface. The files
+ *  are stored as a collection of records. Programs read and write whole
+ *  records, rather than bytes or arbitrary byte ranges, and can seek to
  *  a record boundary but not within records.
  *  The directory and files are created in compile time using the 'CREATE_DIR'
  *  and 'CREATE_FFILE' macros respectively. Generally, the directory and files

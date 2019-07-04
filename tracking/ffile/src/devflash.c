@@ -191,7 +191,7 @@ devflash_is_ready_to_save_in_flash(void)
     return 1;
 }
 
-void 
+void
 devflash_setInvalidPage(void)
 {
     cpage = FF_INVALID_PAGE;

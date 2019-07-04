@@ -29,7 +29,7 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 #if FF_INTERNAL_FLASH == 1
 #define devflash_cmp_pages(pga0, pga1) \
-                (memcmp((pga0), (pga1), RF_SIZE_EFF_PAGE) == 0)
+    (memcmp((pga0), (pga1), RF_SIZE_EFF_PAGE) == 0)
 #else
 /*
  * To avoid the usage of two buffers for comparing two pages, in

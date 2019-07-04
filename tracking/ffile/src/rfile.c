@@ -18,6 +18,7 @@
 #include "ffile.h"
 #include "devflash.h"
 #include "ffdata.h"
+#include "ffdir.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -63,10 +64,7 @@ static ffui8_t proc_page_cmp(void);
 
 static const RECPROC_T recovery[] =
 {
-    proc_page_in_error,
-    proc_page_recovery,
-    proc_page_backup,
-    proc_page_cmp
+    proc_page_in_error, proc_page_recovery, proc_page_backup, proc_page_cmp
 };
 #endif
 
@@ -148,15 +146,12 @@ rfile_init_directory(void)
             }
         }
         pf->page_error = page_error;
-        #if FF_AUTO_FILE_FORMAT == 1
+#if FF_AUTO_FILE_FORMAT == 1
+        if (pf->page_error == pf->num_pages)
         {
-            if (pf->page_error == pf->num_pages)
-            {
-                rfile_file_format(pf);
-                /*trace_evt(file + TRC_FFD0_FORMAT);*/
-            }
+            rfile_file_format(pf);
         }
-        #endif
+#endif
         rfile_update_directory(pf);
     }
 }
@@ -280,14 +275,14 @@ rfile_restore_directory(ffui8_t *status)
 #endif
     if (*status != DIR_BAD)
     {
-        devflash_read_data((SA_T)0, 
-                           RF_DIR_MAIN_PAGE, 
-                           (ffui8_t *)dir, 
+        devflash_read_data((SA_T)0,
+                           RF_DIR_MAIN_PAGE,
+                           (ffui8_t *)dir,
                            sizeof(FFILE_T) * NUM_FLASH_FILES);
     }
     else
     {
-        memcpy(dir, 
+        memcpy(dir,
                (ffui8_t *)defdir,
                sizeof(FFILE_T) * NUM_FLASH_FILES);
     }
