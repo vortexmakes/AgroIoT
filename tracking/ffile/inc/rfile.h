@@ -103,7 +103,7 @@
  */
 
 #define RF_PAGE_DUMP            0
-#define RF_PAGE_DIRTY           0
+#define RF_PAGE_DIRTY           1
 #define RF_SET_DIR              1
 
 /**

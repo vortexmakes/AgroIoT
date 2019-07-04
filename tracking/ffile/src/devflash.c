@@ -24,7 +24,6 @@ typedef ffui8_t (*RECPROC_T)(void);
 
 static PAGE_BUFF_T page_buff;
 static SA_T page_address;
-static ffui16_t main_check;
 static SPG_T cpage = FF_INVALID_PAGE;
 
 static
@@ -66,13 +65,6 @@ devflash_calculate_page_checksum(ffui8_t *address)
         check += *p++;
 
     return ~check;
-}
-
-static
-ffui8_t
-devflash_verify_page_checksum(ffui8_t *pfrom, ffui16_t checksum)
-{
-    return ((PAGE_BUFF_T*)pfrom)->checksum == checksum ? CHECK_OK : CHECK_BAD;
 }
 
 void
@@ -146,8 +138,7 @@ devflash_verify_page(SPG_T page)
 
     devflash_read_page_direct(page);
     res.checksum = devflash_calculate_page_checksum(page_buff.data);
-    res.result = devflash_verify_page_checksum(page_buff.data, main_check);
-    res.result = (res.result == CHECK_OK) ? PAGE_OK : PAGE_BAD;
+    res.result = (page_buff.checksum == res.checksum) ? PAGE_OK : PAGE_BAD;
     return res;
 }
 
@@ -157,16 +148,6 @@ devflash_page_dump(SPG_T page)
 {
     devflash_read_page(page);
     return page_buff.data;
-}
-#endif
-
-#if RF_PAGE_DIRTY == 1
-void
-devflash_page_dirty(SPG_T page)
-{
-    devflash_read_page(page);
-    page_buff.checksum = ~page_buff.checksum;
-    flash_write_page(page_address, &page_buff);
 }
 #endif
 

@@ -1,0 +1,11 @@
+#
+# Usage:
+#   $ sudo ceedling [clean|clobber] options:project-complete test:ffile-complete
+#
+
+:paths:
+  :test:
+  :source:
+  :include:
+  :support:
+    - portable/ceedling
