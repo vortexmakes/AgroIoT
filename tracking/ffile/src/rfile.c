@@ -1,12 +1,31 @@
-/*
- *  rfile.c
+/**
+ *  \file       rfile.c
+ *  \brief
  */
 
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ */
+
+/* --------------------------------- Notes --------------------------------- */
+/* ----------------------------- Include files ----------------------------- */
 #include <string.h>
 #include "ffile.h"
 #include "devflash.h"
 #include "ffdata.h"
 
+/* ----------------------------- Local macros ------------------------------ */
+/* ------------------------------- Constants ------------------------------- */
+/* ---------------------------- Local data types --------------------------- */
+typedef ffui8_t (*RECPROC_T)(void);
+
+/* ---------------------------- Global variables --------------------------- */
+/* ---------------------------- Local variables ---------------------------- */
 static FFILE_T dir[NUM_FLASH_FILES];
 static SA_T reg_addr;
 static SPG_T page_num;
@@ -36,7 +55,6 @@ static ffui16_t main_check, back_check;
  *  MATCH		|	DIR_OK
  */
 #if FF_DIR_BACKUP == 1
-typedef ffui8_t (*RECPROC_T)(void);
 
 static ffui8_t proc_page_in_error(void);
 static ffui8_t proc_page_recovery(void);
@@ -52,6 +70,8 @@ static const RECPROC_T recovery[] =
 };
 #endif
 
+/* ----------------------- Local function prototypes ----------------------- */
+/* ---------------------------- Local functions ---------------------------- */
 #if FF_DIR_BACKUP == 1
 static ffui8_t
 proc_page_in_error(void)
@@ -90,6 +110,7 @@ proc_page_cmp(void)
 }
 #endif
 
+/* ---------------------------- Global functions --------------------------- */
 void
 rfile_file_format(FFILE_T *pf)
 {

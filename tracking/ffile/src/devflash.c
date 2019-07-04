@@ -1,39 +1,85 @@
-/*
- *  devflash.c
+/**
+ *  \file       devflash.c
+ *  \brief
  */
 
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ */
+
+/* --------------------------------- Notes --------------------------------- */
+/* ----------------------------- Include files ----------------------------- */
 #include <string.h>
 #include "ffile.h"
 #include "devflash.h"
 
+/* ----------------------------- Local macros ------------------------------ */
 #define devflash_is_changed_page(pg) \
     ((pg) != cpage)
 
+/* ------------------------------- Constants ------------------------------- */
 enum
 {
     CHECK_BAD, CHECK_OK
 };
 
+/* ---------------------------- Local data types --------------------------- */
 typedef struct
 {
-    ffui8_t data[RF_SIZE_EFF_PAGE];  /* 510 */
-    ffui16_t checksum; /* 2 */
+    ffui8_t data[RF_SIZE_EFF_PAGE];
+    ffui16_t checksum;
 } PAGE_BUFF_T;
 
-typedef ffui8_t (*RECPROC_T)(void);
-
+/* ---------------------------- Global variables --------------------------- */
+/* ---------------------------- Local variables ---------------------------- */
 static PAGE_BUFF_T page_buff;
 static SA_T page_address;
 static SPG_T cpage = FF_INVALID_PAGE;
 
-static
-void
+/* ----------------------- Local function prototypes ----------------------- */
+/* ---------------------------- Local functions ---------------------------- */
+static void
 devflash_set_page_address(SPG_T page)
 {
     cpage = page;
     page_address = (SA_T)(((SA_T)page * RF_SIZE_PHY_PAGE) + RF_FB_ADDRESS);
 }
 
+static ffui16_t
+devflash_calculate_page_checksum(ffui8_t *address)
+{
+    ffui16_t check, i;
+    ffui8_t *p;
+
+    p = (ffui8_t*)address;
+    FFILE_WATCHDOG();
+
+    for (check = 0, i = RF_SIZE_EFF_PAGE; i; --i)
+        check += *p++;
+
+    return ~check;
+}
+
+static void
+devflash_read_page_direct(SPG_T page)
+{
+#if FF_INTERNAL_FLASH == 1
+    if (devflash_is_changed_page(page))
+    {
+        devflash_set_page_address(page);
+        flash_read_page(&page_buff, page_address);
+    }
+#else
+    devflash_read_page(page);
+#endif
+}
+
+/* ---------------------------- Global functions --------------------------- */
 #if FF_DIR_BACKUP == 1
 void
 devflash_copy_page(SPG_T destp, SPG_T srcp)
@@ -51,22 +97,6 @@ devflash_copy_page(SPG_T destp, SPG_T srcp)
 }
 #endif
 
-static
-ffui16_t
-devflash_calculate_page_checksum(ffui8_t *address)
-{
-    ffui16_t check, i;
-    ffui8_t *p;
-
-    p = (ffui8_t*)address;
-    FFILE_WATCHDOG();
-
-    for (check = 0, i = RF_SIZE_EFF_PAGE; i; --i)
-        check += *p++;
-
-    return ~check;
-}
-
 void
 devflash_read_page(SPG_T page)
 {
@@ -75,21 +105,6 @@ devflash_read_page(SPG_T page)
         devflash_set_page_address(page);
         flash_read_page(&page_buff, page_address);
     }
-}
-
-static
-void
-devflash_read_page_direct(SPG_T page)
-{
-#if FF_INTERNAL_FLASH == 1
-    if (devflash_is_changed_page(page))
-    {
-        devflash_set_page_address(page);
-        flash_read_page(&page_buff, page_address);
-    }
-#else
-    devflash_read_page(page);
-#endif
 }
 
 void

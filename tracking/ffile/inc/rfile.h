@@ -1,111 +1,40 @@
-/*
- *  rfile.h
+/**
+ *  \file       rfile.h
+ *  \brief
  */
 
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ */
+
+/* --------------------------------- Notes --------------------------------- */
+/* --------------------------------- Module -------------------------------- */
 #ifndef __RFILE_H__
 #define __RFILE_H__
 
+/* ----------------------------- Include files ----------------------------- */
 /**
  *  Application specific configuration options.
  */
-
 #include "ffilecfg.h"
 
 /**
  *  Specific definitions to the platform being used.
  */
-
 #include "ffplat.h"
 #include "fftype.h"
 
-/**
- *  Sets the physical size of page in bytes.
- */
-
-#define RF_SIZE_PHY_PAGE        FF_PHYS_BLOCK_SIZE /* 512 */
-
-/**
- *	Number of flash memory sectors (files and directory).
- */
-
-#define FF_MAX_NSECTOR          (FF_NSECTOR - (FF_DIR_BACKUP + 1)) /* 8190 - (1
-                                                                    * +1) = 8188 */
-
-/**
- *  Sets the invalid page number. It cannot be accesed.
- */
-
-#define FF_INVALID_PAGE         FF_MAX_NSECTOR
-
-/**
- *  Sets the memory flash size in bytes.
- */
-
-#define FF_FLASH_SIZE           (FF_MAX_NSECTOR * FF_PHYS_BLOCK_SIZE)
-
-/**
- *  Each page stores a 16-bits checksum. It's stored in the last
- *  2 position of page. Thus, the effective storage	area of a page
- *  is calculated as:
- *
- *  RF_SIZE_EFF_PAGE = FF_PHYS_BLOCK_SIZE - RF_SIZE_CHECKSUM
- */
-
-#define RF_SIZE_CHECKSUM        2   /* in bytes */
-#define RF_SIZE_EFF_PAGE        (FF_PHYS_BLOCK_SIZE - RF_SIZE_CHECKSUM) /* (512
-                                                                         * - 2)
-                                                                         * = 510 */
-#define RF_PAGE_CHECKSUM_POS    RF_SIZE_EFF_PAGE /* 510 */
-
-/**
- *  Generally, the erased flash page sets all bits to one. Therefore,
- *  the checksum of recently erased page is calculated as:
- */
-
-#define RF_ERASE_CHECKSUM       (ffui16_t) ~(RF_SIZE_EFF_PAGE * 0xFF)
-
-#define RF_DIR_MAIN_PAGE        0
-#if FF_DIR_BACKUP == 1
-#define RF_DIR_BACK_PAGE        (RF_DIR_MAIN_PAGE + 1) /* (0+1)= 1 */
-#else
-#define RF_DIR_BACK_PAGE        (RF_DIR_MAIN_PAGE + 0)
+/* ---------------------- External C language linkage ---------------------- */
+#ifdef __cplusplus
+extern "C" {
 #endif
-#define RF_FILE_PAGE_BASE       (RF_DIR_BACK_PAGE + 1) /* = 2 */
 
-/**
- *  The address base of storage area is automatically calculated.
- */
-
-#define RF_DIR_MAIN_FB_ADDRESS \
-    ((SA_T)((SA_T)(RF_DIR_MAIN_PAGE * FF_PHYS_BLOCK_SIZE) + RF_FB_ADDRESS))
-
-#define RF_DIR_BACK_FB_ADDRESS \
-    ((SA_T)((SA_T)(RF_DIR_BACK_PAGE * FF_PHYS_BLOCK_SIZE) + RF_FB_ADDRESS)) /*
-                                                                             * (1
-                                                                             * *
-                                                                             * 512)
-                                                                             * +
-                                                                             * 0
-                                                                             * =
-                                                                             * 512 */
-
-#define RF_FILE_FB_ADDRESS \
-    ((SA_T)((SA_T)(RF_FILE_PAGE_BASE * FF_PHYS_BLOCK_SIZE) + RF_FB_ADDRESS)) /* (2
-                                                                              * *
-                                                                              * 512)
-                                                                              * +
-                                                                              * 0
-                                                                              * =
-                                                                              * 1024 */
-
-/**
- *  Misc. macro that includes code to use.
- */
-
-#define RF_PAGE_DUMP            0
-#define RF_PAGE_DIRTY           1
-#define RF_SET_DIR              1
-
+/* --------------------------------- Macros -------------------------------- */
 /**
  *  \brief
  *	Macro that creates a new flash file structure into directory.
@@ -122,7 +51,6 @@
  *				written register. Each register on the file must be the same
  *				size.
  */
-
 #define CREATE_FFILE(fd, t, np, bp, sr) \
     { \
         fd, t, 0, np, bp, \
@@ -136,7 +64,6 @@
  *  \brief
  *  Macro that creates the default directory.
  */
-
 #define CREATE_DIR          const FFILE_T defdir[]
 
 /**
@@ -145,8 +72,72 @@
  *
  *  \param nf	number of files.
  */
-
 #define DECLARE_DIR(nf)     const FFILE_T defdir[nf]
+
+/* -------------------------------- Constants ------------------------------ */
+/**
+ *  Sets the physical size of page in bytes.
+ */
+#define RF_SIZE_PHY_PAGE        FF_PHYS_BLOCK_SIZE
+
+/**
+ *	Number of flash memory sectors (files and directory).
+ */
+#define FF_MAX_NSECTOR          (FF_NSECTOR - (FF_DIR_BACKUP + 1))
+
+/**
+ *  Sets the invalid page number. It cannot be accesed.
+ */
+#define FF_INVALID_PAGE         FF_MAX_NSECTOR
+
+/**
+ *  Sets the memory flash size in bytes.
+ */
+#define FF_FLASH_SIZE           (FF_MAX_NSECTOR * FF_PHYS_BLOCK_SIZE)
+
+/**
+ *  Each page stores a 16-bits checksum. It's stored in the last
+ *  2 position of page. Thus, the effective storage	area of a page
+ *  is calculated as:
+ *
+ *  RF_SIZE_EFF_PAGE = FF_PHYS_BLOCK_SIZE - RF_SIZE_CHECKSUM
+ */
+#define RF_SIZE_CHECKSUM        2   /* in bytes */
+#define RF_SIZE_EFF_PAGE        (FF_PHYS_BLOCK_SIZE - RF_SIZE_CHECKSUM)
+#define RF_PAGE_CHECKSUM_POS    RF_SIZE_EFF_PAGE
+
+/**
+ *  Generally, the erased flash page sets all bits to one. Therefore,
+ *  the checksum of recently erased page is calculated as:
+ */
+#define RF_ERASE_CHECKSUM       (ffui16_t) ~(RF_SIZE_EFF_PAGE * 0xFF)
+
+#define RF_DIR_MAIN_PAGE        0
+#if FF_DIR_BACKUP == 1
+#define RF_DIR_BACK_PAGE        (RF_DIR_MAIN_PAGE + 1)
+#else
+#define RF_DIR_BACK_PAGE        (RF_DIR_MAIN_PAGE + 0)
+#endif
+#define RF_FILE_PAGE_BASE       (RF_DIR_BACK_PAGE + 1)
+
+/**
+ *  The address base of storage area is automatically calculated.
+ */
+#define RF_DIR_MAIN_FB_ADDRESS \
+    ((SA_T)((SA_T)(RF_DIR_MAIN_PAGE * FF_PHYS_BLOCK_SIZE) + RF_FB_ADDRESS))
+
+#define RF_DIR_BACK_FB_ADDRESS \
+    ((SA_T)((SA_T)(RF_DIR_BACK_PAGE * FF_PHYS_BLOCK_SIZE) + RF_FB_ADDRESS))
+
+#define RF_FILE_FB_ADDRESS \
+    ((SA_T)((SA_T)(RF_FILE_PAGE_BASE * FF_PHYS_BLOCK_SIZE) + RF_FB_ADDRESS))
+
+/**
+ *  Misc. macro that includes code to use.
+ */
+#define RF_PAGE_DUMP            0
+#define RF_PAGE_DIRTY           1
+#define RF_SET_DIR              1
 
 #if FF_DEBUG == 1
     #include <stdio.h>
@@ -277,7 +268,7 @@ static const char *dirmsg[] =
     #define FFDBG_Q_FULL(f)               (void)0
     #define FFDBG_Q_INSERT(f)             (void)0
     #define FFDBG_Q_RND_READ(f)           (void)0
-    #define FFDBG_SYNC()                    (void)0
+    #define FFDBG_SYNC()                  (void)0
 #endif
 
 enum
@@ -290,10 +281,10 @@ enum
     QFILE_TYPE, RFILE_TYPE
 };
 
+/* ------------------------------- Data types ------------------------------ */
 /**
  *  Defines the file handler.
  */
-
 typedef FFUInt FFD_T;
 
 /**
@@ -301,7 +292,6 @@ typedef FFUInt FFD_T;
  *  Specify the size of the number of register in FFILE. The valid values
  *  [in bits] are 8, 16 or 32. Default is 16.
  */
-
 #if FF_SIZEOF_NREGS == 8
 typedef ffui8_t NR_T;
 #elif FF_SIZEOF_NREGS == 16
@@ -320,7 +310,6 @@ typedef ffui16_t NR_T;
  *	The valid values [in bits] are 8, 16 or 32. Default is 8. This type is
  *	configurable via the preprocessor switch FF_MAX_NSECTOR.
  */
-
 #if FF_MAX_NSECTOR > 0 && FF_MAX_NSECTOR <= 256
 typedef ffui8_t SPG_T;
 typedef ffui16_t SA_T;
@@ -417,6 +406,8 @@ typedef struct
     ffui16_t rqty;
 } RACC_T;
 
+/* -------------------------- External variables --------------------------- */
+/* -------------------------- Function prototypes -------------------------- */
 void rfile_init_directory(void);
 void rfile_update_directory(FFILE_T *pf);
 void rfile_file_format(FFILE_T *pf);
@@ -426,5 +417,12 @@ void rfile_page_dirty(SPG_T page);
 void rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles);
 FFILE_T *rfile_restore_directory(ffui8_t *status);
 
+/* -------------------- External C language linkage end -------------------- */
+#ifdef __cplusplus
+}
 #endif
+
+/* ------------------------------ Module end ------------------------------- */
+#endif
+
 /* ------------------------------ End of file ------------------------------ */
