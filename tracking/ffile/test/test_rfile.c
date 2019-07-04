@@ -20,6 +20,7 @@
 #include "rfile.h"
 #include "Mock_ffile.h"
 #include "Mock_devflash.h"
+#include "Mock_ffdir.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -40,50 +41,23 @@ tearDown(void)
 }
 
 void
-test_RestoreDirFromDefault(void)
+test_RestoreDirectory(void)
 {
-    ffui8_t result;
-    const FFILE_T *dir;
-    PageRes mainPage, backPage;
+    PageRes res;
+    ffui8_t nFile;
+    FFILE_T *pf;
 
-    mainPage.result = PAGE_BAD;
-    mainPage.checksum = 0;
-    backPage.result = PAGE_BAD;
-    backPage.checksum = 0;
+    res.result = PAGE_OK;
+    ffdir_restore_ExpectAndReturn(0, (FFILE_T *)defdir);
+    ffdir_restore_IgnoreArg_status();
+    devflash_verify_page_IgnoreAndReturn(res);
+    for (nFile = 0, pf = (FFILE_T *)defdir; 
+         nFile < NUM_FLASH_FILES; 
+         ++nFile, ++pf)
+    {
+    }
 
-    devflash_setInvalidPage_Expect();
-    devflash_verify_page_ExpectAndReturn(RF_DIR_MAIN_PAGE, mainPage);
-    devflash_verify_page_ExpectAndReturn(RF_DIR_BACK_PAGE, backPage);
-
-    dir = rfile_restore_directory(&result);
-    TEST_ASSERT_EQUAL(DIR_BAD, result);
-    TEST_ASSERT_EQUAL_MEMORY(defdir, dir, sizeof(FFILE_T) * NUM_FLASH_FILES);
-}
-
-void
-test_RestoreDirFromDataflash(void)
-{
-    ffui8_t result;
-    const FFILE_T *dir;
-    PageRes mainPage, backPage;
-
-    mainPage.result = PAGE_OK;
-    mainPage.checksum = 0;
-    backPage.result = PAGE_OK;
-    backPage.checksum = 0;
-
-    devflash_setInvalidPage_Expect();
-    devflash_verify_page_ExpectAndReturn(RF_DIR_MAIN_PAGE, mainPage);
-    devflash_verify_page_ExpectAndReturn(RF_DIR_BACK_PAGE, backPage);
-    devflash_read_data_Expect((SA_T)0, 
-                              RF_DIR_MAIN_PAGE, 
-                              (ffui8_t *)0, 
-                              sizeof(FFILE_T) * NUM_FLASH_FILES);
-    devflash_read_data_IgnoreArg_data(); 
-
-    dir = rfile_restore_directory(&result);
-    TEST_ASSERT_EQUAL(DIR_OK, result);
-    TEST_ASSERT_EQUAL_MEMORY(defdir, dir, sizeof(FFILE_T) * NUM_FLASH_FILES);
+    rfile_init_directory();
 }
 
 /* ------------------------------ End of file ------------------------------ */

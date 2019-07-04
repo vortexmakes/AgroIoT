@@ -130,7 +130,7 @@ rfile_init_directory(void)
     FFILE_T *pf;
     PageRes res;
 
-    rfile_restore_directory(&r);
+    ffdir_restore(&r);
     for (file = 0, pf = dir; file < NUM_FLASH_FILES; ++file, ++pf)
     {
         for (page = page_error = 0; page < pf->num_pages; ++page)

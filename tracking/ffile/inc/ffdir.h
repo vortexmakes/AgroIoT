@@ -17,6 +17,8 @@
 #define __FFDIR_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "rfile.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -27,6 +29,8 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+FFILE_T *ffdir_restore(ffui8_t *status);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }
