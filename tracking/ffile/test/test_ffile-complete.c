@@ -52,31 +52,6 @@ tearDown(void)
 }
 
 void
-test_WriteAndReadRandomFile(void)
-{
-    int nRead, nWritten;
-    Config writeData;
-    Config readData;
-
-    writeData.aclimit = 8;
-    writeData.brlimit = 4;
-    writeData.status = 2;
-    readData.aclimit = 1;
-    readData.brlimit = 1;
-    readData.status = 1;
-
-    crashDirectory();
-    ffile_init();
-    nWritten = ffile_random_access(FFD1, WRITE_ACCESS, &writeData, 1);
-    ffile_seek(FFD1, 0);
-    nRead = ffile_random_access(FFD1, READ_ACCESS, &readData, 1);
-
-    TEST_ASSERT_EQUAL(1, nWritten);
-    TEST_ASSERT_EQUAL(1, nRead);
-    TEST_ASSERT_EQUAL_MEMORY(&writeData, &readData, sizeof(Config));
-}
-
-void
 test_RestoreDefaultDirectory(void)
 {
     FFILE_T *file;
@@ -147,8 +122,50 @@ test_RestoreDirectoryFromMain(void)
 }
 
 void
-test_RestoreDirectoryFromMem(void)
+test_RestoreDirectoryFromMemory(void)
 {
+    FFILE_T *file;
+    int nWritten;
+    Config writeData;
+
+    crashDirectory();
+    ffile_init();
+
+    file = ffile_get_file_info(FFD1);
+    nWritten = ffile_random_access(FFD1, WRITE_ACCESS, &writeData, 1);
+    file = ffile_get_file_info(FFD1);
+    TEST_ASSERT_EQUAL(1, nWritten);
+    TEST_ASSERT_EQUAL(1, file->pos);
+    ffile_sync();
+
+    ffile_init();
+
+    TEST_ASSERT_EQUAL(1, file->pos);
+}
+
+void
+test_WriteAndReadRandomFile(void)
+{
+    int nRead, nWritten;
+    Config writeData;
+    Config readData;
+
+    writeData.aclimit = 8;
+    writeData.brlimit = 4;
+    writeData.status = 2;
+    readData.aclimit = 1;
+    readData.brlimit = 1;
+    readData.status = 1;
+
+    crashDirectory();
+    ffile_init();
+    nWritten = ffile_random_access(FFD1, WRITE_ACCESS, &writeData, 1);
+    ffile_seek(FFD1, 0);
+    nRead = ffile_random_access(FFD1, READ_ACCESS, &readData, 1);
+
+    TEST_ASSERT_EQUAL(1, nWritten);
+    TEST_ASSERT_EQUAL(1, nRead);
+    TEST_ASSERT_EQUAL_MEMORY(&writeData, &readData, sizeof(Config));
 }
 
 /* ------------------------------ End of file ------------------------------ */
