@@ -30,6 +30,8 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 FFILE_T *ffdir_restore(ffui8_t *status);
+void ffdir_update(FFILE_T *file);
+FFILE_T *ffdir_getFile(FFD_T fd);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

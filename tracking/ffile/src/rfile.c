@@ -118,7 +118,7 @@ rfile_file_format(FFILE_T *pf)
         devflash_format_pages(pf->begin_page, pf->num_pages);
         pf->pos_qty = pf->pos = pf->in = pf->out = pf->qty = 0;
         pf->page_error = 0;
-        rfile_update_directory(pf);
+        ffdir_update(pf);
     }
 }
 
@@ -130,8 +130,8 @@ rfile_init_directory(void)
     FFILE_T *pf;
     PageRes res;
 
-    ffdir_restore(&r);
-    for (file = 0, pf = dir; file < NUM_FLASH_FILES; ++file, ++pf)
+    pf = ffdir_restore(&r);
+    for (file = 0; file < NUM_FLASH_FILES; ++file, ++pf)
     {
         for (page = page_error = 0; page < pf->num_pages; ++page)
         {
@@ -152,10 +152,11 @@ rfile_init_directory(void)
             rfile_file_format(pf);
         }
 #endif
-        rfile_update_directory(pf);
+        ffdir_update(pf);
     }
 }
 
+#if 0
 void
 rfile_update_directory(FFILE_T *pf)
 {
@@ -185,6 +186,7 @@ rfile_update_directory(FFILE_T *pf)
 #endif
     }
 }
+#endif
 
 void
 rfile_access_register(RACC_T *pra)
@@ -232,7 +234,7 @@ rfile_access_register(RACC_T *pra)
 FFILE_T *
 rfile_get_file(FFD_T fd)
 {
-    return &dir[fd];
+    return ffdir_getFile(fd);
 }
 
 #if RF_PAGE_DIRTY == 1
@@ -257,6 +259,7 @@ rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles)
 }
 #endif
 
+#if 0
 FFILE_T *
 rfile_restore_directory(ffui8_t *status)
 {
@@ -290,5 +293,6 @@ rfile_restore_directory(ffui8_t *status)
     FFDBG_RESTORE_DIR(r);
     return dir;
 }
+#endif
 
 /* ------------------------------ End of file ------------------------------ */

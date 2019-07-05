@@ -15,6 +15,7 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <string.h>
 #include "unity.h"
 #include "ffdata.h"
 #include "rfile.h"
@@ -45,19 +46,36 @@ test_RestoreDirectory(void)
 {
     PageRes res;
     ffui8_t nFile;
-    FFILE_T *pf;
+    FFILE_T *file;
+    FFILE_T dir[NUM_FLASH_FILES];
 
     res.result = PAGE_OK;
-    ffdir_restore_ExpectAndReturn(0, (FFILE_T *)defdir);
+    memcpy(dir, (FFILE_T *)defdir, sizeof(FFILE_T) * NUM_FLASH_FILES);
+    ffdir_restore_ExpectAndReturn(0, dir);
     ffdir_restore_IgnoreArg_status();
     devflash_verify_page_IgnoreAndReturn(res);
-    for (nFile = 0, pf = (FFILE_T *)defdir; 
-         nFile < NUM_FLASH_FILES; 
-         ++nFile, ++pf)
+    for (nFile = 0, file = dir; nFile < NUM_FLASH_FILES; ++nFile, ++file)
     {
+        ffdir_update_Expect(file);
+        ffdir_update_IgnoreArg_file();
     }
 
     rfile_init_directory();
+    TEST_ASSERT_EQUAL(0, dir[0].page_error);
+    TEST_ASSERT_EQUAL(0, dir[1].page_error);
+}
+
+void
+test_GetDirectory(void)
+{
+    ffdir_getFile_ExpectAndReturn(FFD0, (FFILE_T *)&defdir[FFD0]);
+    rfile_get_file(FFD0);
+}
+
+void
+test_FormatFile(void)
+{
+    TEST_IGNORE();
 }
 
 /* ------------------------------ End of file ------------------------------ */
