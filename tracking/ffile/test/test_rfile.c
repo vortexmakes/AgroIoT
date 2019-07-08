@@ -28,6 +28,8 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static FFILE_T dir[NUM_FLASH_FILES];
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
@@ -47,7 +49,6 @@ test_RestoreDirectory(void)
     PageRes res;
     ffui8_t nFile;
     FFILE_T *file;
-    FFILE_T dir[NUM_FLASH_FILES];
 
     res.result = PAGE_OK;
     memcpy(dir, (FFILE_T *)defdir, sizeof(FFILE_T) * NUM_FLASH_FILES);
@@ -75,7 +76,24 @@ test_GetDirectory(void)
 void
 test_FormatFile(void)
 {
-    TEST_IGNORE();
+    FFILE_T *file;
+
+    memcpy(dir, (FFILE_T *)defdir, sizeof(FFILE_T) * NUM_FLASH_FILES);
+    file = (FFILE_T *)&dir[FFD0];
+    devflash_is_ready_to_save_in_flash_ExpectAndReturn(1);
+    devflash_format_pages_Expect(file->begin_page, file->num_pages);
+    ffdir_update_Expect(file);
+
+    rfile_file_format(file);
+}
+
+void
+test_SetDirectory(void)
+{
+    memcpy(dir, (FFILE_T *)defdir, sizeof(FFILE_T) * NUM_FLASH_FILES);
+    ffdir_set_Expect(dir, NUM_FLASH_FILES);
+
+    rfile_set_directory(dir, NUM_FLASH_FILES);
 }
 
 /* ------------------------------ End of file ------------------------------ */

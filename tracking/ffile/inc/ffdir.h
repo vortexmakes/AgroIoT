@@ -32,6 +32,7 @@ extern "C" {
 FFILE_T *ffdir_restore(ffui8_t *status);
 void ffdir_update(FFILE_T *file);
 FFILE_T *ffdir_getFile(FFD_T fd);
+void ffdir_set(FFILE_T *file, ffui8_t nFiles);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

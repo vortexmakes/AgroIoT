@@ -27,7 +27,6 @@ typedef ffui8_t (*RECPROC_T)(void);
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static FFILE_T dir[NUM_FLASH_FILES];
 static SA_T reg_addr;
 static SPG_T page_num;
 static ffui16_t main_check, back_check;
@@ -56,7 +55,6 @@ static ffui16_t main_check, back_check;
  *  MATCH		|	DIR_OK
  */
 #if FF_DIR_BACKUP == 1
-
 static ffui8_t proc_page_in_error(void);
 static ffui8_t proc_page_recovery(void);
 static ffui8_t proc_page_backup(void);
@@ -245,6 +243,7 @@ rfile_page_dirty(SPG_T page)
 }
 #endif
 
+#if 0
 #if RF_SET_DIR == 1
 void
 rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles)
@@ -256,6 +255,13 @@ rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles)
 #if FF_DIR_BACKUP == 1
     devflash_copy_page_from_buff(RF_DIR_BACK_FB_ADDRESS);
 #endif
+}
+#endif
+#else
+void
+rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles)
+{
+    ffdir_set(pdir, nfiles);
 }
 #endif
 
