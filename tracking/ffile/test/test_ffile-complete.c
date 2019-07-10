@@ -21,6 +21,7 @@
 #include "devflash.h"
 #include "ffport.h"
 #include "ffdata.h"
+#include "ffdir.h"
 #include "GStatus.h"
 #include "Config.h"
 

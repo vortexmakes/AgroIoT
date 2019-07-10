@@ -15,6 +15,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "ffile.h"
+#include "ffdir.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define ffile_prepare_access(p, o, ta, pd, pos, q) \
@@ -351,6 +352,7 @@ ffile_is_corrupted(FFD_T ffd)
 void
 ffile_sync(void)
 {
-    rfile_update_directory((FFILE_T *)0);
+    ffdir_update((FFILE_T *)0);
 }
+
 /* ------------------------------ End of file ------------------------------ */
