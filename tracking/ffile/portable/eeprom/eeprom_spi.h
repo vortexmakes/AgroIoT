@@ -1,6 +1,6 @@
 /**
- *  \file       dfspi.h
- *  \brief      Dataflash SPI interface
+ *  \file       eeprom_spi.h
+ *  \brief      EEPROM SPI interface
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -16,8 +16,8 @@
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
 
-#ifndef __DFSPI_H__
-#define __DFSPI_H__
+#ifndef __EEPROM_SPI_H__
+#define __EEPROM_SPI_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "mytypes.h"
@@ -28,20 +28,23 @@ extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
+#define EEPROM_CS_HIGH()    eeprom_spi_deselect()
+#define EEPROM_CS_LOW()     eeprom_spi_select()
+
 /* -------------------------------- Constants ------------------------------ */
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void dfspi_init(void);
+void eeprom_spi_init(void);
 
-void dfspi_select_channel(void);
-void dfspi_deselect_channel(void);
+void eeprom_spi_select(void);
+void eeprom_spi_deselect(void);
 
-void dfspi_write_byte(uchar b);
-void dfspi_read_byte(uchar *p);
+void eeprom_spi_write_byte(uchar b);
+void eeprom_spi_read_byte(uchar *p);
 
-void dfspi_write(uchar *p, uint qty);
-void dfspi_read(uchar *p, uint qty);
+void eeprom_spi_write(uchar *p, uint qty);
+void eeprom_spi_read(uchar *p, uint qty);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

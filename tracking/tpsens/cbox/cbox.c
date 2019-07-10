@@ -16,6 +16,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
+#include <string.h>
 #include "rkhfwk_pubsub.h"
 #include "signals.h"
 #include "topics.h"

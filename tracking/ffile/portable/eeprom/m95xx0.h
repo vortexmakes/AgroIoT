@@ -1,6 +1,6 @@
 /**
- *  \file       dfspi.h
- *  \brief      Dataflash SPI interface
+ *  \file       m95xx0.h
+ *  \brief      EEPROM M95xx0 definitions.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -15,13 +15,10 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-
-#ifndef __DFSPI_H__
-#define __DFSPI_H__
+#ifndef __M95XX0_H__
+#define __M95XX0_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "mytypes.h"
-
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -29,20 +26,20 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+#define EEPROM_WREN  0x06  /*!< Write Enable */
+#define EEPROM_WRDI  0x04  /*!< Write Disable */
+#define EEPROM_RDSR  0x05  /*!< Read Status Register */
+#define EEPROM_WRSR  0x01  /*!< Write Status Register */
+#define EEPROM_READ  0x03  /*!< Read from Memory Array */
+#define EEPROM_WRITE 0x02  /*!< Write to Memory Array */
+
+#define EEPROM_WIP_FLAG     0x01  /*!< Write In Progress (WIP) flag */
+
+#define EEPROM_PAGESIZE     32  /*!< Pagesize according to documentation */
+
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void dfspi_init(void);
-
-void dfspi_select_channel(void);
-void dfspi_deselect_channel(void);
-
-void dfspi_write_byte(uchar b);
-void dfspi_read_byte(uchar *p);
-
-void dfspi_write(uchar *p, uint qty);
-void dfspi_read(uchar *p, uint qty);
-
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

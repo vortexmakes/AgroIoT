@@ -12,6 +12,9 @@
 void init_tpl_hal( void );
 void deinit_tpl_hal( void );
 
+void tplink_rx_isr( unsigned char byte );
+void tplink_tx_isr( void );
+
 void tpl_choke_xmit( uchar data );
 void tpl_xmit( uchar data );
 void tpl_stop_xmit( void );

@@ -18,6 +18,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
+#include <string.h>
 #include "rkh.h"
 #include "cubemx.h"
 #include "bsp.h"
@@ -28,6 +29,7 @@
 #include "dOut.h"
 #include "modmgr.h"
 #include "modcmd.h"
+#include "tplhal.h"
 #include "conmgr.h"
 #include "mTime.h"
 #include "epoch.h"
@@ -49,51 +51,34 @@ static ModCmdRcvHandler gsmCmdParser;
 static GpsRcvHandler    gpsParser;
 static SIMSelect_t      simSelect;
 
-/* ----------------------- Local function prototypes ----------------------- */
-/* ---------------------------- Local functions ---------------------------- */
-/* ---------------------------- Global functions --------------------------- */
-void
-bsp_init(int argc, char *argv[])
-{
-    (void)argc;
-    (void)argv;
-
-    HAL_Init();
-
-    SystemClock_Config();
-    MX_GPIO_Init();
-    MX_USB_OTG_HS_HCD_Init();
-    MX_USART6_UART_Init();
-    MX_USART1_UART_Init();
-    MX_CAN1_Init();
-    MX_ADC1_Init();
-    MX_SPI3_Init();
-
-    modPwr_init();
-    dIn_init();
-    dOut_init();
-
-    ffile_init();
-}
-
-void
-bsp_timeTick(void)
-{
-    ++tstamp;
-    mTime_tick();
-}
-
-RKH_TS_T
-rkh_trc_getts(void)
-{
-    return tstamp;
-}
-
 static uint8_t uart1RxBuff[10];
 static uint8_t uart2RxBuff[10];
 static uint8_t uart3RxBuff[10];
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
+/* ----------------------- Local function prototypes ----------------------- */
+/* ---------------------------- Local functions ---------------------------- */
+static UART_HandleTypeDef *
+getUartHandle(int ch)
+{
+    switch(ch)
+    {
+        case GSM_PORT:
+            return &huart2;
+
+        case GPS_PORT:
+            return &huart3;
+
+		case TPSENS_PORT:
+            return &huart1;
+
+		default:
+            return NULL;
+    }
+}
+
+/* ---------------------------- Global functions --------------------------- */
+void
+HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
     if (UartHandle->Instance == USART1)
     {
@@ -119,6 +104,42 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 
         HAL_UART_Receive_IT(&huart3, uart3RxBuff, 1);
     }
+}
+
+void
+bsp_init(int argc, char *argv[])
+{
+    (void)argc;
+    (void)argv;
+
+    HAL_Init();
+
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_DMA_Init();
+    MX_USB_OTG_HS_HCD_Init();
+    MX_USART6_UART_Init();
+    MX_USART1_UART_Init();
+    MX_CAN1_Init();
+    MX_ADC1_Init();
+    MX_SPI3_Init();
+
+    modPwr_init();
+    dIn_init();
+    dOut_init();
+}
+
+void
+bsp_timeTick(void)
+{
+    ++tstamp;
+    mTime_tick();
+}
+
+RKH_TS_T
+rkh_trc_getts(void)
+{
+    return tstamp;
 }
 
 void
@@ -162,46 +183,34 @@ bsp_serial_close(int ch)
 void
 bsp_serial_puts(int ch, char *p)
 {
-    while(*p!='\0')
-    {
-        bsp_serial_putchar(ch, *p);
-        ++p;
-    }
+    ruint len;
+
+    len = strlen(p);
+    bsp_serial_putnchar(ch, (unsigned char *)p, len);
 }
 
 void
 bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata)
 {
-    while(ndata && (ndata-- != 0))
+    UART_HandleTypeDef *pUart;
+    HAL_UART_StateTypeDef state;
+
+    pUart = getUartHandle(ch);
+
+    do
     {
-        bsp_serial_putchar(ch, *p);
-        ++p;
+        state = HAL_UART_GetState(pUart);
     }
+    while((state == HAL_UART_STATE_BUSY_TX) ||
+          (state == HAL_UART_STATE_BUSY_TX_RX));
+
+    HAL_UART_Transmit_DMA(getUartHandle(ch), p, ndata);
 }
 
 void
 bsp_serial_putchar(int ch, unsigned char c)
 {
-    UART_HandleTypeDef *pUart;
-
-    switch(ch)
-    {
-        case GSM_PORT:
-            pUart = &huart2;
-            break;
-
-        case GPS_PORT:
-            pUart = &huart3;
-			break;
-
-		case TPSENS_PORT:
-			break;
-
-		default:
-			break;
-    }
-    
-    HAL_UART_Transmit(pUart, &c, 1, 100);
+    HAL_UART_Transmit(getUartHandle(ch), &c, 1, 100);
 }
 
 void 

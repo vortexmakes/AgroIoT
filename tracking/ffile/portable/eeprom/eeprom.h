@@ -1,6 +1,6 @@
 /**
- *  \file       dfspi.h
- *  \brief      Dataflash SPI interface
+ *  \file       eeprom.h
+ *  \brief      EEPROM M95xxx device controller.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -15,12 +15,11 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-
-#ifndef __DFSPI_H__
-#define __DFSPI_H__
+#ifndef __EEPROM_H__
+#define __EEPROM_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "mytypes.h"
+#include "stdint.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -32,16 +31,13 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void dfspi_init(void);
+void eeprom_init(void);
 
-void dfspi_select_channel(void);
-void dfspi_deselect_channel(void);
+void eeprom_write(uint8_t *p, uint16_t addr, uint16_t qty);
+void eeprom_read(uint8_t *p, uint16_t addr, uint16_t qty);
 
-void dfspi_write_byte(uchar b);
-void dfspi_read_byte(uchar *p);
-
-void dfspi_write(uchar *p, uint qty);
-void dfspi_read(uchar *p, uint qty);
+uint8_t eeprom_readStatusRegister(void);
+void eeprom_writeStatusRegister(uint8_t regval);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

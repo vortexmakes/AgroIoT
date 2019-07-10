@@ -50,7 +50,7 @@ void gpioWrite(dOutSignalId pin, uint8_t value)
             return Output2(value);
 
         default:
-            return 0;
+            return;
     }
 }
 
