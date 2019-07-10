@@ -19,17 +19,29 @@
 #include "ffile.h"
 #include "ffdir.h"
 #include "ffdata.h"
-#include "devflash.h"
+#include "eeprom.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 typedef ffui8_t (*RecProc)(void);
+typedef struct Dir Dir;
+struct Dir
+{
+    FFILE_T data[NUM_FLASH_FILES];
+    ffui16_t checksum;
+};
+
+typedef struct DirSector DirSector;
+struct DirSector
+{
+    Dir main;
+    Dir backup;
+};
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static FFILE_T dir[NUM_FLASH_FILES];
-static ffui16_t main_check, back_check;
+static Dir dir;
 
 /*
  *  Recovery true table:
@@ -78,20 +90,21 @@ proc_page_in_error(void)
 static ffui8_t
 proc_page_recovery(void)
 {
-    devflash_copy_page(RF_DIR_MAIN_PAGE, RF_DIR_BACK_PAGE);
+    /*devflash_copy_page(RF_DIR_MAIN_PAGE, RF_DIR_BACK_PAGE);*/
     return DIR_RECOVERY;
 }
 
 static ffui8_t
 proc_page_backup(void)
 {
-    devflash_copy_page(RF_DIR_BACK_PAGE, RF_DIR_MAIN_PAGE);
+    /*devflash_copy_page(RF_DIR_BACK_PAGE, RF_DIR_MAIN_PAGE);*/
     return DIR_BACKUP;
 }
 
 static ffui8_t
 proc_page_cmp(void)
 {
+#if 0
     if (main_check != back_check)
     {
         return proc_page_backup();
@@ -101,6 +114,7 @@ proc_page_cmp(void)
     {
         return DIR_OK;
     }
+#endif
 
     return proc_page_backup();
 }
@@ -110,84 +124,29 @@ proc_page_cmp(void)
 FFILE_T *
 ffdir_restore(ffui8_t *status)
 {
-    ffui8_t r;
-    PageRes mainPage, backPage;
-
-    devflash_setInvalidPage();
-    mainPage = devflash_verify_page(RF_DIR_MAIN_PAGE);
-#if FF_DIR_BACKUP == 1
-    backPage = devflash_verify_page(RF_DIR_BACK_PAGE);
-    r = 0;
-    r = (mainPage.result << 1) | backPage.result;
-    *status = (*recovery[r])();
-#else
-    *status = (mainPage.result == CHECK_OK) ? DIR_OK : DIR_BAD;
-#endif
-    if (*status != DIR_BAD)
+    eeprom_init();
+    if (status != (ffui8_t *)0)
     {
-        devflash_read_data((SA_T)0,
-                           RF_DIR_MAIN_PAGE,
-                           (ffui8_t *)dir,
-                           sizeof(FFILE_T) * NUM_FLASH_FILES);
-    }
-    else
-    {
-        memcpy(dir,
-               (ffui8_t *)defdir,
-               sizeof(FFILE_T) * NUM_FLASH_FILES);
+        *status = DIR_OK;
     }
 
-    FFDBG_RESTORE_DIR(r);
-    return dir;
+    return dir.data;
 }
 
 void
 ffdir_update(FFILE_T *pf)
 {
-    SA_T da;
-    ffui8_t *sa;
-    ffui8_t nfiles;
-
-    if (devflash_is_ready_to_save_in_flash())
-    {
-        if (pf != (FFILE_T *)0)
-        {
-            da = (SA_T)(pf->fd * sizeof(FFILE_T));
-            sa = (ffui8_t *)pf;
-            nfiles = 1;
-        }
-        else
-        {
-            da = (SA_T)0;
-            sa = (ffui8_t *)dir;
-            nfiles = NUM_FLASH_FILES;
-            FFDBG_SYNC();
-        }
-
-        devflash_write_data(da, RF_DIR_MAIN_PAGE, sa,
-                            sizeof(FFILE_T) * nfiles);
-#if FF_DIR_BACKUP == 1
-        devflash_copy_page_from_buff(RF_DIR_BACK_FB_ADDRESS);
-#endif
-    }
 }
 
 FFILE_T *
 ffdir_getFile(FFD_T fd)
 {
-    return &dir[fd];
+    return &dir.data[fd];
 }
 
 void 
 ffdir_set(FFILE_T *file, ffui8_t nFiles)
 {
-    memcpy(dir, file != (FFILE_T*)0 ?  file : defdir,
-           sizeof(FFILE_T) * nFiles);
-    devflash_write_data((SA_T)0, RF_DIR_MAIN_PAGE, (ffui8_t*)dir,
-                        sizeof(FFILE_T) * nFiles);
-#if FF_DIR_BACKUP == 1
-    devflash_copy_page_from_buff(RF_DIR_BACK_FB_ADDRESS);
-#endif
 }
 
 /* ------------------------------ End of file ------------------------------ */

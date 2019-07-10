@@ -39,11 +39,6 @@ extern "C" {
 #endif
 
 /* -------------------------------- Constants ------------------------------ */
-enum
-{
-    DIR_OK, DIR_BAD, DIR_RECOVERY, DIR_BACKUP
-};
-
 /* ------------------------------- Data types ------------------------------ */
 typedef struct PageRes PageRes;
 struct PageRes
