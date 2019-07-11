@@ -15,9 +15,10 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <string.h>
 #include "unity.h"
 #include "ffdir.h"
-#include "Mock_ffdata.h"
+#include "ffdata.h"
 #include "Mock_eeprom.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -26,7 +27,7 @@
 typedef struct Dir Dir;
 struct Dir
 {
-    FFILE_T data[NUM_FLASH_FILES];
+    FFILE_T file[NUM_FLASH_FILES];
     ffui16_t checksum;
 };
 
@@ -39,12 +40,58 @@ struct DirSector
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static DirSector dirSector;
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static ffui16_t
+calculate_checksum(ffui8_t *address)
+{
+    ffui16_t check, i;
+    ffui8_t *data;
+
+    data = (ffui8_t*)address;
+    FFILE_WATCHDOG();
+
+    for (check = 0, i = (sizeof(FFILE_T) * NUM_FLASH_FILES); i; --i)
+    {
+        check += *data++;
+    }
+
+    return ~check;
+}
+
+static void
+makeDirSector(DirSector *sector)
+{
+    Dir *dir;
+    TEST_ASSERT_NOT_NULL(sector);
+
+    dir = &sector->main;
+    memcpy(dir->file, 
+           (ffui8_t *)defdir, 
+           sizeof(FFILE_T) * NUM_FLASH_FILES);
+    dir->checksum = calculate_checksum((ffui8_t *)dir->file);
+
+    dir = &sector->backup;
+    memcpy(dir->file, 
+           (ffui8_t *)defdir, 
+           sizeof(FFILE_T) * NUM_FLASH_FILES);
+    dir->checksum = calculate_checksum((ffui8_t *)dir->file);
+}
+
+static void 
+MockEepromReadCallback(uint8_t *p, uint16_t addr, uint16_t qty, 
+                       int cmock_num_calls)
+{
+    memcpy(p, &dirSector, qty);
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void 
 setUp(void)
 {
+    makeDirSector(&dirSector);
 }
 
 void 
@@ -59,13 +106,20 @@ test_RestoreDirBothMainBackupEqual(void)
     FFILE_T *dir;
 
     eeprom_init_Expect();
-    /* verify main directory -> ok */
-    /* verify backup directory -> ok */
-    /* return from eeprom */
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();
 
     dir = ffdir_restore(&status);
     TEST_ASSERT_NOT_NULL(dir);
     TEST_ASSERT_EQUAL(DIR_OK, status);
+    TEST_ASSERT_EQUAL(FFD0, dir->fd);
+    TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
+    ++dir;
+    TEST_ASSERT_EQUAL(FFD1, dir->fd);
+    TEST_ASSERT_EQUAL(RFILE_TYPE, dir->type);
 }
 
 /* ------------------------------ End of file ------------------------------ */

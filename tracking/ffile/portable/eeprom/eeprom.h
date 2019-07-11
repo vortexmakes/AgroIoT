@@ -19,7 +19,7 @@
 #define __EEPROM_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "stdint.h"
+#include <stdint.h>
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
