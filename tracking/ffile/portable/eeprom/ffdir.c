@@ -53,7 +53,7 @@ struct DirSectorStatus
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 static Dir dir;
-static DirSector buff;
+static DirSector sector;
 static DirSectorStatus mainDir, backupDir;
 
 /*
@@ -111,7 +111,7 @@ calculate_checksum(ffui8_t *address)
 }
 
 static ffui8_t 
-cmp_dir(void)
+cmpDirSector(void)
 {
     return 1;
 }
@@ -134,6 +134,8 @@ static ffui8_t
 proc_page_backup(void)
 {
     /*devflash_copy_page(RF_DIR_BACK_PAGE, RF_DIR_MAIN_PAGE);*/
+    sector.main = sector.backup;
+    /*eeprom_write(...);*/
     return DIR_BACKUP;
 }
 
@@ -145,7 +147,7 @@ proc_page_cmp(void)
         return proc_page_backup();
     }
 
-    if (cmp_dir())
+    if (cmpDirSector())
     {
         return DIR_OK;
     }
@@ -161,12 +163,12 @@ ffdir_restore(ffui8_t *status)
     ffui8_t dirStatus;
 
     eeprom_init();
-    eeprom_read((uint8_t *)&buff, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
-    mainDir.checksum = calculate_checksum((ffui8_t *)buff.main.file);
-    mainDir.result = (buff.main.checksum == mainDir.checksum) ? 1 : 0;
+    eeprom_read((uint8_t *)&sector, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
+    mainDir.checksum = calculate_checksum((ffui8_t *)sector.main.file);
+    mainDir.result = (sector.main.checksum == mainDir.checksum) ? 1 : 0;
 #if FF_DIR_BACKUP == 1
-    backupDir.checksum = calculate_checksum((ffui8_t *)buff.backup.file);
-    backupDir.result = (buff.backup.checksum == backupDir.checksum) ? 1 : 0;
+    backupDir.checksum = calculate_checksum((ffui8_t *)sector.backup.file);
+    backupDir.result = (sector.backup.checksum == backupDir.checksum) ? 1 : 0;
     dirStatus = 0;
     dirStatus = (mainDir.result << 1) | backupDir.result;
     dirStatus = (*recovery[dirStatus])();

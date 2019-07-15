@@ -65,8 +65,8 @@ static void
 makeDirSector(DirSector *sector)
 {
     Dir *dir;
-    TEST_ASSERT_NOT_NULL(sector);
 
+    TEST_ASSERT_NOT_NULL(sector);
     dir = &sector->main;
     memcpy(dir->file, 
            (ffui8_t *)defdir, 
@@ -78,6 +78,13 @@ makeDirSector(DirSector *sector)
            (ffui8_t *)defdir, 
            sizeof(FFILE_T) * NUM_FLASH_FILES);
     dir->checksum = calculate_checksum((ffui8_t *)dir->file);
+}
+
+static void
+crashDirSector(Dir *sector)
+{
+    TEST_ASSERT_NOT_NULL(sector);
+    sector->checksum = ~sector->checksum;
 }
 
 static void 
@@ -100,7 +107,7 @@ tearDown(void)
 }
 
 void
-test_RestoreDirBothMainBackupEqual(void)
+test_RestoreDirWhenMainBackupAreEquals(void)
 {
     ffui8_t status;
     FFILE_T *dir;
@@ -120,6 +127,30 @@ test_RestoreDirBothMainBackupEqual(void)
     ++dir;
     TEST_ASSERT_EQUAL(FFD1, dir->fd);
     TEST_ASSERT_EQUAL(RFILE_TYPE, dir->type);
+}
+
+void
+test_RestoreDirFromBackup(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_RestoreDirFromMain(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_RestoreDirFromDefault(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_RestoreDirFromBackupChecksumNotEqual(void)
+{
+    TEST_IGNORE();
 }
 
 /* ------------------------------ End of file ------------------------------ */
