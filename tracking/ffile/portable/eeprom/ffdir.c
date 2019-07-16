@@ -16,6 +16,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <string.h>
+#include <stddef.h>
 #include "ffile.h"
 #include "ffdir.h"
 #include "ffdata.h"
@@ -126,16 +127,18 @@ proc_page_in_error(void)
 static ffui8_t
 proc_page_recovery(void)
 {
-    /*devflash_copy_page(RF_DIR_MAIN_PAGE, RF_DIR_BACK_PAGE);*/
+    sector.main = sector.backup;
+    eeprom_write((uint8_t *)&sector.main, EEPROM_DIRSECTOR_ADDR, sizeof(Dir));
     return DIR_RECOVERY;
 }
 
 static ffui8_t
 proc_page_backup(void)
 {
-    /*devflash_copy_page(RF_DIR_BACK_PAGE, RF_DIR_MAIN_PAGE);*/
-    sector.main = sector.backup;
-    /*eeprom_write(...);*/
+    sector.backup = sector.main;
+    eeprom_write((uint8_t *)&sector.main, 
+                 EEPROM_DIRSECTOR_ADDR + offsetof(DirSector, backup), 
+                 sizeof(Dir));
     return DIR_BACKUP;
 }
 
@@ -164,6 +167,7 @@ ffdir_restore(ffui8_t *status)
 
     eeprom_init();
     eeprom_read((uint8_t *)&sector, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
+
     mainDir.checksum = calculate_checksum((ffui8_t *)sector.main.file);
     mainDir.result = (sector.main.checksum == mainDir.checksum) ? 1 : 0;
 #if FF_DIR_BACKUP == 1

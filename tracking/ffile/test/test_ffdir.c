@@ -16,6 +16,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <string.h>
+#include <stddef.h>
 #include "unity.h"
 #include "ffdir.h"
 #include "ffdata.h"
@@ -98,12 +99,15 @@ MockEepromReadCallback(uint8_t *p, uint16_t addr, uint16_t qty,
 void 
 setUp(void)
 {
+    Mock_eeprom_Init();
     makeDirSector(&dirSector);
 }
 
 void 
 tearDown(void)
 {
+    Mock_eeprom_Verify();
+    Mock_eeprom_Destroy();
 }
 
 void
@@ -120,6 +124,7 @@ test_RestoreDirWhenMainBackupAreEquals(void)
     eeprom_read_IgnoreArg_p();
 
     dir = ffdir_restore(&status);
+
     TEST_ASSERT_NOT_NULL(dir);
     TEST_ASSERT_EQUAL(DIR_OK, status);
     TEST_ASSERT_EQUAL(FFD0, dir->fd);
@@ -132,25 +137,108 @@ test_RestoreDirWhenMainBackupAreEquals(void)
 void
 test_RestoreDirFromBackup(void)
 {
-    TEST_IGNORE();
+    ffui8_t status;
+    FFILE_T *dir;
+
+    crashDirSector(&dirSector.backup);
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
+    eeprom_write_IgnoreArg_p();
+    eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();
+
+    dir = ffdir_restore(&status);
+
+    TEST_ASSERT_NOT_NULL(dir);
+    TEST_ASSERT_EQUAL(DIR_BACKUP, status);
+    TEST_ASSERT_EQUAL(FFD0, dir->fd);
+    TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
+    ++dir;
+    TEST_ASSERT_EQUAL(FFD1, dir->fd);
+    TEST_ASSERT_EQUAL(RFILE_TYPE, dir->type);
 }
 
 void
 test_RestoreDirFromMain(void)
 {
-    TEST_IGNORE();
+    ffui8_t status;
+    FFILE_T *dir;
+
+    crashDirSector(&dirSector.main);
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_write_Expect(0, 0, sizeof(Dir));
+    eeprom_write_IgnoreArg_p();
+    eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();
+
+    dir = ffdir_restore(&status);
+
+    TEST_ASSERT_NOT_NULL(dir);
+    TEST_ASSERT_EQUAL(DIR_RECOVERY, status);
+    TEST_ASSERT_EQUAL(FFD0, dir->fd);
+    TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
+    ++dir;
+    TEST_ASSERT_EQUAL(FFD1, dir->fd);
+    TEST_ASSERT_EQUAL(RFILE_TYPE, dir->type);
 }
 
 void
 test_RestoreDirFromDefault(void)
 {
-    TEST_IGNORE();
+    ffui8_t status;
+    FFILE_T *dir;
+
+    crashDirSector(&dirSector.main);
+    crashDirSector(&dirSector.backup);
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+
+    dir = ffdir_restore(&status);
+
+    TEST_ASSERT_NOT_NULL(dir);
+    TEST_ASSERT_EQUAL(DIR_BAD, status);
+    TEST_ASSERT_EQUAL(FFD0, dir->fd);
+    TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
+    ++dir;
+    TEST_ASSERT_EQUAL(FFD1, dir->fd);
+    TEST_ASSERT_EQUAL(RFILE_TYPE, dir->type);
 }
 
 void
 test_RestoreDirFromBackupChecksumNotEqual(void)
 {
-    TEST_IGNORE();
+    ffui8_t status;
+    FFILE_T *dir;
+
+    memcpy(&dirSector.main.file[1], &dirSector.main.file[0], sizeof(FFILE_T));
+    dirSector.main.checksum = 
+                            calculate_checksum((ffui8_t *)dirSector.main.file);
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
+    eeprom_write_IgnoreArg_p();
+    eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();
+
+    dir = ffdir_restore(&status);
+
+    TEST_ASSERT_NOT_NULL(dir);
+    TEST_ASSERT_EQUAL(DIR_BACKUP, status);
+    TEST_ASSERT_EQUAL(FFD0, dir->fd);
+    TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
+    ++dir;
+    TEST_ASSERT_EQUAL(FFD0, dir->fd);
+    TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
 }
 
 /* ------------------------------ End of file ------------------------------ */
