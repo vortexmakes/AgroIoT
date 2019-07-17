@@ -81,8 +81,10 @@ sprayer_update(Device *const me, RKH_EVT_T *evt)
 static void 
 sprayer_updateRaw(Device *const me)
 {
-    ((Collector *)(me->collector))->rawData.hum = ((Sprayer *)me)->nSection;
-    ((Collector *)(me->collector))->rawData.h.pqty = ((Sprayer *)me)->dose;
+    ((Collector *)(me->collector))->rawData.dev.hum = 
+        ((Sprayer *)me)->nSection;
+    ((Collector *)(me->collector))->rawData.dev.h.pqty = 
+        ((Sprayer *)me)->dose;
 }
 
 static DevVtbl vtbl = {sprayer_test, 

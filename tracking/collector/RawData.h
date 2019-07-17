@@ -1,11 +1,11 @@
 /**
- *  \file       collector.h
- *  \brief      Specifies the interface of Collector module.
+ *  \file       GStatus.h
+ *  \brief      Specifies the interface of GStatus module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.11.22  LeFr  v1.0.00  Initial version
+ *  2019.25.01  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -15,12 +15,14 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __COLLECTOR_H__
-#define __COLLECTOR_H__
+#ifndef __RAWDATA_H__
+#define __RAWDATA_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkhsma.h"
-#include "GStatus.h"
+#include "Geo.h"
+#include "cbox.h"
+#include "IOStatus.h"
+#include "BatChr.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -32,19 +34,17 @@ extern "C" {
 /* ................................ Signals ................................ */
 /* ................................. Events ................................ */
 /* ........................ Declares active object ......................... */
-typedef struct Device Device;
-typedef struct Collector Collector;
-struct Collector
+typedef struct GStatus GStatus;
+struct GStatus 
 {
-    RKH_SMA_T base;
-    GStatus rawData;
-    Device *dev;
+    Geo position;
+    CBOX_STR dev;
+    IOStatus io;
+    BatChrStatus batChr;
 };
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
-RKH_SMA_DCLR_TYPE(Collector, collector);
-
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
