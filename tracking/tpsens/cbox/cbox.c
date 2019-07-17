@@ -19,7 +19,7 @@
 #include <string.h>
 #include "rkhfwk_pubsub.h"
 #include "signals.h"
-#include "topics.h"
+#include "topic.h"
 #include "tplink.h"
 #include "tplhal.h"
 #include "ps.h"
@@ -88,7 +88,7 @@ ps_on_stop( void )
 void 
 ps_on_endcycle( void )
 {
-    tpSensor_publish(&endOfCycle, &tpSens);
+    topic_publish(tpSensor, &endOfCycle, &tpSens);
 }
 
 CBOX_STR *

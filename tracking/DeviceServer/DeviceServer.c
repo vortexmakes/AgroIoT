@@ -23,7 +23,7 @@
 #include "bsp.h"
 #include "signals.h"
 #include "events.h"
-#include "topics.h"
+#include "topic.h"
 #include "DeviceServer.h"
 #include "ps.h"
 
@@ -101,7 +101,7 @@ init(DeviceServer *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    tpSensor_subscribe(me);
+    topic_subscribe(tpSensor, me);
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->timer);
@@ -152,7 +152,7 @@ publishData(DeviceServer *const me, RKH_EVT_T *pe)
 
     sensorData.cbox = *get_cbdata();
 
-    tpSensor_publish(&sensorData, me);
+    topic_publish(tpSensor, &sensorData, me);
 }
 
 /* ............................. Entry actions ............................. */

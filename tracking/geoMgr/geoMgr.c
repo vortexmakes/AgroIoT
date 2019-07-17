@@ -24,7 +24,7 @@
 #include "bsp.h"
 #include "signals.h"
 #include "events.h"
-#include "topics.h"
+#include "topic.h"
 #include "geoMgr.h"
 #include "rmc.h"
 #include "ubx.h"
@@ -299,7 +299,7 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
     /* date: like NMEA date [degrees], decimals discarded */
     strncpy(pGps->date, pRmc->date, DATE_LENGTH);
 
-    tpGeo_publish(geoEvt, me);
+    topic_publish(tpGeo, geoEvt, me);
 }
 
 
@@ -310,7 +310,7 @@ publishInvRmc(GeoMgr *const me, RKH_EVT_T *pe)
 
     bsp_GPSStatus(RMC_StatusInvalid);
 
-    tpGeo_publish(&geoInvalidEvt, me);
+    topic_publish(tpGeo, &geoInvalidEvt, me);
 }
 
 /* ............................. Entry actions ............................. */
@@ -362,7 +362,7 @@ turnsDetect(GeoMgr *const me)
 
 		if(cog > cfg->brlimit)
         {
-            tpGeo_publish(&turnEvt, me);
+            topic_publish(tpGeo, &turnEvt, me);
         }
     }
 }

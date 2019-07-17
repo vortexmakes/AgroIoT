@@ -122,6 +122,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>app/topic</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/topic</locationURI>
+		</link>
+		<link>
 			<name>app/tpsens</name>
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/tpsens</locationURI>
