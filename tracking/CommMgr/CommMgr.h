@@ -33,6 +33,13 @@ extern "C" {
 RKH_SMA_DCLR(commMgr);
 
 /* ------------------------------- Data types ------------------------------ */
+typedef struct AppData AppData;
+struct AppData
+{
+    rui8_t *data;
+    rui16_t size;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */
