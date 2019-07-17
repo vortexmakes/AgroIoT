@@ -79,7 +79,6 @@ signals_publishSymbols(void)
 	RKH_TR_FWK_SIG(evSensorData);
 	RKH_TR_FWK_SIG(evTerminate);
     RKH_TR_FWK_SIG(evDevData);
-    RKH_TR_FWK_SIG(evRawData);
     RKH_TR_FWK_SIG(evSyncTout);
 }
 

@@ -22,10 +22,12 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhevt.h"
+#include "rkhtmr.h"
 #include "epoch.h"
 #include "rmc.h"
 #include "Geo.h"
 #include "cbox.h"
+#include "GStatus.h"
 #include "IOStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
@@ -158,11 +160,11 @@ struct OutChgEvt
     DigOut dout;
 };
 
-typedef struct RawDataEvt RawDataEvt;
-struct RawDataEvt
+typedef struct GStatusEvt GStatusEvt;
+struct GStatusEvt
 {
     RKH_EVT_T evt;
-    CBOX_STR rawData;
+    GStatus status;
 };
 
 typedef struct SensorData SensorData;
