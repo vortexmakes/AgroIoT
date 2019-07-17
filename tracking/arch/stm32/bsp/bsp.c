@@ -215,13 +215,13 @@ bsp_serial_putchar(int ch, unsigned char c)
 void 
 bsp_GSMModemFound(void)
 {
-    set_led(LED_GSM, LSTAGE1);
+    set_led(LED_GSM, SEQ_LSTAGE1);
 }
 
 void 
 bsp_SIMReady(void)
 {
-    set_led(LED_GSM, LSTAGE2);
+    set_led(LED_GSM, SEQ_LSTAGE2);
 }
 
 void 
@@ -233,7 +233,7 @@ bsp_SIMSelect(SIMSelect_t sim)
                               SIM_SELECT_Pin, 
                               sim == MainSIM ? 0 : 1);
 
-    set_led(LED_SIM, simSelect ? LSTAGE2 : LSTAGE1);
+    set_led(LED_SIM, simSelect ? SEQ_LSTAGE2 : SEQ_LSTAGE1);
 }
 
 void
@@ -247,19 +247,19 @@ bsp_SIMChange(void)
 void
 bsp_regStatus(Status_t status)
 {
-    set_led(LED_GSM, status == RegisteredSt ? LSTAGE3 : LSTAGE2);
+    set_led(LED_GSM, status == RegisteredSt ? SEQ_LSTAGE3 : SEQ_LSTAGE2);
 }
 
 void 
 bsp_netStatus(Status_t status)
 {
-    set_led(LED_GSM, status == ConnectedSt ? LSTAGE4 : LSTAGE3);
+    set_led(LED_GSM, status == ConnectedSt ? SEQ_LSTAGE4 : SEQ_LSTAGE3);
 }
 
 void 
 bsp_sendFail(void)
 {
-    set_led(LED_GSM, LSTAGE4);
+    set_led(LED_GSM, SEQ_LSTAGE4);
 }
 
 void 
@@ -271,19 +271,19 @@ bsp_sendOk(void)
 void
 bsp_recvFail(void)
 {
-    set_led(LED_GSM, LSTAGE4);
+    set_led(LED_GSM, SEQ_LSTAGE4);
 }
 
 void 
 bsp_recvOk(void)
 {
-    set_led(LED_GSM, LIT);
+    set_led(LED_GSM, SEQ_LIT);
 }
 
 void 
 bsp_GPSStatus(char status)
 {
-    set_led(LED_GPS, status == RMC_StatusValid ? LIT : LSTAGE2);
+    set_led(LED_GPS, status == RMC_StatusValid ? SEQ_LIT : SEQ_LSTAGE2);
 }
 
 void
