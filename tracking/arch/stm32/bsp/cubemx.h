@@ -14,7 +14,6 @@
 #include "adc.h"
 #include "can.h"
 #include "dma.h"
-#include "usb_otg.h"
 
 #include "rkhtype.h"
 
