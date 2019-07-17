@@ -39,7 +39,7 @@ static DigitalTimerOutput dOuts[NUM_DOUT_SIGNALS];
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static
-void gpioWrite(dOutSignalId pin, uint8_t value)
+void gpioWrite(DigOutSignalId pin, uint8_t value)
 {
     switch(pin)
     {
@@ -64,7 +64,7 @@ dOut_init(void)
 }
 
 void
-dOut_set(ruint out, ruint val, rui16_t tmr)
+dOut_set(DigOutSignalId out, ruint val, rui16_t tmr)
 {
     RKH_SR_ALLOC();
 
@@ -78,7 +78,7 @@ dOut_set(ruint out, ruint val, rui16_t tmr)
 }
 
 ruint
-dOut_get(ruint out)
+dOut_get(DigOutSignalId out)
 {
     return dOuts[out].val;
 }
@@ -87,7 +87,7 @@ void
 dOut_process(void)
 {
     DigitalTimerOutput *p;
-    dOutSignalId i;
+    DigOutSignalId i;
 
     p = dOuts;
 

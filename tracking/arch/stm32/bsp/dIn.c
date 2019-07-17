@@ -44,7 +44,7 @@
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
-ruint ioChg;
+ruint inChg;
 
 /* ---------------------------- Local variables ---------------------------- */
 static unsigned char dIns[NUM_DIN_SIGNALS];
@@ -100,20 +100,20 @@ dIn_scan(void)
         {
             dInsSt[i] = 1;
 
-            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &ioChg);
+            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
             p->din |= 1 << i;
 
-            topic_publish(deviceStatus, p, &ioChg);
+            topic_publish(deviceStatus, p, &inChg);
         }
         else if((dIns[i] == DEBOUNCE_NOT_CHG) && (din == DEBOUNCE_NOT_MASK) &&
                 (dInsSt[i] == 1))
         {
             dInsSt[i] = 0;
 
-            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &ioChg);
+            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
             p->din &= ~(1 << i);
 
-            topic_publish(deviceStatus, p, &ioChg);
+            topic_publish(deviceStatus, p, &inChg);
         }
 
         dIns[i] = din;
