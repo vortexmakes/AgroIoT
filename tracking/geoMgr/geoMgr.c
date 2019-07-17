@@ -299,7 +299,7 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
     /* date: like NMEA date [degrees], decimals discarded */
     strncpy(pGps->date, pRmc->date, DATE_LENGTH);
 
-    topic_publish(tpGeo, geoEvt, me);
+    topic_publish(deviceStatus, geoEvt, me);
 }
 
 
@@ -310,7 +310,7 @@ publishInvRmc(GeoMgr *const me, RKH_EVT_T *pe)
 
     bsp_GPSStatus(RMC_StatusInvalid);
 
-    topic_publish(tpGeo, &geoInvalidEvt, me);
+    topic_publish(deviceStatus, &geoInvalidEvt, me);
 }
 
 /* ............................. Entry actions ............................. */
@@ -362,7 +362,7 @@ turnsDetect(GeoMgr *const me)
 
 		if(cog > cfg->brlimit)
         {
-            topic_publish(tpGeo, &turnEvt, me);
+            topic_publish(deviceStatus, &turnEvt, me);
         }
     }
 }

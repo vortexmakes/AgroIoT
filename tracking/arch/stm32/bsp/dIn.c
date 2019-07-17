@@ -103,7 +103,7 @@ dIn_scan(void)
             p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &ioChg);
             p->din |= 1 << i;
 
-            topic_publish(tpIoChg, p, &ioChg);
+            topic_publish(deviceStatus, p, &ioChg);
         }
         else if((dIns[i] == DEBOUNCE_NOT_CHG) && (din == DEBOUNCE_NOT_MASK) &&
                 (dInsSt[i] == 1))
@@ -113,7 +113,7 @@ dIn_scan(void)
             p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &ioChg);
             p->din &= ~(1 << i);
 
-            topic_publish(tpIoChg, p, &ioChg);
+            topic_publish(deviceStatus, p, &ioChg);
         }
 
         dIns[i] = din;

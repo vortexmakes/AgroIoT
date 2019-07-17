@@ -493,8 +493,8 @@ init(ConMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    topic_subscribe(connection, me);
-    topic_subscribe(tpModURC, me);
+    topic_subscribe(tcpConnection, me);
+    topic_subscribe(gsmURC, me);
 
     RKH_TR_FWK_AO(me);
 
@@ -755,7 +755,7 @@ sendOk(ConMgr *const me, RKH_EVT_T *pe)
     (void)me;
 
     me->retryCount = 0;
-    topic_publish(connection, &e_Sent, me);
+    topic_publish(tcpConnection, &e_Sent, me);
 }
 
 static void
@@ -764,7 +764,7 @@ recvOk(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    topic_publish(connection, &e_Received, me);
+    topic_publish(tcpConnection, &e_Received, me);
     bsp_recvOk();
 }
 
@@ -774,7 +774,7 @@ sendFail(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    topic_publish(connection, &e_SendFail, me);
+    topic_publish(tcpConnection, &e_SendFail, me);
 
 	ModCmd_init();
 }
@@ -785,7 +785,7 @@ recvFail(ConMgr *const me, RKH_EVT_T *pe)
     (void)pe;
     (void)me;
 
-    topic_publish(connection, &e_RecvFail, me);
+    topic_publish(tcpConnection, &e_RecvFail, me);
 
 	ModCmd_init();
 }
@@ -971,7 +971,7 @@ socketConnected(ConMgr *const me)
 {
     (void)me;
 
-    topic_publish(connection, &e_NetConnected, me);
+    topic_publish(tcpConnection, &e_NetConnected, me);
 
     bsp_netStatus(ConnectedSt);
 }
@@ -1066,7 +1066,7 @@ socketDisconnected(ConMgr *const me)
 {
     (void)me;
 
-    topic_publish(connection, &e_NetDisconnected, me);
+    topic_publish(tcpConnection, &e_NetDisconnected, me);
 
     bsp_netStatus(DisconnectedSt);
 }

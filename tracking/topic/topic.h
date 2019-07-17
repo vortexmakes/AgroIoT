@@ -33,14 +33,12 @@ extern "C" {
                                                 RKH_UPCAST(RKH_EVT_T, (e)), \
                                                 RKH_UPCAST(RKH_SMA_T, (ao)))
 /* -------------------------------- Constants ------------------------------ */
-typedef enum Topic Topic;
-enum Topic
+typedef enum Topics Topics;
+enum Topics
 {
-    connection,
-    tpModURC,
-    tpGeo,
-    tpIoChg,
-    tpSensor
+    tcpConnection,
+    gsmURC,
+    deviceStatus,
 };
 
 /* ------------------------------- Data types ------------------------------ */
