@@ -52,6 +52,16 @@
 			<locationURI>PARENT-3-PROJECT_LOC/GStatus</locationURI>
 		</link>
 		<link>
+			<name>app/StatQue</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/StatQue</locationURI>
+		</link>
+		<link>
+			<name>app/YFrame</name>
+			<type>2</type>
+			<locationURI>PARENT-5-PROJECT_LOC/AgroLF/tracking/YFrame</locationURI>
+		</link>
+		<link>
 			<name>app/bsp.h</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/bsp.h</locationURI>
@@ -160,16 +170,6 @@
 			<name>bsp/cubemx.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/bsp/cubemx.h</locationURI>
-		</link>
-		<link>
-			<name>bsp/dIn.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/dIn.c</locationURI>
-		</link>
-		<link>
-			<name>bsp/dOut.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/bsp/dOut.c</locationURI>
 		</link>
 		<link>
 			<name>bsp/ffdata.c</name>
