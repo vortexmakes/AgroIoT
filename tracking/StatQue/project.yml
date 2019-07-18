@@ -37,14 +37,13 @@
     - ../gps
     - ../BatChr
     - ../GStatus/inc
-    - ../ffile/source/include
-    - ../ffile
+    - ../ffile/inc
     - ../
   :support:
     - test/support
 
 :defines:
-  :common: &common_defines [__TEST__]
+  :common: &common_defines [__FFILETEST__, __TEST__]
   :test:
     - *common_defines
     - TEST

@@ -33,6 +33,9 @@
     - ../../third-party/rkh/source/queue/inc
     - ../tpsens/cbox
     - ../collector
+    - ../gps
+    - ../GStatus/inc
+    - ../BatChr
     - ../
   :support:
     - test/support

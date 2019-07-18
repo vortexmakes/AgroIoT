@@ -108,8 +108,8 @@ test_MakeEventOperation(void)
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    collector->rawData.hum = nSectionExpect;
-    collector->rawData.h.pqty = doseExpect;
+    collector->rawData.dev.hum = nSectionExpect;
+    collector->rawData.dev.h.pqty = doseExpect;
 
     dev = sprayer_ctor(0);
 
@@ -144,8 +144,8 @@ test_UpdateRawOperation(void)
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    collector->rawData.hum = 0;
-    collector->rawData.h.pqty = 0;
+    collector->rawData.dev.hum = 0;
+    collector->rawData.dev.h.pqty = 0;
 
     dev = sprayer_ctor(0);
 
@@ -157,8 +157,8 @@ test_UpdateRawOperation(void)
 
     (*dev->vptr->updateRaw)(dev);
 
-    TEST_ASSERT_EQUAL(nSectionExpect, collector->rawData.hum);
-    TEST_ASSERT_EQUAL(doseExpect, collector->rawData.h.pqty);
+    TEST_ASSERT_EQUAL(nSectionExpect, collector->rawData.dev.hum);
+    TEST_ASSERT_EQUAL(doseExpect, collector->rawData.dev.h.pqty);
 }
 
 void

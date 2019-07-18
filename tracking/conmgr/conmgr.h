@@ -11,7 +11,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña      db@vortexmakes.com
+ *  DaBa  Dario BaliÃ±a db@vortexmakes.com
  *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
@@ -88,12 +88,12 @@ extern "C" {
 #define REOPEN_DELAY        RKH_TIME_MS(5000)
 
 /**
- * Specifies connections status´s polling period.
+ * Specifies connections statuss polling period.
  */
 #define CONNSTATUS_PERIOD   RKH_TIME_MS(2000)
 
 /**
- * Specifies connections status´s polling period.
+ * Specifies connections statuss polling period.
  */
 #define MAX_CONSTATUS_NORESP 2
 

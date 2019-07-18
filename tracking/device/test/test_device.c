@@ -113,8 +113,8 @@ DevA_update(Device *const me, RKH_EVT_T *evt)
 static void 
 DevA_updateRaw(Device *const me)
 {
-    ((Collector *)(me->collector))->rawData.a.y = ((DevA *)me)->x;
-    ((Collector *)(me->collector))->rawData.a.z = ((DevA *)me)->y;
+    ((Collector *)(me->collector))->rawData.dev.a.y = ((DevA *)me)->x;
+    ((Collector *)(me->collector))->rawData.dev.a.z = ((DevA *)me)->y;
 }
 
 static Device *
@@ -277,11 +277,11 @@ test_UpdateRawData(void)
     devAObj = (DevA *)dev;
     devAObj->x = 4;
     devAObj->y = 8;
-    collector->rawData.a.y = collector->rawData.a.z = 0;
+    collector->rawData.dev.a.y = collector->rawData.dev.a.z = 0;
 
     device_updateRaw(dev);
-    TEST_ASSERT_EQUAL(4, collector->rawData.a.y);
-    TEST_ASSERT_EQUAL(8, collector->rawData.a.z);
+    TEST_ASSERT_EQUAL(4, collector->rawData.dev.a.y);
+    TEST_ASSERT_EQUAL(8, collector->rawData.dev.a.z);
 }
 
 /* ------------------------------ End of file ------------------------------ */

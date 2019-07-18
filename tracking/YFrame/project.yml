@@ -32,10 +32,13 @@
     - ../../third-party/rkh/source/sm/inc
     - ../../third-party/rkh/source/queue/inc
     - ../../third-party/rkh/source/tmr/inc
+    - ../../third-party/rkh/source/trc/inc
+    - ../../third-party/rkh/source/mempool/inc
     - ../tpsens/cbox
     - ../collector
     - ../gps
     - ../BatChr
+    - ../GStatus/inc
     - ../conmgr
     - ../epoch
     - ../
