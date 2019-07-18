@@ -22,6 +22,8 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
+#include "dOut.h"
+#include "dIn.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -101,6 +103,10 @@ void bsp_recvOk(void);
 void bsp_GPSStatus(char status);
 
 void bsp_gpsParserHandler_set(void *p);
+
+void bsp_setDigOut(DigOutSignalId out, ruint val);
+ruint bsp_getDigIn(DigInSignalId in);
+void bsp_DigInPullSelect(DigInPullSelectId ps, uint8_t val);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

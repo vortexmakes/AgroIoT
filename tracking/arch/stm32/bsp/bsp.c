@@ -292,4 +292,56 @@ bsp_gpsParserHandler_set(void *p)
     gpsParser = (GpsRcvHandler)p;
 }
 
+void
+bsp_setDigOut(DigOutSignalId out, ruint val)
+{
+    switch(out)
+    {
+        case dOut1:
+            HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, val);
+            return;
+
+        case dOut2:
+            HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, val);
+            return;
+
+        default:
+            return;
+    }
+}
+
+ruint
+bsp_getDigIn(DigInSignalId in)
+{
+    switch(in)
+    {
+        case dIn1:
+            return HAL_GPIO_ReadPin(INPUT1_GPIO_Port, INPUT1_Pin);
+
+        case dIn2:
+            return HAL_GPIO_ReadPin(INPUT2_GPIO_Port, INPUT2_Pin);
+
+        default:
+            return 0;
+    }
+}
+
+void
+bsp_DigInPullSelect(DigInPullSelectId ps, uint8_t val)
+{
+    switch(ps)
+    {
+        case pullSelect1:
+            HAL_GPIO_WritePin(PULL_SELECT1_GPIO_Port, PULL_SELECT1_Pin, val);
+            break;
+
+        case pullSelect2:
+            HAL_GPIO_WritePin(PULL_SELECT2_GPIO_Port, PULL_SELECT2_Pin, val);
+            break;
+
+        default:
+            break;
+    }
+}
+
 /* ------------------------------ File footer ------------------------------ */

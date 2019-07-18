@@ -19,12 +19,19 @@
 #include "rkh.h"
 #include "dOut.h"
 #include "cubemx.h"
+#include "events.h"
+#include "signals.h"
+#include "topic.h"
+
+RKH_MODULE_NAME(dOut)
 
 /* ----------------------------- Local macros ------------------------------ */
-#define Output1(b)      HAL_GPIO_WritePin(OUTPUT1_GPIO_Port, OUTPUT1_Pin, b)
-#define Output2(b)      HAL_GPIO_WritePin(OUTPUT2_GPIO_Port, OUTPUT2_Pin, b)
-
 /* ------------------------------- Constants ------------------------------- */
+enum
+{
+    OnInit, OnSet
+};
+
 /* ---------------------------- Local data types --------------------------- */
 typedef struct
 {
@@ -33,24 +40,38 @@ typedef struct
 }DigitalTimerOutput;
 
 /* ---------------------------- Global variables --------------------------- */
+ruint outChg;    /* Identifies this module */
+
 /* ---------------------------- Local variables ---------------------------- */
 static DigitalTimerOutput dOuts[NUM_DOUT_SIGNALS];
+static DigOut dOutStatus;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static
-void gpioWrite(DigOutSignalId pin, uint8_t value)
+static void
+setStatus(DigOutSignalId out, ruint val, int context)
 {
-    switch(pin)
+    RKH_ASSERT(out < NUM_DOUT_SIGNALS);
+
+    if (val != 0)
     {
-        case dOut1:
-            return Output1(value);
+        RKH_BIT_SET_08(dOutStatus, RKH_BIT08(1 << out));
+        dOuts[out].val = 1;
+    }
+    else
+    {
+        RKH_BIT_CLR_08(dOutStatus, RKH_BIT08(1 << out));
+        dOuts[out].val = 0;
+    }
 
-        case dOut2:
-            return Output2(value);
-
-        default:
-            return;
+    bsp_setDigOut(out, val);
+    
+    if (context == OnSet)
+    {
+        OutChgEvt *outChgObj = RKH_ALLOC_EVT(OutChgEvt, evOutChg, &outChg);
+        outChgObj->dout = dOutStatus;
+        rkh_pubsub_publish(deviceStatus, RKH_UPCAST(RKH_EVT_T, outChgObj),
+                                        RKH_UPCAST(RKH_SMA_T, &outChg));
     }
 }
 
@@ -58,9 +79,14 @@ void gpioWrite(DigOutSignalId pin, uint8_t value)
 void
 dOut_init(void)
 {
-    memset(dOuts, 0, sizeof(dOuts));
-    Output1(0);
-    Output2(0);
+    DigitalTimerOutput *out;
+    rInt i;
+
+    for (out = dOuts, i = 0; out < &dOuts[NUM_DOUT_SIGNALS]; ++out, ++i)
+    {
+        setStatus(i, 0, OnInit);
+        out->timer = 0;
+    }
 }
 
 void
@@ -86,17 +112,14 @@ dOut_get(DigOutSignalId out)
 void
 dOut_process(void)
 {
-    DigitalTimerOutput *p;
+    DigitalTimerOutput *out;
     DigOutSignalId i;
 
-    p = dOuts;
-
-	for(p=dOuts, i=0; p < &dOuts[NUM_DOUT_SIGNALS]; ++p, ++i)
+	for(out = dOuts, i=0; out < &dOuts[NUM_DOUT_SIGNALS]; ++out, ++i)
     {
-		if(p->timer > 0 && !(--(p->timer)))
+		if(out->timer > 0 && !(--(out->timer)))
         {
-			p->val ^= 1;
-            gpioWrite(i, p->val);
+            setStatus(i, out->val ^ 1, OnSet);
         }
     }
 }

@@ -27,23 +27,23 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ------------------------------- Data types ------------------------------ */
-typedef enum dInSignalId
+typedef enum DigInSignalId
 {
     dIn1, dIn2,
     NUM_DIN_SIGNALS
-}dInSignalId;
+}DigInSignalId;
 
 typedef enum dInPullSelct
 {
     pullSelect1, pullSelect2,
     NUM_PULL_SELCT
-}pullSelectId;
+}DigInPullSelectId;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void dIn_init(void);
 void dIn_scan(void);
-void dIn_pullSelect(pullSelectId ps, rui8_t value);
+void dIn_pullSelect(DigInPullSelectId ps, rui8_t val);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
