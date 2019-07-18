@@ -35,7 +35,7 @@ typedef struct
 typedef ffui8_t (*RECPROC_T)(void);
 
 static PAGE_BUFF_T page_buff;
-static SA_T main_page_addr, back_page_addr, page_address;
+static SA_T page_address;
 static ffui8_t rmain, rback;
 static ffui16_t main_check, back_check;
 static SPG_T cpage = FF_INVALID_PAGE;

@@ -104,7 +104,7 @@
 		<link>
 			<name>app/mTime</name>
 			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/mTime</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/AgroLF/tracking/mTime</locationURI>
 		</link>
 		<link>
 			<name>app/main.c</name>

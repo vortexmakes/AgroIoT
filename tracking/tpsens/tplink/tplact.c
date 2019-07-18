@@ -17,7 +17,6 @@ static TPLFRM_T tpl;
 static uchar *pl;
 static ushort curr_dcnt, check;
 static uchar check_sum, curr_escape;
-static ushort curr_toutfrm;
 
 static const uchar esc_codes[TPLINK_NUM_ESC_CODES-1] = { TPL_SOF, TPL_ESC };
 

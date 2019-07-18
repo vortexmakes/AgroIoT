@@ -2,6 +2,7 @@
  * psport.c
  */
 
+#include <string.h>
 #include "ps.h"
 #include "psport.h"
 #include "tplink.h"

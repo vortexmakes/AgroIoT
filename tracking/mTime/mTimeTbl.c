@@ -20,15 +20,10 @@
 #include "mTimeCfg.h"
 #include "epoch.h"
 #include "modpwr.h"
-//#include "seqchbak.h"
-//#include "dIn.h"
-//#include "dOut.h"
-
+#include "seqchbak.h"
+#include "dIn.h"
+#include "dOut.h"
 #include "mytypes.h"
-MUInt sequence_interrupt( void );
-
-void dIn_scan(void);
-void dOut_process(void);
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */

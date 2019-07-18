@@ -15,13 +15,14 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <stdlib.h>
+#include <string.h>
 #include "rkh.h"
 #include "ubxm8parser.h"
 #include "geoMgr.h"
 #include "signals.h"
 #include "rmc.h"
 #include "events.h"
-#include <stdlib.h>
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GET_RMC_FIELDS(r) \
@@ -56,7 +57,6 @@ ruint ubxm8parser;
 
 /* ---------------------------- Local variables ---------------------------- */
 static Rmc rmcCurrent;
-static RmcEvt rmcEvt;
 static unsigned char *p;
 static char *pF;
 static unsigned char nmeaFrame[NMEA_FRAME_MAX_SIZE];
@@ -115,8 +115,10 @@ nmeaStarts(unsigned char pos)
 static void
 nmeaCollect(unsigned char c)
 {
-    if(p >= nmeaFrame + NMEA_FRAME_MAX_SIZE)
+    if(p >= (nmeaFrame + NMEA_FRAME_MAX_SIZE))
+    {
         return;
+    }
 
 	*p++ = c;
 
@@ -130,10 +132,14 @@ static void
 chkCollect(unsigned char c)
 {
     if (c == '\r' || c == '\n')
+    {
         return;
+    }
 
-    if(p >= nmeaFrame + NMEA_FRAME_MAX_SIZE)
+    if(p >= (nmeaFrame + NMEA_FRAME_MAX_SIZE))
+    {
         return;
+    }
 
 	*p++ = c;
 }
