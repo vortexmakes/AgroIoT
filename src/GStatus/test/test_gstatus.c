@@ -88,6 +88,15 @@ test_InvalidArgs(void)
 
     result = GStatus_toGpsStr(newStatus, (GPS_STR *)0);
     TEST_ASSERT_EQUAL(1, result);
+
+    result = GStatus_fromGpsStr(oldStatus, (GStatus *)0);
+    TEST_ASSERT_EQUAL(1, result);
+
+    result = GStatus_fromGpsStr((GPS_STR *)0, newStatus);
+    TEST_ASSERT_EQUAL(1, result);
+
+    result = GStatus_fromGpsStr((GPS_STR *)0, (GStatus *)0);
+    TEST_ASSERT_EQUAL(1, result);
 }
 
 void
