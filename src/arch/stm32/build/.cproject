@@ -39,7 +39,6 @@
 									<listOptionValue builtIn="false" value="__DATAFLASH__"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.675484694" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp"/>
 									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
@@ -60,12 +59,6 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
-									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
@@ -83,12 +76,19 @@
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../topic"/>
 									<listOptionValue builtIn="false" value="../../../../YFrame/inc"/>
 									<listOptionValue builtIn="false" value="../../../../StatQue/inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../src"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1726576784" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -106,8 +106,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.cpp.linker.1555626191" name="MCU G++ Linker" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.linker"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.archiver.1549590923" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.1076674029" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler">
-								<option id="gnu.both.asm.option.include.paths.1923867530" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp"/>
+								<option id="gnu.both.asm.option.include.paths.1923867530" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
@@ -128,12 +127,6 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
-									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
@@ -151,19 +144,26 @@
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../topic"/>
 									<listOptionValue builtIn="false" value="../../../../StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../../YFrame/inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../src"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1379635670" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<folderInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1331245554.1120440684" name="/" resourcePath="app">
+					<folderInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1331245554.1120440684" name="/" resourcePath="Sources">
 						<toolChain id="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug.554933247" name="Ac6 STM32 MCU GCC" superClass="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug" unusedChildren="">
 							<option id="fr.ac6.managedbuild.option.gnu.cross.mcu.1841453771.966681119" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu.1841453771"/>
 							<option id="fr.ac6.managedbuild.option.gnu.cross.fpu.1910448026.696567436" name="Floating point hardware" superClass="fr.ac6.managedbuild.option.gnu.cross.fpu.1910448026"/>
@@ -172,7 +172,6 @@
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="fr.ac6.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="fr.ac6.managedbuild.targetPlatform.gnu.cross"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1628974728" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.2101217126">
 								<option id="gnu.c.compiler.option.include.paths.2086077315" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp"/>
 									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
@@ -193,12 +192,6 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
-									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
@@ -216,12 +209,19 @@
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../topic"/>
 									<listOptionValue builtIn="false" value="../../../../YFrame/inc"/>
 									<listOptionValue builtIn="false" value="../../../../StatQue/inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../src"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.819050743" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.950737101" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -237,8 +237,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="YFrame/test|YFrame/build|StatQue/test|StatQue/build|Config/test|Config/build|tracking/device/test|ffile/build|GStatus/build|ffile/portable/test|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|ffile/test|GStatus/test|ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
+						<entry excluding="src/bsp/stm32/stm32f4_tracking.c|src/ffile/test|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp/win|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|ffile/build|src/GStatus/build|src/ffile/portable/test|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86|src/parser/sim900" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -282,7 +281,6 @@
 									<listOptionValue builtIn="false" value="__DATAFLASH__"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.871960899" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp"/>
 									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/mempool/inc"/>
@@ -303,12 +301,6 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
-									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
@@ -326,12 +318,19 @@
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../topic"/>
 									<listOptionValue builtIn="false" value="../../../../YFrame/inc"/>
 									<listOptionValue builtIn="false" value="../../../../StatQue/inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../src"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.618148146" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -350,7 +349,6 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.archiver.856295713" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release.1649225213" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release">
 								<option id="gnu.both.asm.option.include.paths.1632190880" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../bsp"/>
 									<listOptionValue builtIn="false" value="../../../../BatChr"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/fwk/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../third-party/rkh/source/queue/inc"/>
@@ -371,12 +369,6 @@
 									<listOptionValue builtIn="false" value="../../../../tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/ps"/>
 									<listOptionValue builtIn="false" value="../../../../tpsens/tplink"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Drivers/CMSIS/Include"/>
-									<listOptionValue builtIn="false" value="../../../../../tracking"/>
 									<listOptionValue builtIn="false" value="../../../../geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../../GStatus/inc"/>
 									<listOptionValue builtIn="false" value="../../../../device/inc"/>
@@ -394,12 +386,19 @@
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/dataflash"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../../ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
-									<listOptionValue builtIn="false" value="../../bsp/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../topic"/>
 									<listOptionValue builtIn="false" value="../../../../StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../../YFrame/inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/Third_Party/FatFs/src"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/STM32F4xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32F4xx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../src"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.803142745" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -407,8 +406,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="YFrame/test|YFrame/build|StatQue/test|StatQue/build|Config/test|Config/build|tracking/device/test|ffile/build|GStatus/build|ffile/portable/test|tracking/modcmd/modcmdSim900.c|tracking/parser/sim900|epoch/test|ffile/test|GStatus/test|ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="app"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="bsp"/>
+						<entry excluding="src/ffile/test|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/parser/sim900|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

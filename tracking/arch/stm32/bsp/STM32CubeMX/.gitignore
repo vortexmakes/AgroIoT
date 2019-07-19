@@ -1,4 +1,0 @@
-# Ignore all files
-# tracked files must be forced using git add -f
-*.*
-/Debug/
