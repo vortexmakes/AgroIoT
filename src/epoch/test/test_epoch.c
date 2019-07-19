@@ -26,6 +26,7 @@
 /*
  *  LeFr  Leandro Francucci  lf@vortexmakes.com
  *  CIM   Carlos Mancón manconci@gmail.com
+ *  DaBa  Darío Baliña db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -163,6 +164,42 @@ test_ReceiveTimeZero(void)
 
     epoch = epoch_init();
     TEST_ASSERT_EQUAL(0, epoch);
+}
+
+void
+test_LeapDay(void)
+{
+    Epoch epoch, updatingEpoch;
+
+    time.tm_sec = 59;
+    time.tm_min = 59;
+    time.tm_hour = 24;
+    time.tm_mday = 28;
+    time.tm_mon = 2;
+    time.tm_year = 2020;
+    time.tm_wday = 6;
+    time.tm_isdst = 0;
+    rtime_get_ExpectAndReturn(&time);
+    updatingEpoch = epoch_updateByStep();
+    TEST_ASSERT_EQUAL(0, updatingEpoch);
+
+    updatingEpoch = epoch_updateByStep();
+    TEST_ASSERT_EQUAL(489, updatingEpoch);
+
+    updatingEpoch = epoch_updateByStep();
+    TEST_ASSERT_EQUAL(18320, updatingEpoch);
+
+    updatingEpoch = epoch_updateByStep();
+    TEST_ASSERT_EQUAL(439704, updatingEpoch);
+
+    updatingEpoch = epoch_updateByStep();
+    TEST_ASSERT_EQUAL(26382299, updatingEpoch);
+
+    updatingEpoch = epoch_updateByStep();
+    TEST_ASSERT_EQUAL(1582937999, updatingEpoch);
+
+    epoch = epoch_get();
+    TEST_ASSERT_EQUAL(updatingEpoch, epoch);
 }
 
 /* ------------------------------ End of file ------------------------------ */
