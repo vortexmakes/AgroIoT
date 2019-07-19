@@ -52,7 +52,6 @@
 									<listOptionValue builtIn="false" value="../../../src/modcmd"/>
 									<listOptionValue builtIn="false" value="../../../src/conmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/mTime"/>
-									<listOptionValue builtIn="false" value="../../../src/epoch"/>
 									<listOptionValue builtIn="false" value="../../../src/rtime"/>
 									<listOptionValue builtIn="false" value="../../../src/modmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/gps"/>
@@ -90,6 +89,7 @@
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp"/>
+									<listOptionValue builtIn="false" value="../../../src/epoch/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1726576784" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -121,7 +121,6 @@
 									<listOptionValue builtIn="false" value="../../../src/modcmd"/>
 									<listOptionValue builtIn="false" value="../../../src/conmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/mTime"/>
-									<listOptionValue builtIn="false" value="../../../src/epoch"/>
 									<listOptionValue builtIn="false" value="../../../src/rtime"/>
 									<listOptionValue builtIn="false" value="../../../src/modmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/gps"/>
@@ -159,6 +158,7 @@
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp"/>
+									<listOptionValue builtIn="false" value="../../../src/epoch/inc"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1379635670" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -187,7 +187,6 @@
 									<listOptionValue builtIn="false" value="../../../src/modcmd"/>
 									<listOptionValue builtIn="false" value="../../../src/conmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/mTime"/>
-									<listOptionValue builtIn="false" value="../../../src/epoch"/>
 									<listOptionValue builtIn="false" value="../../../src/rtime"/>
 									<listOptionValue builtIn="false" value="../../../src/modmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/gps"/>
@@ -225,6 +224,7 @@
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp"/>
+									<listOptionValue builtIn="false" value="../../../src/epoch/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.819050743" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.950737101" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -240,7 +240,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/portable/arm-cortex/ksdk_os|third-party/ssp/tools|third-party/ssp/tests|third-party/rkh/source/trc/test|third-party/rkh/source/trc/build|third-party/rkh/source/tmr/test|third-party/rkh/source/tmr/build|third-party/rkh/source/sma/test|third-party/rkh/source/sma/build|third-party/rkh/source/sm/test|third-party/rkh/source/sm/build|third-party/rkh/source/queue/build|third-party/rkh/source/portable/ucos|third-party/rkh/source/portable/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/cfv1|third-party/rkh/source/portable/80x86|third-party/rkh/source/mempool/build|third-party/rkh/source/fwk/test|third-party/rkh/source/fwk/build|third-party/rkh/tools|third-party/rkh/third-party|third-party/rkh/template|third-party/rkh/doc|third-party/rkh/demo|src/bsp/stm32/stm32f4_tracking.c|src/ffile/test|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp/win|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86|src/parser/sim900" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
+						<entry excluding="src/epoch/build|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/portable/arm-cortex/ksdk_os|third-party/ssp/tools|third-party/ssp/tests|third-party/rkh/source/trc/test|third-party/rkh/source/trc/build|third-party/rkh/source/tmr/test|third-party/rkh/source/tmr/build|third-party/rkh/source/sma/test|third-party/rkh/source/sma/build|third-party/rkh/source/sm/test|third-party/rkh/source/sm/build|third-party/rkh/source/queue/build|third-party/rkh/source/portable/ucos|third-party/rkh/source/portable/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/cfv1|third-party/rkh/source/portable/80x86|third-party/rkh/source/mempool/build|third-party/rkh/source/fwk/test|third-party/rkh/source/fwk/build|third-party/rkh/tools|third-party/rkh/third-party|third-party/rkh/template|third-party/rkh/doc|third-party/rkh/demo|src/bsp/stm32/stm32f4_tracking.c|src/ffile/test|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp/win|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86|src/parser/sim900" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -297,7 +297,6 @@
 									<listOptionValue builtIn="false" value="../../../src/modcmd"/>
 									<listOptionValue builtIn="false" value="../../../src/conmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/mTime"/>
-									<listOptionValue builtIn="false" value="../../../src/epoch"/>
 									<listOptionValue builtIn="false" value="../../../src/rtime"/>
 									<listOptionValue builtIn="false" value="../../../src/modmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/gps"/>
@@ -335,6 +334,7 @@
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp"/>
+									<listOptionValue builtIn="false" value="../../../src/epoch/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.618148146" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -366,7 +366,6 @@
 									<listOptionValue builtIn="false" value="../../../src/modcmd"/>
 									<listOptionValue builtIn="false" value="../../../src/conmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/mTime"/>
-									<listOptionValue builtIn="false" value="../../../src/epoch"/>
 									<listOptionValue builtIn="false" value="../../../src/rtime"/>
 									<listOptionValue builtIn="false" value="../../../src/modmgr"/>
 									<listOptionValue builtIn="false" value="../../../src/gps"/>
@@ -404,6 +403,7 @@
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32/STM32CubeMX/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp"/>
+									<listOptionValue builtIn="false" value="../../../src/epoch/inc"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.803142745" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -411,7 +411,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/portable/arm-cortex/ksdk_os|third-party/ssp/tools|third-party/ssp/tests|third-party/rkh/source/trc/test|third-party/rkh/source/trc/build|third-party/rkh/source/tmr/test|third-party/rkh/source/tmr/build|third-party/rkh/source/sma/test|third-party/rkh/source/sma/build|third-party/rkh/source/sm/test|third-party/rkh/source/sm/build|third-party/rkh/source/queue/build|third-party/rkh/source/portable/ucos|third-party/rkh/source/portable/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/cfv1|third-party/rkh/source/portable/80x86|third-party/rkh/source/mempool/build|third-party/rkh/source/fwk/test|third-party/rkh/source/fwk/build|third-party/rkh/tools|third-party/rkh/third-party|third-party/rkh/template|third-party/rkh/doc|third-party/rkh/demo|src/ffile/test|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/parser/sim900|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
+						<entry excluding="src/epoch/build|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/portable/arm-cortex/ksdk_os|third-party/ssp/tools|third-party/ssp/tests|third-party/rkh/source/trc/test|third-party/rkh/source/trc/build|third-party/rkh/source/tmr/test|third-party/rkh/source/tmr/build|third-party/rkh/source/sma/test|third-party/rkh/source/sma/build|third-party/rkh/source/sm/test|third-party/rkh/source/sm/build|third-party/rkh/source/queue/build|third-party/rkh/source/portable/ucos|third-party/rkh/source/portable/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/cfv1|third-party/rkh/source/portable/80x86|third-party/rkh/source/mempool/build|third-party/rkh/source/fwk/test|third-party/rkh/source/fwk/build|third-party/rkh/tools|third-party/rkh/third-party|third-party/rkh/template|third-party/rkh/doc|third-party/rkh/demo|src/ffile/test|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/parser/sim900|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

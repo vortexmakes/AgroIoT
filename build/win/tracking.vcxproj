@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\third-party\rkh\source\fwk\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\mempool\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\queue\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sm\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\sma\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\tmr\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\trc\inc;$(ProjectDir)..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\;$(ProjectDir)..\..\..\..\third-party\ssp\src;$(ProjectDir)..\bsp;$(ProjectDir)..\bsp\serial;$(ProjectDir)..\..\..;$(ProjectDir)..\..\..\parser\sim5320;$(ProjectDir)..\..\..\parser\ubxm8;$(ProjectDir)..\..\..\modpwr;$(ProjectDir)..\..\..\geoMgr;$(ProjectDir)..\..\..\modcmd;$(ProjectDir)..\..\..\conmgr;$(ProjectDir)..\..\..\CommMgr;$(ProjectDir)..\..\..\epoch;$(ProjectDir)..\..\..\gps;$(ProjectDir)..\..\..\date;$(ProjectDir)..\..\..\rtime;$(ProjectDir)..\..\..\mTime;$(ProjectDir)..\..\..\config;$(ProjectDir)..\..\..\ioChg;$(ProjectDir)..\..\..\modmgr;$(ProjectDir)..\..\..\trkClient;$(ProjectDir)..\..\..\DeviceServer;$(ProjectDir)..\..\..\tpsens\cbox;$(ProjectDir)..\..\..\tpsens\ps;$(ProjectDir)..\..\..\tpsens\tplink;$(ProjectDir)..\..\..\device\inc;$(ProjectDir)..\..\..\collector;$(ProjectDir)..\..\..\sequence;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\third-party\rkh\source\fwk\inc;$(ProjectDir)..\..\third-party\rkh\source\mempool\inc;$(ProjectDir)..\..\third-party\rkh\source\queue\inc;$(ProjectDir)..\..\third-party\rkh\source\sm\inc;$(ProjectDir)..\..\third-party\rkh\source\sma\inc;$(ProjectDir)..\..\third-party\rkh\source\tmr\inc;$(ProjectDir)..\..\third-party\rkh\source\trc\inc;$(ProjectDir)..\..\third-party\rkh\source\portable\80x86\win32_st\vc\;$(ProjectDir)..\..\third-party\ssp\src;$(ProjectDir)..\..\src\bsp;$(ProjectDir)..\..\src\bsp\win;$(ProjectDir)..\..\src\bsp\win\serial;$(ProjectDir)..\..\src;$(ProjectDir)..\..\src\parser\sim5320;$(ProjectDir)..\..\src\parser\ubxm8;$(ProjectDir)..\..\src\modpwr;$(ProjectDir)..\..\src\geoMgr;$(ProjectDir)..\..\src\modcmd;$(ProjectDir)..\..\src\conmgr;$(ProjectDir)..\..\src\CommMgr;$(ProjectDir)..\..\src\epoch\inc;$(ProjectDir)..\..\src\gps;$(ProjectDir)..\..\src\date;$(ProjectDir)..\..\src\rtime;$(ProjectDir)..\..\src\mTime;$(ProjectDir)..\..\src\Config;$(ProjectDir)..\..\src\ioChg;$(ProjectDir)..\..\src\modmgr;$(ProjectDir)..\..\src\DeviceServer;$(ProjectDir)..\..\src\tpsens\cbox;$(ProjectDir)..\..\src\tpsens\ps;$(ProjectDir)..\..\src\tpsens\tplink;$(ProjectDir)..\..\src\device\inc;$(ProjectDir)..\..\src\collector;$(ProjectDir)..\..\src\topic;$(ProjectDir)..\..\src\sequence;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;__W32STVC__;CIPSHUT_ON_INIT;MODPWR_CTRL_ENABLE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -92,82 +92,80 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_bittbl.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_dynevt.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_evtpool.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_pubsub.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_rdygrp.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_sched.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_version.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\mempool\src\rkhmempool.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\rkhport.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\queue\src\rkhqueue.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\sma\src\rkhsma.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\sma\src\rkhsma_prio.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\sma\src\rkhsma_sync.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\sm\src\rkhsm.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\tmr\src\rkhtmr.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\trc\src\rkhtrc_filter.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\trc\src\rkhtrc_record.c" />
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\trc\src\rkhtrc_stream.c" />
-    <ClCompile Include="..\..\..\..\third-party\ssp\src\ssp.c" />
-    <ClCompile Include="..\..\..\collector\collector.c" />
-    <ClCompile Include="..\..\..\CommMgr\CommMgr.c" />
-    <ClCompile Include="..\..\..\config\config.c" />
-    <ClCompile Include="..\..\..\conmgr\conmgr.c" />
-    <ClCompile Include="..\..\..\date\date.c" />
-    <ClCompile Include="..\..\..\DeviceServer\DeviceServer.c" />
-    <ClCompile Include="..\..\..\device\src\device.c" />
-    <ClCompile Include="..\..\..\device\src\sprayer.c" />
-    <ClCompile Include="..\..\..\epoch\epoch.c" />
-    <ClCompile Include="..\..\..\geoMgr\geoMgr.c" />
-    <ClCompile Include="..\..\..\gps\gps.c" />
-    <ClCompile Include="..\..\..\gps\rmc.c" />
-    <ClCompile Include="..\..\..\main.c" />
-    <ClCompile Include="..\..\..\modcmd\modcmdSim5320.c" />
-    <ClCompile Include="..\..\..\modmgr\modmgr.c" />
-    <ClCompile Include="..\..\..\mTime\mTime.c" />
-    <ClCompile Include="..\..\..\mTime\mTimeTbl.c" />
-    <ClCompile Include="..\..\..\parser\sim5320\sim5320parser.c" />
-    <ClCompile Include="..\..\..\parser\ubxm8\ubxm8parser.c" />
-    <ClCompile Include="..\..\..\sequence\seqtbl.c" />
-    <ClCompile Include="..\..\..\sequence\sequence.c" />
-    <ClCompile Include="..\..\..\signals.c" />
-    <ClCompile Include="..\..\..\tpsens\cbox\cbox.c" />
-    <ClCompile Include="..\..\..\tpsens\ps\ps.c" />
-    <ClCompile Include="..\..\..\tpsens\ps\psport.c" />
-    <ClCompile Include="..\..\..\tpsens\tplink\tplact.c" />
-    <ClCompile Include="..\..\..\tpsens\tplink\tplfsm.c" />
-    <ClCompile Include="..\..\..\tpsens\tplink\tplhal.c" />
-    <ClCompile Include="..\..\..\tpsens\tplink\tplink.c" />
-    <ClCompile Include="..\..\..\tpsens\tplink\tpltbl.c" />
-    <ClCompile Include="..\..\..\trkClient\trkClient.c" />
-    <ClCompile Include="..\bsp\assert.c" />
-    <ClCompile Include="..\bsp\bsp.c" />
-    <ClCompile Include="..\bsp\dIn.c" />
-    <ClCompile Include="..\bsp\dOut.c" />
-    <ClCompile Include="..\bsp\getopt.c" />
-    <ClCompile Include="..\bsp\gsmlog.c" />
-    <ClCompile Include="..\bsp\hook.c" />
-    <ClCompile Include="..\bsp\modpwr.c" />
-    <ClCompile Include="..\bsp\rtime.c" />
-    <ClCompile Include="..\bsp\seqlog.c" />
-    <ClCompile Include="..\bsp\trace_io.c" />
-    <ClCompile Include="..\bsp\trace_io_tcp.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_bittbl.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_dynevt.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_evtpool.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_pubsub.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_rdygrp.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_sched.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_version.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\mempool\src\rkhmempool.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\portable\80x86\win32_st\vc\rkhport.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\queue\src\rkhqueue.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\sma\src\rkhsma.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\sma\src\rkhsma_prio.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\sma\src\rkhsma_sync.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\sm\src\rkhsm.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\tmr\src\rkhtmr.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\trc\src\rkhtrc_filter.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\trc\src\rkhtrc_record.c" />
+    <ClCompile Include="..\..\third-party\rkh\source\trc\src\rkhtrc_stream.c" />
+    <ClCompile Include="..\..\third-party\ssp\src\ssp.c" />
+    <ClCompile Include="..\..\src\collector\collector.c" />
+    <ClCompile Include="..\..\src\CommMgr\CommMgr.c" />
+    <ClCompile Include="..\..\src\config\config.c" />
+    <ClCompile Include="..\..\src\conmgr\conmgr.c" />
+    <ClCompile Include="..\..\src\date\date.c" />
+    <ClCompile Include="..\..\src\DeviceServer\DeviceServer.c" />
+    <ClCompile Include="..\..\src\device\src\device.c" />
+    <ClCompile Include="..\..\src\device\src\sprayer.c" />
+    <ClCompile Include="..\..\src\epoch\epoch.c" />
+    <ClCompile Include="..\..\src\geoMgr\geoMgr.c" />
+    <ClCompile Include="..\..\src\gps\gps.c" />
+    <ClCompile Include="..\..\src\gps\rmc.c" />
+    <ClCompile Include="..\..\src\main.c" />
+    <ClCompile Include="..\..\src\modcmd\modcmdSim5320.c" />
+    <ClCompile Include="..\..\src\modmgr\modmgr.c" />
+    <ClCompile Include="..\..\src\mTime\mTime.c" />
+    <ClCompile Include="..\..\src\mTime\mTimeTbl.c" />
+    <ClCompile Include="..\..\src\parser\sim5320\sim5320parser.c" />
+    <ClCompile Include="..\..\src\parser\ubxm8\ubxm8parser.c" />
+    <ClCompile Include="..\..\src\sequence\seqtbl.c" />
+    <ClCompile Include="..\..\src\sequence\sequence.c" />
+    <ClCompile Include="..\..\src\signals.c" />
+    <ClCompile Include="..\..\src\tpsens\cbox\cbox.c" />
+    <ClCompile Include="..\..\src\tpsens\ps\ps.c" />
+    <ClCompile Include="..\..\src\tpsens\ps\psport.c" />
+    <ClCompile Include="..\..\src\tpsens\tplink\tplact.c" />
+    <ClCompile Include="..\..\src\tpsens\tplink\tplfsm.c" />
+    <ClCompile Include="..\..\src\tpsens\tplink\tplhal.c" />
+    <ClCompile Include="..\..\src\tpsens\tplink\tplink.c" />
+    <ClCompile Include="..\..\src\tpsens\tplink\tpltbl.c" />
+    <ClCompile Include="..\..\src\bsp\win\assert.c" />
+    <ClCompile Include="..\..\src\bsp\win\bsp.c" />
+    <ClCompile Include="..\..\src\bsp\win\dIn.c" />
+    <ClCompile Include="..\..\src\bsp\win\dOut.c" />
+    <ClCompile Include="..\..\src\bsp\win\getopt.c" />
+    <ClCompile Include="..\..\src\bsp\win\gsmlog.c" />
+    <ClCompile Include="..\..\src\bsp\win\hook.c" />
+    <ClCompile Include="..\..\src\bsp\win\modpwr.c" />
+    <ClCompile Include="..\..\src\bsp\win\rtime.c" />
+    <ClCompile Include="..\..\src\bsp\win\seqlog.c" />
+    <ClCompile Include="..\..\src\bsp\win\trace_io.c" />
+    <ClCompile Include="..\..\src\bsp\win\trace_io_tcp.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\geoMgr\geoMgr.h" />
-    <ClInclude Include="..\..\..\sequence\genled.h" />
-    <ClInclude Include="..\..\..\sequence\seqchbak.h" />
-    <ClInclude Include="..\..\..\sequence\seqdefs.h" />
-    <ClInclude Include="..\..\..\sequence\seqerr.h" />
-    <ClInclude Include="..\..\..\sequence\seqlog.h" />
-    <ClInclude Include="..\..\..\sequence\seqtbl.h" />
-    <ClInclude Include="..\..\..\sequence\sequence.h" />
-    <ClInclude Include="..\..\..\trkClient\trkClient.h" />
+    <ClInclude Include="..\..\src\geoMgr\geoMgr.h" />
+    <ClInclude Include="..\..\src\sequence\genled.h" />
+    <ClInclude Include="..\..\src\sequence\seqchbak.h" />
+    <ClInclude Include="..\..\src\sequence\seqdefs.h" />
+    <ClInclude Include="..\..\src\sequence\seqerr.h" />
+    <ClInclude Include="..\..\src\sequence\seqlog.h" />
+    <ClInclude Include="..\..\src\sequence\seqtbl.h" />
+    <ClInclude Include="..\..\src\sequence\sequence.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\bsp\serial\winbsp.lib" />
+    <Library Include="..\..\src\bsp\win\serial\winbsp.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
