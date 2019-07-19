@@ -3,7 +3,7 @@
 
 source_dir="../../src"
 ceedling_dir="tools/ceedling"
-modules="Config GStatus StatQue YFrame"
+modules="Config epoch GStatus StatQue YFrame"
 stateMachines=""
 
 #echo $PATH

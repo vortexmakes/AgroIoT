@@ -1,191 +1,184 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\..\main.c">
-      <Filter>tracking</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_bittbl.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_dynevt.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_evtpool.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_sched.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_version.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\mempool\src\rkhmempool.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\portable\80x86\win32_st\vc\rkhport.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\queue\src\rkhqueue.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\sm\src\rkhsm.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\sma\src\rkhsma.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\sma\src\rkhsma_prio.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\sma\src\rkhsma_sync.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\tmr\src\rkhtmr.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\trc\src\rkhtrc_filter.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\trc\src\rkhtrc_record.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\trc\src\rkhtrc_stream.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\assert.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\bsp.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\getopt.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\hook.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\trace_io.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\trace_io_tcp.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\ssp\src\ssp.c">
-      <Filter>ssp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modmgr\modmgr.c">
-      <Filter>tracking\modmgr</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\conmgr\conmgr.c">
-      <Filter>tracking\conmgr</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\epoch\epoch.c">
-      <Filter>epoch</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\rtime.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\mTime\mTime.c">
-      <Filter>mTime</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\mTime\mTimeTbl.c">
-      <Filter>mTime</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\date\date.c">
-      <Filter>date</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\modpwr.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_rdygrp.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\third-party\rkh\source\fwk\src\rkhfwk_pubsub.c">
-      <Filter>rkh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\geoMgr\geoMgr.c">
-      <Filter>tracking\geomgr</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\gps\gps.c">
-      <Filter>gps</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\parser\ubxm8\ubxm8parser.c">
-      <Filter>tracking\parser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\gps\rmc.c">
-      <Filter>gps</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\config\config.c">
-      <Filter>config</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\dOut.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\dIn.c">
-      <Filter>bsp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\tplink\tplact.c">
-      <Filter>tpsens\tplink</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\tplink\tplfsm.c">
-      <Filter>tpsens\tplink</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\tplink\tplink.c">
-      <Filter>tpsens\tplink</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\tplink\tpltbl.c">
-      <Filter>tpsens\tplink</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\cbox\cbox.c">
-      <Filter>tpsens\cbox</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\signals.c">
-      <Filter>tracking</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\ps\ps.c">
-      <Filter>tpsens\ps</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\tplink\tplhal.c">
-      <Filter>tpsens\tplink</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\tpsens\ps\psport.c">
-      <Filter>tpsens\ps</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\device\src\device.c">
-      <Filter>tracking\device</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\device\src\sprayer.c">
-      <Filter>tracking\device</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\collector\collector.c">
+    <ClCompile Include="..\..\src\main.c" />
+    <ClCompile Include="..\..\src\signals.c" />
+    <ClCompile Include="..\..\src\collector\collector.c">
       <Filter>collector</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\CommMgr\CommMgr.c">
-      <Filter>tracking\CommMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\parser\sim5320\sim5320parser.c">
-      <Filter>tracking\parser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\modcmd\modcmdSim5320.c">
-      <Filter>tracking\modcmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\sequence\sequence.c">
-      <Filter>sequence</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\sequence\seqtbl.c">
-      <Filter>sequence</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\seqlog.c">
+    <ClCompile Include="..\..\src\bsp\win\bsp.c">
       <Filter>bsp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\trkClient\trkClient.c">
-      <Filter>trkClient</Filter>
+    <ClCompile Include="..\..\src\tpsens\cbox\cbox.c">
+      <Filter>tpsens\cbox</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\DeviceServer\DeviceServer.c">
-      <Filter>tracking\DeviceServer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\bsp\gsmlog.c">
+    <ClCompile Include="..\..\src\bsp\win\assert.c">
       <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\config\config.c">
+      <Filter>config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\conmgr\conmgr.c">
+      <Filter>conmgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\CommMgr\CommMgr.c">
+      <Filter>CommMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\date\date.c">
+      <Filter>date</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\device\src\device.c">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DeviceServer\DeviceServer.c">
+      <Filter>DeviceServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\dIn.c">
+      <Filter>ioChg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\dOut.c">
+      <Filter>ioChg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\epoch\epoch.c">
+      <Filter>epoch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\geoMgr\geoMgr.c">
+      <Filter>geomgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\getopt.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gps\gps.c">
+      <Filter>gps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\gsmlog.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\hook.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\modcmd\modcmdSim5320.c">
+      <Filter>modcmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\modmgr\modmgr.c">
+      <Filter>modmgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\modpwr.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mTime\mTime.c">
+      <Filter>mTime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mTime\mTimeTbl.c">
+      <Filter>mTime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tpsens\ps\ps.c">
+      <Filter>tpsens\ps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tpsens\ps\psport.c">
+      <Filter>tpsens\ps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_bittbl.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_dynevt.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_evtpool.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_pubsub.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_rdygrp.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_sched.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\fwk\src\rkhfwk_version.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\mempool\src\rkhmempool.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\portable\80x86\win32_st\vc\rkhport.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\queue\src\rkhqueue.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\sm\src\rkhsm.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\sma\src\rkhsma.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\sma\src\rkhsma_prio.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\sma\src\rkhsma_sync.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\tmr\src\rkhtmr.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\trc\src\rkhtrc_filter.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\trc\src\rkhtrc_record.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\rkh\source\trc\src\rkhtrc_stream.c">
+      <Filter>rkh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gps\rmc.c">
+      <Filter>gps</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\rtime.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\seqlog.c">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sequence\seqtbl.c">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sequence\sequence.c">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\sim5320\sim5320parser.c">
+      <Filter>parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\device\src\sprayer.c">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third-party\ssp\src\ssp.c">
+      <Filter>ssp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tpsens\tplink\tplact.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tpsens\tplink\tplfsm.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tpsens\tplink\tplhal.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tpsens\tplink\tplink.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tpsens\tplink\tpltbl.c">
+      <Filter>tpsens\tplink</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\trace_io.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bsp\win\trace_io_tcp.c">
+      <Filter>bsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\parser\ubxm8\ubxm8parser.c">
+      <Filter>parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,39 +263,58 @@
     <Filter Include="tracking\DeviceServer">
       <UniqueIdentifier>{a8d560ca-1790-4dcc-85b6-cd495930cf07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GStatus">
+      <UniqueIdentifier>{68793294-c5a8-4ce5-b0d8-cee132d9cd25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="conmgr">
+      <UniqueIdentifier>{bb83cf05-4f6e-44c5-9f6c-b0b3381ed608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommMgr">
+      <UniqueIdentifier>{027b0a76-7e42-434c-91d8-36a8aac18af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="device">
+      <UniqueIdentifier>{58f9bd3c-0d9b-4cbd-8803-98c9195c86d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DeviceServer">
+      <UniqueIdentifier>{b0b01c17-4eb1-40b1-bd22-2e63b6ac2aa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modcmd">
+      <UniqueIdentifier>{3f458094-3084-473a-967b-0cf083b0c33f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modmgr">
+      <UniqueIdentifier>{86478e19-746f-4142-87d2-9e346b2f25e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="parser">
+      <UniqueIdentifier>{ede1c40c-d0a6-4f0b-8abc-01f269bbdbee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\geoMgr\geoMgr.h">
-      <Filter>tracking\geomgr</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\sequence\sequence.h">
+    <ClInclude Include="..\..\src\sequence\genled.h">
       <Filter>sequence</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\sequence\seqtbl.h">
+    <ClInclude Include="..\..\src\geoMgr\geoMgr.h">
+      <Filter>geomgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sequence\seqchbak.h">
       <Filter>sequence</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\sequence\seqlog.h">
+    <ClInclude Include="..\..\src\sequence\seqdefs.h">
       <Filter>sequence</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\sequence\seqerr.h">
+    <ClInclude Include="..\..\src\sequence\seqerr.h">
       <Filter>sequence</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\sequence\seqdefs.h">
+    <ClInclude Include="..\..\src\sequence\seqlog.h">
       <Filter>sequence</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\sequence\seqchbak.h">
+    <ClInclude Include="..\..\src\sequence\seqtbl.h">
       <Filter>sequence</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\sequence\genled.h">
+    <ClInclude Include="..\..\src\sequence\sequence.h">
       <Filter>sequence</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\trkClient\trkClient.h">
-      <Filter>trkClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\bsp\serial\winbsp.lib">
-      <Filter>bsp\serial</Filter>
-    </Library>
+    <Library Include="..\..\src\bsp\win\serial\winbsp.lib" />
   </ItemGroup>
 </Project>

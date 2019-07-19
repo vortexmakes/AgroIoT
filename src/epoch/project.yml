@@ -26,22 +26,7 @@
     - src
   :include:
     - inc
-    - ../../third-party/rkh/source/portable/test
-    - ../../third-party/rkh/source/fwk/inc
-    - ../../third-party/rkh/source/sma/inc
-    - ../../third-party/rkh/source/sm/inc
-    - ../../third-party/rkh/source/queue/inc
-    - ../../third-party/rkh/source/tmr/inc
-    - ../../third-party/rkh/source/trc/inc
-    - ../../third-party/rkh/source/mempool/inc
-    - ../tpsens/cbox
-    - ../collector
-    - ../gps
-    - ../BatChr
-    - ../GStatus/inc
-    - ../conmgr
-    - ../epoch/inc
-    - ../
+    - ../rtime
   :support:
     - test/support
 
@@ -56,7 +41,7 @@
 
 :cmock:
   :when_no_prototypes: :warn
-  :plugins: [ignore_arg, ignore, callback]
+  :plugins: [ignore_arg, ignore, callback, return_thru_ptr]
   :mock_prefix: Mock_
   :callback_after_arg_check: TRUE
   :when_ptr: :compare_ptr
