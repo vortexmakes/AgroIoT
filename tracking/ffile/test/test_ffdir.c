@@ -276,4 +276,22 @@ test_GetDirtyDirectory(void)
                             dirSectorWrite.backup.checksum);
 }
 
+void
+test_UpdateAllDirectory(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_UpdateFile(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_SetDirectory(void)
+{
+    TEST_IGNORE();
+}
+
 /* ------------------------------ End of file ------------------------------ */
