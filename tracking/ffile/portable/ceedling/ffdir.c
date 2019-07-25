@@ -190,4 +190,13 @@ ffdir_set(FFILE_T *file, ffui8_t nFiles)
 #endif
 }
 
+void 
+ffdir_getDirty(DirId dir)
+{
+    if ((dir == DirMainId) || (dir == DirBackupId))
+    {
+        devflash_page_dirty((SPG_T)dir);
+    }
+}
+
 /* ------------------------------ End of file ------------------------------ */

@@ -41,7 +41,7 @@ struct DirSector
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static DirSector dirSector;
+static DirSector dirSector, dirSectorWrite;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -93,6 +93,13 @@ MockEepromReadCallback(uint8_t *p, uint16_t addr, uint16_t qty,
                        int cmock_num_calls)
 {
     memcpy(p, &dirSector, qty);
+}
+
+static void 
+MockEepromWriteCallback(uint8_t *p, uint16_t addr, uint16_t qty, 
+                        int cmock_num_calls)
+{
+    memcpy((uint8_t *)&dirSectorWrite + addr, p, qty);
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -239,6 +246,34 @@ test_RestoreDirFromBackupChecksumNotEqual(void)
     ++dir;
     TEST_ASSERT_EQUAL(FFD0, dir->fd);
     TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
+}
+
+void
+test_GetDirtyDirectory(void)
+{
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_write_Expect(0, offsetof(DirSector, main), sizeof(Dir));
+    eeprom_write_IgnoreArg_p();
+    eeprom_write_StubWithCallback(MockEepromWriteCallback);
+
+    ffdir_getDirty(DirMainId);
+
+    TEST_ASSERT_EQUAL_HEX16(~dirSector.main.checksum, 
+                            dirSectorWrite.main.checksum);
+
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
+    eeprom_write_IgnoreArg_p();
+    eeprom_write_StubWithCallback(MockEepromWriteCallback);
+
+    ffdir_getDirty(DirBackupId);
+
+    TEST_ASSERT_EQUAL_HEX16(~dirSector.backup.checksum, 
+                            dirSectorWrite.backup.checksum);
 }
 
 /* ------------------------------ End of file ------------------------------ */

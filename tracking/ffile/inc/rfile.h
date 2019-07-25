@@ -281,6 +281,12 @@ enum
     QFILE_TYPE, RFILE_TYPE
 };
 
+typedef enum DirId DirId;
+enum DirId
+{
+    DirMainId, DirBackupId
+};
+
 /* ------------------------------- Data types ------------------------------ */
 /**
  *  Defines the file handler.
@@ -416,6 +422,7 @@ FFILE_T *rfile_get_file(FFD_T fd);
 void rfile_page_dirty(SPG_T page);
 void rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles);
 FFILE_T *rfile_restore_directory(ffui8_t *status);
+void rfile_getDirtyDir(DirId dir);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -216,4 +216,26 @@ ffdir_set(FFILE_T *file, ffui8_t nFiles)
 {
 }
 
+void 
+ffdir_getDirty(DirId dir)
+{
+    Dir *pDir;
+    ffui16_t addr;
+
+    if (dir == DirMainId)
+    {
+        pDir = &sector.main;
+        addr = EEPROM_DIRSECTOR_ADDR;
+    }
+    else
+    {
+        pDir = &sector.backup;
+        addr = EEPROM_DIRSECTOR_ADDR + offsetof(DirSector, backup);
+    }
+
+    eeprom_read((uint8_t *)&sector, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
+    pDir->checksum = ~pDir->checksum;
+    eeprom_write((uint8_t *)pDir, addr, sizeof(Dir));
+}
+
 /* ------------------------------ End of file ------------------------------ */

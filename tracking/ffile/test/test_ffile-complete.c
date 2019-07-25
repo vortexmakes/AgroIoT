@@ -36,8 +36,8 @@ static void
 crashDirectory(void)
 {
     flash_init();
-    devflash_page_dirty(RF_DIR_MAIN_PAGE);
-    devflash_page_dirty(RF_DIR_BACK_PAGE);
+    rfile_getDirtyDir(DirMainId);
+    rfile_getDirtyDir(DirBackupId);
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -93,7 +93,7 @@ test_RestoreDirectoryFromBackup(void)
     TEST_ASSERT_EQUAL(1, file->pos);
     ffile_sync();
 
-    devflash_page_dirty(RF_DIR_MAIN_PAGE);
+    rfile_getDirtyDir(DirMainId);
     ffile_init();
 
     TEST_ASSERT_EQUAL(1, file->pos);
@@ -116,7 +116,7 @@ test_RestoreDirectoryFromMain(void)
     TEST_ASSERT_EQUAL(1, file->pos);
     ffile_sync();
 
-    devflash_page_dirty(RF_DIR_BACK_PAGE);
+    rfile_getDirtyDir(DirBackupId);
     ffile_init();
 
     TEST_ASSERT_EQUAL(1, file->pos);

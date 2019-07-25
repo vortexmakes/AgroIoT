@@ -142,4 +142,10 @@ rfile_set_directory(FFILE_T *pdir, ffui8_t nfiles)
     ffdir_set(pdir, nfiles);
 }
 
+void 
+rfile_getDirtyDir(DirId dir)
+{
+    ffdir_getDirty(dir);
+}
+
 /* ------------------------------ End of file ------------------------------ */
