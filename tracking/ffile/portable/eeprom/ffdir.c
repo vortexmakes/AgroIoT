@@ -21,6 +21,7 @@
 #include "ffdir.h"
 #include "ffdata.h"
 #include "eeprom.h"
+#include <stdio.h>
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -196,6 +197,7 @@ ffdir_restore(ffui8_t *status)
     {
         *status = dirStatus;
     }
+    printf("status = %d\n", dirStatus);
      
     return dir.file;
 }
@@ -209,10 +211,9 @@ ffdir_update(FFILE_T *pf)
     }
     else
     {
-        sector.main.file[pf->fd] = *pf;
-        sector.main.checksum = 
-            calculate_checksum((ffui8_t *)sector.main.file);
-        dir = sector.backup = sector.main;
+        dir.file[pf->fd] = *pf;
+        dir.checksum = calculate_checksum((ffui8_t *)dir.file);
+        sector.backup = sector.main = dir;
     }
     eeprom_write((uint8_t *)&sector, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
 }

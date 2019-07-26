@@ -15,29 +15,84 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "eeprom.h"
+#include "ffile.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static ffui8_t image_cell = 0xFF;
+static FILE *fout;
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
 eeprom_init(void)
 {
+	long i;
+
+	if ((fout = fopen( "build/test/out/image-eeprom", "r+b")) == NULL)
+    {
+		if ((fout = fopen( "build/test/out/image-eeprom", "w+b")) == NULL)
+		{
+			perror("Can't open input file image-eeprom\n");
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			/* ...emulates the erased eeprom memory device */
+			for (i = 0 ; i < 4096; ++i)
+            {
+				fwrite(&image_cell, sizeof(image_cell), 1, fout);
+            }
+		}
+    }
+
+	if (ferror(fout))
+	{
+		perror("Error in image-eeprom file");
+		exit(EXIT_FAILURE);
+	}	
 }
 
 void
-eeprom_write(uint8_t* p, uint16_t addr, uint16_t qty)
+eeprom_write(uint8_t *p, uint16_t addr, uint16_t qty)
 {
+#if 1
+	long loc;
+
+	loc = (long)addr; 		/* position location */
+	fseek(fout, loc, SEEK_SET);
+	fwrite(p, 1, qty, fout);
+	if (ferror(fout))
+	{
+		perror("Error in write image-eeprom file");
+		exit(EXIT_FAILURE);
+	}	
+#endif
 }
 
 void
 eeprom_read(uint8_t* p, uint16_t addr, uint16_t qty)
 {
+#if 1
+	long loc;
+
+	loc = (long)addr; 	/* position location */
+	fseek(fout, loc, SEEK_SET);
+	fread(p, 1, qty, fout);
+	if (ferror(fout))
+	{
+		perror("Error in write image-eeprom file");
+		exit(EXIT_FAILURE);
+	}
+#endif
 }
 
 uint8_t

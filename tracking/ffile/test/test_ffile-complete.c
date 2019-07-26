@@ -37,6 +37,7 @@ static void
 crashDirectory(void)
 {
     flash_init();
+    eeprom_init();
     rfile_getDirtyDir(DirMainId);
     rfile_getDirtyDir(DirBackupId);
 }
@@ -64,18 +65,18 @@ test_RestoreDefaultDirectory(void)
     file = ffile_get_file_info(FFD0);
     result = ffile_is_corrupted(FFD0);
 
+    TEST_ASSERT_EQUAL(FRFILE_OK, result);
     TEST_ASSERT_EQUAL(FFD0, file->fd);
     TEST_ASSERT_EQUAL(QFILE_TYPE, file->type);
     TEST_ASSERT_EQUAL(sizeof(GPS_STR), file->size_reg);
-    TEST_ASSERT_EQUAL(FRFILE_OK, result);
 
     file = ffile_get_file_info(FFD1);
     result = ffile_is_corrupted(FFD1);
 
+    TEST_ASSERT_EQUAL(FRFILE_OK, result);
     TEST_ASSERT_EQUAL(FFD1, file->fd);
     TEST_ASSERT_EQUAL(RFILE_TYPE, file->type);
     TEST_ASSERT_EQUAL(sizeof(Config), file->size_reg);
-    TEST_ASSERT_EQUAL(FRFILE_OK, result);
 }
 
 void
