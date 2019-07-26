@@ -87,13 +87,4 @@ test_FormatFile(void)
     rfile_file_format(file);
 }
 
-void
-test_SetDirectory(void)
-{
-    memcpy(dir, (FFILE_T *)defdir, sizeof(FFILE_T) * NUM_FLASH_FILES);
-    ffdir_set_Expect(dir, NUM_FLASH_FILES);
-
-    rfile_set_directory(dir, NUM_FLASH_FILES);
-}
-
 /* ------------------------------ End of file ------------------------------ */

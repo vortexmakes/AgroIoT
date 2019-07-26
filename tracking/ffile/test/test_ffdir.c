@@ -41,7 +41,7 @@ struct DirSector
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static DirSector dirSector, dirSectorWrite;
+static DirSector dirSectorRead, dirSectorWrite;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -92,7 +92,7 @@ static void
 MockEepromReadCallback(uint8_t *p, uint16_t addr, uint16_t qty, 
                        int cmock_num_calls)
 {
-    memcpy(p, &dirSector, qty);
+    memcpy(p, &dirSectorRead, qty);
 }
 
 static void 
@@ -107,7 +107,7 @@ void
 setUp(void)
 {
     Mock_eeprom_Init();
-    makeDirSector(&dirSector);
+    makeDirSector(&dirSectorRead);
 }
 
 void 
@@ -147,7 +147,7 @@ test_RestoreDirFromBackup(void)
     ffui8_t status;
     FFILE_T *dir;
 
-    crashDirSector(&dirSector.backup);
+    crashDirSector(&dirSectorRead.backup);
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
@@ -174,7 +174,7 @@ test_RestoreDirFromMain(void)
     ffui8_t status;
     FFILE_T *dir;
 
-    crashDirSector(&dirSector.main);
+    crashDirSector(&dirSectorRead.main);
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
@@ -201,8 +201,8 @@ test_RestoreDirFromDefault(void)
     ffui8_t status;
     FFILE_T *dir;
 
-    crashDirSector(&dirSector.main);
-    crashDirSector(&dirSector.backup);
+    crashDirSector(&dirSectorRead.main);
+    crashDirSector(&dirSectorRead.backup);
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
@@ -225,9 +225,11 @@ test_RestoreDirFromBackupChecksumNotEqual(void)
     ffui8_t status;
     FFILE_T *dir;
 
-    memcpy(&dirSector.main.file[1], &dirSector.main.file[0], sizeof(FFILE_T));
-    dirSector.main.checksum = 
-                            calculate_checksum((ffui8_t *)dirSector.main.file);
+    memcpy(&dirSectorRead.main.file[1], 
+           &dirSectorRead.main.file[0], 
+           sizeof(FFILE_T));
+    dirSectorRead.main.checksum = 
+            calculate_checksum((ffui8_t *)dirSectorRead.main.file);
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
@@ -260,7 +262,7 @@ test_GetDirtyDirectory(void)
 
     ffdir_getDirty(DirMainId);
 
-    TEST_ASSERT_EQUAL_HEX16(~dirSector.main.checksum, 
+    TEST_ASSERT_EQUAL_HEX16(~dirSectorRead.main.checksum, 
                             dirSectorWrite.main.checksum);
 
     eeprom_read_Expect(0, 0, sizeof(DirSector));
@@ -272,26 +274,63 @@ test_GetDirtyDirectory(void)
 
     ffdir_getDirty(DirBackupId);
 
-    TEST_ASSERT_EQUAL_HEX16(~dirSector.backup.checksum, 
+    TEST_ASSERT_EQUAL_HEX16(~dirSectorRead.backup.checksum, 
                             dirSectorWrite.backup.checksum);
 }
 
 void
-test_UpdateAllDirectory(void)
+test_StoreWholeDirectoryInMemory(void)
 {
-    TEST_IGNORE();
+    ffui8_t status;
+
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();
+
+    ffdir_restore(&status);
+
+    eeprom_write_Expect(0, 0, sizeof(DirSector));
+    eeprom_write_IgnoreArg_p();
+    eeprom_write_StubWithCallback(MockEepromWriteCallback);
+
+    ffdir_update((FFILE_T *)0);
+
+    TEST_ASSERT_EQUAL_MEMORY(&dirSectorRead, 
+                             &dirSectorWrite, 
+                             sizeof(DirSector));
 }
 
 void
-test_UpdateFile(void)
+test_StoreOneFileInMemory(void)
 {
-    TEST_IGNORE();
-}
+    ffui8_t status;
 
-void
-test_SetDirectory(void)
-{
-    TEST_IGNORE();
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();
+
+    ffdir_restore(&status);
+
+    dirSectorRead.main.file[FFD1].type = QFILE_TYPE;
+    dirSectorRead.main.checksum = 
+            calculate_checksum((ffui8_t *)dirSectorRead.main.file);
+    dirSectorRead.backup = dirSectorRead.main;
+
+    eeprom_write_Expect(0, 0, sizeof(DirSector));
+    eeprom_write_IgnoreArg_p();
+    eeprom_write_StubWithCallback(MockEepromWriteCallback);
+
+    ffdir_update(&dirSectorRead.main.file[FFD1]);
+
+    TEST_ASSERT_EQUAL_MEMORY(&dirSectorRead, 
+                             &dirSectorWrite, 
+                             sizeof(DirSector));
 }
 
 /* ------------------------------ End of file ------------------------------ */

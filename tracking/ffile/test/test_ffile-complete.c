@@ -24,6 +24,7 @@
 #include "ffdir.h"
 #include "GStatus.h"
 #include "Config.h"
+#include "eeprom.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */

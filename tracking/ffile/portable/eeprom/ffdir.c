@@ -203,17 +203,24 @@ ffdir_restore(ffui8_t *status)
 void
 ffdir_update(FFILE_T *pf)
 {
+    if (pf == (FFILE_T *)0)
+    {
+        sector.backup = sector.main = dir;
+    }
+    else
+    {
+        sector.main.file[pf->fd] = *pf;
+        sector.main.checksum = 
+            calculate_checksum((ffui8_t *)sector.main.file);
+        dir = sector.backup = sector.main;
+    }
+    eeprom_write((uint8_t *)&sector, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
 }
 
 FFILE_T *
 ffdir_getFile(FFD_T fd)
 {
     return &dir.file[fd];
-}
-
-void 
-ffdir_set(FFILE_T *file, ffui8_t nFiles)
-{
 }
 
 void 

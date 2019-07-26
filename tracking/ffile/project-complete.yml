@@ -7,5 +7,6 @@
   :test:
   :source:
   :include:
+    - portable/eeprom
   :support:
     - portable/ceedling
