@@ -47,7 +47,7 @@ eeprom_init(void)
 		else
 		{
 			/* ...emulates the erased eeprom memory device */
-			for (i = 0 ; i < 4096; ++i)
+			for (i = 0 ; i < 256; ++i)
             {
 				fwrite(&image_cell, sizeof(image_cell), 1, fout);
             }
@@ -59,40 +59,32 @@ eeprom_init(void)
 		perror("Error in image-eeprom file");
 		exit(EXIT_FAILURE);
 	}	
+	fflush(fout);
 }
 
 void
 eeprom_write(uint8_t *p, uint16_t addr, uint16_t qty)
 {
-#if 1
-	long loc;
-
-	loc = (long)addr; 		/* position location */
-	fseek(fout, loc, SEEK_SET);
+	fseek(fout, addr, SEEK_SET);
 	fwrite(p, 1, qty, fout);
 	if (ferror(fout))
 	{
 		perror("Error in write image-eeprom file");
 		exit(EXIT_FAILURE);
 	}	
-#endif
+	fflush(fout);
 }
 
 void
 eeprom_read(uint8_t* p, uint16_t addr, uint16_t qty)
 {
-#if 1
-	long loc;
-
-	loc = (long)addr; 	/* position location */
-	fseek(fout, loc, SEEK_SET);
+	fseek(fout, addr, SEEK_SET);
 	fread(p, 1, qty, fout);
 	if (ferror(fout))
 	{
 		perror("Error in write image-eeprom file");
 		exit(EXIT_FAILURE);
 	}
-#endif
 }
 
 uint8_t
