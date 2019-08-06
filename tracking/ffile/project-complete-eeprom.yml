@@ -1,6 +1,7 @@
 #
 # Usage:
-#   $ sudo ceedling [clean|clobber] options:project-complete test:ffile-complete
+#   $ sudo ceedling [clean|clobber] options:project-complete-eeprom \
+#                                   test:ffile-complete
 #
 
 :paths:

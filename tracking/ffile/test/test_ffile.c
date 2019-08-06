@@ -19,6 +19,7 @@
 #include "ffile.h"
 #include "Mock_rfile.h"
 #include "Mock_ffport.h"
+#include "Mock_ffdir.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */

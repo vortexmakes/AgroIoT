@@ -21,7 +21,6 @@
 #include "ffdir.h"
 #include "ffdata.h"
 #include "eeprom.h"
-#include <stdio.h>
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -171,11 +170,9 @@ ffdir_restore(ffui8_t *status)
 
     mainDir.checksum = calculate_checksum((ffui8_t *)sector.main.file);
     mainDir.result = (sector.main.checksum == mainDir.checksum) ? 1 : 0;
-    printf("mr=%x,mc=%x\n", sector.main.checksum, mainDir.checksum);
 #if FF_DIR_BACKUP == 1
     backupDir.checksum = calculate_checksum((ffui8_t *)sector.backup.file);
     backupDir.result = (sector.backup.checksum == backupDir.checksum) ? 1 : 0;
-    printf("br=%x,bc=%x\n", sector.backup.checksum, backupDir.checksum);
     dirStatus = 0;
     dirStatus = (mainDir.result << 1) | backupDir.result;
     dirStatus = (*recovery[dirStatus])();
@@ -199,7 +196,6 @@ ffdir_restore(ffui8_t *status)
     {
         *status = dirStatus;
     }
-    printf("status = %d\n", dirStatus);
      
     return dir.file;
 }

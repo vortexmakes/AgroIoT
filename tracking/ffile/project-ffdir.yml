@@ -1,6 +1,7 @@
 #
 # Usage:
-#   $ sudo ceedling [clean|clobber] options:project-complete test:ffile-complete
+#   $ sudo ceedling [clean|clobber] options:project-ffdir \
+#                                   test:ffdir
 #
 
 :paths:

@@ -29,27 +29,6 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
-typedef struct Dir Dir;
-struct Dir
-{
-    FFILE_T file[NUM_FLASH_FILES];
-    ffui16_t checksum;
-};
-
-typedef struct DirSector DirSector;
-struct DirSector
-{
-    Dir main;
-    Dir backup;
-};
-
-typedef struct DirSectorStatus DirSectorStatus;
-struct DirSectorStatus
-{
-    ffui8_t result;
-    ffui16_t checksum;
-};
-
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
@@ -72,37 +51,9 @@ setUp(void)
 void 
 tearDown(void)
 {
-    //ffile_close();
+    ffile_close();
 }
 
-void
-test_Eeprom(void)
-{
-    DirSector sector;
-
-#if 0
-    eeprom_init();
-    rfile_getDirtyDir(DirBackupId);
-#else
-    ffdir_restore(0);
-    rfile_getDirtyDir(DirMainId);
-    ffdir_restore(0);
-#if 0
-    ffile_init();
-    rfile_getDirtyDir(DirBackupId);
-    ffile_init();
-    ffile_init();
-    rfile_getDirtyDir(DirMainId);
-    rfile_getDirtyDir(DirBackupId);
-    ffile_init();
-    ffile_init();
-#endif
-    //eeprom_read((uint8_t *)&sector, 0, sizeof(DirSector));
-    //TEST_ASSERT_EQUAL_HEX16(0, sector.main.checksum);
-#endif
-}
-
-#if 0
 void
 test_RestoreDefaultDirectory(void)
 {
@@ -219,6 +170,5 @@ test_WriteAndReadRandomFile(void)
     TEST_ASSERT_EQUAL(1, nRead);
     TEST_ASSERT_EQUAL_MEMORY(&writeData, &readData, sizeof(Config));
 }
-#endif
 
 /* ------------------------------ End of file ------------------------------ */
