@@ -1,0 +1,15 @@
+#
+# Usage:
+#   $ sudo ceedling [clean|clobber] options:project-complete-eeprom \
+#                                   test:ffile-complete
+#
+
+:paths:
+  :test:
+  :source:
+  :include:
+    - portable/eeprom
+  :support:
+    - portable/ceedling/ffport.c
+    - portable/ceedling/eeprom.c
+    - portable/eeprom/ffdir.c

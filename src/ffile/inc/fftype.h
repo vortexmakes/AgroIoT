@@ -1,31 +1,6 @@
-/*
- *	file: fftype.h
- *	Last updated for version: 1.0.00
- *	Date of the last update:  Feb 28, 2012
- *
- *  Copyright (C) 2010 Leandro Francucci. All rights reserved.
- *
- *  FFILE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  FFILE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with FFILE, see copying.txt file.
- *
- * Contact information:
- * e-mail:			francuccilea@gmail.com
- */
-
 /**
- *  \file fftype.h
- *	\brief
- *	This file defines the data types that uses FFILE.
+ *  \file       fftype.h
+ *  \brief      This file defines the data types that uses FFILE.
  *
  *  The FFILE uses a set of integer quantities. That maybe machine or compiler
  *  dependent. These types must be defined in \b fft.h file. The following
@@ -82,9 +57,20 @@
  *	The path of platform-dependent file must be relative.
  */
 
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ */
+
+/* --------------------------------- Notes --------------------------------- */
+/* --------------------------------- Module -------------------------------- */
 #ifndef __FFTYPE_H__
 #define __FFTYPE_H__
 
+/* ----------------------------- Include files ----------------------------- */
 #ifdef __W32VC08__
     #include "..\portable\80x86\win32\vc08\fft.h"
 #endif
@@ -105,5 +91,22 @@
     #include "../portable/test/fft.h"
 #endif
 
+/* ---------------------- External C language linkage ---------------------- */
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+/* --------------------------------- Macros -------------------------------- */
+/* -------------------------------- Constants ------------------------------ */
+/* ------------------------------- Data types ------------------------------ */
+/* -------------------------- External variables --------------------------- */
+/* -------------------------- Function prototypes -------------------------- */
+/* -------------------- External C language linkage end -------------------- */
+#ifdef __cplusplus
+}
+#endif
+
+/* ------------------------------ Module end ------------------------------- */
+#endif
+
 /* ------------------------------ End of file ------------------------------ */
