@@ -68,6 +68,7 @@ flash_init( void )
 		perror( "Error in image file" );
 		exit( EXIT_FAILURE );
 	}	
+	fflush(fout);
 }
 
 
@@ -91,6 +92,7 @@ flash_write_data( unsigned long pto, const void *pfrom, int qty )
 		perror( "Error in write image file" );
 		exit( EXIT_FAILURE );
 	}	
+	fflush(fout);
 }
 
 
