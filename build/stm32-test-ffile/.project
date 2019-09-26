@@ -47,6 +47,11 @@
 			<locationURI>copy_PARENT/src/ffile</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/testSetup.c</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/testSetup.c</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/test_ffile-complete_runner.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/ffile/build/test/runners/test_ffile-complete_runner.c</locationURI>
