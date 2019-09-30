@@ -118,8 +118,6 @@ writePage(uint8_t* p, uint16_t addr, uint16_t qty)
     header[1] = addr >> 8; // Send 16-bit address
     header[2] = addr;
 
-    waitStandbyState();
-
     writeEnable();
 
     eeprom_spi_select();
@@ -131,6 +129,8 @@ writePage(uint8_t* p, uint16_t addr, uint16_t qty)
     eeprom_spi_deselect();
 
     writeDisable();
+
+    waitStandbyState();
 }
 
 /* ---------------------------- Global functions --------------------------- */
