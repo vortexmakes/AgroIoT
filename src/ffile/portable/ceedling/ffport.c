@@ -30,7 +30,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <string.h>
 
 #include "ffile.h"
@@ -49,19 +48,21 @@ flash_init( void )
 {
 	long i;
 
-	if( ( fout = fopen( "image", "r+b" ) ) == NULL )
-		if( ( fout = fopen( "image", "w+b" ) ) == NULL )
+	if( ( fout = fopen( "build/test/out/image", "r+b" ) ) == NULL )
+    {
+		if( ( fout = fopen( "build/test/out/image", "w+b" ) ) == NULL )
 		{
 			perror( "Can't open input file image\n" );
 			exit( EXIT_FAILURE );
 		}
 		else
 		{
-			printf( "Created the image file\n" );
+			/*printf( "Created the image file\n" );*/
 			/* ...emulates the erased flash memory device */
 			for( i = 0 ; i < FF_FLASH_SIZE ; ++i )
 				fwrite( &image_cell, sizeof( image_cell ), 1, fout );
 		}
+    }
 
 	if( ferror( fout ) )
 	{

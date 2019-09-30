@@ -1,11 +1,11 @@
 /**
- *  \file       test_ffile.c
- *  \brief      Unit test for ffile module.
+ *  \file       test_devflash.c
+ *  \brief      Unit test for devflash module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2019.04.03  LeFr  v1.0.00  Initial version
+ *  2019.07.02  LeFr  v1.0.00
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -16,10 +16,10 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
-#include "ffile.h"
-#include "Mock_rfile.h"
+#include "ffdata.h"
+#include "devflash.h"
+#include "Mock_ffile.h"
 #include "Mock_ffport.h"
-#include "Mock_ffdir.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */

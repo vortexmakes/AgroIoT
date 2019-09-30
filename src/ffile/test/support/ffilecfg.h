@@ -95,7 +95,7 @@
 /**
  */
 
-#define FF_IS_CORRUPTED         0
+#define FF_IS_CORRUPTED         1
 
 /**
  */
@@ -105,7 +105,7 @@
 /**
  */
 
-#define FF_GET_FILE_INFO        0
+#define FF_GET_FILE_INFO        1
 
 /**
  */

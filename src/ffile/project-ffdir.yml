@@ -1,0 +1,12 @@
+#
+# Usage:
+#   $ sudo ceedling [clean|clobber] options:project-ffdir \
+#                                   test:ffdir
+#
+
+:paths:
+  :test:
+  :source:
+  :include:
+  :support:
+    - portable/eeprom

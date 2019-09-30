@@ -1,11 +1,23 @@
-/*
- *  ffile.c
+/**
+ *  \file       ffile.c
+ *  \brief
  */
 
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ */
+
+/* --------------------------------- Notes --------------------------------- */
+/* ----------------------------- Include files ----------------------------- */
 #include "ffile.h"
+#include "ffdir.h"
 
-static RACC_T ra;
-
+/* ----------------------------- Local macros ------------------------------ */
 #define ffile_prepare_access(p, o, ta, pd, pos, q) \
     ra.pf = (p); \
     ra.op = (o); \
@@ -14,6 +26,15 @@ static RACC_T ra;
     ra.currpos = (pos); \
     ra.rqty = (q)
 
+/* ------------------------------- Constants ------------------------------- */
+/* ---------------------------- Local data types --------------------------- */
+/* ---------------------------- Global variables --------------------------- */
+/* ---------------------------- Local variables ---------------------------- */
+static RACC_T ra;
+
+/* ----------------------- Local function prototypes ----------------------- */
+/* ---------------------------- Local functions ---------------------------- */
+/* ---------------------------- Global functions --------------------------- */
 void
 ffile_init(void)
 {
@@ -331,6 +352,7 @@ ffile_is_corrupted(FFD_T ffd)
 void
 ffile_sync(void)
 {
-    rfile_update_directory((FFILE_T *)0);
+    ffdir_update((FFILE_T *)0);
 }
+
 /* ------------------------------ End of file ------------------------------ */
