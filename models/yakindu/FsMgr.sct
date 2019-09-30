@@ -14,7 +14,7 @@
         <outgoingTransitions xmi:id="_ns55sOGREem7nOmKY_LUiw" specification="evDisable" target="_YlrLj9-GEem24a7BsFr5GA"/>
         <outgoingTransitions xmi:id="_fo9IQON8EemeM9l5VBLIxw" specification="evRead /&#xD;&#xA;reply = RKH_ALLOC_EVT(FsMgrRWReply, 0, me);&#xD;&#xA;result = f_read(getFileObj(e.file), e.buff, e.nBytes, &amp;reply->nBytesRW);&#xD;&#xA;reply->result = result;&#xD;&#xA;reply->e.sig = (result != FR_OK) ? evReadFail : evReadOk;&#xD;&#xA;RKH_SMA_POST_FIFO(e.client, (RKH_EVT_T*)reply, me);" target="_HdvIgOFaEemnXKmYOXoQIg"/>
         <outgoingTransitions xmi:id="_7EALUOOAEemeM9l5VBLIxw" specification="evOpen /&#xD;&#xA;reply = RKH_ALLOC_EVT(FsMgrRWReply, 0, me);&#xD;&#xA;result = f_open(getFileObj(e.file), e.buff, e.nBytes, &amp;reply->nBytesRW);&#xD;&#xA;reply->result = result;&#xD;&#xA;reply->e.sig = (result != FR_OK) ? evOpenFail : evOpenOk;&#xD;&#xA;RKH_SMA_POST_FIFO(e.client, (RKH_EVT_T*)reply, me);" target="_HdvIgOFaEemnXKmYOXoQIg"/>
-        <outgoingTransitions xmi:id="_8j_FcOOCEemeM9l5VBLIxw" specification="evSync /&#xD;&#xA;f_sync(statusBackupFile);&#xD;&#xA;f_sync(traceFile);" target="_HdvIgOFaEemnXKmYOXoQIg"/>
+        <outgoingTransitions xmi:id="_8j_FcOOCEemeM9l5VBLIxw" specification="evSync /&#xD;&#xA;f_sync(getFileObj(e.file));" target="_HdvIgOFaEemnXKmYOXoQIg"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_XRJMEN-HEem24a7BsFr5GA" name="Error" incomingTransitions="_zeQzAN-QEem24a7BsFr5GA _JMUxQOFaEemnXKmYOXoQIg _j2S0gOGREem7nOmKY_LUiw">
         <outgoingTransitions xmi:id="_-R3rUOFYEemnXKmYOXoQIg" specification="evEnable/&#xD;&#xA;result = f_mount(fatFs, &quot;&quot;, 1);&#xD;&#xA;..." target="_v8ofUN-QEem24a7BsFr5GA"/>
