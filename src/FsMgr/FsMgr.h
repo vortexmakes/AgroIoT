@@ -1,24 +1,23 @@
 /**
- *  \file       signals.h
- *  \brief      Event signal definitions.
+ *  \file       FsMgr.h
+ *  \brief      Filesystem Manager. 
  */
 
 /* -------------------------- Development history -------------------------- */
-/*
- *  2018.09.27  DaBa  v1.0.00  Initial version
- */
-
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario BaliÃ±a db@vortexmakes.com
+ *  DaBa  Dario Baliña db@vortexmakes.com
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __SIGNALS_H__
-#define __SIGNALS_H__
+#ifndef __FSMGR_H__
+#define __FSMGR_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "rkh.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -27,71 +26,12 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ................................ Signals ................................ */
-typedef enum Signals Signals;
-enum Signals
-{
-	evOpen,
-	evClose,
-    evCmd,
-    evResponse,
-    evNoResponse,
-    evURC,
-	evTimeout,
-    evRegTimeout,
-    evToutWaitResponse,
-    evOk,
-    evError,
-    evToutDelay,
-    evSimReady,
-    evSimPin,
-    evSimError,
-    evNoReg,
-    evOper,
-    evReg,
-    evIP,
-    evIPInitial,
-    evIPStart,
-    evIPStatus,
-    evIPGprsAct,
-    evConnecting,
-    evClosed,
-    evConnected,
-    evSend,
-    evSendFail,
-    evSent,
-    evRecv,
-    evRecvFail,
-    evReceived,
-    evNetConnected,
-    evNetDisconnected,
-    evDisconnected,
-    evNetClockSync,
-    evLocalTime,
-    evUnlocked,
-    evImei,
-    evSigLevel,
-    evRMC,
-    evGeo,
-    evGeoInvalid,
-    evTurn,
-    evIoChg,
-	evRestart,
-	evEndOfCycle,
-	evSensorData,
-	evTerminate,     /* press the key escape on the keyboard */
-    evDevData,
-    evGStatus,
-    evSyncTout,
-    evOutChg,
-    evDiskConnected,
-    evDiskDisconnected
-};
+/* ........................ Declares active object ......................... */
+RKH_SMA_DCLR(fsMgr);
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void signals_publishSymbols(void);
-
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

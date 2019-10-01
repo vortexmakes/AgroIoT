@@ -14,6 +14,8 @@
 #include "adc.h"
 #include "can.h"
 #include "dma.h"
+#include "fatfs.h"
+#include "usb_host.h"
 
 #include "rkhtype.h"
 

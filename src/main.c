@@ -26,6 +26,7 @@
 #include "conmgr.h"
 #include "modmgr.h"
 #include "geoMgr.h"
+#include "FsMgr.h"
 #include "ioChg.h"
 #include "DeviceServer.h"
 #include "sim5320parser.h"
@@ -44,6 +45,7 @@
 #define MODMGR_QSTO_SIZE    4
 #define GEOMGR_QSTO_SIZE    4
 #define DEVSRV_QSTO_SIZE    4
+#define FSMGR_QSTO_SIZE     4
 
 #define SIZEOF_EP0STO       16
 #define SIZEOF_EP0_BLOCK    sizeof(RKH_EVT_T)
@@ -63,6 +65,7 @@ static RKH_EVT_T *ConMgr_qsto[CONMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
 static RKH_EVT_T *GeoMgr_qsto[GEOMGR_QSTO_SIZE];
 static RKH_EVT_T *DevSvr_qsto[DEVSRV_QSTO_SIZE];
+static RKH_EVT_T *FsMgr_qsto[FSMGR_QSTO_SIZE];
 static rui8_t evPool0Sto[SIZEOF_EP0STO], 
               evPool1Sto[SIZEOF_EP1STO], 
               evPool2Sto[SIZEOF_EP2STO];
@@ -89,6 +92,7 @@ setupTraceFilters(void)
 	//RKH_FILTER_OFF_SMA(geoMgr);
 	//RKH_FILTER_OFF_SMA(deviceServer);
 	//RKH_FILTER_OFF_SMA(commMgr);
+    RKH_FILTER_OFF_SMA(fsMgr);
 	RKH_FILTER_OFF_ALL_SIGNALS();
 }
 
@@ -129,6 +133,8 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(deviceServer, DevSvr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
 
     RKH_SMA_ACTIVATE(commMgr, CommMgr_qsto, COMMMGR_QSTO_SIZE, 0, 0);
+
+    RKH_SMA_ACTIVATE(fsMgr, FsMgr_qsto, FSMGR_QSTO_SIZE, 0, 0);
 
     RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);
 	RKH_SMA_POST_FIFO(deviceServer, &e_Open, 0);
