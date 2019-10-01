@@ -32,6 +32,15 @@
 
 #define FFILE_WATCHDOG()        (void)0
 
+/*
+ * 	Size of sector flash in bytes.
+ */
+#define PHYS_BLOCK_SIZE			512
+#define NUM_PHYS_BLOCKS			8192
+#define FLASH_BASE_ADDRESS		(unsigned long)(0x0000)
+#define FLASH_BASE_PAGE			0
+#define FLASH_INV_SECT			(NUM_PHYS_BLOCKS)
+
 /**
  *  Initializes and opens the flash driver.
  */

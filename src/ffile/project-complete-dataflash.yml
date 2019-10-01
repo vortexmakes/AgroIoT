@@ -1,0 +1,13 @@
+#
+# Usage:
+#   $ sudo ceedling [clean|clobber] options:project-complete-devflash \
+#                                   test:ffile-complete
+#
+
+:paths:
+  :test:
+  :source:
+  :include:
+    - portable/eeprom
+  :support:
+    - portable/ceedling

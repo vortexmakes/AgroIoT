@@ -1,31 +1,43 @@
 /**
- *  file: ffile.h
- *	Last updated for version: 1.0.00
- *	Date of the last update:  Feb 13, 2012
- */
-
-/*
- *  \file ffile.h
+ *  \file       ffile.h
+ *  \brief      Implements a very simple flash file system.
  *
- *  \brief
- *	Implements a very simple flash file system. It offers a typical file
- *	system abstraction and interface. The files are stored as a collection
- *	of records. Programs read and write whole records, rather than bytes or
- *	arbitrary byte ranges, and can seek to a record boundary but not within
- *	records.
+ *  It offers a typical file system abstraction and interface. The files
+ *  are stored as a collection of records. Programs read and write whole
+ *  records, rather than bytes or arbitrary byte ranges, and can seek to
+ *  a record boundary but not within records.
  *  The directory and files are created in compile time using the 'CREATE_DIR'
  *  and 'CREATE_FFILE' macros respectively. Generally, the directory and files
  *  are declared on 'ffdata' file.
  *
  *  \note
- *  This module not implements a dynamic wear levelling.
+ *  This module does not implement a dynamic wear levelling.
  */
 
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ */
+
+/* --------------------------------- Notes --------------------------------- */
+/* --------------------------------- Module -------------------------------- */
 #ifndef __FFILE_H__
 #define __FFILE_H__
 
+/* ----------------------------- Include files ----------------------------- */
 #include "rfile.h"
 
+/* ---------------------- External C language linkage ---------------------- */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* --------------------------------- Macros -------------------------------- */
+/* -------------------------------- Constants ------------------------------ */
 enum
 {
     FQFILE_OK, FQFILE_EMPTY, FQFILE_FULL
@@ -56,20 +68,21 @@ enum
     READ_BACKWARD, READ_FORWARD
 };
 
+/* ------------------------------- Data types ------------------------------ */
+/* -------------------------- External variables --------------------------- */
+/* -------------------------- Function prototypes -------------------------- */
 /**
  *  \brief
  *  Initializes internal data structures and restores directory from flash.
  *  Also, the entire flash partition is scanned for a failed sector. If
  *  found then the flash sector is formatted.
  */
-
 void ffile_init(void);
 
 /**
  *  \brief
  *  Close the FFILE.
  */
-
 void ffile_close(void);
 
 /**
@@ -81,7 +94,6 @@ void ffile_close(void);
  *  \return
  *  A pointer to flash file data structure.
  */
-
 FFILE_T *ffile_get_file_info(FFD_T ffd);
 
 /**
@@ -94,7 +106,6 @@ FFILE_T *ffile_get_file_info(FFD_T ffd);
  *  FRFILE_OK if the entire file wasn't corrupted during initializing process,
  *  FRFILE_ERROR otherwise.
  */
-
 FFUInt ffile_is_corrupted(FFD_T ffd);
 
 /**
@@ -104,7 +115,6 @@ FFUInt ffile_is_corrupted(FFD_T ffd);
  *
  *  \param ffd		file descriptor.
  */
-
 void ffile_file_format(FFD_T ffd);
 
 /**
@@ -117,7 +127,6 @@ void ffile_file_format(FFD_T ffd);
  *  A true (1) value if the end of file was reached, otherwise
  *  false value (0).
  */
-
 FFUInt ffile_is_eof(FFD_T ffd);
 
 /**
@@ -135,7 +144,6 @@ FFUInt ffile_is_eof(FFD_T ffd);
  *  \return
  *  The number of register to be read.
  */
-
 ffui16_t ffile_queue_open_as_random(FFD_T ffd, ffui8_t from);
 
 /**
@@ -152,7 +160,6 @@ ffui16_t ffile_queue_open_as_random(FFD_T ffd, ffui8_t from);
  *  \return
  *	A current file position.
  */
-
 ffui16_t ffile_tell(FFD_T ffd);
 
 /**
@@ -165,7 +172,6 @@ ffui16_t ffile_tell(FFD_T ffd);
  *  \param offset   compute the new file position relative to the start of
  *                  the file. The value of offset must not be negative.
  */
-
 void ffile_seek(FFD_T ffd, ffui16_t offset);
 
 /**
@@ -182,7 +188,6 @@ void ffile_seek(FFD_T ffd, ffui16_t offset);
  *  FQFILE_OK if the element was successfully inserted,
  *	otherwise error code.
  */
-
 FFUInt ffile_queue_insert(FFD_T ffd, void *preg);
 
 /**
@@ -199,7 +204,6 @@ FFUInt ffile_queue_insert(FFD_T ffd, void *preg);
  *  FQFILE_OK if an element was successfully removed from the
  *  file, otherwise error code.
  */
-
 FFUInt ffile_queue_remove(FFD_T ffd, void *preg);
 
 /**
@@ -215,7 +219,6 @@ FFUInt ffile_queue_remove(FFD_T ffd, void *preg);
  *  FQFILE_OK if the registers was successfully deleted from the
  *  file, otherwise error code.
  */
-
 FFUInt ffile_queue_delete(FFD_T ffd, NR_T *ndel);
 
 /**
@@ -241,7 +244,6 @@ FFUInt ffile_queue_delete(FFD_T ffd, NR_T *ndel);
  *  FQFILE_OK if an element was successfully read from the
  *  file, otherwise FQFILE_EMPTY.
  */
-
 FFUInt ffile_queue_random_read(FFD_T ffd, ffui8_t dir, void *preg);
 
 /**
@@ -266,7 +268,6 @@ FFUInt ffile_queue_random_read(FFD_T ffd, ffui8_t dir, void *preg);
  *	FQFILE_OK if an element was successfully read from the file, otherwise
  *	FQFILE_EMPTY.
  */
-
 FFUInt ffile_queue_read(FFD_T ffd, void *preg);
 
 /**
@@ -295,7 +296,6 @@ FFUInt ffile_queue_read(FFD_T ffd, void *preg);
  *  On write access: the positive number of complete registers successfully
  *  written; if an error occurs, this is less than 'rqty'.
  */
-
 int ffile_random_access(FFD_T ffd, ffui8_t op, void *preg, ffui16_t rqty);
 
 /**
@@ -304,8 +304,14 @@ int ffile_random_access(FFD_T ffd, ffui8_t op, void *preg, ffui16_t rqty);
  *  caching in RAM. It's main use is to be called in power fail interrupt and
  *  periodic timer.
  */
-
 void ffile_sync(void);
 
+/* -------------------- External C language linkage end -------------------- */
+#ifdef __cplusplus
+}
 #endif
+
+/* ------------------------------ Module end ------------------------------- */
+#endif
+
 /* ------------------------------ End of file ------------------------------ */
