@@ -1,6 +1,6 @@
 /**
  *  \file       FsMgr.c
- *  \brief      Filesystem Manager active object implementation.
+ *  \brief      Active object implementation.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -9,49 +9,51 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
- *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include <stdio.h>
-#include <string.h>
-#include "rkh.h"
-#include "bsp.h"
+#include "rkhsma.h"
 #include "signals.h"
-#include "events.h"
-#include "topic.h"
 #include "FsMgr.h"
+#include "FsMgrAct.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-/* ......................... Declares active object ........................ */
-typedef struct FsMgr FsMgr;
-
-/* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Off;
-                    
-/* ........................ Declares initial action ........................ */
-static void init(FsMgr *const me, RKH_EVT_T *pe);
-
-/* ........................ Declares effect actions ........................ */
-/* ......................... Declares entry actions ........................ */
-/* ......................... Declares exit actions ......................... */
-/* ............................ Declares guards ............................ */
 /* ........................ States and pseudostates ........................ */
-RKH_CREATE_BASIC_STATE(Off, NULL, NULL, RKH_ROOT, NULL);
-RKH_CREATE_TRANS_TABLE(Off)
-    RKH_TRINT(evDiskConnected, NULL, NULL),
-    RKH_TRINT(evDiskDisconnected, NULL, NULL),
+RKH_CREATE_BASIC_STATE(DiskDisconnected, NULL, NULL, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(FsActive, NULL, NULL, &DiskConnected, NULL);
+RKH_CREATE_BASIC_STATE(FsError, NULL, NULL, &DiskConnected, NULL);
+
+RKH_CREATE_COMP_REGION_STATE(DiskConnected, NULL, NULL, RKH_ROOT, &C0, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+
+RKH_CREATE_TRANS_TABLE(DiskDisconnected)
+	RKH_TRREG(evDiskConnected, NULL, FsMgr_DiskDisconnectedToDiskConnectedExt1, &DiskConnected),
 RKH_END_TRANS_TABLE
 
-/* ............................. Active object ............................. */
-struct FsMgr
-{
-    RKH_SMA_T ao;
-};
+RKH_CREATE_TRANS_TABLE(DiskConnected)
+	RKH_TRREG(evDiskDisconnected, NULL, NULL, &DiskDisconnected),
+RKH_END_TRANS_TABLE
 
-RKH_SMA_CREATE(FsMgr, fsMgr, 5, HCAL, &Off, init, NULL);
+RKH_CREATE_TRANS_TABLE(FsActive)
+	RKH_TRREG(evWrite, NULL, FsMgr_FsActiveToC0Ext3, &C0),
+	RKH_TRREG(evRead, NULL, FsMgr_FsActiveToC0Ext4, &C0),
+	RKH_TRREG(evOpen, NULL, FsMgr_FsActiveToC0Ext5, &C0),
+	RKH_TRREG(evSync, NULL, FsMgr_FsActiveToC0Ext6, &C0),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(FsError)
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_CHOICE_STATE(C0);
+
+RKH_CREATE_BRANCH_TABLE(C0)
+	RKH_BRANCH(FsMgr_isCondC0ToFsActive9, NULL, &FsActive),
+	RKH_BRANCH(ELSE, NULL, &FsError),
+RKH_END_BRANCH_TABLE
+
+
+/* ............................. Active object ............................. */
+RKH_SMA_CREATE(FsMgr, fsMgr, 0, HCAL, &DiskDisconnected, NULL, NULL);
 RKH_SMA_DEF_PTR(fsMgr);
 
 /* ------------------------------- Constants ------------------------------- */
@@ -60,20 +62,5 @@ RKH_SMA_DEF_PTR(fsMgr);
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-/* ............................ Initial action ............................. */
-static void
-init(FsMgr *const me, RKH_EVT_T *pe)
-{
-	(void)pe;
-
-    RKH_TR_FWK_AO(me);
-    RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
-    RKH_TR_FWK_STATE(me, &Off);
-}
-
-/* ............................ Effect actions ............................. */
-/* ............................. Entry actions ............................. */
-/* ............................. Exit actions .............................. */
-/* ................................ Guards ................................. */
 /* ---------------------------- Global functions --------------------------- */
 /* ------------------------------ End of file ------------------------------ */

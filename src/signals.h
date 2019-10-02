@@ -84,7 +84,18 @@ enum Signals
     evSyncTout,
     evOutChg,
     evDiskConnected,
-    evDiskDisconnected
+    evDiskDisconnected,
+	evRead,
+	evWrite,
+	evMount,
+	evSync,
+	evOpenOk,
+	evOpenFail,
+	evReadOk,
+	evReadFail,
+	evWriteOk,
+	evWriteFail,
+	evFsFail,
 };
 
 /* ------------------------------- Data types ------------------------------ */
