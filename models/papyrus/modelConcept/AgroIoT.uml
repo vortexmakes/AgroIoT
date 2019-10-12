@@ -81,10 +81,6 @@
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jlIM4Jl3Eeii_JvRFExniQ"/>
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jlIz8Jl3Eeii_JvRFExniQ" value="1"/>
       </ownedAttribute>
-      <ownedAttribute xmi:type="uml:Property" xmi:id="_8LFfACC7EemyTKt2ez43LQ" name="batChStatus" type="_po_c0CC7EemyTKt2ez43LQ" aggregation="composite" association="_8K7G8CC7EemyTKt2ez43LQ">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8LFfASC7EemyTKt2ez43LQ"/>
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8LGGECC7EemyTKt2ez43LQ" value="1"/>
-      </ownedAttribute>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_5S9CYH_oEeiGQ_qU31K2fA" name="DeviceServer" isActive="true">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_ab90EOgHEei_rN11x4-KBA" name="dev" type="_-oP8cLepEeiIpI7hu9VsYg" association="_abq5IOgHEei_rN11x4-KBA">
@@ -190,16 +186,6 @@
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
       </ownedAttribute>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="_BBcKgLW_Eeix7r8U1ZxtVA" memberEnd="_BBgb8rW_Eeix7r8U1ZxtVA _BBgb9bW_Eeix7r8U1ZxtVA">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BBgb8LW_Eeix7r8U1ZxtVA" source="org.eclipse.papyrus">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BBgb8bW_Eeix7r8U1ZxtVA" key="nature" value="UML_Nature"/>
-      </eAnnotations>
-      <ownedEnd xmi:type="uml:Property" xmi:id="_BBgb9bW_Eeix7r8U1ZxtVA" name="collector" type="_eX7mYH_oEeiGQ_qU31K2fA" association="_BBcKgLW_Eeix7r8U1ZxtVA"/>
-      <ownedEnd xmi:type="uml:Property" xmi:id="_BBgb8rW_Eeix7r8U1ZxtVA" name="ioStatus" type="_p8RlwLW-Eeix7r8U1ZxtVA" aggregation="composite" association="_BBcKgLW_Eeix7r8U1ZxtVA">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BBgb87W_Eeix7r8U1ZxtVA"/>
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BBgb9LW_Eeix7r8U1ZxtVA" value="1"/>
-      </ownedEnd>
-    </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_hpy8wLW_Eeix7r8U1ZxtVA" memberEnd="_hpy8w7W_Eeix7r8U1ZxtVA _hpy8xrW_Eeix7r8U1ZxtVA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_hpy8wbW_Eeix7r8U1ZxtVA" source="org.eclipse.papyrus">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hpy8wrW_Eeix7r8U1ZxtVA" key="nature" value="UML_Nature"/>
@@ -297,16 +283,6 @@
         <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_Cv_UEON_EeiGbY0CU5P6pg"/>
       </ownedAttribute>
     </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="_9QjjwOabEeiE9KDw0vtNSg" memberEnd="_9Qkx4uabEeiE9KDw0vtNSg _9QmAAeabEeiE9KDw0vtNSg">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9Qkx4OabEeiE9KDw0vtNSg" source="org.eclipse.papyrus">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9Qkx4eabEeiE9KDw0vtNSg" key="nature" value="UML_Nature"/>
-      </eAnnotations>
-      <ownedEnd xmi:type="uml:Property" xmi:id="_9QmAAeabEeiE9KDw0vtNSg" name="collector" type="_eX7mYH_oEeiGQ_qU31K2fA" association="_9QjjwOabEeiE9KDw0vtNSg"/>
-      <ownedEnd xmi:type="uml:Property" xmi:id="_9Qkx4uabEeiE9KDw0vtNSg" name="position" type="_9_QBULW9Eeix7r8U1ZxtVA" aggregation="composite" association="_9QjjwOabEeiE9KDw0vtNSg">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9QlY8OabEeiE9KDw0vtNSg"/>
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9QmAAOabEeiE9KDw0vtNSg" value="1"/>
-      </ownedEnd>
-    </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_Du7ZUOc0EeiE9KDw0vtNSg" name="Harvest">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_-sVMsOc0EeiE9KDw0vtNSg" name="nPail">
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
@@ -347,12 +323,6 @@
       <ownedAttribute xmi:type="uml:Property" xmi:id="_1ovMUCC7EemyTKt2ez43LQ" name="status">
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
       </ownedAttribute>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Association" xmi:id="_8K7G8CC7EemyTKt2ez43LQ" visibility="private" memberEnd="_8LFfACC7EemyTKt2ez43LQ _8LGGESC7EemyTKt2ez43LQ">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8K9jMCC7EemyTKt2ez43LQ" source="org.eclipse.papyrus">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8K9jMSC7EemyTKt2ez43LQ" key="nature" value="UML_Nature"/>
-      </eAnnotations>
-      <ownedEnd xmi:type="uml:Property" xmi:id="_8LGGESC7EemyTKt2ez43LQ" name="collector" type="_eX7mYH_oEeiGQ_qU31K2fA" association="_8K7G8CC7EemyTKt2ez43LQ"/>
     </packagedElement>
   </packagedElement>
   <packagedElement xmi:type="uml:Package" xmi:id="_Tkn6sFLLEei-ps2IrsePSA" name="Behavior">

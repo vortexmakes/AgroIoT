@@ -4109,43 +4109,6 @@
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_5tA6oLW-Eeix7r8U1ZxtVA" id="(0.594059405940594,0.0)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_5tA6obW-Eeix7r8U1ZxtVA" id="(0.594059405940594,1.0)"/>
     </edges>
-    <edges xmi:type="notation:Connector" xmi:id="_BCLKULW_Eeix7r8U1ZxtVA" type="Association_Edge" source="_eX7mYX_oEeiGQ_qU31K2fA" target="_p8RlwbW-Eeix7r8U1ZxtVA" routing="Rectilinear">
-      <children xmi:type="notation:DecorationNode" xmi:id="_BCLKU7W_Eeix7r8U1ZxtVA" visible="false" type="Association_StereotypeLabel">
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_WxyRYLW_Eeix7r8U1ZxtVA" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_BCLKVLW_Eeix7r8U1ZxtVA" y="-20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_BCLKVbW_Eeix7r8U1ZxtVA" visible="false" type="Association_NameLabel">
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_WyNIILW_Eeix7r8U1ZxtVA" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_BCLKVrW_Eeix7r8U1ZxtVA" y="20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_BCLKV7W_Eeix7r8U1ZxtVA" visible="false" type="Association_TargetRoleLabel">
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_WykUgLW_Eeix7r8U1ZxtVA" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_BCLKWLW_Eeix7r8U1ZxtVA" x="12" y="-20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_BCLKWbW_Eeix7r8U1ZxtVA" type="Association_SourceRoleLabel">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8LR5UOdBEeiE9KDw0vtNSg" source="PapyrusCSSForceValue">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8LR5UedBEeiE9KDw0vtNSg" key="visible" value="true"/>
-        </eAnnotations>
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_WzAZYLW_Eeix7r8U1ZxtVA" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_BCLKWrW_Eeix7r8U1ZxtVA" x="-32" y="7"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_BCLKW7W_Eeix7r8U1ZxtVA" visible="false" type="Association_SourceMultiplicityLabel">
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_Wze6gLW_Eeix7r8U1ZxtVA" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_BCLKXLW_Eeix7r8U1ZxtVA" x="12" y="20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_BCLKXbW_Eeix7r8U1ZxtVA" visible="false" type="Association_TargetMultiplicityLabel">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AUApQOdCEeiE9KDw0vtNSg" source="PapyrusCSSForceValue">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AUApQedCEeiE9KDw0vtNSg" key="visible" value="true"/>
-        </eAnnotations>
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_Wz_Q0LW_Eeix7r8U1ZxtVA" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_BCLKXrW_Eeix7r8U1ZxtVA" x="-9" y="-13"/>
-      </children>
-      <styles xmi:type="notation:FontStyle" xmi:id="_BCLKUbW_Eeix7r8U1ZxtVA"/>
-      <element xmi:type="uml:Association" href="AgroIoT.uml#_BBcKgLW_Eeix7r8U1ZxtVA"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BCLKUrW_Eeix7r8U1ZxtVA" points="[961, 80, -643984, -643984]$[1000, 80, -643984, -643984]$[1000, 160, -643984, -643984]$[1060, 160, -643984, -643984]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BDWPALW_Eeix7r8U1ZxtVA" id="(1.0,0.6557377049180327)"/>
-      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BDWPAbW_Eeix7r8U1ZxtVA" id="(0.0,0.32786885245901637)"/>
-    </edges>
     <edges xmi:type="notation:Connector" xmi:id="_hqVIQLW_Eeix7r8U1ZxtVA" type="Association_Edge" source="_KwuXgJ77EeiH_JeYeCwMag" target="_9_QBUbW9Eeix7r8U1ZxtVA" routing="Rectilinear">
       <children xmi:type="notation:DecorationNode" xmi:id="_hqWWYLW_Eeix7r8U1ZxtVA" visible="false" type="Association_StereotypeLabel">
         <styles xmi:type="notation:BooleanValueStyle" xmi:id="_jlQj4LW_Eeix7r8U1ZxtVA" name="IS_UPDATED_POSITION" booleanValue="true"/>
@@ -4379,37 +4342,6 @@
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_DXSm0OEdEeiE9KDw0vtNSg" id="(0.5970149253731343,1.0)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_DXSm0eEdEeiE9KDw0vtNSg" id="(0.1652892561983471,0.0)"/>
     </edges>
-    <edges xmi:type="notation:Connector" xmi:id="_9RSjkOabEeiE9KDw0vtNSg" type="Association_Edge" source="_eX7mYX_oEeiGQ_qU31K2fA" target="_9_QBUbW9Eeix7r8U1ZxtVA">
-      <children xmi:type="notation:DecorationNode" xmi:id="_9RTKoOabEeiE9KDw0vtNSg" visible="false" type="Association_StereotypeLabel">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_9RTKoeabEeiE9KDw0vtNSg" y="-20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_9RTKouabEeiE9KDw0vtNSg" type="Association_NameLabel">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_rnQGUOdBEeiE9KDw0vtNSg" source="PapyrusCSSForceValue">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_rnQGUedBEeiE9KDw0vtNSg" key="visible" value="true"/>
-        </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_9RTKo-abEeiE9KDw0vtNSg" y="20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_9RTKpOabEeiE9KDw0vtNSg" visible="false" type="Association_TargetRoleLabel">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_9RTKpeabEeiE9KDw0vtNSg" y="-20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_9RTKpuabEeiE9KDw0vtNSg" type="Association_SourceRoleLabel">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-Dy6IOdBEeiE9KDw0vtNSg" source="PapyrusCSSForceValue">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-Dy6IedBEeiE9KDw0vtNSg" key="visible" value="true"/>
-        </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_9RTKp-abEeiE9KDw0vtNSg" x="-17" y="7"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_9RTKqOabEeiE9KDw0vtNSg" visible="false" type="Association_SourceMultiplicityLabel">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_9RTKqeabEeiE9KDw0vtNSg" y="20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_9RTKquabEeiE9KDw0vtNSg" visible="false" type="Association_TargetMultiplicityLabel">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_9RTKq-abEeiE9KDw0vtNSg" y="-20"/>
-      </children>
-      <styles xmi:type="notation:FontStyle" xmi:id="_9RSjkeabEeiE9KDw0vtNSg"/>
-      <element xmi:type="uml:Association" href="AgroIoT.uml#_9QjjwOabEeiE9KDw0vtNSg"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_9RSjkuabEeiE9KDw0vtNSg" points="[961, 60, -643984, -643984]$[1060, 60, -643984, -643984]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_9SmyMOabEeiE9KDw0vtNSg" id="(1.0,0.32786885245901637)"/>
-      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_9SmyMeabEeiE9KDw0vtNSg" id="(0.0,0.32786885245901637)"/>
-    </edges>
     <edges xmi:type="notation:Connector" xmi:id="_H0qfoOc0EeiE9KDw0vtNSg" type="Realization_Edge" source="_Du7ZUec0EeiE9KDw0vtNSg" target="_-oSYsLepEeiIpI7hu9VsYg" routing="Tree">
       <children xmi:type="notation:DecorationNode" xmi:id="_H0qfo-c0EeiE9KDw0vtNSg" type="Realization_StereotypeLabel">
         <styles xmi:type="notation:BooleanValueStyle" xmi:id="_LFIK0Oc0EeiE9KDw0vtNSg" name="IS_UPDATED_POSITION" booleanValue="true"/>
@@ -4546,43 +4478,6 @@
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_KKjG0hpWEemiTP14HmAPrg" points="[360, 40, -643984, -643984]$[360, -60, -643984, -643984]$[920, -60, -643984, -643984]$[920, -139, -643984, -643984]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_KMzJkBpWEemiTP14HmAPrg" id="(0.6,0.0)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_KMzwoBpWEemiTP14HmAPrg" id="(0.5673758865248227,1.0)"/>
-    </edges>
-    <edges xmi:type="notation:Connector" xmi:id="_8L_d8CC7EemyTKt2ez43LQ" type="Association_Edge" source="_eX7mYX_oEeiGQ_qU31K2fA" target="_ppCgICC7EemyTKt2ez43LQ" routing="Rectilinear">
-      <children xmi:type="notation:DecorationNode" xmi:id="_8MAFACC7EemyTKt2ez43LQ" visible="false" type="Association_StereotypeLabel">
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_-7GIgCC7EemyTKt2ez43LQ" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_8MAFASC7EemyTKt2ez43LQ" y="-20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_8MAsECC7EemyTKt2ez43LQ" visible="false" type="Association_NameLabel">
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_-8CjsCC7EemyTKt2ez43LQ" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_8MAsESC7EemyTKt2ez43LQ" y="20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_8MAsEiC7EemyTKt2ez43LQ" visible="false" type="Association_TargetRoleLabel">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_KpBIMCC8EemyTKt2ez43LQ" source="PapyrusCSSForceValue">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_KpBvQCC8EemyTKt2ez43LQ" key="visible" value="true"/>
-        </eAnnotations>
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_-9k0wCC7EemyTKt2ez43LQ" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_8MAsEyC7EemyTKt2ez43LQ" x="33" y="30"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_8MAsFCC7EemyTKt2ez43LQ" type="Association_SourceRoleLabel">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_eXOYMCC8EemyTKt2ez43LQ" source="PapyrusCSSForceValue">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_eXOYMSC8EemyTKt2ez43LQ" key="visible" value="true"/>
-        </eAnnotations>
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="_--974CC7EemyTKt2ez43LQ" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_8MAsFSC7EemyTKt2ez43LQ" x="-6" y="-61"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_8MAsFiC7EemyTKt2ez43LQ" visible="false" type="Association_SourceMultiplicityLabel">
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="__AF9QCC7EemyTKt2ez43LQ" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_8MAsFyC7EemyTKt2ez43LQ" x="72" y="20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_8MAsGCC7EemyTKt2ez43LQ" visible="false" type="Association_TargetMultiplicityLabel">
-        <styles xmi:type="notation:BooleanValueStyle" xmi:id="__BGC0CC7EemyTKt2ez43LQ" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_8MAsGSC7EemyTKt2ez43LQ" x="-33" y="-59"/>
-      </children>
-      <styles xmi:type="notation:FontStyle" xmi:id="_8L_d8SC7EemyTKt2ez43LQ"/>
-      <element xmi:type="uml:Association" href="AgroIoT.uml#_8K7G8CC7EemyTKt2ez43LQ"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_8L_d8iC7EemyTKt2ez43LQ" points="[900, 40, -643984, -643984]$[900, -100, -643984, -643984]$[800, -100, -643984, -643984]$[800, -259, -643984, -643984]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_8OexQCC7EemyTKt2ez43LQ" id="(0.49586776859504134,0.0)"/>
-      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_8OexQSC7EemyTKt2ez43LQ" id="(0.7453416149068323,1.0)"/>
     </edges>
   </notation:Diagram>
   <notation:Diagram xmi:id="_Pa_E0WG-EeiiAe1I9uyWIQ" type="PapyrusUMLStateMachineDiagram" name="MQTT" measurementUnit="Pixel">
