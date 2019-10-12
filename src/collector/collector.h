@@ -37,7 +37,7 @@ typedef struct Collector Collector;
 struct Collector
 {
     RKH_SMA_T base;
-    GStatus rawData;
+    GStatus status;
     Device *dev;
 };
 

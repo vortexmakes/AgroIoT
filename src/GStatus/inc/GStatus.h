@@ -39,9 +39,9 @@ typedef struct GStatus GStatus;
 struct GStatus
 {
     Geo position;
-    CBOX_STR dev;
-    IOStatus io;
-    BatChrStatus batChr;
+    CBOX_STR devData;
+    IOStatus ioStatus;
+    BatChrStatus batChrStatus;
 };
 
 /**

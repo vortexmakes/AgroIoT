@@ -4286,11 +4286,17 @@
         <styles xmi:type="notation:BooleanValueStyle" xmi:id="_NaETUOEdEeiE9KDw0vtNSg" name="IS_UPDATED_POSITION" booleanValue="true"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_4fhzE-EcEeiE9KDw0vtNSg" y="20"/>
       </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_4fhzFOEcEeiE9KDw0vtNSg" visible="false" type="Association_TargetRoleLabel">
+      <children xmi:type="notation:DecorationNode" xmi:id="_4fhzFOEcEeiE9KDw0vtNSg" type="Association_TargetRoleLabel">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xByHAO0ZEemy5J4rD5UCMQ" source="PapyrusCSSForceValue">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xByuEO0ZEemy5J4rD5UCMQ" key="visible" value="true"/>
+        </eAnnotations>
         <styles xmi:type="notation:BooleanValueStyle" xmi:id="_Na1vYOEdEeiE9KDw0vtNSg" name="IS_UPDATED_POSITION" booleanValue="true"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_4fhzFeEcEeiE9KDw0vtNSg" x="36" y="-20"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_4fhzFeEcEeiE9KDw0vtNSg" x="6" y="-29"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_4fiaIOEcEeiE9KDw0vtNSg" visible="false" type="Association_SourceRoleLabel">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vhQvcO0ZEemy5J4rD5UCMQ" source="PapyrusCSSForceValue">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vhRWgO0ZEemy5J4rD5UCMQ" key="visible" value="true"/>
+        </eAnnotations>
         <styles xmi:type="notation:BooleanValueStyle" xmi:id="_NbwVYOEdEeiE9KDw0vtNSg" name="IS_UPDATED_POSITION" booleanValue="true"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_4fiaIeEcEeiE9KDw0vtNSg" x="-36" y="20"/>
       </children>
@@ -4304,8 +4310,8 @@
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_4fhMAeEcEeiE9KDw0vtNSg"/>
       <element xmi:type="uml:Association" href="AgroIoT.uml#_4d73oOEcEeiE9KDw0vtNSg"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_4fhMAuEcEeiE9KDw0vtNSg" points="[1480, -139, -643984, -643984]$[1480, -60, -643984, -643984]$[1320, -60, -643984, -643984]$[1320, 40, -643984, -643984]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4iPv4OEcEeiE9KDw0vtNSg" id="(0.7407407407407407,1.0)"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_4fhMAuEcEeiE9KDw0vtNSg" points="[1460, -139, -643984, -643984]$[1460, -60, -643984, -643984]$[1320, -60, -643984, -643984]$[1320, 40, -643984, -643984]"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4iPv4OEcEeiE9KDw0vtNSg" id="(0.49382716049382713,1.0)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4iPv4eEcEeiE9KDw0vtNSg" id="(0.5673758865248227,0.0)"/>
     </edges>
     <edges xmi:type="notation:Connector" xmi:id="_DVYiUOEdEeiE9KDw0vtNSg" type="Association_Edge" source="_gupjkCCxEemyTKt2ez43LQ" target="_eX7mYX_oEeiGQ_qU31K2fA" routing="Rectilinear">

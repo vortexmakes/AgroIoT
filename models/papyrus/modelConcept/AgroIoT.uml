@@ -255,7 +255,7 @@
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4d9FwOEcEeiE9KDw0vtNSg" key="nature" value="UML_Nature"/>
       </eAnnotations>
       <ownedEnd xmi:type="uml:Property" xmi:id="_4d9FweEcEeiE9KDw0vtNSg" name="deviceserver" type="_5S9CYH_oEeiGQ_qU31K2fA" association="_4d73oOEcEeiE9KDw0vtNSg"/>
-      <ownedEnd xmi:type="uml:Property" xmi:id="_4d-T4OEcEeiE9KDw0vtNSg" name="cbox_str" type="_emBecOEcEeiE9KDw0vtNSg" aggregation="composite" association="_4d73oOEcEeiE9KDw0vtNSg"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_4d-T4OEcEeiE9KDw0vtNSg" name="rawData" type="_emBecOEcEeiE9KDw0vtNSg" aggregation="composite" association="_4d73oOEcEeiE9KDw0vtNSg"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_DUDsoOEdEeiE9KDw0vtNSg" memberEnd="_DUE6wOEdEeiE9KDw0vtNSg _DUFh0OEdEeiE9KDw0vtNSg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_DUETsOEdEeiE9KDw0vtNSg" source="org.eclipse.papyrus">
