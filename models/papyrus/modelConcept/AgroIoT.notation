@@ -3506,10 +3506,6 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_3NYUlOdEEeiE9KDw0vtNSg" y="15"/>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_3NYUledEEeiE9KDw0vtNSg" type="Class_AttributeCompartment">
-        <children xmi:type="notation:Shape" xmi:id="_BvP7YOdGEei_rN11x4-KBA" type="Property_ClassAttributeLabel">
-          <element xmi:type="uml:Property" href="AgroIoT.uml#_BtrOEOdGEei_rN11x4-KBA"/>
-          <layoutConstraint xmi:type="notation:Location" xmi:id="_BvP7YedGEei_rN11x4-KBA"/>
-        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_3NYUludEEeiE9KDw0vtNSg"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_3NYUl-dEEeiE9KDw0vtNSg"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_3NYUmOdEEeiE9KDw0vtNSg"/>
@@ -3528,7 +3524,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_3NY7qedEEeiE9KDw0vtNSg"/>
       </children>
       <element xmi:type="uml:Class" href="AgroIoT.uml#_3NWfYOdEEeiE9KDw0vtNSg"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_3NYUkedEEeiE9KDw0vtNSg" x="1400" y="440" width="181" height="41"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_3NYUkedEEeiE9KDw0vtNSg" x="1400" y="440" width="121" height="41"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_gupjkCCxEemyTKt2ez43LQ" type="Class_Shape">
       <children xmi:type="notation:DecorationNode" xmi:id="_guqKoCCxEemyTKt2ez43LQ" type="Class_NameLabel"/>
@@ -4405,7 +4401,7 @@
       <styles xmi:type="notation:FontStyle" xmi:id="_-iu8EedFEei_rN11x4-KBA"/>
       <element xmi:type="uml:Realization" href="AgroIoT.uml#_-icoMOdFEei_rN11x4-KBA"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_-iu8EudFEei_rN11x4-KBA" points="[1480, 440, -643984, -643984]$[1480, 420, -643984, -643984]$[1100, 420, -643984, -643984]$[1100, 381, -643984, -643984]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_-mHAMOdFEei_rN11x4-KBA" id="(0.4419889502762431,0.0)"/>
+      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_-mHAMOdFEei_rN11x4-KBA" id="(0.6611570247933884,0.0)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_-mHAMedFEei_rN11x4-KBA" id="(0.39603960396039606,1.0)"/>
     </edges>
     <edges xmi:type="notation:Connector" xmi:id="_adrEQOgHEei_rN11x4-KBA" type="Association_Edge" source="_5S9CYX_oEeiGQ_qU31K2fA" target="_-oSYsLepEeiIpI7hu9VsYg" routing="Rectilinear">

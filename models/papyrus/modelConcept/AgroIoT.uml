@@ -293,12 +293,7 @@
     <packagedElement xmi:type="uml:Realization" xmi:id="_hYs6kOc0EeiE9KDw0vtNSg" client="_dhZR0Oc0EeiE9KDw0vtNSg" supplier="_VnGd0LeqEeiIpI7hu9VsYg"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_iI0VoOdEEeiE9KDw0vtNSg" name="DevNull"/>
     <packagedElement xmi:type="uml:Realization" xmi:id="_q8TkgOdEEeiE9KDw0vtNSg" client="_iI0VoOdEEeiE9KDw0vtNSg" supplier="_-oP8cLepEeiIpI7hu9VsYg"/>
-    <packagedElement xmi:type="uml:Class" xmi:id="_3NWfYOdEEeiE9KDw0vtNSg" name="DevNullJobCond">
-      <ownedAttribute xmi:type="uml:Property" xmi:id="_BtrOEOdGEei_rN11x4-KBA" name="matchInput">
-        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
-        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_PSkWcOdGEei_rN11x4-KBA" value="3"/>
-      </ownedAttribute>
-    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_3NWfYOdEEeiE9KDw0vtNSg" name="DevNullJobCond"/>
     <packagedElement xmi:type="uml:Realization" xmi:id="_-icoMOdFEei_rN11x4-KBA" client="_3NWfYOdEEeiE9KDw0vtNSg" supplier="_VnGd0LeqEeiIpI7hu9VsYg"/>
     <packagedElement xmi:type="uml:Association" xmi:id="_abq5IOgHEei_rN11x4-KBA" visibility="protected" memberEnd="_ab90EOgHEei_rN11x4-KBA _acAQUOgHEei_rN11x4-KBA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ab7X0OgHEei_rN11x4-KBA" source="org.eclipse.papyrus">
@@ -691,7 +686,7 @@
           </expr>
         </when>
       </packagedElement>
-      <packagedElement xmi:type="uml:Signal" xmi:id="_nMlNwONPEeiE9KDw0vtNSg" name="EvtGeoStamp">
+      <packagedElement xmi:type="uml:Signal" xmi:id="_nMlNwONPEeiE9KDw0vtNSg" name="EvtGeo">
         <generalization xmi:type="uml:Generalization" xmi:id="_7dB48BglEemOl_Rcwx2UMg" general="_i4ZskBglEemOl_Rcwx2UMg"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="_SXFz4OPDEeiGbY0CU5P6pg" name="position" type="_9_QBULW9Eeix7r8U1ZxtVA"/>
       </packagedElement>
