@@ -1,0 +1,11 @@
+GeneratorModel for yakindu::c::rkh {
+
+	statechart FsMgr {
+
+		feature Outlet {
+			targetProject = "AgroIot"
+			targetFolder = "src-gen-FsMgr"
+			libraryTargetFolder = "src-gen-FsMgr"
+		}
+	}
+}

@@ -17,8 +17,10 @@
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
 #include "rkh.h"
+#include "rkhfwk_pubsub.h"
 #include "dOut.h"
 #include "cubemx.h"
+#include "bsp.h"
 #include "events.h"
 #include "signals.h"
 #include "topic.h"

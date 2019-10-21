@@ -80,6 +80,9 @@ signals_publishSymbols(void)
 	RKH_TR_FWK_SIG(evTerminate);
     RKH_TR_FWK_SIG(evDevData);
     RKH_TR_FWK_SIG(evSyncTout);
+    RKH_TR_FWK_SIG(evOutChg);
+    RKH_TR_FWK_SIG(evDiskConnected);
+    RKH_TR_FWK_SIG(evDiskDisconnected);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>AgroIoT</name>
+=======
+	<name>AgroIot</name>
+>>>>>>> issue-fsmgr
 	<comment></comment>
 	<projects>
 	</projects>
@@ -11,14 +15,23 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
-			<triggers>clean,full,incremental,</triggers>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<triggers>full,incremental,</triggers>
 			<arguments>
+				<dictionary>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/org.eclipse.cdt.managedbuilder.core.genmakebuilder.launch</value>
+				</dictionary>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
 			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.yakindu.sct.builder.SCTBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -28,5 +41,28 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
+		<nature>org.yakindu.sct.builder.SCTNature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>copy_PARENT</name>
+			<value>$%7BPARENT-1-ECLIPSE_HOME%7D/vortex/trenes/dimba/models</value>
+		</variable>
+		<variable>
+			<name>copy_PARENT1</name>
+			<value>$%7BPARENT-2-copy_PARENT%7D</value>
+		</variable>
+		<variable>
+			<name>copy_PARENT12</name>
+			<value>$%7BPARENT-1-copy_PARENT1%7D</value>
+		</variable>
+		<variable>
+			<name>copy_PROJECT_LOC</name>
+			<value>$%7Bcopy_PARENT%7D/yakindu</value>
+		</variable>
+		<variable>
+			<name>copy_PROJECT_LOC1</name>
+			<value>$%7Bcopy_PROJECT_LOC%7D</value>
+		</variable>
+	</variableList>
 </projectDescription>

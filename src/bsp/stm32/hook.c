@@ -73,7 +73,8 @@ void
 rkh_hook_idle(void)             /* called within critical section */
 {
 	RKH_ENA_INTERRUPT();
-    RKH_TRC_FLUSH();
+    MX_USB_HOST_Process();
+	RKH_TRC_FLUSH();
 }
 
 /* ------------------------------ File footer ------------------------------ */

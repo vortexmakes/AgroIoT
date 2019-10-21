@@ -122,6 +122,8 @@ bsp_init(int argc, char *argv[])
     MX_CAN1_Init();
     MX_ADC1_Init();
     MX_SPI3_Init();
+    MX_FATFS_Init();
+    MX_USB_HOST_Init();
 
     modPwr_init();
     dIn_init();

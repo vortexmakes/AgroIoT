@@ -17,6 +17,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "cubemx.h"
+#include "bsp.h"
 #include "rkhfwk_pubsub.h"
 #include "dIn.h"
 #include "ioChg.h"
