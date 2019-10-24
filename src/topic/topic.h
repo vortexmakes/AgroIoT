@@ -38,7 +38,7 @@ enum Topics
 {
     tcpConnection,
     gsmURC,
-    deviceStatus,
+    status
 };
 
 /* ------------------------------- Data types ------------------------------ */
