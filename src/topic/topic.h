@@ -37,7 +37,7 @@ typedef enum Topics Topics;
 enum Topics
 {
     tcpConnection,
-    gsmURC,
+    modURC,
     status
 };
 

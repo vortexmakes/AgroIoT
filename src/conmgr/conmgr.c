@@ -494,7 +494,7 @@ init(ConMgr *const me, RKH_EVT_T *pe)
 	(void)pe;
 
     topic_subscribe(tcpConnection, me);
-    topic_subscribe(gsmURC, me);
+    topic_subscribe(modURC, me);
 
     RKH_TR_FWK_AO(me);
 
