@@ -82,9 +82,9 @@ struct DeviceServer
     RKH_TMR_T timer;    
 };
 
-RKH_SMA_CREATE(DeviceServer, deviceServer, 3, HCAL, 
+RKH_SMA_CREATE(DeviceServer, deviceMgr, 3, HCAL, 
                              &DevSvr_Inactive, init, NULL);
-RKH_SMA_DEF_PTR(deviceServer);
+RKH_SMA_DEF_PTR(deviceMgr);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */

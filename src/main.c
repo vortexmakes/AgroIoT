@@ -87,7 +87,7 @@ setupTraceFilters(void)
     //RKH_FILTER_OFF_SMA(modMgr);
     RKH_FILTER_OFF_SMA(conMgr);
 	//RKH_FILTER_OFF_SMA(geoMgr);
-	//RKH_FILTER_OFF_SMA(deviceServer);
+	//RKH_FILTER_OFF_SMA(deviceMgr);
 	//RKH_FILTER_OFF_SMA(commMgr);
 	RKH_FILTER_OFF_ALL_SIGNALS();
 }
@@ -126,12 +126,12 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(conMgr, ConMgr_qsto, CONMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(modMgr, ModMgr_qsto, MODMGR_QSTO_SIZE, 0, 0);
 	RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
-    RKH_SMA_ACTIVATE(deviceServer, DevSvr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(deviceMgr, DevSvr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
 
     RKH_SMA_ACTIVATE(commMgr, CommMgr_qsto, COMMMGR_QSTO_SIZE, 0, 0);
 
     RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);
-	RKH_SMA_POST_FIFO(deviceServer, &e_Open, 0);
+	RKH_SMA_POST_FIFO(deviceMgr, &e_Open, 0);
 
     rkh_fwk_enter();
 
