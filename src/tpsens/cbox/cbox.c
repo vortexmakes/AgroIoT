@@ -88,7 +88,7 @@ ps_on_stop( void )
 void 
 ps_on_endcycle( void )
 {
-    topic_publish(deviceStatus, &endOfCycle, &tpSens);
+    topic_publish(status, &endOfCycle, &tpSens);
 }
 
 CBOX_STR *

@@ -101,7 +101,7 @@ init(DeviceServer *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    topic_subscribe(deviceStatus, me);
+    topic_subscribe(status, me);
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->timer);
@@ -152,7 +152,7 @@ publishData(DeviceServer *const me, RKH_EVT_T *pe)
 
     sensorData.cbox = *cbox_getInstance();
 
-    topic_publish(deviceStatus, &sensorData, me);
+    topic_publish(status, &sensorData, me);
 }
 
 /* ............................. Entry actions ............................. */
