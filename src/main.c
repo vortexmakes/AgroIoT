@@ -27,7 +27,7 @@
 #include "modmgr.h"
 #include "geoMgr.h"
 #include "ioChg.h"
-#include "DeviceServer.h"
+#include "DeviceMgr.h"
 #include "sim5320parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"

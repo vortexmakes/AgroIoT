@@ -1,5 +1,5 @@
 /**
- *  \file       DeviceServer.h
+ *  \file       DeviceMgr.h
  *  \brief      TpSensor Externals Devices Server
  */
 

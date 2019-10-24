@@ -1,5 +1,5 @@
 /**
- *  \file       DeviceServer.c
+ *  \file       DeviceMgr.c
  *  \brief      TpSensor Externals Devices Server
  */
 
@@ -24,31 +24,31 @@
 #include "signals.h"
 #include "events.h"
 #include "topic.h"
-#include "DeviceServer.h"
+#include "DeviceMgr.h"
 #include "ps.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
-typedef struct DeviceServer DeviceServer;
+typedef struct DeviceMgr DeviceMgr;
 
 /* ................... Declares states and pseudostates .................... */
 RKH_DCLR_BASIC_STATE DevSvr_Inactive, DevSvr_inCycle, DevSvr_Idle; 
 RKH_DCLR_COMP_STATE DevSvr_Active; 
                     
 /* ........................ Declares initial action ........................ */
-static void init(DeviceServer *const me, RKH_EVT_T *pe);
+static void init(DeviceMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ Declares effect actions ........................ */
-static void startPs(DeviceServer *const me, RKH_EVT_T *pe);
-static void stopPs(DeviceServer *const me, RKH_EVT_T *pe);
-static void restartPs(DeviceServer *const me, RKH_EVT_T *pe);
-static void publishData(DeviceServer *const me, RKH_EVT_T *pe);
+static void startPs(DeviceMgr *const me, RKH_EVT_T *pe);
+static void stopPs(DeviceMgr *const me, RKH_EVT_T *pe);
+static void restartPs(DeviceMgr *const me, RKH_EVT_T *pe);
+static void publishData(DeviceMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
-static void idle_entry(DeviceServer *const me);
+static void idle_entry(DeviceMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
-static void idle_exit(DeviceServer *const me);
+static void idle_exit(DeviceMgr *const me);
 
 /* ............................ Declares guards ............................ */
 
@@ -76,13 +76,13 @@ RKH_CREATE_TRANS_TABLE(DevSvr_Idle)
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
-struct DeviceServer
+struct DeviceMgr
 {
     RKH_SMA_T ao;       /* Base structure */
     RKH_TMR_T timer;    
 };
 
-RKH_SMA_CREATE(DeviceServer, deviceMgr, 3, HCAL, 
+RKH_SMA_CREATE(DeviceMgr, deviceMgr, 3, HCAL, 
                              &DevSvr_Inactive, init, NULL);
 RKH_SMA_DEF_PTR(deviceMgr);
 
@@ -97,7 +97,7 @@ static SensorData sensorData;
 /* ---------------------------- Local functions ---------------------------- */
 /* ............................ Initial action ............................. */
 static void
-init(DeviceServer *const me, RKH_EVT_T *pe)
+init(DeviceMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
@@ -120,7 +120,7 @@ init(DeviceServer *const me, RKH_EVT_T *pe)
 
 /* ............................ Effect actions ............................. */
 static void
-startPs(DeviceServer *const me, RKH_EVT_T *pe)
+startPs(DeviceMgr *const me, RKH_EVT_T *pe)
 {
     (void)me;
     (void)pe;
@@ -129,7 +129,7 @@ startPs(DeviceServer *const me, RKH_EVT_T *pe)
 }
 
 static void
-restartPs(DeviceServer *const me, RKH_EVT_T *pe)
+restartPs(DeviceMgr *const me, RKH_EVT_T *pe)
 {
     (void)me;
     (void)pe;
@@ -138,14 +138,14 @@ restartPs(DeviceServer *const me, RKH_EVT_T *pe)
 }
 
 static void
-stopPs(DeviceServer *const me, RKH_EVT_T *pe)
+stopPs(DeviceMgr *const me, RKH_EVT_T *pe)
 {
     (void)me;
     (void)pe;
 }
 
 static void
-publishData(DeviceServer *const me, RKH_EVT_T *pe)
+publishData(DeviceMgr *const me, RKH_EVT_T *pe)
 {
     (void)me;
     (void)pe;
@@ -157,14 +157,14 @@ publishData(DeviceServer *const me, RKH_EVT_T *pe)
 
 /* ............................. Entry actions ............................. */
 static void
-idle_entry(DeviceServer *const me)
+idle_entry(DeviceMgr *const me)
 {
     RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), DEVICE_CYCLE_TIME);
 }
 
 /* ............................. Exit actions .............................. */
 static void
-idle_exit(DeviceServer *const me)
+idle_exit(DeviceMgr *const me)
 {
     rkh_tmr_stop(&me->timer);
 }
