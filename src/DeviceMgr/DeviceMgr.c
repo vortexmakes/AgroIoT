@@ -10,7 +10,8 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario BaliÃ±a db@vortexmakes.com
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
