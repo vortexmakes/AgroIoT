@@ -62,7 +62,7 @@ static RKH_EVT_T *CommMgr_qsto[COMMMGR_QSTO_SIZE];
 static RKH_EVT_T *ConMgr_qsto[CONMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
 static RKH_EVT_T *GeoMgr_qsto[GEOMGR_QSTO_SIZE];
-static RKH_EVT_T *DevSvr_qsto[DEVSRV_QSTO_SIZE];
+static RKH_EVT_T *DeviceMgr_qsto[DEVSRV_QSTO_SIZE];
 static rui8_t evPool0Sto[SIZEOF_EP0STO], 
               evPool1Sto[SIZEOF_EP1STO], 
               evPool2Sto[SIZEOF_EP2STO];
@@ -126,7 +126,7 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(conMgr, ConMgr_qsto, CONMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(modMgr, ModMgr_qsto, MODMGR_QSTO_SIZE, 0, 0);
 	RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
-    RKH_SMA_ACTIVATE(deviceMgr, DevSvr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(deviceMgr, DeviceMgr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
 
     RKH_SMA_ACTIVATE(commMgr, CommMgr_qsto, COMMMGR_QSTO_SIZE, 0, 0);
 

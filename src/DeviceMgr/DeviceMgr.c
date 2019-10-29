@@ -32,8 +32,8 @@
 typedef struct DeviceMgr DeviceMgr;
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE DevSvr_Inactive, DevSvr_inCycle, DevSvr_Idle; 
-RKH_DCLR_COMP_STATE DevSvr_Active; 
+RKH_DCLR_BASIC_STATE DeviceMgr_Inactive, DeviceMgr_inCycle, DeviceMgr_Idle; 
+RKH_DCLR_COMP_STATE DeviceMgr_Active; 
                     
 /* ........................ Declares initial action ........................ */
 static void init(DeviceMgr *const me, RKH_EVT_T *pe);
@@ -53,26 +53,26 @@ static void idle_exit(DeviceMgr *const me);
 /* ............................ Declares guards ............................ */
 
 /* ........................ States and pseudostates ........................ */
-RKH_CREATE_BASIC_STATE(DevSvr_Inactive, NULL, NULL, RKH_ROOT, NULL);
-RKH_CREATE_TRANS_TABLE(DevSvr_Inactive)
-    RKH_TRREG(evOpen, NULL, startPs, &DevSvr_Active),
+RKH_CREATE_BASIC_STATE(DeviceMgr_Inactive, NULL, NULL, RKH_ROOT, NULL);
+RKH_CREATE_TRANS_TABLE(DeviceMgr_Inactive)
+    RKH_TRREG(evOpen, NULL, startPs, &DeviceMgr_Active),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_COMP_REGION_STATE(DevSvr_Active, NULL, NULL, RKH_ROOT, 
-                             &DevSvr_inCycle, NULL,
+RKH_CREATE_COMP_REGION_STATE(DeviceMgr_Active, NULL, NULL, RKH_ROOT, 
+                             &DeviceMgr_inCycle, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_TRANS_TABLE(DevSvr_Active)
-    RKH_TRREG(evClose, NULL, stopPs, &DevSvr_Inactive),
+RKH_CREATE_TRANS_TABLE(DeviceMgr_Active)
+    RKH_TRREG(evClose, NULL, stopPs, &DeviceMgr_Inactive),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(DevSvr_inCycle, NULL, NULL, &DevSvr_Active, NULL);
-RKH_CREATE_TRANS_TABLE(DevSvr_inCycle)
-    RKH_TRREG(evEndOfCycle, NULL, publishData, &DevSvr_Idle),
+RKH_CREATE_BASIC_STATE(DeviceMgr_inCycle, NULL, NULL, &DeviceMgr_Active, NULL);
+RKH_CREATE_TRANS_TABLE(DeviceMgr_inCycle)
+    RKH_TRREG(evEndOfCycle, NULL, publishData, &DeviceMgr_Idle),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(DevSvr_Idle, idle_entry, idle_exit, &DevSvr_Active, NULL);
-RKH_CREATE_TRANS_TABLE(DevSvr_Idle)
-    RKH_TRREG(evTimeout,     NULL, restartPs, &DevSvr_inCycle),
+RKH_CREATE_BASIC_STATE(DeviceMgr_Idle, idle_entry, idle_exit, &DeviceMgr_Active, NULL);
+RKH_CREATE_TRANS_TABLE(DeviceMgr_Idle)
+    RKH_TRREG(evTimeout,     NULL, restartPs, &DeviceMgr_inCycle),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
@@ -83,7 +83,7 @@ struct DeviceMgr
 };
 
 RKH_SMA_CREATE(DeviceMgr, deviceMgr, 3, HCAL, 
-                             &DevSvr_Inactive, init, NULL);
+                             &DeviceMgr_Inactive, init, NULL);
 RKH_SMA_DEF_PTR(deviceMgr);
 
 /* ------------------------------- Constants ------------------------------- */
@@ -107,10 +107,10 @@ init(DeviceMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_TIMER(&me->timer);
 
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
-    RKH_TR_FWK_STATE(me, &DevSvr_Inactive);
-    RKH_TR_FWK_STATE(me, &DevSvr_Active);
-    RKH_TR_FWK_STATE(me, &DevSvr_Idle);
-    RKH_TR_FWK_STATE(me, &DevSvr_inCycle);
+    RKH_TR_FWK_STATE(me, &DeviceMgr_Inactive);
+    RKH_TR_FWK_STATE(me, &DeviceMgr_Active);
+    RKH_TR_FWK_STATE(me, &DeviceMgr_Idle);
+    RKH_TR_FWK_STATE(me, &DeviceMgr_inCycle);
 
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
 
