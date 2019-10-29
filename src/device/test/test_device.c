@@ -58,6 +58,7 @@ struct EvtDevAData
 static DevAJobCond devAJobCond;
 static DevA devA;               /* It must be statically instantiated in a...*/
                                 /* ...concrete class (c source file) */
+static Device *devAObj;
 static EvtDevAData evtDevAData;
 static Collector collectorActObj;
 Collector *const collector = &collectorActObj;
@@ -145,7 +146,7 @@ getDevice(int devId)
 
     if (devId == DEVA)
     {
-        dev = (Device *)&devA;
+        dev = (Device *)devAObj;
     }
     else
     {
@@ -203,15 +204,15 @@ test_FailsWrongArgs(void)
 void
 test_MakesAnEventFromReceivedRawData(void)
 {
-    Device *devAObj, *dev;
+    Device *dev;
     RKH_EVT_T *evt;
     CBOX_STR rawData;
 
     devAObj = DevA_ctor(2, 8, 3);   /* from main() */
-	rawData.a.x = DEVA;             /* from prosens */
+	rawData.a.x = DEVA;             /* from ps callback */
 	rawData.a.y = 4;
 	rawData.a.z = 5;
-    dev = getDevice(rawData.a.x);   /* from prosens */
+    dev = getDevice(rawData.a.x);
     TEST_ASSERT_NOT_NULL(dev);
 
     evt = device_makeEvt(dev, &rawData);
@@ -221,15 +222,16 @@ test_MakesAnEventFromReceivedRawData(void)
 void
 test_UpdateDeviceAttributes(void)
 {
-    Device *devAObj, *dev;          /* collector attribute */
+    Device *dev;                    /* collector attribute */
     RKH_EVT_T *evt;                 /* transition event */
 
     devAObj = DevA_ctor(2, 8, 3);   /* from main() */
-    evtDevAData.base.dev = devAObj; /* from prosens */
+    evtDevAData.base.dev = devAObj; /* from ps callback */
     evtDevAData.param.x = 4;
     evtDevAData.param.y = 5;
-    evt = (RKH_EVT_T *)&evtDevAData;
-    dev = collector->dev = ((EvtDevData *)evt)->dev; /* from updateDevData() */
+                                    /* from collector effect action */
+    evt = (RKH_EVT_T *)&evtDevAData;/* effect action argument */
+    dev = collector->dev = ((EvtDevData *)evt)->dev; /* connected device */
     TEST_ASSERT_NOT_NULL(dev);
 
     device_update(dev, evt);
@@ -246,12 +248,12 @@ test_TestJobCondition(void)
     DevA *devAObj;
     int result;
 
-    dev = DevA_ctor(2, 8, 3);
+    dev = DevA_ctor(2, 8, 3);   /* from main() */
     devAObj = (DevA *)dev;
-    devAObj->x = 4;
+    devAObj->x = 4;             /* update device attributes */
     devAObj->y = 8;
 
-    result = device_test(dev);
+    result = device_test(dev);  /* from collector effect action */
     TEST_ASSERT_EQUAL(1, result);
 
     devAObj->x = 1;
@@ -273,9 +275,9 @@ test_UpdateRawData(void)
     Device *dev;
     DevA *devAObj;
 
-    dev = DevA_ctor(2, 8, 3);
+    dev = DevA_ctor(2, 8, 3);   /* from main() */
     devAObj = (DevA *)dev;
-    devAObj->x = 4;
+    devAObj->x = 4;             /* update device attributes */
     devAObj->y = 8;
     collector->status.devData.a.y = collector->status.devData.a.z = 0;
 
