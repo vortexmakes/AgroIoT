@@ -32,7 +32,7 @@
 typedef struct DeviceMgr DeviceMgr;
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE DeviceMgr_Inactive, DeviceMgr_inCycle, DeviceMgr_Idle; 
+RKH_DCLR_BASIC_STATE DeviceMgr_Inactive, DeviceMgr_InCycle, DeviceMgr_Idle; 
 RKH_DCLR_COMP_STATE DeviceMgr_Active; 
                     
 /* ........................ Declares initial action ........................ */
@@ -42,13 +42,12 @@ static void init(DeviceMgr *const me, RKH_EVT_T *pe);
 static void startPs(DeviceMgr *const me, RKH_EVT_T *pe);
 static void stopPs(DeviceMgr *const me, RKH_EVT_T *pe);
 static void restartPs(DeviceMgr *const me, RKH_EVT_T *pe);
-static void publishData(DeviceMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
-static void idle_entry(DeviceMgr *const me);
+static void nIdle(DeviceMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
-static void idle_exit(DeviceMgr *const me);
+static void xIdle(DeviceMgr *const me);
 
 /* ............................ Declares guards ............................ */
 
@@ -59,20 +58,20 @@ RKH_CREATE_TRANS_TABLE(DeviceMgr_Inactive)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_COMP_REGION_STATE(DeviceMgr_Active, NULL, NULL, RKH_ROOT, 
-                             &DeviceMgr_inCycle, NULL,
+                             &DeviceMgr_InCycle, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(DeviceMgr_Active)
     RKH_TRREG(evClose, NULL, stopPs, &DeviceMgr_Inactive),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(DeviceMgr_inCycle, NULL, NULL, &DeviceMgr_Active, NULL);
-RKH_CREATE_TRANS_TABLE(DeviceMgr_inCycle)
-    RKH_TRREG(evEndOfCycle, NULL, publishData, &DeviceMgr_Idle),
+RKH_CREATE_BASIC_STATE(DeviceMgr_InCycle, NULL, NULL, &DeviceMgr_Active, NULL);
+RKH_CREATE_TRANS_TABLE(DeviceMgr_InCycle)
+    RKH_TRREG(evEndOfCycle, NULL, NULL, &DeviceMgr_Idle),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(DeviceMgr_Idle, idle_entry, idle_exit, &DeviceMgr_Active, NULL);
+RKH_CREATE_BASIC_STATE(DeviceMgr_Idle, nIdle, xIdle, &DeviceMgr_Active, NULL);
 RKH_CREATE_TRANS_TABLE(DeviceMgr_Idle)
-    RKH_TRREG(evTimeout,     NULL, restartPs, &DeviceMgr_inCycle),
+    RKH_TRREG(evTimeout, NULL, restartPs, &DeviceMgr_InCycle),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
@@ -82,16 +81,14 @@ struct DeviceMgr
     RKH_TMR_T timer;    
 };
 
-RKH_SMA_CREATE(DeviceMgr, deviceMgr, 3, HCAL, 
-                             &DeviceMgr_Inactive, init, NULL);
+RKH_SMA_CREATE(DeviceMgr, deviceMgr, 3, HCAL, &DeviceMgr_Inactive, init, NULL);
 RKH_SMA_DEF_PTR(deviceMgr);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_STATIC_EVENT(e_tout, evTimeout);
-static SensorData sensorData;
+static RKH_STATIC_EVENT(evTimeoutObj, evTimeout);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -101,20 +98,15 @@ init(DeviceMgr *const me, RKH_EVT_T *pe)
 {
 	(void)pe;
 
-    topic_subscribe(status, me);
-
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->timer);
-
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
     RKH_TR_FWK_STATE(me, &DeviceMgr_Inactive);
     RKH_TR_FWK_STATE(me, &DeviceMgr_Active);
     RKH_TR_FWK_STATE(me, &DeviceMgr_Idle);
-    RKH_TR_FWK_STATE(me, &DeviceMgr_inCycle);
+    RKH_TR_FWK_STATE(me, &DeviceMgr_InCycle);
 
-    RKH_TMR_INIT(&me->timer, &e_tout, NULL);
-
-    RKH_SET_STATIC_EVENT(&sensorData, evSensorData);
+    RKH_TMR_INIT(&me->timer, &evTimeoutObj, NULL);
     ps_init();
 }
 
@@ -144,27 +136,16 @@ stopPs(DeviceMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 }
 
-static void
-publishData(DeviceMgr *const me, RKH_EVT_T *pe)
-{
-    (void)me;
-    (void)pe;
-
-    sensorData.cbox = *cbox_getInstance();
-
-    topic_publish(status, &sensorData, me);
-}
-
 /* ............................. Entry actions ............................. */
 static void
-idle_entry(DeviceMgr *const me)
+nIdle(DeviceMgr *const me)
 {
     RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), DEVICE_CYCLE_TIME);
 }
 
 /* ............................. Exit actions .............................. */
 static void
-idle_exit(DeviceMgr *const me)
+xIdle(DeviceMgr *const me)
 {
     rkh_tmr_stop(&me->timer);
 }
