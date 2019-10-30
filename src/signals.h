@@ -80,6 +80,7 @@ enum Signals
 	evSensorData,
 	evTerminate,     /* press the key escape on the keyboard */
     evDevData,
+    evNoDev,
     evGStatus,
     evSyncTout,
     evOutChg

@@ -90,15 +90,18 @@ RKH_SMA_DEF_PTR(deviceMgr);
 /* ------------------------------- Constants ------------------------------- */
 static const PS_PLBUFF_T reqs[] =
 {
-    {1, {CBOX_NULL}},
-    {1, {CBOX_READ_ALL}}
+    {1, {CBOX_NULL      }},
+    {1, {CBOX_READ_ALL  }}
 };
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+extern Device *sprayer;
+
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_STATIC_EVENT(endOfCycle, evEndOfCycle);
+static RKH_STATIC_EVENT(evEndOfCycleObj, evEndOfCycle);
 static RKH_STATIC_EVENT(evTimeoutObj, evTimeout);
+static RKH_STATIC_EVENT(evNoDevObj, evNoDev);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -107,6 +110,22 @@ assembleShort(uchar *buf, short data)
 {
     data = (*buf << 8) | *(buf + 1);
     buf += 2;
+}
+
+static Device *
+getDevice(DevId devId)
+{
+    Device *dev;
+
+    if (devId == SPRAYER)
+    {
+        dev = (Device *)sprayer;
+    }
+    else
+    {
+        dev = (Device *)0;
+    }
+    return dev;
 }
 
 /* ............................ Initial action ............................. */
@@ -180,19 +199,22 @@ ps_onStartCycle(void)
 void
 ps_onStop(void)
 {
+    topic_publish(status, &evNoDevObj, deviceMgr);
 }
 
 void
 ps_onEndCycle(void)
 {
-    topic_publish(status, &endOfCycle, &deviceMgr);
+    RKH_SMA_POST_FIFO(deviceMgr, &evEndOfCycleObj, deviceMgr);
 }
 
 void
 ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
 {
     static CBOX_STR cbox;
+    Device *dev;
     uchar *p;
+    RKH_EVT_T *evt;
 
     switch (station)
     {
@@ -208,6 +230,10 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             assembleShort(p, cbox.a.z);
             cbox.a.m = *p++;
             cbox.hum = *p++;
+
+            dev = getDevice(cbox.a.x);
+            evt = device_makeEvt(dev, &cbox);
+            topic_publish(status, evt, deviceMgr);
             break;
 
         case ADDR_CAUDALIMETRO:

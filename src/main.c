@@ -28,6 +28,7 @@
 #include "geoMgr.h"
 #include "ioChg.h"
 #include "DeviceMgr.h"
+#include "sprayer.h"
 #include "sim5320parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"
@@ -68,6 +69,7 @@ static rui8_t evPool0Sto[SIZEOF_EP0STO],
               evPool2Sto[SIZEOF_EP2STO];
 
 static RKH_ROM_STATIC_EVENT(e_Open, evOpen);
+Device *sprayer;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -111,6 +113,7 @@ main(int argc, char *argv[])
 
     RKH_TRC_OPEN();
 
+    sprayer = sprayer_ctor(0);
     signals_publishSymbols();
 
     RKH_TR_FWK_ACTOR(&inChg, "inChg");

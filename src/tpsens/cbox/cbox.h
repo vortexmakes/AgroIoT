@@ -1,6 +1,6 @@
 /**
  *  \file       cbox.h
- * 	\bried      Module to handle cbox responces-
+ * 	\brief      Module to handle cbox singleton
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -11,6 +11,7 @@
 /* -------------------------------- Authors -------------------------------- */
 /*
  *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
