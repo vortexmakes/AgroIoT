@@ -206,7 +206,7 @@ typedef struct
  * 	This function is called when the protocol starts a new polling cycle.
  */
 
-void ps_on_startcycle( void );
+void ps_onStartCycle( void );
 
 
 /**
@@ -214,7 +214,7 @@ void ps_on_startcycle( void );
  * 	This function is called when the protocol stops the polling.
  */
 
-void ps_on_stop( void );
+void ps_onStop( void );
 
 
 /**
@@ -223,7 +223,7 @@ void ps_on_stop( void );
  * 	Use ps_restart() function to start a new polling cycle.
  */
 
-void ps_on_endcycle( void );
+void ps_onEndCycle( void );
 
 
 /**
@@ -242,7 +242,7 @@ void ps_on_endcycle( void );
  * 	to do that, use the station parameter within this function.
  */
 
-void on_st_rcv( ST_T station, PS_PLBUFF_T *pb );
+void ps_onStationRecv( ST_T station, PS_PLBUFF_T *pb );
 
 
 /**
@@ -253,7 +253,7 @@ void on_st_rcv( ST_T station, PS_PLBUFF_T *pb );
  * 	to do that, use the station parameter within this function.
  */
 
-void on_st_stop( ST_T station, uchar reason );
+void ps_onStationStop( ST_T station, uchar reason );
 
 
 /**
@@ -264,7 +264,7 @@ void on_st_stop( ST_T station, uchar reason );
  * 	to do that, use the station parameter within this function.
  */
 
-void on_st_run( ST_T station );
+void ps_onStationRun( ST_T station );
 
 
 /**
@@ -278,7 +278,7 @@ void on_st_run( ST_T station );
  * 	to do that, use the station parameter within this function.
  */
 
-void on_st_tout( ST_T station );
+void ps_onStationTout( ST_T station );
 
 
 /**
@@ -288,14 +288,14 @@ void on_st_tout( ST_T station );
  * 	to do that, use the station parameter within this function.
  *
  * 	Therefore, use PS_PLBUFF_T structure to store the request command 
- * 	payload. Thus, when invoking the on_st_req() callback the protocol 
+ * 	payload. Thus, when invoking the ps_onStationReq() callback the protocol 
  * 	scheduler will send to station the defined request command.
  *
  *	/returns
  *	The pointer to the request command.
  */
 
-PS_PLBUFF_T *on_st_req( ST_T station );
+PS_PLBUFF_T *ps_onStationReq( ST_T station );
 
 
 /**

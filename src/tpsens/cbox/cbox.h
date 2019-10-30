@@ -35,37 +35,55 @@ extern "C" {
 #define EQTYPE_SAMPLER			0xFF06
 #define EQTYPE_SPRAYER			0xFF07
 #define EQTYPE_SPRAYERPRO		0xFF08
+#define ADDR_CAUDALIMETRO       1
+
+enum
+{
+	ADDR_NORIA,
+    /* ADDR_CAUDALIMETRO, */
+	NUM_SENSORS_BOX
+};
+
+enum
+{
+	TPSENS_NULL_CMD,
+
+	CBOX_NULL = TPSENS_NULL_CMD,
+	CBOX_READ_ALL,		/* Reads all CBOX parameters */
+
+	NUM_CBOX_CMDS
+};
 
 /* ------------------------------- Data types ------------------------------ */
-typedef struct
+typedef struct ACCEL_T ACCEL_T;
+struct ACCEL_T
 {
 	short x;
 	short y;
 	short z;
 	unsigned char m;
-}ACCEL_T;
+};
 
-typedef struct
+typedef struct GRSENS_T GRSENS_T;
+struct GRSENS_T
 {
-	unsigned short hoard;	// grain hoard.
-	unsigned short pqty;     // pails quantity.
-	unsigned short flow;	// grain volume by second.
-} GRSENS_T;
+	unsigned short hoard;
+	unsigned short pqty;
+	unsigned short flow;
+};
 
-typedef struct
+typedef struct CBOX_STR CBOX_STR;
+struct CBOX_STR
 {
 	unsigned char cmd;
 	unsigned char m;
 	GRSENS_T h;
 	ACCEL_T a;
 	unsigned char hum;
-}CBOX_STR;
+};
 
 /* -------------------------- External variables --------------------------- */
-extern ruint tpSens;
-
 /* -------------------------- Function prototypes -------------------------- */
-CBOX_STR *cbox_getInstance(void);
 rbool_t cbox_isMoving(CBOX_STR *const me);
 
 /* -------------------- External C language linkage end -------------------- */
@@ -77,4 +95,3 @@ rbool_t cbox_isMoving(CBOX_STR *const me);
 #endif
 
 /* ------------------------------ End of file ------------------------------ */
-

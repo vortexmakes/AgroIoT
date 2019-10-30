@@ -47,33 +47,33 @@
  */
 
 #if PS_EN_ON_STARTCYCLE == 1
-#define cb_ps_on_startcycle()		ps_on_startcycle()
+#define cb_ps_onStartCycle()		ps_onStartCycle()
 #else
-#define cb_ps_on_startcycle()
+#define cb_ps_onStartCycle()
 #endif
 
 #if PS_EN_ON_ENDCYCLE == 1
-#define cb_ps_on_endcycle()			ps_on_endcycle()
+#define cb_ps_onEndCycle()			ps_onEndCycle()
 #else
-#define cb_ps_on_endcycle()
+#define cb_ps_onEndCycle()
 #endif
 
 #if PS_EN_ON_ST_TOUT == 1
-#define cb_on_st_tout( s )			on_st_tout( s )
+#define cb_ps_onStationTout( s )			ps_onStationTout( s )
 #else
-#define cb_on_st_tout( s )
+#define cb_ps_onStationTout( s )
 #endif
 
 #if PS_EN_ON_ST_RUN == 1
-#define cb_on_st_run( s )			on_st_run( s )
+#define cb_ps_onStationRun( s )			ps_onStationRun( s )
 #else
-#define cb_on_st_run( s )
+#define cb_ps_onStationRun( s )
 #endif
 
 #if PS_EN_ON_ST_STOP == 1
-#define cb_on_st_stop( s, r )		on_st_stop( s, r )
+#define cb_ps_onStationStop( s, r )		ps_onStationStop( s, r )
 #else
-#define cb_on_st_stop( s, r )
+#define cb_ps_onStationStop( s, r )
 #endif
 
 
@@ -317,7 +317,7 @@ ps_get_payload( void )
 	if( ps_is_xmit_request() )
 	{
 		prot.pcs->was_request = 1;
-		return on_st_req( prot.station );
+		return ps_onStationReq( prot.station );
 	}
 	prot.pcs->was_request = 0;
 	PSQ_READ( prot.pcs->qd, &prot.plbuff );
@@ -341,7 +341,7 @@ ps_dispatch_to_station( ST_T station, PSM_T *pm )
 		{
 			PSQ_DEPLETE( p->qd );
 			dll_send_frame( ps_get_curr_station(), ps_get_payload());
-			cb_on_st_run( station );
+			cb_ps_onStationRun( station );
 			r = RET_WAITRESP;
 			p->state = ST_RDY_WAIT_RESPONSE;
 		}
@@ -350,7 +350,7 @@ ps_dispatch_to_station( ST_T station, PSM_T *pm )
 	{
 		if( pm->m == PS_SIG_DISABLE )
 		{
-			cb_on_st_stop( station, PS_SIG_DISABLE );
+			cb_ps_onStationStop( station, PS_SIG_DISABLE );
 			r = RET_UNAVAILABLE;
 			p->state = ST_UNAVAILABLE;
 		}
@@ -372,13 +372,13 @@ ps_dispatch_to_station( ST_T station, PSM_T *pm )
 						if( !p->was_request )
 							PSQ_REMOVE( p->qd, &prot.plbuff );
 
-						on_st_rcv( station, &((( PSM_PKT_T* )pm)->buff) );
+						ps_onStationRecv( station, &((( PSM_PKT_T* )pm)->buff) );
 						p->state = ST_READY;
 					}
 					else if( pm->m == PS_SIG_TOUT )
 					{
 						p->retry = 1;
-						cb_on_st_tout( station );
+						cb_ps_onStationTout( station );
 						p->state = ST_RETRANSMIT;
 					}
 					break;
@@ -396,7 +396,7 @@ ps_dispatch_to_station( ST_T station, PSM_T *pm )
 						if( !p->was_request )
 							PSQ_REMOVE( p->qd, &prot.plbuff );
 
-						on_st_rcv( station, &((( PSM_PKT_T* )pm)->buff) );
+						ps_onStationRecv( station, &((( PSM_PKT_T* )pm)->buff) );
 						p->retry = 0;
 						r = RET_OK;
 						p->state = ST_READY;
@@ -405,7 +405,7 @@ ps_dispatch_to_station( ST_T station, PSM_T *pm )
 					{
 						if( ++p->retry < PS_NUM_RETRIES )
 						{
-							cb_on_st_tout( station );
+							cb_ps_onStationTout( station );
 							r = RET_OK;
 							p->state = ST_RETRANSMIT;
 						}
@@ -413,7 +413,7 @@ ps_dispatch_to_station( ST_T station, PSM_T *pm )
 						{
 							p->cstatus = ST_DIS;
 							p->ostatus = ST_DIS; 
-							cb_on_st_stop( station, PS_SIG_TOUT );
+							cb_ps_onStationStop( station, PS_SIG_TOUT );
 							r = RET_UNAVAILABLE;
 							p->state = ST_UNAVAILABLE;
 						}
@@ -454,10 +454,10 @@ ps_running( PSM_T *pm )
 		else
 		{
 			prot.station = 0;
-			cb_ps_on_endcycle();
+			cb_ps_onEndCycle();
 #if PS_EN_ON_STOP == 1
 			if( prot.no_station == 1 )
-				ps_on_stop();
+				ps_onStop();
 #endif
 			return PS_RUNNING_EXIT;
 		}
@@ -497,7 +497,7 @@ ps_dispatch_to_scheduler( PSM_T *pm )
 				pmsg->m = PS_SIG_SEND_NEXT;
 
 				q = ps_process_event( pmsg );
-				cb_ps_on_startcycle();
+				cb_ps_onStartCycle();
 
 							    /* It's the choice point from state diagram. */
 				if( ps_running( q ) == PS_RUNNING_CONTINUE )

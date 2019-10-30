@@ -116,7 +116,6 @@ main(int argc, char *argv[])
     RKH_TR_FWK_ACTOR(&inChg, "inChg");
     RKH_TR_FWK_ACTOR(&sim5320parser, "sim5320parser");
     RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
-	RKH_TR_FWK_ACTOR(&tpSens, "tpSens");
 	
     rkh_dynEvt_init();
     rkh_fwk_registerEvtPool(evPool0Sto, SIZEOF_EP0STO, SIZEOF_EP0_BLOCK);

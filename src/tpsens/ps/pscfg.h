@@ -37,7 +37,7 @@
 #ifndef __PSCFG_H__
 #define __PSCFG_H__
 
-#include "cboxcmd.h"
+#include "cbox.h"
 
 /**
  * 	Polling configurations.
