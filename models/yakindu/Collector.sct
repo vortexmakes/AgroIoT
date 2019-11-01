@@ -5,7 +5,7 @@
       <vertices xsi:type="sgraph:Entry" xmi:id="_e6T8kO0fEem6TqTrgnK7zA">
         <outgoingTransitions xmi:id="__k320O02Eemg6KQwm_8wCw" specification="/ init()" target="_s1gFEO0fEem6TqTrgnK7zA"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_s1gFEO0fEem6TqTrgnK7zA" specification="evGeo / updatePosition()&#xD;&#xA;evGeoInvalid / updatePosition()&#xD;&#xA;evDigOutChanged / updateDigOut()&#xD;&#xA;after Config_getMapTimeOnRunning() / publishCurrStatus()" name="Active" incomingTransitions="__k320O02Eemg6KQwm_8wCw">
+      <vertices xsi:type="sgraph:State" xmi:id="_s1gFEO0fEem6TqTrgnK7zA" specification="evGeo / updatePosition()&#xD;&#xA;evGeoInvalid / updatePosition()&#xD;&#xA;evDigOutChanged / updateDigOut()&#xD;&#xA;after getUpdatingStatusTime() / publishCurrStatus()" name="Active" incomingTransitions="__k320O02Eemg6KQwm_8wCw">
         <regions xmi:id="_s1hTMO0fEem6TqTrgnK7zA" name="DevStatus">
           <vertices xsi:type="sgraph:State" xmi:id="_EmjfcO0gEem6TqTrgnK7zA" specification="entry / initDevNull()&#xD;&#xA;evDigInChanged / updateDigInDevNull()" name="DevNotConnected" incomingTransitions="_L8HXwO0gEem6TqTrgnK7zA _Z82HkO0gEem6TqTrgnK7zA">
             <outgoingTransitions xmi:id="_Yzc2kO0gEem6TqTrgnK7zA" specification="evDevData/&#xD;&#xA;updateAndTestDevData()" target="_VZhtYO0gEem6TqTrgnK7zA"/>
