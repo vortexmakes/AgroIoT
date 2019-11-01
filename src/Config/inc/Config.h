@@ -115,6 +115,8 @@ void Config_setIP(char *value);
 void Config_getIP(char *value);
 void Config_setPort(char *value);
 void Config_getPort(char *value);
+void Config_setDefault(rui8_t value);
+rui8_t Config_getDefault(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

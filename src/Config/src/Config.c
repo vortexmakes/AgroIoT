@@ -236,4 +236,23 @@ Config_getPort(char *value)
     strcpy(value, cfg->port);
 }
 
+void 
+Config_setDefault(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->status = value;
+    Config_set(cfg);
+}
+
+rui8_t 
+Config_getDefault(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->status;
+}
+
 /* ------------------------------ End of file ------------------------------ */
