@@ -265,4 +265,28 @@ test_SetFailsWrongFileAccess(void)
     Config_set(&cfgFile);
 }
 
+void
+test_SetGetMappingTime(void)
+{
+    rui8_t time;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+	ffile_seek_Ignore();
+	ffile_random_access_IgnoreAndReturn(1);
+	ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    time = 4;
+    Config_setMappingTime(time);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(time, cfg->smptime);
+
+    time = 0;
+    time = Config_getMappingTime();
+    TEST_ASSERT_EQUAL(time, cfg->smptime);
+}
+
 /* ------------------------------ End of file ------------------------------ */

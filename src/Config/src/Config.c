@@ -108,4 +108,23 @@ Config_set(Config *cfg)
     RKH_EXIT_CRITICAL_();
 }
 
+void 
+Config_setMappingTime(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->smptime = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getMappingTime(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->smptime;
+}
+
 /* ------------------------------ End of file ------------------------------ */
