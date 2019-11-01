@@ -49,7 +49,7 @@ struct Config
     rui8_t brlimit;
 
     /**
-     * When status is set to 0 the configuration is set to default
+     * When status is set to 0 configuration is set to default
      */
     rui8_t status;
 
@@ -64,15 +64,15 @@ struct Config
     char port[PORT_LENGTH + 1];
 
     /**
-     * When the mapping is in Running state the system stores its status 
-     * every conntime.
-     * See smptime member for more information.
+     * The system connects to remote server in order to send it messages 
+     * every T seconds
      */
     rui8_t conntime;
 
     /**
      * Maximum time to register in the GSM network, open a TCP/IP socket, 
      * and send a message to the remote server
+     * Should it be deprecated?
      */
     rui8_t totacttime;
 
@@ -89,7 +89,7 @@ struct Config
     /** 
      * The mapping is performed by collecting the different 
      * status of the system, including its location, every T seconds, 
-     * which is called the mapping time. The T period depends on the 
+     * which is called the mapping time. This period depends on the 
      * mapping state (Stopped or Running). In Stopped state the system 
      * stores its status every smptime.
      */
@@ -105,6 +105,16 @@ void Config_set(Config *cfg);
 
 void Config_setMappingTime(rui8_t value);
 rui8_t Config_getMappingTime(void);
+void Config_setDftDigOut(DigOut value);
+DigOut Config_getDftDigOut(void);
+void Config_setUpdateLocTime(rui8_t value);
+rui8_t Config_getUpdateLocTime(void);
+void Config_setConnPeriodTime(rui8_t value);
+rui8_t Config_getConnPeriodTime(void);
+void Config_setIP(char *value);
+void Config_getIP(char *value);
+void Config_setPort(char *value);
+void Config_getPort(char *value);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
