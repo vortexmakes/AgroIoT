@@ -492,7 +492,7 @@ test_SetGetDefault(void)
 	ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    value = 4;
+    value = 1;
     Config_setDefault(value);
     cfg = Config_get();
     TEST_ASSERT_EQUAL(value, cfg->status);
@@ -500,6 +500,54 @@ test_SetGetDefault(void)
     value = 0;
     value = Config_getDefault();
     TEST_ASSERT_EQUAL(value, cfg->status);
+}
+
+void
+test_SetGetAccLimit(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+	ffile_seek_Ignore();
+	ffile_random_access_IgnoreAndReturn(1);
+	ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    value = 4;
+    Config_setAccLimit(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->aclimit);
+
+    value= 0;
+    value= Config_getAccLimit();
+    TEST_ASSERT_EQUAL(value, cfg->aclimit);
+}
+
+void
+test_SetGetBrakeLimit(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+	ffile_seek_Ignore();
+	ffile_random_access_IgnoreAndReturn(1);
+	ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    value = 4;
+    Config_setBrakeLimit(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->brlimit);
+
+    value= 0;
+    value= Config_getBrakeLimit();
+    TEST_ASSERT_EQUAL(value, cfg->brlimit);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -117,6 +117,10 @@ void Config_setPort(char *value);
 void Config_getPort(char *value);
 void Config_setDefault(rui8_t value);
 rui8_t Config_getDefault(void);
+void Config_setAccLimit(rui8_t value);
+rui8_t Config_getAccLimit(void);
+void Config_setBrakeLimit(rui8_t value);
+rui8_t Config_getBrakeLimit(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

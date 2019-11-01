@@ -255,4 +255,42 @@ Config_getDefault(void)
     return cfg->status;
 }
 
+void 
+Config_setAccLimit(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->aclimit = value;
+    Config_set(cfg);
+}
+
+rui8_t 
+Config_getAccLimit(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->aclimit;
+}
+
+void 
+Config_setBrakeLimit(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->brlimit = value;
+    Config_set(cfg);
+}
+
+rui8_t 
+Config_getBrakeLimit(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->brlimit;
+}
+
 /* ------------------------------ End of file ------------------------------ */
