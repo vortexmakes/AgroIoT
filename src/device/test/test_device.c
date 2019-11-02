@@ -19,7 +19,7 @@
 #include "device.h"
 #include "Mock_rkhassert.h"
 #include "Mock_rkhevt.h"
-#include "Mock_collector.h"
+#include "Mock_Collector.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */

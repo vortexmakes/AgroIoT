@@ -22,7 +22,7 @@
 #include "cbox.h"
 #include "rkhevt.h"
 #include "rkhsma.h"
-#include "collector.h"
+#include "Collector.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus

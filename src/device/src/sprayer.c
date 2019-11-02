@@ -17,7 +17,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "device.h"
 #include "sprayer.h"
-#include "collector.h"
+#include "Collector.h"
 #include "rkhfwk_dynevt.h"
 #include "signals.h"
 

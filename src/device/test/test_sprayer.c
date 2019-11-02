@@ -20,7 +20,7 @@
 #include "sprayerSpy.h"
 #include "Mock_rkhassert.h"
 #include "Mock_device.h"
-#include "Mock_collector.h"
+#include "Mock_Collector.h"
 #include "Mock_rkhfwk_dynevt.h"
 #include "Mock_signals.h"
 

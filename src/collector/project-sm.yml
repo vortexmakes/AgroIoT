@@ -1,0 +1,14 @@
+#
+# Usage:
+#   $ sudo ceedling [clean|clobber] options:project-sm test:SigMon
+#
+
+:paths:
+  :test:
+  :source:
+    - src/SigMon.c
+    - ../DigIn/inc
+    - ../../third-party/rkh/source/sm/src
+  :include:
+  :support:
+    - ../../third-party/rkh/source/trc/src

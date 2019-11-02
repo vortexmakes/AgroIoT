@@ -1,5 +1,5 @@
 /**
- *  \file       collector.h
+ *  \file       Collector.h
  *  \brief      Specifies the interface of Collector module.
  */
 
