@@ -1,11 +1,10 @@
 /**
- *  \file       collector.c
- *  \brief      Implementation of Collector module.
+ *  \file       Collector.c
+ *  \brief      Active object's action implementations.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.11.22  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -15,31 +14,28 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rkhsma.h"
+#include "rkh.h"
+#include "rkhfwk_cast.h"
+#include "rkhtrc.h"
+#include "rkhtrc_define.h"
+#include "rkhtrc_filter.h"
+#include "rkhtrc_record.h"
+#include "rkhassert.h"
 #include "signals.h"
 #include "Collector.h"
 #include "CollectorAct.h"
+#include "bsp.h"
+#include "CollectorActRequired.h"
+
+RKH_MODULE_NAME(CollectorAct)
 
 /* ----------------------------- Local macros ------------------------------ */
-/* ......................... Declares active object ........................ */
-/* ................... Declares states and pseudostates .................... */
-/* ........................ Declares initial action ........................ */
-/* ........................ Declares effect actions ........................ */
-/* ......................... Declares entry actions ........................ */
-/* ......................... Declares exit actions ......................... */
-/* ............................ Declares guards ............................ */
-/* ........................ States and pseudostates ........................ */
-/* ............................. Active object ............................. */
-RKH_SMA_CREATE(Collector, collector, 3, HCAL, NULL, NULL, NULL);
-RKH_SMA_DEF_PTR_TYPE(Collector, collector);
-
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-/* ............................ Initial action ............................. */
 /* ............................ Effect actions ............................. */
 /* ............................. Entry actions ............................. */
 /* ............................. Exit actions .............................. */

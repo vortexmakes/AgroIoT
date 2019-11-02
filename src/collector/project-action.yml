@@ -1,24 +1,20 @@
 #
 # Usage:
-#   $ sudo ceedling [clean|clobber] options:project-action test:SigMonAct
+#   $ sudo ceedling [clean|clobber] options:project-action test:CollectoAct
 #
 
 :paths:
   :test:
   :source:
-    - src/SigMonAct.c
+    - src/CollectorAct.c
   :include:
-    - ../DigIn/inc
-    - ../Relay/inc
-    - ../StoreTest/inc
-    - ../anSampler/inc
-    - ../CirBuffer/inc
-    - ../epoch/inc
-    - ../adconv
-    - ../anIn
-    - ../mTime
-    - ../publisher
-    - ../mqttProt
+    - ../GStatus/inc
+    - ../GStatus/inc
+    - ../gps
+    - ../tpsens/cbox
+    - ../BatChr
+    - ../bsp
+    - ../ioChg
     - ../../third-party/rkh/source/trc/inc
   :support:
 
