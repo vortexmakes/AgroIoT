@@ -350,25 +350,22 @@ ontimeEntry(GeoMgr *const me)
 static void
 turnsDetect(GeoMgr *const me)
 {
-    Config *cfg;
     int currSog, currCog, diff, cog;
 
     currSog = atol(me->rmc.sog);
     currCog = atol(me->rmc.cog);
 
-    cfg = Config_get();
-
     if(me->cog < 0)
         me->cog = currCog;
 
     if(!(me->count % ACCELERATION_PERIOD) && 
-        (currSog > cfg->aclimit))
+        (currSog > Config_getAccLimit()))
     {
 		diff = abs(currCog - me->cog);
 		cog = diff < (360 - diff) ? diff : (360 - diff);
 		me->cog = currCog;
 
-		if(cog > cfg->brlimit)
+		if(cog > Config_getBrakeLimit())
         {
             topic_publish(deviceStatus, &turnEvt, me);
         }
