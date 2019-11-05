@@ -18,7 +18,7 @@
 #include "Collector.h"
 #include "CollectorAct.h"
 #include "signals.h"
-#include "rkhfwk_cast.h"
+#include "Mock_rkhfwk_cast.h"
 #include "Mock_rkhtmr.h"
 #include "Mock_rkhtrc_record.h"
 #include "Mock_rkhsma.h"
@@ -40,6 +40,13 @@ RKHROM RKH_FINAL_T Collector_Final;
 RKH_SMA_CREATE(Collector, collector, 0, HCAL, NULL, NULL, NULL);
 RKH_SMA_DEF_PTR_TYPE(Collector, collector);
 static Collector *me;
+const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
+{
+    rkh_sma_activate,
+    rkh_sma_dispatch,
+    rkh_sma_post_fifo,
+    rkh_sma_post_lifo
+};
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -56,9 +63,10 @@ tearDown(void)
 }
 
 void
-test_TestSupport(void)
+test_Constructor(void)
 {
-    TEST_IGNORE();
+    rkh_sma_ctor_Expect(RKH_UPCAST(RKH_SMA_T, collector), &collector->vtbl);
+    Collector_ctor();
 }
 
 /* ------------------------------ End of file ------------------------------ */

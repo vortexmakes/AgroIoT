@@ -37,6 +37,7 @@ typedef struct Collector Collector;
 struct Collector
 {
     RKH_SMA_T base;
+    RKHSmaVtbl vtbl;            /* Virtual table */
     GStatus status;
     Device *dev;
 };

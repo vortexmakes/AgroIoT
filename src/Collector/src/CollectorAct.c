@@ -14,7 +14,7 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
+#include "rkhsma.h"
 #include "rkhfwk_cast.h"
 #include "rkhtrc.h"
 #include "rkhtrc_define.h"
@@ -36,9 +36,25 @@ RKH_MODULE_NAME(CollectorAct)
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static void 
+dispatch(RKH_SMA_T *me, void *arg)
+{
+}
+
 /* ............................ Effect actions ............................. */
 /* ............................. Entry actions ............................. */
 /* ............................. Exit actions .............................. */
 /* ................................ Guards ................................. */
 /* ---------------------------- Global functions --------------------------- */
+void 
+Collector_ctor(void)
+{
+    Collector *me;
+
+    me = RKH_DOWNCAST(Collector, collector);
+    me->vtbl = rkhSmaVtbl;
+    me->vtbl.task = dispatch;
+    rkh_sma_ctor(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
+}
+
 /* ------------------------------ End of file ------------------------------ */
