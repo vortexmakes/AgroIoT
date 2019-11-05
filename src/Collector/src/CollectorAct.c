@@ -15,6 +15,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhsma.h"
+#include "rkhsm.h"
 #include "rkhfwk_cast.h"
 #include "rkhtrc.h"
 #include "rkhtrc_define.h"
@@ -34,6 +35,8 @@ RKH_MODULE_NAME(CollectorAct)
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+RKH_SM_CONST_CREATE(mapping, 0, HCAL, &Mapping_Active, NULL, NULL);
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void 
@@ -55,6 +58,11 @@ Collector_ctor(void)
     me->vtbl = rkhSmaVtbl;
     me->vtbl.task = dispatch;
     rkh_sma_ctor(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
+
+    me->itsMapping.itsCollector = me;
+    RKH_SM_INIT(&me->itsMapping, 
+            mapping, 0, HCAL, 
+                Mapping_Active, NULL, NULL);
 }
 
 /* ------------------------------ End of file ------------------------------ */

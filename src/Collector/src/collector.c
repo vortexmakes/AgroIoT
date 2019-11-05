@@ -21,8 +21,6 @@
 #include "CollectorAct.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-/* ......................... Declares active object ........................ */
-/* ................... Declares states and pseudostates .................... */
 /* ........................ Declares initial action ........................ */
 /* ........................ Declares effect actions ........................ */
 /* ......................... Declares entry actions ........................ */
@@ -31,7 +29,7 @@
 /* ........................ States and pseudostates ........................ */
 /* ............................. Active object ............................. */
 RKH_SMA_CREATE(Collector, collector, 3, HCAL, NULL, NULL, NULL);
-RKH_SMA_DEF_PTR_TYPE(Collector, collector);
+RKH_SMA_DEF_PTR(collector);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */

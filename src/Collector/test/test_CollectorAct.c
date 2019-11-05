@@ -27,6 +27,7 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
+RKHROM RKH_SCMP_T Mapping_Active;
 #if 0
 RKHROM RKH_SBSC_T SMInactive, WaitSyncSeq, Seq0, Seq2, Seq3, Seq4, Seq5, 
                   Seq11, OutOfSeq, Seq1, Seq10, Seq8, Seq7, Seq6, Seq9;
@@ -38,7 +39,7 @@ RKHROM RKH_FINAL_T Collector_Final;
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 RKH_SMA_CREATE(Collector, collector, 0, HCAL, NULL, NULL, NULL);
-RKH_SMA_DEF_PTR_TYPE(Collector, collector);
+RKH_SMA_DEF_PTR(collector);
 static Collector *me;
 const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
 {
@@ -65,8 +66,11 @@ tearDown(void)
 void
 test_Constructor(void)
 {
-    rkh_sma_ctor_Expect(RKH_UPCAST(RKH_SMA_T, collector), &collector->vtbl);
+    rkh_sma_ctor_Expect(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
+
     Collector_ctor();
+    TEST_ASSERT_NOT_NULL(me->vtbl.task);
+    TEST_ASSERT_NOT_NULL(me->itsMapping.itsCollector);
 }
 
 /* ------------------------------ End of file ------------------------------ */
