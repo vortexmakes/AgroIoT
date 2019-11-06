@@ -40,6 +40,8 @@ RKHROM RKH_FINAL_T Collector_Final;
 /* ---------------------------- Local variables ---------------------------- */
 RKH_SMA_CREATE(Collector, collector, 0, HCAL, NULL, NULL, NULL);
 RKH_SMA_DEF_PTR(collector);
+RKH_SM_CONST_CREATE(mapping, 0, HCAL, &Mapping_Active, NULL, NULL);
+
 static Collector *me;
 const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
 {

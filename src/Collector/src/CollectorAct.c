@@ -34,9 +34,9 @@ RKH_MODULE_NAME(CollectorAct)
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
-/* ---------------------------- Local variables ---------------------------- */
-RKH_SM_CONST_CREATE(mapping, 0, HCAL, &Mapping_Active, NULL, NULL);
+RKH_DCLR_SM_CONST_GLOBAL(mapping);
 
+/* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void 
