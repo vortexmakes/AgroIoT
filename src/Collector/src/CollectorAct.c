@@ -83,13 +83,13 @@ Collector_init(Collector *const me, RKH_EVT_T *pe)
 void 
 Collector_updatePosition(Collector *const me, RKH_EVT_T *pe)
 {
-    me->status.position = RKH_DOWNCAST(GeoEvt, pe)->gps;
+    me->status.position = RKH_DOWNCAST(GeoEvt, pe)->position;
 }
 
 void 
 Collector_updateDigOut(Collector *const me, RKH_EVT_T *pe)
 {
-    me->status.ioStatus.digOut = RKH_DOWNCAST(DigOutChangedEvt, pe)->dout;
+    me->status.ioStatus.digOut = RKH_DOWNCAST(DigOutChangedEvt, pe)->status;
 }
 
 void 

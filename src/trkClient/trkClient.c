@@ -174,7 +174,7 @@ init(TrkClient *const me, RKH_EVT_T *pe)
 static void
 updateGeoStamp(TrkClient *const me, RKH_EVT_T *pe)
 {
-    me->geo = (((GeoStampEvt *)pe)->gps);
+    me->geo = (((GeoStampEvt *)pe)->position);
 }
 
 static void

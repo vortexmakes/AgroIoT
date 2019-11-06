@@ -1,5 +1,5 @@
 /**
- *  \file       dout.c
+ *  \file       dOut.c
  *  \brief      Implementation of Digital Outputs Control HAL.
  */
 
@@ -71,7 +71,7 @@ setStatus(DigOutSignalId out, ruint val, int context)
         DigOutChangedEvt *outChgObj = RKH_ALLOC_EVT(DigOutChangedEvt, 
                                                     evDigOutChanged, 
                                                     &outChg);
-        outChgObj->dout = dOutStatus;
+        outChgObj->status = dOutStatus;
         rkh_pubsub_publish(status, RKH_UPCAST(RKH_EVT_T, outChgObj),
                                         RKH_UPCAST(RKH_SMA_T, &outChg));
     }

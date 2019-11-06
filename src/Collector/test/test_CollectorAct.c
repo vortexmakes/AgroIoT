@@ -98,7 +98,7 @@ test_UpdatePosition(void)
     GeoEvt event;
 
     Collector_updatePosition(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL_MEMORY(&me->status.position, &event.gps, sizeof(Geo));
+    TEST_ASSERT_EQUAL_MEMORY(&me->status.position, &event.position, sizeof(Geo));
 }
 
 void
@@ -106,9 +106,9 @@ test_UpdateDigOut(void)
 {
     DigOutChangedEvt event;
 
-    event.dout = 99;
+    event.status = 99;
     Collector_updateDigOut(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL(event.dout, me->status.ioStatus.digOut);
+    TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digOut);
 }
 
 void

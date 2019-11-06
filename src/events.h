@@ -143,7 +143,7 @@ typedef struct GeoEvt GeoEvt;
 struct GeoEvt
 {
     RKH_EVT_T evt;
-    Geo gps;
+    Geo position;
 };
 
 typedef struct InChgEvt InChgEvt;
@@ -157,7 +157,7 @@ typedef struct DigOutChangedEvt DigOutChangedEvt;
 struct DigOutChangedEvt
 {
     RKH_EVT_T evt;
-    DigOut dout;
+    DigOut status;
 };
 
 typedef struct GStatusEvt GStatusEvt;
