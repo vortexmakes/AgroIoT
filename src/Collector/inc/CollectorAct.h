@@ -37,6 +37,7 @@ void Collector_ctor(void);
 void Collector_init(Collector *const me, RKH_EVT_T *pe);
 void Collector_updatePosition(Collector *const me, RKH_EVT_T *pe);
 void Collector_updateDigOut(Collector *const me, RKH_EVT_T *pe);
+void Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 void Collector_enActive(Collector *const me);

@@ -112,18 +112,24 @@ test_UpdateDigOut(void)
 }
 
 void
-test_PubTmr(void)
+test_UpdatingStatusTmr(void)
 {
+    GStatusEvt event;
+
     rkh_tmr_init__Expect(&me->updateStatusTmr.tmr, 
                          RKH_UPCAST(RKH_EVT_T, &me->updateStatusTmr));
     rkh_tmr_start_Expect(&me->updateStatusTmr.tmr, 
                          RKH_UPCAST(RKH_SMA_T, me), 
-                         UPDATING_STATUS_TIME, 0);
-
+                         0, UPDATING_STATUS_TIME);
     Collector_enActive(me);
 
     rkh_tmr_stop_ExpectAndReturn(&me->updateStatusTmr.tmr, 0);
     Collector_exActive(me);
+
+    topic_publish_Expect(status, 
+                         RKH_UPCAST(RKH_EVT_T, &event), 
+                         RKH_UPCAST(RKH_SMA_T, me));
+    Collector_publishCurrStatus(me, RKH_UPCAST(RKH_EVT_T, &event));
 }
 
 /* ------------------------------ End of file ------------------------------ */

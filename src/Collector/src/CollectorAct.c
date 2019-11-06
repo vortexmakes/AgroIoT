@@ -92,6 +92,14 @@ Collector_updateDigOut(Collector *const me, RKH_EVT_T *pe)
     me->status.ioStatus.digOut = RKH_DOWNCAST(DigOutChangedEvt, pe)->dout;
 }
 
+void 
+Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
+{
+    topic_publish(status, 
+                  RKH_UPCAST(RKH_EVT_T, pe), 
+                  RKH_UPCAST(RKH_SMA_T, me));
+}
+
 /* ............................. Entry actions ............................. */
 void
 Collector_enActive(Collector *const me)
@@ -100,9 +108,9 @@ Collector_enActive(Collector *const me)
     RKH_TMR_INIT(&me->updateStatusTmr.tmr, 
                  RKH_UPCAST(RKH_EVT_T, &me->updateStatusTmr), 
                  NULL);
-    RKH_TMR_ONESHOT(&me->updateStatusTmr.tmr, 
-                    RKH_UPCAST(RKH_SMA_T, me), 
-                    UPDATING_STATUS_TIME);
+    RKH_TMR_PERIODIC(&me->updateStatusTmr.tmr, 
+                     RKH_UPCAST(RKH_SMA_T, me), 
+                     0, UPDATING_STATUS_TIME);
 }
 
 /* ............................. Exit actions .............................. */
