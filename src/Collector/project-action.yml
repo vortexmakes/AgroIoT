@@ -15,6 +15,8 @@
     - ../BatChr
     - ../bsp
     - ../ioChg
+    - ../topic/inc
+    - ../epoch/inc
     - ../../third-party/rkh/source/trc/inc
   :support:
 

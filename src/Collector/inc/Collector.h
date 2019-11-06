@@ -21,6 +21,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhsma.h"
 #include "rkhsm.h"
+#include "rkhtmr.h"
 #include "GStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
@@ -30,6 +31,8 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+#define UPDATING_STATUS_TIME   RKH_TIME_MS(1500)
+
 /* ................................ Signals ................................ */
 /* ................................. Events ................................ */
 /* ........................ Declares active object ......................... */
@@ -56,6 +59,7 @@ struct Collector
     GStatus status;
     Device *dev;
     Mapping itsMapping;   /* Mapping orthogonal region */
+    RKHTmEvt updateStatusTmr;
 };
 
 /* ------------------------------- Data types ------------------------------ */

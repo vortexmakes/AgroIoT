@@ -1,5 +1,5 @@
 /**
- *  \file       Collector.h
+ *  \file       CollectorAct.h
  *  \brief      Active object's action specifications.
  */
 
@@ -34,8 +34,16 @@ extern "C" {
 void Collector_ctor(void);
 
 /* ........................ Declares effect actions ........................ */
+void Collector_init(Collector *const me, RKH_EVT_T *pe);
+void Collector_updatePosition(Collector *const me, RKH_EVT_T *pe);
+void Collector_updateDigOut(Collector *const me, RKH_EVT_T *pe);
+
 /* ......................... Declares entry actions ........................ */
+void Collector_enActive(Collector *const me);
+
 /* ......................... Declares exit actions ......................... */
+void Collector_exActive(Collector *const me);
+
 /* ............................ Declares guards ............................ */
 
 /* -------------------- External C language linkage end -------------------- */

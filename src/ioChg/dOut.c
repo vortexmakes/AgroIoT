@@ -68,7 +68,9 @@ setStatus(DigOutSignalId out, ruint val, int context)
     
     if (context == OnSet)
     {
-        OutChgEvt *outChgObj = RKH_ALLOC_EVT(OutChgEvt, evOutChg, &outChg);
+        DigOutChangedEvt *outChgObj = RKH_ALLOC_EVT(DigOutChangedEvt, 
+                                                    evDigOutChanged, 
+                                                    &outChg);
         outChgObj->dout = dOutStatus;
         rkh_pubsub_publish(status, RKH_UPCAST(RKH_EVT_T, outChgObj),
                                         RKH_UPCAST(RKH_SMA_T, &outChg));

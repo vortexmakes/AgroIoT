@@ -83,7 +83,7 @@ enum Signals
     evNoDev,
     evGStatus,
     evSyncTout,
-    evOutChg
+    evDigOutChanged
 };
 
 /* ------------------------------- Data types ------------------------------ */
