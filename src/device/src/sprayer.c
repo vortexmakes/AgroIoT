@@ -58,8 +58,8 @@ sprayer_makeEvt(Device *const me, CBOX_STR *rawData)
 
     evt = RKH_ALLOC_EVT(EvtSprayerData, evDevData, 0);
     evt->base.dev = me;
-    evt->param.nSection = rawData->hum;
-    evt->param.dose = rawData->h.pqty;
+    evt->nSection = rawData->hum;
+    evt->dose = rawData->h.pqty;
     return (RKH_EVT_T *)evt;
 }
 
@@ -74,8 +74,8 @@ sprayer_update(Device *const me, RKH_EVT_T *evt)
 
     ((Collector *)(me->collector))->dev = realEvt->base.dev;
     currDev = (Sprayer *)(((Collector *)(me->collector))->dev);
-    currDev->nSection = realEvt->param.nSection;
-    currDev->dose = realEvt->param.dose;
+    currDev->nSection = realEvt->nSection;
+    currDev->dose = realEvt->dose;
 }
 
 static void 

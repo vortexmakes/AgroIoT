@@ -128,8 +128,8 @@ test_MakeEventOperation(void)
 
     TEST_ASSERT_NOT_NULL(evt);
     TEST_ASSERT_EQUAL(dev, ((EvtSprayerData *)evt)->base.dev);
-    TEST_ASSERT_EQUAL(nSectionExpect, ((EvtSprayerData *)evt)->param.nSection);
-    TEST_ASSERT_EQUAL(doseExpect, ((EvtSprayerData *)evt)->param.dose);
+    TEST_ASSERT_EQUAL(nSectionExpect, ((EvtSprayerData *)evt)->nSection);
+    TEST_ASSERT_EQUAL(doseExpect, ((EvtSprayerData *)evt)->dose);
 }
 
 void
@@ -190,8 +190,8 @@ test_UpdateOperation(void)
     dev = sprayer_ctor(0);
 
     evtSprayerData.base.dev = dev;
-    evtSprayerData.param.nSection = nSectionExpect;
-    evtSprayerData.param.dose = doseExpect;
+    evtSprayerData.nSection = nSectionExpect;
+    evtSprayerData.dose = doseExpect;
     evt = (RKH_EVT_T *)&evtSprayerData;
 
     (*dev->vptr->update)(dev, evt);

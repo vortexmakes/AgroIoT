@@ -51,7 +51,8 @@ typedef struct EvtDevAData EvtDevAData;
 struct EvtDevAData
 {
     EvtDevData base;
-    DevA param;
+    int x;
+    int y;
 };
 
 /* ---------------------------- Global variables --------------------------- */
@@ -96,8 +97,8 @@ DevA_makeEvt(Device *const me, CBOX_STR *rawData)
     /* ...evtDevAData = RKH_ALLOC_EVT(EvtDevAData, evDevAData, &devA);... */
     /* ...allocates an EvtDevAData object */
     evtDevAData.base.dev = me;
-    evtDevAData.param.x = rawData->a.y; /* sets its attributes from rawData */
-    evtDevAData.param.y = rawData->a.z;
+    evtDevAData.x = rawData->a.y; /* sets its attributes from rawData */
+    evtDevAData.y = rawData->a.z;
 }
 
 static void
@@ -108,8 +109,8 @@ DevA_update(Device *const me, RKH_EVT_T *evt)
 
     devEvt = (EvtDevAData *)evt;
     dev = (DevA *)(((EvtDevData *)devEvt)->dev);
-    dev->x = devEvt->param.x;
-    dev->y = devEvt->param.y;
+    dev->x = devEvt->x;
+    dev->y = devEvt->y;
 }
 
 static void 
@@ -230,8 +231,8 @@ test_UpdateDeviceAttributes(void)
     me = RKH_DOWNCAST(Collector, collector);
     devAObj = DevA_ctor(2, 8, 3);   /* from main() */
     evtDevAData.base.dev = devAObj; /* from ps callback */
-    evtDevAData.param.x = 4;
-    evtDevAData.param.y = 5;
+    evtDevAData.x = 4;
+    evtDevAData.y = 5;
                                     /* from collector effect action */
     evt = (RKH_EVT_T *)&evtDevAData;/* effect action argument */
     me->dev = ((EvtDevData *)evt)->dev; /* connected device */
