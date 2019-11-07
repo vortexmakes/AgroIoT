@@ -23,14 +23,15 @@
 #include "Mock_Collector.h"
 #include "Mock_rkhfwk_dynevt.h"
 #include "Mock_signals.h"
+#include "Mock_rkhfwk_cast.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static Collector collectorActObj;
-Collector *const collector = &collectorActObj;
+RKH_SMA_CREATE(Collector, collector, 0, HCAL, NULL, NULL, NULL);
+RKH_SMA_DEF_PTR(collector);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -99,7 +100,9 @@ test_MakeEventOperation(void)
     int nSectionExpect = 2;
     int doseExpect = 4;
     EvtSprayerData evtObj;
+    Collector *me;
 
+    me = RKH_DOWNCAST(Collector, collector);
     device_ctor_Expect(sprayerSpy_getObj(), 
                        SPRAYER, 
                        (RKH_SMA_T *)collector, 
@@ -108,8 +111,8 @@ test_MakeEventOperation(void)
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    collector->status.devData.hum = nSectionExpect;
-    collector->status.devData.h.pqty = doseExpect;
+    me->status.devData.hum = nSectionExpect;
+    me->status.devData.h.pqty = doseExpect;
 
     dev = sprayer_ctor(0);
 
@@ -121,7 +124,7 @@ test_MakeEventOperation(void)
 
     TEST_ASSERT_NOT_NULL(dev->vptr->makeEvt);
 
-    evt = (*dev->vptr->makeEvt)(dev, &collector->status.devData);
+    evt = (*dev->vptr->makeEvt)(dev, &me->status.devData);
 
     TEST_ASSERT_NOT_NULL(evt);
     TEST_ASSERT_EQUAL(dev, ((EvtSprayerData *)evt)->base.dev);
@@ -135,7 +138,9 @@ test_UpdateRawOperation(void)
     Device *dev;
     int nSectionExpect = 2;
     int doseExpect = 4;
+    Collector *me;
 
+    me = RKH_DOWNCAST(Collector, collector);
     device_ctor_Expect(sprayerSpy_getObj(), 
                        SPRAYER, 
                        (RKH_SMA_T *)collector, 
@@ -144,12 +149,12 @@ test_UpdateRawOperation(void)
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    collector->status.devData.hum = 0;
-    collector->status.devData.h.pqty = 0;
+    me->status.devData.hum = 0;
+    me->status.devData.h.pqty = 0;
 
     dev = sprayer_ctor(0);
 
-    collector->dev = dev;
+    me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->updateRaw);
     TEST_ASSERT_NOT_NULL(dev->collector);
     ((Sprayer *)dev)->nSection = nSectionExpect;
@@ -157,8 +162,8 @@ test_UpdateRawOperation(void)
 
     (*dev->vptr->updateRaw)(dev);
 
-    TEST_ASSERT_EQUAL(nSectionExpect, collector->status.devData.hum);
-    TEST_ASSERT_EQUAL(doseExpect, collector->status.devData.h.pqty);
+    TEST_ASSERT_EQUAL(nSectionExpect, me->status.devData.hum);
+    TEST_ASSERT_EQUAL(doseExpect, me->status.devData.h.pqty);
 }
 
 void
@@ -170,7 +175,9 @@ test_UpdateOperation(void)
     EvtSprayerData evtSprayerData;
     RKH_EVT_T *evt;
     Sprayer *sprayer;
+    Collector *me;
 
+    me = RKH_DOWNCAST(Collector, collector);
     device_ctor_Expect(sprayerSpy_getObj(), 
                        SPRAYER, 
                        (RKH_SMA_T *)collector, 
@@ -189,8 +196,8 @@ test_UpdateOperation(void)
 
     (*dev->vptr->update)(dev, evt);
 
-    sprayer = (Sprayer *)collector->dev;
-    TEST_ASSERT_EQUAL(dev, collector->dev);
+    sprayer = (Sprayer *)me->dev;
+    TEST_ASSERT_EQUAL(dev, me->dev);
     TEST_ASSERT_EQUAL(nSectionExpect, sprayer->nSection);
     TEST_ASSERT_EQUAL(doseExpect, sprayer->dose);
 }
@@ -203,7 +210,9 @@ test_TestOperation(void)
     int doseMax = 5;
     Sprayer *sprayer;
     int result = 0;
+    Collector *me;
 
+    me = RKH_DOWNCAST(Collector, collector);
     device_ctor_Expect(sprayerSpy_getObj(), 
                        SPRAYER, 
                        (RKH_SMA_T *)collector, 
@@ -215,7 +224,7 @@ test_TestOperation(void)
 
     dev = sprayer_ctor(doseMax);
 
-    collector->dev = dev;
+    me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->test);
     TEST_ASSERT_NOT_NULL(dev->collector);
     sprayer = (Sprayer *)dev;

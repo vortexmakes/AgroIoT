@@ -20,6 +20,7 @@
 #include "Mock_rkhassert.h"
 #include "Mock_rkhevt.h"
 #include "Mock_Collector.h"
+#include "Mock_rkhfwk_cast.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -60,8 +61,8 @@ static DevA devA;               /* It must be statically instantiated in a...*/
                                 /* ...concrete class (c source file) */
 static Device *devAObj;
 static EvtDevAData evtDevAData;
-static Collector collectorActObj;
-Collector *const collector = &collectorActObj;
+RKH_SMA_CREATE(Collector, collector, 0, HCAL, NULL, NULL, NULL);
+RKH_SMA_DEF_PTR(collector);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -224,14 +225,17 @@ test_UpdateDeviceAttributes(void)
 {
     Device *dev;                    /* collector attribute */
     RKH_EVT_T *evt;                 /* transition event */
+    Collector *me;
 
+    me = RKH_DOWNCAST(Collector, collector);
     devAObj = DevA_ctor(2, 8, 3);   /* from main() */
     evtDevAData.base.dev = devAObj; /* from ps callback */
     evtDevAData.param.x = 4;
     evtDevAData.param.y = 5;
                                     /* from collector effect action */
     evt = (RKH_EVT_T *)&evtDevAData;/* effect action argument */
-    dev = collector->dev = ((EvtDevData *)evt)->dev; /* connected device */
+    me->dev = ((EvtDevData *)evt)->dev; /* connected device */
+    dev = me->dev;
     TEST_ASSERT_NOT_NULL(dev);
 
     device_update(dev, evt);
@@ -274,16 +278,18 @@ test_UpdateRawData(void)
 {
     Device *dev;
     DevA *devAObj;
+    Collector *me;
 
+    me = RKH_DOWNCAST(Collector, collector);
     dev = DevA_ctor(2, 8, 3);   /* from main() */
     devAObj = (DevA *)dev;
     devAObj->x = 4;             /* update device attributes */
     devAObj->y = 8;
-    collector->status.devData.a.y = collector->status.devData.a.z = 0;
+    me->status.devData.a.y = me->status.devData.a.z = 0;
 
     device_updateRaw(dev);
-    TEST_ASSERT_EQUAL(4, collector->status.devData.a.y);
-    TEST_ASSERT_EQUAL(8, collector->status.devData.a.z);
+    TEST_ASSERT_EQUAL(4, me->status.devData.a.y);
+    TEST_ASSERT_EQUAL(8, me->status.devData.a.z);
 }
 
 /* ------------------------------ End of file ------------------------------ */
