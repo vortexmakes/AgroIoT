@@ -40,12 +40,13 @@ RKH_SMA_DCLR(collector);
 RKH_SM_DCLR(mapping);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_COMP_STATE Mapping_Active;
+RKH_DCLR_COMP_STATE DevStatus_Active;
+RKH_DCLR_BASIC_STATE DevStatus_DevNotConnected, DevStatus_DevConnected; 
 
+/* ------------------------------- Data types ------------------------------ */
 typedef struct Device Device;
 typedef struct Collector Collector;
 typedef struct Mapping Mapping;
-
 struct Mapping
 {
     RKH_SM_T sm;                /* Orthogonal region */
@@ -62,7 +63,6 @@ struct Collector
     RKHTmEvt updateStatusTmr;
 };
 
-/* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

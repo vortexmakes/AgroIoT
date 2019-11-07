@@ -7,8 +7,15 @@
   :test:
   :source:
     - src/Collector.c
-    - ../DigIn/inc
-    - ../../third-party/rkh/source/sm/src
   :include:
+    - ../GStatus/inc
+    - ../gps
+    - ../tpsens/cbox
+    - ../BatChr
+    - ../bsp
+    - ../ioChg
+    - ../topic/inc
+    - ../epoch/inc
+    - ../device/inc
+    - ../
   :support:
-    - ../../third-party/rkh/source/trc/src

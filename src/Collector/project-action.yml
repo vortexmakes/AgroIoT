@@ -9,7 +9,6 @@
     - src/CollectorAct.c
   :include:
     - ../GStatus/inc
-    - ../GStatus/inc
     - ../gps
     - ../tpsens/cbox
     - ../BatChr
@@ -17,7 +16,6 @@
     - ../ioChg
     - ../topic/inc
     - ../epoch/inc
-    - ../../third-party/rkh/source/trc/inc
     - ../device/inc
     - ../
   :support:
