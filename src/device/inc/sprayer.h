@@ -42,7 +42,7 @@ typedef struct EvtSprayerData EvtSprayerData;
 struct EvtSprayerData
 {
     EvtDevData base;
-    int nSection;
+    int nSection;       /* Device's attributes */
     int dose;
 };
 

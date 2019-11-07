@@ -25,6 +25,8 @@
 #include "events.h"
 #include "rkhtmr.h"
 #include "rkhfwk_dynevt.h"
+#include "device.h"
+#include "rkhassert.h"
 
 RKH_MODULE_NAME(CollectorAct)
 
@@ -86,6 +88,8 @@ Collector_init(Collector *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_AO(collectorMapping);
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
+    /* here one should publish state machine's element to trazer */
+    /* ... */
     RKH_FILTER_OFF_SMA(collectorMapping);
 
     topic_subscribe(status, RKH_UPCAST(RKH_SMA_T, me));
@@ -109,6 +113,10 @@ Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
 {
     GStatusEvt *evt;
 
+    if (me->dev != (Device *)0)
+    {
+        device_updateRaw(me->dev);
+    }
     evt = RKH_ALLOC_EVT(GStatusEvt, evGStatus, me);
     evt->status = me->status;
     topic_publish(status, 
@@ -128,9 +136,22 @@ Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe)
 }
 
 void 
-Collector_testDevNull(Collector *const me, RKH_EVT_T *pe)
+Collector_updateDigIn(Collector *const me, RKH_EVT_T *pe)
 {
-    if (testDevNullJobCond(me))
+    me->status.ioStatus.digIn = RKH_DOWNCAST(DigInChangedEvt, pe)->status;
+}
+
+void 
+Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe)
+{
+    EvtDevData *evtDevData;
+
+    evtDevData = RKH_DOWNCAST(EvtDevData, pe);
+    RKH_REQUIRE(evtDevData->dev != (Device *)0);
+    me->dev = evtDevData->dev; /* obtain device's instance */
+
+    device_update(me->dev, RKH_UPCAST(RKH_EVT_T, evtDevData));
+    if (device_test(me->dev))
     {
         RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), 
                           RKH_UPCAST(RKH_EVT_T, &evMappingObj), me);
@@ -151,9 +172,14 @@ Collector_enActive(Collector *const me)
 }
 
 void
-Collector_initDevNull(Collector *const me)
+Collector_initAndTestDevNull(Collector *const me)
 {
     me->dev = (Device *)0;
+    if (testDevNullJobCond(me))
+    {
+        RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), 
+                          RKH_UPCAST(RKH_EVT_T, &evMappingObj), me);
+    }
 }
 
 /* ............................. Exit actions .............................. */

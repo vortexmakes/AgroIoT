@@ -79,7 +79,7 @@ typedef struct EvtDevData EvtDevData;
 struct EvtDevData
 {
     RKH_EVT_T base;
-    Device *dev;
+    Device *dev;        /* Points to a device's instance */
 };
 
 /* -------------------------- External variables --------------------------- */

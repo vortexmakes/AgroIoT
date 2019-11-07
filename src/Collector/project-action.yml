@@ -18,6 +18,7 @@
     - ../topic/inc
     - ../epoch/inc
     - ../../third-party/rkh/source/trc/inc
+    - ../device/inc
     - ../
   :support:
 

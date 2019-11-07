@@ -58,7 +58,7 @@ struct Collector
     RKHSmaVtbl vtbl;            /* Virtual table */
     GStatus status;
     Device *dev;
-    Mapping itsMapping;   /* Mapping orthogonal region */
+    Mapping itsMapping;         /* Mapping orthogonal region */
     RKHTmEvt updateStatusTmr;
 };
 

@@ -27,6 +27,8 @@
 #include "events.h"
 #include "Mock_rkhtmr.h"
 #include "Mock_rkhfwk_dynevt.h"
+#include "Mock_device.h"
+#include "Mock_rkhassert.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -39,6 +41,22 @@ RKHROM RKH_FINAL_T Collector_Final;
 #endif
 
 /* ---------------------------- Local data types --------------------------- */
+typedef struct DevA DevA;
+struct DevA
+{
+    Device base;
+    int x;
+    int y;
+};
+
+typedef struct EvtDevAData EvtDevAData;
+struct EvtDevAData
+{
+    EvtDevData base;
+    int x;
+    int y;
+};
+
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 RKH_SMA_CREATE(Collector, collector, 0, HCAL, NULL, Collector_init, NULL);
@@ -81,6 +99,7 @@ test_Constructor(void)
     TEST_ASSERT_NULL(me->dev);
     TEST_ASSERT_EQUAL(0xff, me->status.ioStatus.digIn);
     TEST_ASSERT_EQUAL(0, me->status.ioStatus.digOut);
+    TEST_ASSERT_EQUAL(LINE_BATT, me->status.batChrStatus);
 }
 
 void
@@ -132,7 +151,7 @@ test_StartAndStopUpdatingStatusTmr(void)
 }
 
 void
-test_PublishingCurrentStatus(void)
+test_PublishCurrStatusWithNoDev(void)
 {
     GStatusEvt event;
 
@@ -146,14 +165,44 @@ test_PublishingCurrentStatus(void)
 }
 
 void
-test_InitDevNull(void)
+test_PublishCurrStatusWithDevConnected(void)
 {
-    Collector_initDevNull(me);
+    GStatusEvt event;
+    Device device;
+
+    me->dev = &device;
+    device_updateRaw_Expect(me->dev);
+    rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me, 
+                               RKH_UPCAST(RKH_EVT_T, &event));
+    topic_publish_Expect(status, 
+                         RKH_UPCAST(RKH_EVT_T, &event), 
+                         RKH_UPCAST(RKH_SMA_T, me));
+
+    Collector_publishCurrStatus(me, RKH_UPCAST(RKH_EVT_T, &event));
+}
+
+void
+test_ActiveDigInOnEntryDevNotConnected(void)
+{
+    me->status.ioStatus.digIn = 0xfe;
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_initAndTestDevNull(me);
     TEST_ASSERT_NULL(me->dev);
 }
 
 void
-test_ActiveDigInOnDevNull(void)
+test_IdleDigInOnEntryDevNotConnected(void)
+{
+    me->status.ioStatus.digIn = 0xff;
+
+    Collector_initAndTestDevNull(me);
+    TEST_ASSERT_NULL(me->dev);
+}
+
+void
+test_ActiveDigInInDevNotConnected(void)
 {
     DigInChangedEvt event;
 
@@ -166,7 +215,7 @@ test_ActiveDigInOnDevNull(void)
 }
 
 void
-test_IdleDigInOnDevNull(void)
+test_IdleDigInInDevNotConnected(void)
 {
     DigInChangedEvt event;
 
@@ -175,28 +224,44 @@ test_IdleDigInOnDevNull(void)
     TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digIn);
 }
 
-
 void
-test_DevNullAndActiveDigInOnDevConnected(void)
+test_UpdateDigInInDevConnected(void)
 {
-    RKH_EVT_T event;
+    DigInChangedEvt event;
 
-    RKH_SET_STATIC_EVENT(&event, evNoDev);
-    me->status.ioStatus.digIn = 0xfe;
-    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
-    rkh_sma_post_lifo_IgnoreArg_e();
-
-    Collector_testDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
+    event.status = 0xfc;
+    Collector_updateDigIn(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digIn);
 }
 
 void
-test_DevNullAndIdleDigInOnDevConnected(void)
+test_UpdateDevDataAndJobCondTrue(void)
 {
-    RKH_EVT_T event;
+    EvtDevAData event;
+    Device device;
 
-    RKH_SET_STATIC_EVENT(&event, evNoDev);
-    me->status.ioStatus.digIn = 0xff;
-    Collector_testDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
+    event.base.dev = &device;
+    device_update_Expect(event.base.dev, RKH_UPCAST(RKH_EVT_T, &event));
+    device_test_ExpectAndReturn(event.base.dev, 1);
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_updateAndTestDevData(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL(event.base.dev, me->dev);
+}
+
+void
+test_UpdateDevDataAndJobCondFalse(void)
+{
+    EvtDevAData event;
+    Device device;
+
+    event.base.dev = &device;
+    device_update_Expect(event.base.dev, RKH_UPCAST(RKH_EVT_T, &event));
+    device_test_ExpectAndReturn(event.base.dev, 0);
+
+    Collector_updateAndTestDevData(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL(event.base.dev, me->dev);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -32,6 +32,7 @@
 #include "sim5320parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"
+#include "CollectorAct.h"
 
 #include "ffile.h"
 #include "Config.h"
@@ -114,6 +115,7 @@ main(int argc, char *argv[])
     RKH_TRC_OPEN();
 
     sprayer = sprayer_ctor(0);
+    Collector_ctor();
     signals_publishSymbols();
 
     RKH_TR_FWK_ACTOR(&inChg, "inChg");
