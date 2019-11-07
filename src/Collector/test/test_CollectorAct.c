@@ -26,6 +26,7 @@
 #include "Mock_rkhtrc_filter.h"
 #include "events.h"
 #include "Mock_rkhtmr.h"
+#include "Mock_rkhfwk_dynevt.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -76,7 +77,10 @@ test_Constructor(void)
 
     Collector_ctor();
     TEST_ASSERT_NOT_NULL(me->vtbl.task);
-    TEST_ASSERT_NOT_NULL(me->itsMapping.itsCollector);
+    TEST_ASSERT_EQUAL(me, me->itsMapping.itsCollector);
+    TEST_ASSERT_NULL(me->dev);
+    TEST_ASSERT_EQUAL(0xff, me->status.ioStatus.digIn);
+    TEST_ASSERT_EQUAL(0, me->status.ioStatus.digOut);
 }
 
 void
@@ -112,7 +116,7 @@ test_UpdateDigOut(void)
 }
 
 void
-test_UpdatingStatusTmr(void)
+test_StartAndStopUpdatingStatusTmr(void)
 {
     GStatusEvt event;
 
@@ -125,11 +129,74 @@ test_UpdatingStatusTmr(void)
 
     rkh_tmr_stop_ExpectAndReturn(&me->updateStatusTmr.tmr, 0);
     Collector_exActive(me);
+}
 
+void
+test_PublishingCurrentStatus(void)
+{
+    GStatusEvt event;
+
+    rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me, 
+                               RKH_UPCAST(RKH_EVT_T, &event));
     topic_publish_Expect(status, 
                          RKH_UPCAST(RKH_EVT_T, &event), 
                          RKH_UPCAST(RKH_SMA_T, me));
+
     Collector_publishCurrStatus(me, RKH_UPCAST(RKH_EVT_T, &event));
+}
+
+void
+test_InitDevNull(void)
+{
+    Collector_initDevNull(me);
+    TEST_ASSERT_NULL(me->dev);
+}
+
+void
+test_ActiveDigInOnDevNull(void)
+{
+    DigInChangedEvt event;
+
+    event.status = 0xfe;
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_updateDigInTestDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digIn);
+}
+
+void
+test_IdleDigInOnDevNull(void)
+{
+    DigInChangedEvt event;
+
+    event.status = 0xff;
+    Collector_updateDigInTestDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digIn);
+}
+
+
+void
+test_DevNullAndActiveDigInOnDevConnected(void)
+{
+    RKH_EVT_T event;
+
+    RKH_SET_STATIC_EVENT(&event, evNoDev);
+    me->status.ioStatus.digIn = 0xfe;
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_testDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
+}
+
+void
+test_DevNullAndIdleDigInOnDevConnected(void)
+{
+    RKH_EVT_T event;
+
+    RKH_SET_STATIC_EVENT(&event, evNoDev);
+    me->status.ioStatus.digIn = 0xff;
+    Collector_testDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
 }
 
 /* ------------------------------ End of file ------------------------------ */

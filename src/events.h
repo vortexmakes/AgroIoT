@@ -146,11 +146,11 @@ struct GeoEvt
     Geo position;
 };
 
-typedef struct InChgEvt InChgEvt;
-struct InChgEvt
+typedef struct DigInChangedEvt DigInChangedEvt;
+struct DigInChangedEvt
 {
     RKH_EVT_T evt;
-    DigIn din;
+    DigIn status;
 };
 
 typedef struct DigOutChangedEvt DigOutChangedEvt;

@@ -74,7 +74,7 @@ enum Signals
     evGeo,
     evGeoInvalid,
     evTurn,
-    evIoChg,
+    evDigInChanged,
 	evRestart,
 	evEndOfCycle,
 	evSensorData,
@@ -83,7 +83,8 @@ enum Signals
     evNoDev,
     evGStatus,
     evSyncTout,
-    evDigOutChanged
+    evDigOutChanged,
+    evMapping
 };
 
 /* ------------------------------- Data types ------------------------------ */

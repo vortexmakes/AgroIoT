@@ -73,7 +73,8 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evGeo);
     RKH_TR_FWK_SIG(evGeoInvalid);
     RKH_TR_FWK_SIG(evTurn);
-    RKH_TR_FWK_SIG(evIoChg);
+    RKH_TR_FWK_SIG(evDigInChanged);
+    RKH_TR_FWK_SIG(evDigOutChanged);
 	RKH_TR_FWK_SIG(evRestart);
 	RKH_TR_FWK_SIG(evEndOfCycle);
 	RKH_TR_FWK_SIG(evSensorData);
@@ -81,6 +82,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evDevData);
     RKH_TR_FWK_SIG(evNoDev);
     RKH_TR_FWK_SIG(evSyncTout);
+    RKH_TR_FWK_SIG(evMapping);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -64,7 +64,7 @@ dIn_scan(void)
 {
     DigInSignalId i;
     uint8_t din;
-    InChgEvt *p;
+    DigInChangedEvt *p;
 
     for(i=0; i < NUM_DIN_SIGNALS; ++i)
     {
@@ -75,7 +75,7 @@ dIn_scan(void)
         {
             dInsSt[i] = 1;
 
-            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
+            p = RKH_ALLOC_EVT(DigInChangedEvt, evDigInChanged, &inChg);
             p->din |= 1 << i;
 
             topic_publish(status, p, &inChg);
@@ -85,7 +85,7 @@ dIn_scan(void)
         {
             dInsSt[i] = 0;
 
-            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
+            p = RKH_ALLOC_EVT(DigInChangedEvt, evDigInChanged, &inChg);
             p->din &= ~(1 << i);
 
             topic_publish(status, p, &inChg);

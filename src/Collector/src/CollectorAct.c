@@ -24,6 +24,7 @@
 #include "signals.h"
 #include "events.h"
 #include "rkhtmr.h"
+#include "rkhfwk_dynevt.h"
 
 RKH_MODULE_NAME(CollectorAct)
 
@@ -35,6 +36,8 @@ RKH_DCLR_SM_CONST_GLOBAL(mapping);
 RKH_SM_T *collectorMapping;
 
 /* ---------------------------- Local variables ---------------------------- */
+static RKH_EVT_T evMappingObj;
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void 
@@ -47,6 +50,12 @@ dispatch(RKH_SMA_T *me, void *arg)
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, region), (RKH_EVT_T *)arg);
 }
 
+bool
+testDevNullJobCond(Collector *const me)
+{
+    return (me->status.ioStatus.digIn != 0xff) ? true : false;
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void 
 Collector_ctor(void)
@@ -56,6 +65,8 @@ Collector_ctor(void)
     me = RKH_DOWNCAST(Collector, collector);
     me->vtbl = rkhSmaVtbl;
     me->vtbl.task = dispatch;
+    me->status.ioStatus.digIn = 0xff;
+    me->status.ioStatus.digOut = 0;
     rkh_sma_ctor(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
 
     me->itsMapping.itsCollector = me;
@@ -63,6 +74,7 @@ Collector_ctor(void)
                 mapping, 0, HCAL, 
                 Mapping_Active, NULL, NULL);
     collectorMapping = (RKH_SM_T *)&(me->itsMapping);
+    RKH_SET_STATIC_EVENT(&evMappingObj, evMapping);
 }
 
 /* ............................ Effect actions ............................. */
@@ -95,9 +107,34 @@ Collector_updateDigOut(Collector *const me, RKH_EVT_T *pe)
 void 
 Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
 {
+    GStatusEvt *evt;
+
+    evt = RKH_ALLOC_EVT(GStatusEvt, evGStatus, me);
+    evt->status = me->status;
     topic_publish(status, 
-                  RKH_UPCAST(RKH_EVT_T, pe), 
+                  RKH_UPCAST(RKH_EVT_T, evt), 
                   RKH_UPCAST(RKH_SMA_T, me));
+}
+
+void 
+Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe)
+{
+    me->status.ioStatus.digIn = RKH_DOWNCAST(DigInChangedEvt, pe)->status;
+    if (testDevNullJobCond(me))
+    {
+        RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), 
+                          RKH_UPCAST(RKH_EVT_T, &evMappingObj), me);
+    }
+}
+
+void 
+Collector_testDevNull(Collector *const me, RKH_EVT_T *pe)
+{
+    if (testDevNullJobCond(me))
+    {
+        RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), 
+                          RKH_UPCAST(RKH_EVT_T, &evMappingObj), me);
+    }
 }
 
 /* ............................. Entry actions ............................. */
@@ -111,6 +148,12 @@ Collector_enActive(Collector *const me)
     RKH_TMR_PERIODIC(&me->updateStatusTmr.tmr, 
                      RKH_UPCAST(RKH_SMA_T, me), 
                      0, UPDATING_STATUS_TIME);
+}
+
+void
+Collector_initDevNull(Collector *const me)
+{
+    me->dev = (Device *)0;
 }
 
 /* ............................. Exit actions .............................. */
