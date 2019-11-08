@@ -37,12 +37,6 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 RKHROM RKH_SCMP_T Mapping_Active;
-#if 0
-RKHROM RKH_SBSC_T SMInactive, WaitSyncSeq, Seq0, Seq2, Seq3, Seq4, Seq5, 
-                  Seq11, OutOfSeq, Seq1, Seq10, Seq8, Seq7, Seq6, Seq9;
-RKHROM RKH_SCMP_T SMActive;
-RKHROM RKH_FINAL_T Collector_Final;
-#endif
 
 /* ---------------------------- Local data types --------------------------- */
 typedef struct DevA DevA;
@@ -201,6 +195,8 @@ void
 test_IdleDigInOnEntryDevNotConnected(void)
 {
     me->status.ioStatus.digIn = 0xff;
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
 
     Collector_initAndTestDevNull(me);
     TEST_ASSERT_NULL(me->dev);
@@ -225,6 +221,9 @@ test_IdleDigInInDevNotConnected(void)
     DigInChangedEvt event;
 
     event.status = 0xff;
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
     Collector_updateDigInTestDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
     TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digIn);
 }
@@ -264,6 +263,8 @@ test_UpdateDevDataAndJobCondFalse(void)
     event.base.dev = &device;
     device_update_Expect(event.base.dev, RKH_UPCAST(RKH_EVT_T, &event));
     device_test_ExpectAndReturn(event.base.dev, 0);
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
 
     Collector_updateAndTestDevData(me, RKH_UPCAST(RKH_EVT_T, &event));
     TEST_ASSERT_EQUAL(event.base.dev, me->dev);
@@ -355,6 +356,19 @@ test_IsSyncDirOnStopped(void)
 void
 test_IsSyncDirOnRunning(void)
 {
+    rbool_t result;
+    Mapping *region;
+
+    region = &me->itsMapping;
+    region->nStoreLastSync = 80;
+    result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region), 
+                                        (RKH_EVT_T *)0);
+    TEST_ASSERT_EQUAL(RKH_FALSE, result);
+
+    region->nStoreLastSync = 100;
+    result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region), 
+                                        (RKH_EVT_T *)0);
+    TEST_ASSERT_EQUAL(RKH_TRUE, result);
 }
 
 /* ------------------------------ End of file ------------------------------ */

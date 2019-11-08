@@ -55,9 +55,48 @@ RKH_CREATE_TRANS_TABLE(DevStatus_DevConnected)
     RKH_TRREG(evNoDev, NULL, NULL, &DevStatus_DevNotConnected),
 RKH_END_TRANS_TABLE
 
+RKH_CREATE_COMP_REGION_STATE(Mapping_Active, NULL, NULL, RKH_ROOT, 
+                             &Mapping_Stopped, NULL,
+                             RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_TRANS_TABLE(Mapping_Active)
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_BASIC_STATE(Mapping_Stopped, NULL, 
+                       NULL, &Mapping_Active, NULL);
+RKH_CREATE_TRANS_TABLE(Mapping_Stopped)
+    RKH_TRREG(evToutSyncStopped, NULL, Mapping_storeStatus, &Mapping_C1),
+    RKH_TRREG(evMapping, NULL, NULL, &Mapping_Running),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_CHOICE_STATE(Mapping_C1);
+RKH_CREATE_BRANCH_TABLE(Mapping_C1)
+	RKH_BRANCH(Mapping_isSyncDirOnStopped, Mapping_syncDir, &Mapping_Stopped),
+	RKH_BRANCH(ELSE, NULL, &Mapping_Stopped),
+RKH_END_BRANCH_TABLE
+
+RKH_CREATE_BASIC_STATE(Mapping_Running, NULL, 
+                       NULL, &Mapping_Active, NULL);
+RKH_CREATE_TRANS_TABLE(Mapping_Running)
+    RKH_TRREG(evToutSyncRunning, NULL, Mapping_storeStatus, &Mapping_C3),
+    RKH_TRREG(evNoMapping, NULL, NULL, &Mapping_C2),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_CHOICE_STATE(Mapping_C2);
+RKH_CREATE_BRANCH_TABLE(Mapping_C2)
+	RKH_BRANCH(Mapping_isSyncDirOnStopped, Mapping_syncDir, &Mapping_Stopped),
+	RKH_BRANCH(ELSE, NULL, &Mapping_Stopped),
+RKH_END_BRANCH_TABLE
+
+RKH_CREATE_CHOICE_STATE(Mapping_C3);
+RKH_CREATE_BRANCH_TABLE(Mapping_C3)
+	RKH_BRANCH(Mapping_isSyncDirOnRunning, Mapping_syncDir, &Mapping_Running),
+	RKH_BRANCH(ELSE, NULL, &Mapping_Running),
+RKH_END_BRANCH_TABLE
+
 /* ............................. Active object ............................. */
 RKH_SMA_CREATE(Collector, collector, 3, HCAL, NULL, Collector_init, NULL);
 RKH_SMA_DEF_PTR(collector);
+RKH_SM_CONST_CREATE(mapping, 0, HCAL, &Mapping_Active, NULL, NULL);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */

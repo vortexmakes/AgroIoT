@@ -2,6 +2,7 @@
 #
 # Usage:
 #   $ sudo ceedling [clean|clobber] options:project-sm test:Collector
+#   $ sudo ceedling [clean|clobber] options:project-action test:CollectorAct
 #
 
 :project:

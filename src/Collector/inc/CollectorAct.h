@@ -57,6 +57,7 @@ void Mapping_exRunning(Mapping *const me);
 
 /* ............................ Declares guards ............................ */
 rbool_t Mapping_isSyncDirOnStopped(const RKH_SM_T *me, RKH_EVT_T *pe);
+rbool_t Mapping_isSyncDirOnRunning(const RKH_SM_T *me, RKH_EVT_T *pe);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

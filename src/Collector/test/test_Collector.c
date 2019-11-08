@@ -18,6 +18,7 @@
 #include "Collector.h"
 #include "Mock_CollectorAct.h"
 #include "Mock_rkhsma.h"
+#include "Mock_rkhsm.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */

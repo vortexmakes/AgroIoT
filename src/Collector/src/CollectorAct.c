@@ -42,7 +42,8 @@ RKH_DCLR_SM_CONST_GLOBAL(mapping);
 RKH_SM_T *collectorMapping;
 
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_EVT_T evMappingObj;
+static RKH_ROM_STATIC_EVENT(evMappingObj, evMapping);
+static RKH_ROM_STATIC_EVENT(evNoMappingObj, evNoMapping);
 static GPS_STR oldStatus; /* Should be deprecated in future releases */
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -76,6 +77,15 @@ getMapTimeOnRunning(void)
     return RKH_TIME_SEC(Config_getMappingTime());
 }
 
+static void
+propagateMappingEvent(Collector *const me, int result)
+{
+    const RKH_EVT_T *evt;
+
+    evt = result ? &evMappingObj : &evNoMappingObj;
+    RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), evt, me);
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void 
 Collector_ctor(void)
@@ -95,7 +105,6 @@ Collector_ctor(void)
                 mapping, 0, HCAL, 
                 Mapping_Active, NULL, NULL);
     collectorMapping = (RKH_SM_T *)&(me->itsMapping);
-    RKH_SET_STATIC_EVENT(&evMappingObj, evMapping);
 }
 
 /* ............................ Effect actions ............................. */
@@ -146,12 +155,11 @@ Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
 void 
 Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe)
 {
+    int result;
+
     me->status.ioStatus.digIn = RKH_DOWNCAST(DigInChangedEvt, pe)->status;
-    if (testDevNullJobCond(me))
-    {
-        RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), 
-                          RKH_UPCAST(RKH_EVT_T, &evMappingObj), me);
-    }
+    result = testDevNullJobCond(me);
+    propagateMappingEvent(me, result);
 }
 
 void 
@@ -164,17 +172,15 @@ void
 Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe)
 {
     EvtDevData *evtDevData;
+    int result;
 
     evtDevData = RKH_DOWNCAST(EvtDevData, pe);
     RKH_REQUIRE(evtDevData->dev != (Device *)0);
     me->dev = evtDevData->dev; /* obtain device's instance */
 
     device_update(me->dev, RKH_UPCAST(RKH_EVT_T, evtDevData));
-    if (device_test(me->dev))
-    {
-        RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), 
-                          RKH_UPCAST(RKH_EVT_T, &evMappingObj), me);
-    }
+    result = device_test(me->dev);
+    propagateMappingEvent(me, result);
 }
 
 void
@@ -213,12 +219,12 @@ Collector_enActive(Collector *const me)
 void
 Collector_initAndTestDevNull(Collector *const me)
 {
+    const RKH_EVT_T *evt;
+    int result;
+
     me->dev = (Device *)0;
-    if (testDevNullJobCond(me))
-    {
-        RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), 
-                          RKH_UPCAST(RKH_EVT_T, &evMappingObj), me);
-    }
+    result = testDevNullJobCond(me);
+    propagateMappingEvent(me, result);
 }
 
 void

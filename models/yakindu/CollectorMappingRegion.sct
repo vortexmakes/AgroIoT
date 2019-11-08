@@ -9,13 +9,13 @@
         <regions xmi:id="_aO6xav8vEemOF-Zd97UPAA" name="r1">
           <vertices xsi:type="sgraph:State" xmi:id="_aO6xa_8vEemOF-Zd97UPAA" specification="" name="Stopped" incomingTransitions="_aO7YbP8vEemOF-Zd97UPAA _aO7_ff8vEemOF-Zd97UPAA _aO7_f_8vEemOF-Zd97UPAA _aO7_hv8vEemOF-Zd97UPAA _aO7_iP8vEemOF-Zd97UPAA">
             <outgoingTransitions xmi:id="_aO7YYf8vEemOF-Zd97UPAA" specification="evMapping" target="_aO7Ybf8vEemOF-Zd97UPAA"/>
-            <outgoingTransitions xmi:id="_aO7YZf8vEemOF-Zd97UPAA" specification="after 60s /*getMapTimeOnStop()*//&#xD;&#xA;storeStatus()" target="_aO7_hf8vEemOF-Zd97UPAA"/>
+            <outgoingTransitions xmi:id="_aO7YZf8vEemOF-Zd97UPAA" specification="every 60s /*getMapTimeOnStop()*//&#xD;&#xA;storeStatus()" target="_aO7_hf8vEemOF-Zd97UPAA"/>
           </vertices>
           <vertices xsi:type="sgraph:Entry" xmi:id="_aO7Ya_8vEemOF-Zd97UPAA">
             <outgoingTransitions xmi:id="_aO7YbP8vEemOF-Zd97UPAA" specification="" target="_aO6xa_8vEemOF-Zd97UPAA"/>
           </vertices>
           <vertices xsi:type="sgraph:State" xmi:id="_aO7Ybf8vEemOF-Zd97UPAA" name="Running" incomingTransitions="_aO7YYf8vEemOF-Zd97UPAA _aO7_dP8vEemOF-Zd97UPAA _aO7_ev8vEemOF-Zd97UPAA">
-            <outgoingTransitions xmi:id="_aO7Yb_8vEemOF-Zd97UPAA" specification="after 3s /*getMapTimeOnRunning*//&#xD;&#xA;storeStatus()" target="_aO7_c_8vEemOF-Zd97UPAA"/>
+            <outgoingTransitions xmi:id="_aO7Yb_8vEemOF-Zd97UPAA" specification="every 3s /*getMapTimeOnRunning*//&#xD;&#xA;storeStatus()" target="_aO7_c_8vEemOF-Zd97UPAA"/>
             <outgoingTransitions xmi:id="_aO7Ydf8vEemOF-Zd97UPAA" specification="evNoMapping" target="_aO7_fP8vEemOF-Zd97UPAA"/>
           </vertices>
           <vertices xsi:type="sgraph:Choice" xmi:id="_aO7_c_8vEemOF-Zd97UPAA" incomingTransitions="_aO7Yb_8vEemOF-Zd97UPAA">

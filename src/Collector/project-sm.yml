@@ -17,5 +17,9 @@
     - ../topic/inc
     - ../epoch/inc
     - ../device/inc
+    - ../Config/inc
+    - ../StatQue/inc
+    - ../ffile/portable/test
+    - ../ffile/inc
     - ../
   :support:

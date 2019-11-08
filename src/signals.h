@@ -85,6 +85,7 @@ enum Signals
     evSyncTout,
     evDigOutChanged,
     evMapping,
+    evNoMapping,
     evToutSyncStopped,
     evToutSyncRunning
 };
