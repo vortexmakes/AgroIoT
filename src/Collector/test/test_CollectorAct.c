@@ -21,14 +21,18 @@
 #include "Mock_rkhsm.h"
 #include "rkhfwk_cast.h"
 #include "signals.h"
+#include "events.h"
 #include "Mock_topic.h"
 #include "Mock_rkhtrc_record.h"
 #include "Mock_rkhtrc_filter.h"
-#include "events.h"
 #include "Mock_rkhtmr.h"
 #include "Mock_rkhfwk_dynevt.h"
 #include "Mock_device.h"
 #include "Mock_rkhassert.h"
+#include "Mock_Config.h"
+#include "Mock_StatQue.h"
+#include "Mock_GStatus.h"
+#include "Mock_ffile.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -100,6 +104,7 @@ test_Constructor(void)
     TEST_ASSERT_EQUAL(0xff, me->status.ioStatus.digIn);
     TEST_ASSERT_EQUAL(0, me->status.ioStatus.digOut);
     TEST_ASSERT_EQUAL(LINE_BATT, me->status.batChrStatus);
+    TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
 }
 
 void
@@ -262,6 +267,94 @@ test_UpdateDevDataAndJobCondFalse(void)
 
     Collector_updateAndTestDevData(me, RKH_UPCAST(RKH_EVT_T, &event));
     TEST_ASSERT_EQUAL(event.base.dev, me->dev);
+}
+
+void
+test_StartAndStopSyncStoppedTmr(void)
+{
+    Mapping *region;
+
+    region = &me->itsMapping;
+    rkh_tmr_init__Expect(&region->syncStoppedTmr.tmr, 
+                         RKH_UPCAST(RKH_EVT_T, &region->syncStoppedTmr));
+    Config_getConnPeriodTime_ExpectAndReturn(60);
+    rkh_tmr_start_Expect(&region->syncStoppedTmr.tmr, 
+                         RKH_UPCAST(RKH_SMA_T, me), 
+                         0, RKH_TIME_SEC(60));
+    Mapping_enStopped(region);
+
+    rkh_tmr_stop_ExpectAndReturn(&region->syncStoppedTmr.tmr, 0);
+    Mapping_exStopped(region);
+}
+
+void
+test_StoreStatus(void)
+{
+    int n;
+    Mapping *region;
+
+    region = &me->itsMapping;
+    region->nStoreLastSync = n = 20;
+    GStatus_toGpsStr_ExpectAndReturn(&me->status, 0, 0);
+    GStatus_toGpsStr_IgnoreArg_to();
+    StatQue_put_ExpectAndReturn(0, 0);
+    StatQue_put_IgnoreArg_elem();
+
+    Mapping_storeStatus(region, (RKH_EVT_T *)0);
+    TEST_ASSERT_EQUAL(n + 1, me->itsMapping.nStoreLastSync);
+}
+
+void
+test_syncDir(void)
+{
+    Mapping *region;
+
+    region = &me->itsMapping;
+    me->itsMapping.nStoreLastSync = 20;
+    ffile_sync_Expect();
+    Mapping_syncDir(region, (RKH_EVT_T *)0);
+    TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
+}
+
+void
+test_StartAndStopSyncRunningTmr(void)
+{
+    Mapping *region;
+
+    region = &me->itsMapping;
+    rkh_tmr_init__Expect(&region->syncRunningTmr.tmr, 
+                         RKH_UPCAST(RKH_EVT_T, &region->syncRunningTmr));
+    Config_getMappingTime_ExpectAndReturn(60);
+    rkh_tmr_start_Expect(&region->syncRunningTmr.tmr, 
+                         RKH_UPCAST(RKH_SMA_T, me), 
+                         0, RKH_TIME_SEC(60));
+    Mapping_enRunning(region);
+
+    rkh_tmr_stop_ExpectAndReturn(&region->syncRunningTmr.tmr, 0);
+    Mapping_exRunning(region);
+}
+
+void
+test_IsSyncDirOnStopped(void)
+{
+    rbool_t result;
+    Mapping *region;
+
+    region = &me->itsMapping;
+    region->nStoreLastSync = 80;
+    result = Mapping_isSyncDirOnStopped(RKH_UPCAST(RKH_SM_T, region), 
+                                        (RKH_EVT_T *)0);
+    TEST_ASSERT_EQUAL(RKH_FALSE, result);
+
+    region->nStoreLastSync = 240;
+    result = Mapping_isSyncDirOnStopped(RKH_UPCAST(RKH_SM_T, region), 
+                                        (RKH_EVT_T *)0);
+    TEST_ASSERT_EQUAL(RKH_TRUE, result);
+}
+
+void
+test_IsSyncDirOnRunning(void)
+{
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -33,6 +33,7 @@
 #include "ubxm8parser.h"
 #include "cbox.h"
 #include "CollectorAct.h"
+#include "StatQue.h"
 
 #include "ffile.h"
 #include "Config.h"
@@ -105,6 +106,7 @@ main(int argc, char *argv[])
     init_seqs();
     mTime_init();
     ffile_init();
+    StatQue_init();
     Config_init();
 
     rkh_fwk_init();

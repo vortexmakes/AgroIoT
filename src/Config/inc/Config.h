@@ -65,7 +65,7 @@ struct Config
 
     /**
      * The system connects to remote server in order to send it messages 
-     * every T seconds
+     * every conntime seconds
      */
     rui8_t conntime;
 

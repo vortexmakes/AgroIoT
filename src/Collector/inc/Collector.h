@@ -51,6 +51,11 @@ struct Mapping
 {
     RKH_SM_T sm;                /* Orthogonal region */
     Collector *itsCollector;
+    RKHTmEvt syncStoppedTmr;
+    RKHTmEvt syncRunningTmr;
+    int nStoreLastSync;         /* indicates the number of status */
+                                /* storing from last directory */
+                                /* synchronization */
 };
 
 struct Collector

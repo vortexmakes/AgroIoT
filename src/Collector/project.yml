@@ -39,7 +39,7 @@
     - ../../third-party/rkh/third-party/unitrazer
     - ../../third-party/rkh/source/fwk/src
 :defines:
-  :common: &common_defines [__TEST__]
+  :common: &common_defines [__FFILETEST__, __TEST__]
   :test:
     - *common_defines
     - TEST

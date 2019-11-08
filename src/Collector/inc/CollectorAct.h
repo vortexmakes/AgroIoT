@@ -41,15 +41,22 @@ void Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe);
 void Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe);
 void Collector_updateDigIn(Collector *const me, RKH_EVT_T *pe);
 void Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe);
+void Mapping_storeStatus(Mapping *const me, RKH_EVT_T *pe);
+void Mapping_syncDir(Mapping *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 void Collector_enActive(Collector *const me);
 void Collector_initAndTestDevNull(Collector *const me);
+void Mapping_enStopped(Mapping *const me);
+void Mapping_enRunning(Mapping *const me);
 
 /* ......................... Declares exit actions ......................... */
 void Collector_exActive(Collector *const me);
+void Mapping_exStopped(Mapping *const me);
+void Mapping_exRunning(Mapping *const me);
 
 /* ............................ Declares guards ............................ */
+rbool_t Mapping_isSyncDirOnStopped(const RKH_SM_T *me, RKH_EVT_T *pe);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

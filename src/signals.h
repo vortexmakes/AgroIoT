@@ -84,7 +84,9 @@ enum Signals
     evGStatus,
     evSyncTout,
     evDigOutChanged,
-    evMapping
+    evMapping,
+    evToutSyncStopped,
+    evToutSyncRunning
 };
 
 /* ------------------------------- Data types ------------------------------ */
