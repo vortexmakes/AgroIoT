@@ -3,8 +3,8 @@
 
 source_dir="../../src"
 ceedling_dir="tools/ceedling"
-modules="Config epoch GStatus StatQue YFrame"
-stateMachines=""
+modules="Config epoch GStatus StatQue YFrame device topic"
+stateMachines="Collector"
 
 #echo $PATH
 export PATH="$PATH:/home/travis/.rvm/gems/ruby-2.4.1/bin"
