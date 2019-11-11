@@ -35,7 +35,7 @@
     - ../../third-party/rkh/source/trc/inc
     - ../../third-party/rkh/source/mempool/inc
     - ../tpsens/cbox
-    - ../collector
+    - ../Collector/inc
     - ../gps
     - ../BatChr
     - ../GStatus/inc

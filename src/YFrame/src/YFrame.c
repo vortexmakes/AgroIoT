@@ -52,7 +52,7 @@ YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type)
     {
 	    flag |= (Geo_isValid(&from->position) == 1) ? FLG_GPS_VALID : 0;
     	flag |= (type == YFRAME_MGP_TYPE) ? FLG_HISTORY : 0;
-	    flag |= (cbox_isMoving(&from->dev) == 1) ? FLG_MOVING : 0;
+	    flag |= (cbox_isMoving(&from->devData) == 1) ? FLG_MOVING : 0;
     	flag |= (BatChr_getStatus() << 3);
         *flags = flag;
     }
@@ -110,8 +110,8 @@ YFrame_data(GStatus *from, char *to, rInt type)
     size = 0;
     frame = to;
     position = &from->position;
-    io = &from->io;
-    dev = &from->dev;
+    io = &from->ioStatus;
+    dev = &from->devData;
 
     if ((from != (GStatus *)0) && (to != (char *)0))
     {
@@ -151,7 +151,7 @@ YFrame_data(GStatus *from, char *to, rInt type)
         strcat(frame, temp);
         sprintf(temp, "%04X,", (rui16_t)(dev->a.z));
         strcat(frame, temp);
-        sprintf(temp, "%d", from->batChr);
+        sprintf(temp, "%d", from->batChrStatus);
         strcat(frame, temp);
         size = strlen(frame);
     }

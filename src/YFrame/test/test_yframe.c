@@ -105,7 +105,7 @@ test_ValidGetFlags(void)
 
     flags = 0;
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
-    cbox_isMoving_ExpectAndReturn(&(status0.dev), 0);
+    cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
 
     err = YFrame_getFlags((GStatus *)&status0, &flags, YFRAME_SGP_TYPE);
@@ -117,7 +117,7 @@ void
 test_MakeSingleHeader(void)
 {
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
-    cbox_isMoving_ExpectAndReturn(&(status0.dev), 0);
+    cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     ConMgr_Imei_ExpectAndReturn("355826018345180");
 
@@ -132,7 +132,7 @@ test_MakeSingleFrame(void)
 
     expLen = strlen(singleFrame);
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
-    cbox_isMoving_ExpectAndReturn(&(status0.dev), 0);
+    cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     ConMgr_Imei_ExpectAndReturn("355826018345180");
 
@@ -166,7 +166,7 @@ test_MakeMultipleFrame(void)
     for (i = 0; i < 2; ++i)
     {
         Geo_isValid_ExpectAndReturn(&(status0.position), 1);
-        cbox_isMoving_ExpectAndReturn(&(status0.dev), 0);
+        cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
         BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
         size += YFrame_data(&status0, &buf[size], YFRAME_MGP_TYPE);
     }
