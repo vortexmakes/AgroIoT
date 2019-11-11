@@ -55,9 +55,10 @@ GStatus_toGpsStr(GStatus *from, GPS_STR *to)
         strcpy(to->speed, pos->speed);
         strcpy(to->course, pos->course);
         strcpy(to->date, pos->date);
-        sprintf(to->in_out_st, "%02X%02X", from->io.digOut, from->io.digIn);
-        sprintf(to->acbk_st, "%d", from->batChr);
-        to->cbox = from->dev;
+        sprintf(to->in_out_st, "%02X%02X", from->ioStatus.digOut, 
+                from->ioStatus.digIn);
+        sprintf(to->acbk_st, "%d", from->batChrStatus);
+        to->cbox = from->devData;
     }
     else
     {

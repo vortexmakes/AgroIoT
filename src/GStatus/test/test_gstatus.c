@@ -118,9 +118,9 @@ test_ConvertGStatusToGpsStr(void)
     TEST_ASSERT_EQUAL_STRING(status0.position.speed, oldStatus.speed);
     TEST_ASSERT_EQUAL_STRING(status0.position.course, oldStatus.course);
     TEST_ASSERT_EQUAL_STRING(status0.position.date, oldStatus.date);
-    sprintf(temp, "%02X%02X", status0.io.digOut, status0.io.digIn);
+    sprintf(temp, "%02X%02X", status0.ioStatus.digOut, status0.ioStatus.digIn);
     TEST_ASSERT_EQUAL_STRING(temp, oldStatus.in_out_st);
-    sprintf(temp, "%d", status0.batChr);
+    sprintf(temp, "%d", status0.batChrStatus);
     TEST_ASSERT_EQUAL_STRING(temp, oldStatus.acbk_st);
     TEST_ASSERT_EQUAL(0, result);
 }
