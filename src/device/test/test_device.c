@@ -172,14 +172,14 @@ void
 test_InitAttr(void)
 {
     Device *me = (Device *)&devA;
-    DevVtbl *vtbl;
+    DevVtbl vtbl;
 
     device_ctor(me, DEVA, (RKH_SMA_T *)&collector, (JobCond *)&devAJobCond, 
-                vtbl);
+                &vtbl);
 
     TEST_ASSERT_EQUAL(DEVA, me->id);
     TEST_ASSERT_EQUAL(&devAJobCond, me->jobCond);
-    TEST_ASSERT_EQUAL(vtbl, me->vptr);
+    TEST_ASSERT_EQUAL(&vtbl, me->vptr);
 }
 
 void
