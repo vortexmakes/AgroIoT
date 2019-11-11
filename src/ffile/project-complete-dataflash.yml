@@ -1,6 +1,6 @@
 #
 # Usage:
-#   $ sudo ceedling [clean|clobber] options:project-complete-devflash \
+#   $ sudo ceedling [clean|clobber] options:project-complete-dataflash \
 #                                   test:ffile-complete
 #
 
