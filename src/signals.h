@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario Balina db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -30,13 +30,13 @@ extern "C" {
 typedef enum Signals Signals;
 enum Signals
 {
-	evOpen,
-	evClose,
+    evOpen,
+    evClose,
     evCmd,
     evResponse,
     evNoResponse,
     evURC,
-	evTimeout,
+    evTimeout,
     evRegTimeout,
     evToutWaitResponse,
     evOk,
@@ -75,10 +75,10 @@ enum Signals
     evGeoInvalid,
     evTurn,
     evDigInChanged,
-	evRestart,
-	evEndOfCycle,
-	evSensorData,
-	evTerminate,     /* press the key escape on the keyboard */
+    evRestart,
+    evEndOfCycle,
+    evSensorData,
+    evTerminate,     /* press the key escape on the keyboard */
     evDevData,
     evNoDev,
     evGStatus,
