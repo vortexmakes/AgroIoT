@@ -36,7 +36,10 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-RKHROM RKH_SCMP_T Mapping_Active;
+RKHROM RKH_SCMP_T DevStatus_Active, Mapping_Active;
+RKHROM RKH_SBSC_T DevStatus_DevNotConnected, DevStatus_DevConnected, 
+                  Mapping_Stopped, Mapping_Running;
+RKHROM RKH_SCHOICE_T Mapping_C1, Mapping_C2, Mapping_C3;
 
 /* ---------------------------- Local data types --------------------------- */
 typedef struct DevA DevA;
@@ -107,6 +110,15 @@ test_Init(void)
     rkh_trc_ao_Ignore();
     rkh_trc_ao_Ignore();
     rkh_trc_obj_Ignore();
+    rkh_trc_state_Ignore();
+    rkh_trc_state_Ignore();
+    rkh_trc_state_Ignore();
+    rkh_trc_state_Ignore();
+    rkh_trc_state_Ignore();
+    rkh_trc_state_Ignore();
+    rkh_trc_state_Ignore();
+    rkh_trc_state_Ignore();
+    rkh_trc_state_Ignore();
     rkh_trc_symFil_Ignore();
     topic_subscribe_Expect(status, RKH_UPCAST(RKH_SMA_T, me));
     rkh_sm_init_Expect(RKH_UPCAST(RKH_SM_T, &me->itsMapping));

@@ -116,8 +116,15 @@ Collector_init(Collector *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_AO(collectorMapping);
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
-    /* here one should publish state machine's element to trazer */
-    /* ... */
+    RKH_TR_FWK_STATE(me, &DevStatus_Active);
+    RKH_TR_FWK_STATE(me, &DevStatus_DevNotConnected);
+    RKH_TR_FWK_STATE(me, &DevStatus_DevConnected);
+    RKH_TR_FWK_STATE(me, &Mapping_Active);
+    RKH_TR_FWK_STATE(me, &Mapping_Stopped);
+    RKH_TR_FWK_STATE(me, &Mapping_Running);
+    RKH_TR_FWK_PSTATE(me, &Mapping_C1);
+    RKH_TR_FWK_PSTATE(me, &Mapping_C2);
+    RKH_TR_FWK_PSTATE(me, &Mapping_C3);
     RKH_FILTER_OFF_SMA(collectorMapping);
 
     topic_subscribe(status, RKH_UPCAST(RKH_SMA_T, me));
