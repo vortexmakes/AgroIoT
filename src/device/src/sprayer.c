@@ -38,7 +38,7 @@ static Sprayer sprayer;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static int 
+static int
 sprayer_test(Device *const me)
 {
     SprayerJobCond *jc;
@@ -78,28 +78,28 @@ sprayer_update(Device *const me, RKH_EVT_T *evt)
     currDev->dose = realEvt->dose;
 }
 
-static void 
+static void
 sprayer_updateRaw(Device *const me)
 {
-    ((Collector *)(me->collector))->status.devData.hum = 
+    ((Collector *)(me->collector))->status.devData.hum =
         ((Sprayer *)me)->nSection;
-    ((Collector *)(me->collector))->status.devData.h.pqty = 
+    ((Collector *)(me->collector))->status.devData.h.pqty =
         ((Sprayer *)me)->dose;
 }
 
-static DevVtbl vtbl = {sprayer_test, 
-                       sprayer_makeEvt, 
-                       sprayer_update, 
+static DevVtbl vtbl = {sprayer_test,
+                       sprayer_makeEvt,
+                       sprayer_update,
                        sprayer_updateRaw};
 
 /* ---------------------------- Global functions --------------------------- */
-Device * 
+Device *
 sprayer_ctor(int doseMax)
 {
     SprayerJobCond *jc;
     Sprayer *me = &sprayer;
 
-    device_ctor((Device *)me, SPRAYER, (RKH_SMA_T *)collector, 
+    device_ctor((Device *)me, SPRAYER, (RKH_SMA_T *)collector,
                 (JobCond *)&sprayerJobCond, &vtbl);
     me->nSection = 0; /* atttibute default initialization */
     me->dose = 0;
@@ -108,19 +108,19 @@ sprayer_ctor(int doseMax)
     return (Device *)me;
 }
 
-int 
+int
 sprayerSpy_getNSection(void)
 {
     return sprayer.nSection;
 }
 
-int 
+int
 sprayerSpy_getDose(void)
 {
     return sprayer.dose;
 }
 
-int 
+int
 sprayerSpy_getDoseMax(void)
 {
     return sprayerJobCond.doseMax;

@@ -29,14 +29,14 @@
 void
 signals_publishSymbols(void)
 {
-	RKH_TR_FWK_SIG(evOpen);
-	RKH_TR_FWK_SIG(evClose);
+    RKH_TR_FWK_SIG(evOpen);
+    RKH_TR_FWK_SIG(evClose);
     RKH_TR_FWK_SIG(evCmd);
     RKH_TR_FWK_SIG(evResponse);
     RKH_TR_FWK_SIG(evNoResponse);
     RKH_TR_FWK_SIG(evURC);
-	RKH_TR_FWK_SIG(evTimeout);
-	RKH_TR_FWK_SIG(evRegTimeout);
+    RKH_TR_FWK_SIG(evTimeout);
+    RKH_TR_FWK_SIG(evRegTimeout);
     RKH_TR_FWK_SIG(evToutWaitResponse);
     RKH_TR_FWK_SIG(evOk);
     RKH_TR_FWK_SIG(evError);
@@ -75,10 +75,10 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evTurn);
     RKH_TR_FWK_SIG(evDigInChanged);
     RKH_TR_FWK_SIG(evDigOutChanged);
-	RKH_TR_FWK_SIG(evRestart);
-	RKH_TR_FWK_SIG(evEndOfCycle);
-	RKH_TR_FWK_SIG(evSensorData);
-	RKH_TR_FWK_SIG(evTerminate);
+    RKH_TR_FWK_SIG(evRestart);
+    RKH_TR_FWK_SIG(evEndOfCycle);
+    RKH_TR_FWK_SIG(evSensorData);
+    RKH_TR_FWK_SIG(evTerminate);
     RKH_TR_FWK_SIG(evDevData);
     RKH_TR_FWK_SIG(evNoDev);
     RKH_TR_FWK_SIG(evSyncTout);

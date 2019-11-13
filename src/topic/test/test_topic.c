@@ -33,14 +33,14 @@ static Topics topic;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static void 
+static void
 MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 {
     TEST_PASS();
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
     evt = &evtObj;
@@ -48,7 +48,7 @@ setUp(void)
     topic = status;
 }
 
-void 
+void
 tearDown(void)
 {
 }

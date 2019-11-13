@@ -65,14 +65,14 @@ setStatus(DigOutSignalId out, ruint val, int context)
     }
 
     bsp_setDigOut(out, val);
-    
+
     if (context == OnSet)
     {
-        DigOutChangedEvt *outChgObj = RKH_ALLOC_EVT(DigOutChangedEvt, 
-                                                    evDigOutChanged, 
+        DigOutChangedEvt *outChgObj = RKH_ALLOC_EVT(DigOutChangedEvt,
+                                                    evDigOutChanged,
                                                     &outChg);
         outChgObj->status = dOutStatus;
-        topic_publish(status, RKH_UPCAST(RKH_EVT_T, outChgObj), 
+        topic_publish(status, RKH_UPCAST(RKH_EVT_T, outChgObj),
                       RKH_UPCAST(RKH_SMA_T, &outChg));
     }
 }
@@ -96,13 +96,15 @@ dOut_set(DigOutSignalId out, ruint val, rui16_t tmr)
 {
     RKH_SR_ALLOC();
 
-    if(out >= NUM_DOUT_SIGNALS)
+    if (out >= NUM_DOUT_SIGNALS)
+    {
         return;
+    }
 
-    RKH_ENTER_CRITICAL_();    
+    RKH_ENTER_CRITICAL_();
     dOuts[out].val = val != 0 ? 1 : 0;
     dOuts[out].timer = tmr;
-    RKH_EXIT_CRITICAL_();    
+    RKH_EXIT_CRITICAL_();
 }
 
 ruint
@@ -117,9 +119,9 @@ dOut_process(void)
     DigitalTimerOutput *out;
     DigOutSignalId i;
 
-	for(out = dOuts, i=0; out < &dOuts[NUM_DOUT_SIGNALS]; ++out, ++i)
+    for (out = dOuts, i = 0; out < &dOuts[NUM_DOUT_SIGNALS]; ++out, ++i)
     {
-		if(out->timer > 0 && !(--(out->timer)))
+        if ((out->timer > 0) && !(--(out->timer)))
         {
             setStatus(i, out->val ^ 1, OnSet);
         }

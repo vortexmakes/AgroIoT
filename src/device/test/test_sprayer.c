@@ -35,15 +35,15 @@ RKH_SMA_DEF_PTR(collector);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static void 
+static void
 MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 {
     TEST_PASS();
 }
 
-static void 
-Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector, 
-                          JobCond *jobCond, DevVtbl *vtbl, 
+static void
+Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
+                          JobCond *jobCond, DevVtbl *vtbl,
                           int cmock_num_calls)
 {
     me->jobCond = sprayerSpy_getJobCondObj();
@@ -52,14 +52,14 @@ Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
     Mock_rkhassert_Init();
     Mock_device_Init();
 }
 
-void 
+void
 tearDown(void)
 {
     Mock_rkhassert_Verify();
@@ -74,10 +74,10 @@ test_InitAttributes(void)
     Device *dev;
     int nSectionMaxExpect = 5;
 
-    device_ctor_Expect(sprayerSpy_getObj(), 
-                       SPRAYER, 
-                       (RKH_SMA_T *)collector, 
-                       (JobCond *)0, 
+    device_ctor_Expect(sprayerSpy_getObj(),
+                       SPRAYER,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
@@ -103,10 +103,10 @@ test_MakeEventOperation(void)
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(), 
-                       SPRAYER, 
-                       (RKH_SMA_T *)collector, 
-                       (JobCond *)0, 
+    device_ctor_Expect(sprayerSpy_getObj(),
+                       SPRAYER,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
@@ -116,8 +116,8 @@ test_MakeEventOperation(void)
 
     dev = sprayer_ctor(0);
 
-    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSprayerData), 
-                               (RKH_SIG_T)evDevData, 
+    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSprayerData),
+                               (RKH_SIG_T)evDevData,
                                0,
                                (RKH_EVT_T *)&evtObj);
     rkh_fwk_ae_IgnoreArg_sender();
@@ -141,10 +141,10 @@ test_UpdateRawOperation(void)
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(), 
-                       SPRAYER, 
-                       (RKH_SMA_T *)collector, 
-                       (JobCond *)0, 
+    device_ctor_Expect(sprayerSpy_getObj(),
+                       SPRAYER,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
@@ -178,10 +178,10 @@ test_UpdateOperation(void)
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(), 
-                       SPRAYER, 
-                       (RKH_SMA_T *)collector, 
-                       (JobCond *)0, 
+    device_ctor_Expect(sprayerSpy_getObj(),
+                       SPRAYER,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
@@ -213,10 +213,10 @@ test_TestOperation(void)
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(), 
-                       SPRAYER, 
-                       (RKH_SMA_T *)collector, 
-                       (JobCond *)0, 
+    device_ctor_Expect(sprayerSpy_getObj(),
+                       SPRAYER,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();

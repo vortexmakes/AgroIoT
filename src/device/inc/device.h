@@ -84,7 +84,7 @@ struct EvtDevData
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void device_ctor(Device *const me, int id, RKH_SMA_T *collector, 
+void device_ctor(Device *const me, int id, RKH_SMA_T *collector,
                  JobCond *jobCond, DevVtbl *vtbl);
 RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
 void device_update(Device *const me, RKH_EVT_T *evt);

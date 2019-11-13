@@ -22,7 +22,7 @@
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
-	extern "C" {
+extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */

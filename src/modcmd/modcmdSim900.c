@@ -60,99 +60,99 @@ static SSP sim900Parser;
 
 static const CmdTbl cmdTbl =
 {
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT\r\n",
+     &conMgr,
      RKH_TIME_MS(2000), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "ATE1+CREG=1\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(5000), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CPIN?\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CPIN?\r\n",
+     &conMgr,
      RKH_TIME_MS(1500), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CPIN=%d\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CPIN=%d\r\n",
+     &conMgr,
      RKH_TIME_MS(500), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CREG?\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CREG?\r\n",
+     &conMgr,
      RKH_TIME_MS(300), RKH_TIME_MS(500)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CLTS=1\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+GSN\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(500), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CIPSHUT\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(200)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CIPRXGET=1\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CCLK?\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CSTT=\"%s\",\"%s\",\"%s\"\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CSTT=\"%s\",\"%s\",\"%s\"\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(500)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIICR\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIICR\r\n",
+     &conMgr,
      RKH_TIME_MS(30000), RKH_TIME_MS(200)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIFSR\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIFSR\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSTATUS\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPSTATUS\r\n",
+     &conMgr,
      RKH_TIME_MS(100), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSTART=\"%s\",\"%s\",\"%s\"\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPSTART=\"%s\",\"%s\",\"%s\"\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(300)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPCLOSE\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPCLOSE\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSEND=%d\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPSEND=%d\r\n",
+     &conMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "\x1A\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "\x1A\r\n",
+     &conMgr,
      RKH_TIME_MS(10000), RKH_TIME_MS(100)},
 
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPRXGET=2,1024\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPRXGET=2,1024\r\n",
+     &conMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(100)},
 };
 
@@ -165,7 +165,8 @@ doSearch(unsigned char c)
 }
 
 static void
-postFIFOEvtCmd(ModMgrEvt *pe, const ModCmd *pc, unsigned char *data, ruint nData)
+postFIFOEvtCmd(ModMgrEvt *pe, const ModCmd *pc, unsigned char *data,
+               ruint nData)
 {
     pe->data = data;
     pe->nData = nData;
@@ -207,7 +208,7 @@ sendModCmd_3StrArgs(const ModCmd *p, char *s1, char *s2, char *s3)
     ModMgrEvt *evtCmd;
 
     evtCmd = RKH_ALLOC_EVT(ModMgrEvt, evCmd, *p->aoDest);
-    
+
     snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, p->fmt, s1, s2, s3);
 
     postFIFOEvtCmd(evtCmd, p, NULL, 0);
@@ -220,102 +221,102 @@ ModCmd_init(void)
     RKH_SR_ALLOC();
 
     RKH_ENTER_CRITICAL_();
-  	ssp_init(&sim900Parser, &rootCmdParser);
+    ssp_init(&sim900Parser, &rootCmdParser);
     RKH_EXIT_CRITICAL_();
     return &doSearch;
 }
 
-void 
+void
 ModCmd_sync(void)
 {
     sendModCmd_noArgs(&cmdTbl.sync);
 }
 
-void 
+void
 ModCmd_initStr(void)
 {
     sendModCmd_noArgs(&cmdTbl.initStr);
 }
 
-void 
+void
 ModCmd_getPinStatus(void)
 {
     sendModCmd_noArgs(&cmdTbl.getPinStatus);
 }
 
-void 
+void
 ModCmd_setPin(rui16_t pin)
 {
     sendModCmd_rui16(&cmdTbl.setPin, pin);
 }
 
-void 
+void
 ModCmd_getRegStatus(void)
 {
     sendModCmd_noArgs(&cmdTbl.getRegStatus);
 }
 
-void 
+void
 ModCmd_enableNetTime(void)
 {
     sendModCmd_noArgs(&cmdTbl.enableNetTime);
 }
 
-void 
+void
 ModCmd_getImei(void)
 {
     sendModCmd_noArgs(&cmdTbl.getImei);
 }
 
-void 
+void
 ModCmd_cipShutdown(void)
 {
     sendModCmd_noArgs(&cmdTbl.cipShutdown);
 }
 
-void 
+void
 ModCmd_setManualGet(void)
 {
     sendModCmd_noArgs(&cmdTbl.setManualGet);
 }
 
-void 
+void
 ModCmd_getLocalTime(void)
 {
     sendModCmd_noArgs(&cmdTbl.getLocalTime);
 }
 
-void 
+void
 ModCmd_setupAPN(char *apn, char *usr, char *nm)
 {
     sendModCmd_3StrArgs(&cmdTbl.setAPN, apn, usr, nm);
 }
 
-void 
+void
 ModCmd_startGPRS(void)
 {
     sendModCmd_noArgs(&cmdTbl.startGPRS);
 }
 
-void 
+void
 ModCmd_requestIP(void)
 {
     sendModCmd_noArgs(&cmdTbl.requestIP);
 }
 
-void 
+void
 ModCmd_getConnStatus(void)
 {
     sendModCmd_noArgs(&cmdTbl.getConnStatus);
 }
 
-void 
+void
 ModCmd_connect(char *prot, char *dmn, char *port)
 {
     sendModCmd_3StrArgs(&cmdTbl.connect, prot, dmn, port);
 }
 
-void 
+void
 ModCmd_disconnect(void)
 {
     sendModCmd_noArgs(&cmdTbl.disconnect);

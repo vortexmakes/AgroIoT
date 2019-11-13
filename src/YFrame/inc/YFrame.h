@@ -1,6 +1,6 @@
 /**
  *  \file       YFrame.h
- *  \brief      Specifies the interface of Yipies frame (remote protocol) 
+ *  \brief      Specifies the interface of Yipies frame (remote protocol)
  *              module
  */
 

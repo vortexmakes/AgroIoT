@@ -33,7 +33,7 @@ typedef rui8_t DigIn;
 typedef rui8_t DigOut;
 
 typedef struct IOStatus IOStatus;
-struct IOStatus 
+struct IOStatus
 {
     DigIn digIn;
     DigOut digOut;

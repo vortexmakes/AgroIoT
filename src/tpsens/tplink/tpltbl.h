@@ -8,25 +8,26 @@
 
 enum
 {
-	TPL_IDLE,
-	TPL_IN_ESC,
+    TPL_IDLE,
+    TPL_IN_ESC,
 #if TPLINK_ADDRESSING_ON
-	TPL_WADDR,
+    TPL_WADDR,
 #endif
-	TPL_WNDATAH,
-	TPL_WNDATAL,
-	TPL_IN_DATA,
-	TPL_WCHK,
-	TPL_IN_XMIT,
-	TPL_XMIT_ESC,
-	TPL_XCHK,
-	TPL_WXMIT,
-	TPL_WXMITCMP,
+    TPL_WNDATAH,
+    TPL_WNDATAL,
+    TPL_IN_DATA,
+    TPL_WCHK,
+    TPL_IN_XMIT,
+    TPL_XMIT_ESC,
+    TPL_XCHK,
+    TPL_WXMIT,
+    TPL_WXMITCMP,
 
-	TPL_NUM_STATES
+    TPL_NUM_STATES
 };
 
 extern const PROCFUNC_T tpltbl[TPL_NUM_STATES];
 
 #endif
 
+/* ------------------------------ End of file ------------------------------ */

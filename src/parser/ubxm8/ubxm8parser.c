@@ -26,24 +26,24 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GET_RMC_FIELDS(r) \
-                { \
-                    { (r).utc, RMC_UTC_LEN },  \
-                    { (r).status, RMC_INDICATOR_LEN },   \
-                    { (r).latitude, RMC_LATITUDE_LEN },  \
-                    { (r).northingIndicator, RMC_INDICATOR_LEN },  \
-                    { (r).longitude, RMC_LONGITUDE_LEN },  \
-                    { (r).eastingIndicator, RMC_INDICATOR_LEN },  \
-                    { (r).sog, RMC_SOG_LEN },  \
-                    { (r).cog, RMC_COG_LEN },  \
-                    { (r).date, RMC_DATE_LEN },  \
-                    { (r).magneticVariation, RMC_MAGVAR_LEN },  \
-                    { (r).magneticVarIndicator, RMC_INDICATOR_LEN },  \
-                    { (r).modeIndicator, RMC_INDICATOR_LEN },  \
-                    { (r).navigationalStatus, RMC_INDICATOR_LEN }  \
-                }
+    { \
+        {(r).utc, RMC_UTC_LEN},  \
+        {(r).status, RMC_INDICATOR_LEN},   \
+        {(r).latitude, RMC_LATITUDE_LEN},  \
+        {(r).northingIndicator, RMC_INDICATOR_LEN},  \
+        {(r).longitude, RMC_LONGITUDE_LEN},  \
+        {(r).eastingIndicator, RMC_INDICATOR_LEN},  \
+        {(r).sog, RMC_SOG_LEN},  \
+        {(r).cog, RMC_COG_LEN},  \
+        {(r).date, RMC_DATE_LEN},  \
+        {(r).magneticVariation, RMC_MAGVAR_LEN},  \
+        {(r).magneticVarIndicator, RMC_INDICATOR_LEN},  \
+        {(r).modeIndicator, RMC_INDICATOR_LEN},  \
+        {(r).navigationalStatus, RMC_INDICATOR_LEN}  \
+    }
 
 /* ------------------------------- Constants ------------------------------- */
-#define NMEA_FRAME_MAX_SIZE     82 // NMEA 0183 specification
+#define NMEA_FRAME_MAX_SIZE     82 /* NMEA 0183 specification */
 
 /* ---------------------------- Local data types --------------------------- */
 typedef struct
@@ -81,25 +81,25 @@ static void chkCrcAndPublish(unsigned char pos);
 
 SSP_CREATE_NORMAL_NODE(rootGpsParser);
 SSP_CREATE_BR_TABLE(rootGpsParser)
-	SSPBR("$",    nmeaStarts,  &inNMEA),
+SSPBR("$",    nmeaStarts,  &inNMEA),
 SSP_END_BR_TABLE
 
 SSP_CREATE_TRN_NODE(inNMEA, nmeaCollect);
 SSP_CREATE_BR_TABLE(inNMEA)
-	SSPBR("GNRMC,",    rmcStarts, &inRMC),
-	SSPBR("\n",       NULL,      &rootGpsParser),
+SSPBR("GNRMC,",    rmcStarts, &inRMC),
+SSPBR("\n",       NULL,      &rootGpsParser),
 SSP_END_BR_TABLE
 
 SSP_CREATE_TRN_NODE(inRMC, rmcCollect);
 SSP_CREATE_BR_TABLE(inRMC)
-	SSPBR(",",    rmcIncField,   &inRMC),
-	SSPBR("*",    NULL,  &inChk),
-	SSPBR("\n",   NULL,  &rootGpsParser),
+SSPBR(",",    rmcIncField,   &inRMC),
+SSPBR("*",    NULL,  &inChk),
+SSPBR("\n",   NULL,  &rootGpsParser),
 SSP_END_BR_TABLE
 
 SSP_CREATE_TRN_NODE(inChk, chkCollect);
 SSP_CREATE_BR_TABLE(inChk)
-	SSPBR("\n",   chkCrcAndPublish,  &rootGpsParser),
+SSPBR("\n",   chkCrcAndPublish,  &rootGpsParser),
 SSP_END_BR_TABLE
 
 static void
@@ -115,15 +115,17 @@ nmeaStarts(unsigned char pos)
 static void
 nmeaCollect(unsigned char c)
 {
-    if(p >= (nmeaFrame + NMEA_FRAME_MAX_SIZE))
+    if (p >= (nmeaFrame + NMEA_FRAME_MAX_SIZE))
     {
         return;
     }
 
-	*p++ = c;
+    *p++ = c;
 
     if (c == '*')
+    {
         return;
+    }
 
     checksum ^= c;
 }
@@ -131,23 +133,23 @@ nmeaCollect(unsigned char c)
 static void
 chkCollect(unsigned char c)
 {
-    if (c == '\r' || c == '\n')
+    if ((c == '\r') || (c == '\n'))
     {
         return;
     }
 
-    if(p >= (nmeaFrame + NMEA_FRAME_MAX_SIZE))
+    if (p >= (nmeaFrame + NMEA_FRAME_MAX_SIZE))
     {
         return;
     }
 
-	*p++ = c;
+    *p++ = c;
 }
 
 static void
 rmcStarts(unsigned char pos)
 {
-	(void)pos;
+    (void)pos;
 
     pRmcF = &rmcFields[0];
     pF = pRmcF->p;
@@ -158,28 +160,35 @@ rmcCollect(unsigned char c)
 {
     nmeaCollect(c);
 
-	if (pRmcF >= rmcFields + RMC_FIELDS_NUM)
-		return;
-
-    if( pF >= (pRmcF->p + pRmcF->size) )
+    if (pRmcF >= rmcFields + RMC_FIELDS_NUM)
+    {
         return;
+    }
+
+    if (pF >= (pRmcF->p + pRmcF->size))
+    {
+        return;
+    }
 
     if (c == ',')
+    {
         return;
+    }
 
     *pF++ = c;
-
 }
 
 static void
 rmcIncField(unsigned char pos)
 {
-	(void)pos;
+    (void)pos;
 
     ++pRmcF;
 
-	if(pRmcF >= rmcFields + RMC_FIELDS_NUM)
-		return;
+    if (pRmcF >= rmcFields + RMC_FIELDS_NUM)
+    {
+        return;
+    }
 
     pF = pRmcF->p;
 }
@@ -190,12 +199,14 @@ chkCrcAndPublish(unsigned char pos)
     unsigned char fchk;
     RmcEvt *pRmc;
 
-	(void)pos;
+    (void)pos;
 
-	fchk = (unsigned char)strtol((const char *)(p-2), NULL, 16);
+    fchk = (unsigned char)strtol((const char *)(p - 2), NULL, 16);
 
-    if(fchk != checksum)
+    if (fchk != checksum)
+    {
         return;
+    }
 
     pRmc = RKH_ALLOC_EVT(RmcEvt, evRMC, &ubxm8parser);
 

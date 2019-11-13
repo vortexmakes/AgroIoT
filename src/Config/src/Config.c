@@ -90,8 +90,8 @@ Config_init(void)
     int res;
     Config *cfg;
 
-	ffile_seek(FFD1, 0);
-	res = ffile_random_access(FFD1, READ_ACCESS, &cfgObj, 1);
+    ffile_seek(FFD1, 0);
+    res = ffile_random_access(FFD1, READ_ACCESS, &cfgObj, 1);
     if (res > 0)
     {
         if (cfgObj.status != 1)
@@ -112,7 +112,7 @@ Config_init(void)
     return cfg;
 }
 
-void 
+void
 Config_set(Config *cfg)
 {
     int res;
@@ -120,15 +120,15 @@ Config_set(Config *cfg)
 
     RKH_REQUIRE(cfg != (Config *)0);
     RKH_ENTER_CRITICAL_();
-	ffile_seek(FFD1, 0);
-	res = ffile_random_access(FFD1, WRITE_ACCESS, cfg, 1);
+    ffile_seek(FFD1, 0);
+    res = ffile_random_access(FFD1, WRITE_ACCESS, cfg, 1);
     RKH_ENSURE(res > 0);
     ffile_sync();
     cfgObj = *cfg;
     RKH_EXIT_CRITICAL_();
 }
 
-void 
+void
 Config_setMappingTime(rui8_t value)
 {
     Config *cfg;
@@ -157,7 +157,7 @@ Config_setDftDigOut(DigOut value)
     Config_set(cfg);
 }
 
-DigOut 
+DigOut
 Config_getDftDigOut(void)
 {
     Config *cfg;
@@ -166,7 +166,7 @@ Config_getDftDigOut(void)
     return cfg->digOut;
 }
 
-void 
+void
 Config_setUpdateLocTime(rui8_t value)
 {
     Config *cfg;
@@ -176,7 +176,7 @@ Config_setUpdateLocTime(rui8_t value)
     Config_set(cfg);
 }
 
-rui8_t 
+rui8_t
 Config_getUpdateLocTime(void)
 {
     Config *cfg;
@@ -185,7 +185,7 @@ Config_getUpdateLocTime(void)
     return cfg->gpsttime;
 }
 
-void 
+void
 Config_setConnPeriodTime(rui8_t value)
 {
     Config *cfg;
@@ -195,7 +195,7 @@ Config_setConnPeriodTime(rui8_t value)
     Config_set(cfg);
 }
 
-rui8_t 
+rui8_t
 Config_getConnPeriodTime(void)
 {
     Config *cfg;
@@ -204,13 +204,13 @@ Config_getConnPeriodTime(void)
     return cfg->conntime;
 }
 
-void 
+void
 Config_setIP(char *value)
 {
     setTCP(IP_PARAM, value);
 }
 
-void 
+void
 Config_getIP(char *value)
 {
     Config *cfg;
@@ -220,13 +220,13 @@ Config_getIP(char *value)
     strcpy(value, cfg->ip);
 }
 
-void 
+void
 Config_setPort(char *value)
 {
     setTCP(PORT_PARAM, value);
 }
 
-void 
+void
 Config_getPort(char *value)
 {
     Config *cfg;
@@ -236,7 +236,7 @@ Config_getPort(char *value)
     strcpy(value, cfg->port);
 }
 
-void 
+void
 Config_setDefault(rui8_t value)
 {
     Config *cfg;
@@ -246,7 +246,7 @@ Config_setDefault(rui8_t value)
     Config_set(cfg);
 }
 
-rui8_t 
+rui8_t
 Config_getDefault(void)
 {
     Config *cfg;
@@ -255,7 +255,7 @@ Config_getDefault(void)
     return cfg->status;
 }
 
-void 
+void
 Config_setAccLimit(rui8_t value)
 {
     Config *cfg;
@@ -265,7 +265,7 @@ Config_setAccLimit(rui8_t value)
     Config_set(cfg);
 }
 
-rui8_t 
+rui8_t
 Config_getAccLimit(void)
 {
     Config *cfg;
@@ -274,7 +274,7 @@ Config_getAccLimit(void)
     return cfg->aclimit;
 }
 
-void 
+void
 Config_setBrakeLimit(rui8_t value)
 {
     Config *cfg;
@@ -284,7 +284,7 @@ Config_setBrakeLimit(rui8_t value)
     Config_set(cfg);
 }
 
-rui8_t 
+rui8_t
 Config_getBrakeLimit(void)
 {
     Config *cfg;

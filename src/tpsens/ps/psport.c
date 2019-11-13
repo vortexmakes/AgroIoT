@@ -19,3 +19,4 @@ dll_send_frame(ST_T s, PS_PLBUFF_T *p)
     memcpy(frm.pload, p->payload, frm.qty);
     tplink_send_frame(&frm);
 }
+/* ------------------------------ End of file ------------------------------ */

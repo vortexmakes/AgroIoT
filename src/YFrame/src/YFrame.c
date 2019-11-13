@@ -40,7 +40,7 @@ static const char *frameType[] = {"0", "1"};
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-rInt 
+rInt
 YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type)
 {
     rInt res;
@@ -50,10 +50,10 @@ YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type)
     flag = 0;
     if ((from != (GStatus *)0) && (flags != (rui8_t *)0))
     {
-	    flag |= (Geo_isValid(&from->position) == 1) ? FLG_GPS_VALID : 0;
-    	flag |= (type == YFRAME_MGP_TYPE) ? FLG_HISTORY : 0;
-	    flag |= (cbox_isMoving(&from->devData) == 1) ? FLG_MOVING : 0;
-    	flag |= (BatChr_getStatus() << 3);
+        flag |= (Geo_isValid(&from->position) == 1) ? FLG_GPS_VALID : 0;
+        flag |= (type == YFRAME_MGP_TYPE) ? FLG_HISTORY : 0;
+        flag |= (cbox_isMoving(&from->devData) == 1) ? FLG_MOVING : 0;
+        flag |= (BatChr_getStatus() << 3);
         *flags = flag;
     }
     else
@@ -63,7 +63,7 @@ YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type)
     return res;
 }
 
-ruint 
+ruint
 YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type)
 {
     ruint size;
@@ -97,7 +97,7 @@ YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type)
     return size;
 }
 
-ruint 
+ruint
 YFrame_data(GStatus *from, char *to, rInt type)
 {
     ruint size;
@@ -158,7 +158,7 @@ YFrame_data(GStatus *from, char *to, rInt type)
     return size;
 }
 
-ruint 
+ruint
 YFrame_multipleTail(char *to)
 {
     ruint size;

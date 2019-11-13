@@ -1,24 +1,24 @@
 /*
- * 	seqerr.h
- * 		Central module to manage the
- * 		driver errors
+ *  seqerr.h
+ *      Central module to manage the
+ *      driver errors
  */
 
 #include "mytypes.h"
 #include "rkhassert.h"
 
 /*
- * 	Error codes
+ *  Error codes
  */
-
 
 enum
 {
-	ERR_OK,
-	BAD_MAJOR, BAD_MINORS, BAD_CODE,
-	BAD_CHANNEL,
-	NUM_FATAL_ERRORS
+    ERR_OK,
+    BAD_MAJOR, BAD_MINORS, BAD_CODE,
+    BAD_CHANNEL,
+    NUM_FATAL_ERRORS
 };
 
-#define fatal_driver(x)	rkh_assert(__FILE__, __LINE__)
+#define fatal_driver(x) rkh_assert(__FILE__, __LINE__)
 
+/* ------------------------------ End of file ------------------------------ */

@@ -64,13 +64,13 @@ struct Config
     char port[PORT_LENGTH + 1];
 
     /**
-     * The system connects to remote server in order to send it messages 
+     * The system connects to remote server in order to send it messages
      * every conntime seconds
      */
     rui8_t conntime;
 
     /**
-     * Maximum time to register in the GSM network, open a TCP/IP socket, 
+     * Maximum time to register in the GSM network, open a TCP/IP socket,
      * and send a message to the remote server
      * Should it be deprecated?
      */
@@ -86,11 +86,11 @@ struct Config
      */
     DigOut digOut;
 
-    /** 
-     * The mapping is performed by collecting the different 
-     * status of the system, including its location, every T seconds, 
-     * which is called the mapping time. This period depends on the 
-     * mapping state (Stopped or Running). In Stopped state the system 
+    /**
+     * The mapping is performed by collecting the different
+     * status of the system, including its location, every T seconds,
+     * which is called the mapping time. This period depends on the
+     * mapping state (Stopped or Running). In Stopped state the system
      * stores its status every smptime.
      */
     rui8_t smptime;

@@ -1,6 +1,6 @@
 /**
  *  \file       cbox.c
- * 	\bried      Module to handle cbox object
+ *  \bried      Module to handle cbox object
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -27,7 +27,7 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-rbool_t 
+rbool_t
 cbox_isMoving(CBOX_STR *const me)
 {
     return me->m != 0;

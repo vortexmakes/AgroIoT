@@ -37,7 +37,7 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 RKHROM RKH_SCMP_T DevStatus_Active, Mapping_Active;
-RKHROM RKH_SBSC_T DevStatus_DevNotConnected, DevStatus_DevConnected, 
+RKHROM RKH_SBSC_T DevStatus_DevNotConnected, DevStatus_DevConnected,
                   Mapping_Stopped, Mapping_Running;
 RKHROM RKH_SCHOICE_T Mapping_C1, Mapping_C2, Mapping_C3;
 
@@ -132,7 +132,8 @@ test_UpdatePosition(void)
     GeoEvt event;
 
     Collector_updatePosition(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL_MEMORY(&me->status.position, &event.position, sizeof(Geo));
+    TEST_ASSERT_EQUAL_MEMORY(&me->status.position, &event.position,
+                             sizeof(Geo));
 }
 
 void
@@ -150,10 +151,10 @@ test_StartAndStopUpdatingStatusTmr(void)
 {
     GStatusEvt event;
 
-    rkh_tmr_init__Expect(&me->updateStatusTmr.tmr, 
+    rkh_tmr_init__Expect(&me->updateStatusTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &me->updateStatusTmr));
-    rkh_tmr_start_Expect(&me->updateStatusTmr.tmr, 
-                         RKH_UPCAST(RKH_SMA_T, me), 
+    rkh_tmr_start_Expect(&me->updateStatusTmr.tmr,
+                         RKH_UPCAST(RKH_SMA_T, me),
                          0, UPDATING_STATUS_TIME);
     Collector_enActive(me);
 
@@ -166,10 +167,10 @@ test_PublishCurrStatusWithNoDev(void)
 {
     GStatusEvt event;
 
-    rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me, 
+    rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
-    topic_publish_Expect(status, 
-                         RKH_UPCAST(RKH_EVT_T, &event), 
+    topic_publish_Expect(status,
+                         RKH_UPCAST(RKH_EVT_T, &event),
                          RKH_UPCAST(RKH_SMA_T, me));
 
     Collector_publishCurrStatus(me, RKH_UPCAST(RKH_EVT_T, &event));
@@ -183,10 +184,10 @@ test_PublishCurrStatusWithDevConnected(void)
 
     me->dev = &device;
     device_updateRaw_Expect(me->dev);
-    rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me, 
+    rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
-    topic_publish_Expect(status, 
-                         RKH_UPCAST(RKH_EVT_T, &event), 
+    topic_publish_Expect(status,
+                         RKH_UPCAST(RKH_EVT_T, &event),
                          RKH_UPCAST(RKH_SMA_T, me));
 
     Collector_publishCurrStatus(me, RKH_UPCAST(RKH_EVT_T, &event));
@@ -288,11 +289,11 @@ test_StartAndStopSyncStoppedTmr(void)
     Mapping *region;
 
     region = &me->itsMapping;
-    rkh_tmr_init__Expect(&region->syncStoppedTmr.tmr, 
+    rkh_tmr_init__Expect(&region->syncStoppedTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncStoppedTmr));
     Config_getConnPeriodTime_ExpectAndReturn(60);
-    rkh_tmr_start_Expect(&region->syncStoppedTmr.tmr, 
-                         RKH_UPCAST(RKH_SMA_T, me), 
+    rkh_tmr_start_Expect(&region->syncStoppedTmr.tmr,
+                         RKH_UPCAST(RKH_SMA_T, me),
                          0, RKH_TIME_SEC(60));
     Mapping_enStopped(region);
 
@@ -335,11 +336,11 @@ test_StartAndStopSyncRunningTmr(void)
     Mapping *region;
 
     region = &me->itsMapping;
-    rkh_tmr_init__Expect(&region->syncRunningTmr.tmr, 
+    rkh_tmr_init__Expect(&region->syncRunningTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncRunningTmr));
     Config_getMappingTime_ExpectAndReturn(60);
-    rkh_tmr_start_Expect(&region->syncRunningTmr.tmr, 
-                         RKH_UPCAST(RKH_SMA_T, me), 
+    rkh_tmr_start_Expect(&region->syncRunningTmr.tmr,
+                         RKH_UPCAST(RKH_SMA_T, me),
                          0, RKH_TIME_SEC(60));
     Mapping_enRunning(region);
 
@@ -355,12 +356,12 @@ test_IsSyncDirOnStopped(void)
 
     region = &me->itsMapping;
     region->nStoreLastSync = 80;
-    result = Mapping_isSyncDirOnStopped(RKH_UPCAST(RKH_SM_T, region), 
+    result = Mapping_isSyncDirOnStopped(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_FALSE, result);
 
     region->nStoreLastSync = 240;
-    result = Mapping_isSyncDirOnStopped(RKH_UPCAST(RKH_SM_T, region), 
+    result = Mapping_isSyncDirOnStopped(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_TRUE, result);
 }
@@ -373,12 +374,12 @@ test_IsSyncDirOnRunning(void)
 
     region = &me->itsMapping;
     region->nStoreLastSync = 80;
-    result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region), 
+    result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_FALSE, result);
 
     region->nStoreLastSync = 100;
-    result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region), 
+    result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_TRUE, result);
 }

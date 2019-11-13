@@ -28,13 +28,13 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
     Mock_ffile_Init();
 }
 
-void 
+void
 tearDown(void)
 {
     Mock_ffile_Verify();
@@ -43,7 +43,7 @@ tearDown(void)
 void
 test_InitOpenFile(void)
 {
-	ffile_queue_open_as_random_ExpectAndReturn(FFD0, 
+    ffile_queue_open_as_random_ExpectAndReturn(FFD0,
                                                OPEN_FROM_BEGINNING, 0);
     StatQue_init();
 }
@@ -54,7 +54,7 @@ test_GetNumElems(void)
     rui16_t nElem, nElemExp;
 
     nElemExp = 128;
-	ffile_tell_ExpectAndReturn(FFD0, nElemExp);
+    ffile_tell_ExpectAndReturn(FFD0, nElemExp);
     nElem = StatQue_getNumElem();
 
     TEST_ASSERT_EQUAL(nElemExp, nElem);
@@ -67,7 +67,7 @@ test_IsEmpty(void)
     rui16_t nElemExp;
 
     nElemExp = 0;
-	ffile_tell_ExpectAndReturn(FFD0, nElemExp);
+    ffile_tell_ExpectAndReturn(FFD0, nElemExp);
 
     res = StatQue_isEmpty();
     TEST_ASSERT_EQUAL(1, res);
@@ -79,7 +79,7 @@ test_RemoveOneElemSuccessfully(void)
     rInt res;
     GPS_STR *elem;
 
-	ffile_queue_remove_ExpectAndReturn(FFD0, elem, FQFILE_OK);
+    ffile_queue_remove_ExpectAndReturn(FFD0, elem, FQFILE_OK);
 
     res = StatQue_remove(elem);
     TEST_ASSERT_EQUAL(0, res);
@@ -91,7 +91,7 @@ test_RemoveOneElemWrongly(void)
     rInt res;
     GPS_STR *elem;
 
-	ffile_queue_remove_ExpectAndReturn(FFD0, elem, FQFILE_EMPTY);
+    ffile_queue_remove_ExpectAndReturn(FFD0, elem, FQFILE_EMPTY);
 
     res = StatQue_remove(elem);
     TEST_ASSERT_EQUAL(1, res);
@@ -104,7 +104,7 @@ test_Delete(void)
     rui16_t nElem;
 
     nElem = 8;
-	ffile_queue_delete_ExpectAndReturn(FFD0, (NR_T *)&nElem, FQFILE_OK);
+    ffile_queue_delete_ExpectAndReturn(FFD0, (NR_T *)&nElem, FQFILE_OK);
 
     res = StatQue_delete(&nElem);
     TEST_ASSERT_EQUAL(0, res);
@@ -116,7 +116,7 @@ test_Read(void)
     rInt res;
     GPS_STR *elem;
 
-    ffile_queue_random_read_ExpectAndReturn(FFD0, READ_FORWARD, 
+    ffile_queue_random_read_ExpectAndReturn(FFD0, READ_FORWARD,
                                             elem, FQFILE_OK);
 
     res = StatQue_read(elem);
@@ -129,7 +129,7 @@ test_Put(void)
     rInt res;
     GPS_STR *elem;
 
-	ffile_queue_insert_ExpectAndReturn(FFD0, elem, FQFILE_OK);
+    ffile_queue_insert_ExpectAndReturn(FFD0, elem, FQFILE_OK);
 
     res = StatQue_put(elem);
     TEST_ASSERT_EQUAL(0, res);

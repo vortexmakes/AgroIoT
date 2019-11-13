@@ -62,126 +62,126 @@ static const CmdTbl cmdTbl =
 {
     /* sync */
     {RKH_INIT_STATIC_EVT(evCmd),
-     "AT\r\n", 
-     &conMgr, 
+     "AT\r\n",
+     &conMgr,
      RKH_TIME_MS(2000), RKH_TIME_MS(2000)},
 
     /* initStr */
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "ATE1+CREG=1;V1;Q0;+STK=0;+IFC=0,0;+CIPSRIP=0;+CIPHEAD=0\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(5000), RKH_TIME_MS(5000)},
 
     /* getPinStatus */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CPIN?\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CPIN?\r\n",
+     &conMgr,
      RKH_TIME_MS(1500), RKH_TIME_MS(100)},
 
     /* setPin */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CPIN=%d\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CPIN=%d\r\n",
+     &conMgr,
      RKH_TIME_MS(500), RKH_TIME_MS(100)},
 
     /* getRegStatus */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CREG?;+CSQ\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CREG?;+CSQ\r\n",
+     &conMgr,
      RKH_TIME_MS(300), RKH_TIME_MS(500)},
 
     /* enableNetTime */
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CTZR=1;+COPS=3,2\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
     /* getImei */
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CGSN\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(500), RKH_TIME_MS(100)},
 
     /* cipShutdown */
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CGACT=0,1\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(200)},
 
     /* setManualGet */
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
 #ifdef GPRS_QUICK_SEND
      "AT+CIPRXGET=1;+CIPQSEND=1\r\n",
 #else
      "AT+CIPRXGET=1\r\n",
 #endif
-    &conMgr,
-    RKH_TIME_MS(300), RKH_TIME_MS(100)},
+     &conMgr,
+     RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
     /* getLocalTime */
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CCLK?\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
 
     /* getOper */
-    {RKH_INIT_STATIC_EVT(evCmd), 
+    {RKH_INIT_STATIC_EVT(evCmd),
      "AT+COPS?\r\n",
-     &conMgr, 
+     &conMgr,
      RKH_TIME_MS(2000), RKH_TIME_MS(100)},
 
     /* setAPN */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CGSOCKCONT=1,\"IP\",\"%s\"\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CGSOCKCONT=1,\"IP\",\"%s\"\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(500)},
 
     /* startNetwork */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CGATT=1;+CGACT=1,1;+NETOPEN\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CGATT=1;+CGACT=1,1;+NETOPEN\r\n",
+     &conMgr,
      RKH_TIME_MS(10000), RKH_TIME_MS(200)},
 
     /* requestIP */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIFSR\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIFSR\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
     /* getIpStatus */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+IPADDR\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+IPADDR\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
     /* getConnStatus */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSTATUS=0;+CSQ\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPSTATUS=0;+CSQ\r\n",
+     &conMgr,
      RKH_TIME_MS(100), RKH_TIME_MS(100)},
 
     /* connect */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPOPEN=0,\"%s\",\"%s\",%s\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPOPEN=0,\"%s\",\"%s\",%s\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(300)},
 
     /* disconnect */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPCLOSE\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPCLOSE\r\n",
+     &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
     /* sendDataRequest */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPSEND=0,%d\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPSEND=0,%d\r\n",
+     &conMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(100)},
 
     /* sendData */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "\x1A\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "\x1A\r\n",
+     &conMgr,
 #ifdef GPRS_QUICK_SEND
      RKH_TIME_MS(10000), RKH_TIME_MS(500)},
 #else
@@ -189,9 +189,9 @@ static const CmdTbl cmdTbl =
 #endif
 
     /* readData */
-    {RKH_INIT_STATIC_EVT(evCmd), 
-     "AT+CIPRXGET=2,0,1024\r\n", 
-     &conMgr, 
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPRXGET=2,0,1024\r\n",
+     &conMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(500)},
 };
 
@@ -204,7 +204,8 @@ doSearch(unsigned char c)
 }
 
 static void
-postFIFOEvtCmd(ModMgrEvt *pe, const ModCmd *pc, unsigned char *data, ruint nData)
+postFIFOEvtCmd(ModMgrEvt *pe, const ModCmd *pc, unsigned char *data,
+               ruint nData)
 {
     pe->data = data;
     pe->nData = nData;
@@ -246,7 +247,7 @@ sendModCmd_3StrArgs(const ModCmd *p, char *s1, char *s2, char *s3)
     ModMgrEvt *evtCmd;
 
     evtCmd = RKH_ALLOC_EVT(ModMgrEvt, evCmd, *p->aoDest);
-    
+
     snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, p->fmt, s1, s2, s3);
 
     postFIFOEvtCmd(evtCmd, p, NULL, 0);
@@ -259,124 +260,124 @@ ModCmd_init(void)
     RKH_SR_ALLOC();
 
     RKH_ENTER_CRITICAL_();
-  	ssp_init(&sim5320Parser, &rootCmdParser);
+    ssp_init(&sim5320Parser, &rootCmdParser);
     RKH_EXIT_CRITICAL_();
     return &doSearch;
 }
 
-void 
+void
 ModCmd_sync(void)
 {
     sendModCmd_noArgs(&cmdTbl.sync);
 }
 
-void 
+void
 ModCmd_initStr(void)
 {
     sendModCmd_noArgs(&cmdTbl.initStr);
 }
 
-void 
+void
 ModCmd_getPinStatus(void)
 {
     sendModCmd_noArgs(&cmdTbl.getPinStatus);
 }
 
-void 
+void
 ModCmd_setPin(rui16_t pin)
 {
     sendModCmd_rui16(&cmdTbl.setPin, pin);
 }
 
-void 
+void
 ModCmd_getRegStatus(void)
 {
     sendModCmd_noArgs(&cmdTbl.getRegStatus);
 }
 
-void 
+void
 ModCmd_enableNetTime(void)
 {
     sendModCmd_noArgs(&cmdTbl.enableNetTime);
 }
 
-void 
+void
 ModCmd_getImei(void)
 {
     sendModCmd_noArgs(&cmdTbl.getImei);
 }
 
-void 
+void
 ModCmd_cipShutdown(void)
 {
     sendModCmd_noArgs(&cmdTbl.cipShutdown);
 }
 
-void 
+void
 ModCmd_setManualGet(void)
 {
     sendModCmd_noArgs(&cmdTbl.setManualGet);
 }
 
-void 
+void
 ModCmd_getLocalTime(void)
 {
     sendModCmd_noArgs(&cmdTbl.getLocalTime);
 }
 
-void 
+void
 ModCmd_getOper(void)
 {
     sendModCmd_noArgs(&cmdTbl.getOper);
 }
 
-void 
+void
 ModCmd_setupAPN(char *apn, char *usr, char *nm)
 {
-    //sendModCmd_3StrArgs(&cmdTbl.setAPN, apn, usr, nm);
+    /*sendModCmd_3StrArgs(&cmdTbl.setAPN, apn, usr, nm); */
 
     const ModCmd *p;
     ModMgrEvt *evtCmd;
 
     p = &cmdTbl.setAPN;
     evtCmd = RKH_ALLOC_EVT(ModMgrEvt, evCmd, *p->aoDest);
-    
+
     snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, p->fmt, apn);
 
     postFIFOEvtCmd(evtCmd, p, NULL, 0);
 }
 
-void 
+void
 ModCmd_startNetwork(void)
 {
     sendModCmd_noArgs(&cmdTbl.startNetwork);
 }
 
-void 
+void
 ModCmd_requestIP(void)
 {
     sendModCmd_noArgs(&cmdTbl.requestIP);
 }
 
-void 
+void
 ModCmd_getIpStatus(void)
 {
     sendModCmd_noArgs(&cmdTbl.getIpStatus);
 }
 
-void 
+void
 ModCmd_getConnStatus(void)
 {
     sendModCmd_noArgs(&cmdTbl.getConnStatus);
 }
 
-void 
+void
 ModCmd_connect(char *prot, char *dmn, char *port)
 {
     sendModCmd_3StrArgs(&cmdTbl.connect, prot, dmn, port);
 }
 
-void 
+void
 ModCmd_disconnect(void)
 {
     sendModCmd_noArgs(&cmdTbl.disconnect);

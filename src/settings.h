@@ -26,7 +26,7 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define AGROIOT_VERSION_DATE 	"190918"
+#define AGROIOT_VERSION_DATE    "190918"
 #define ACCELERATION_PERIOD     3
 
 /* Default configurations */

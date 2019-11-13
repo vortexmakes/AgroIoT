@@ -24,7 +24,7 @@
 #include "epoch.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define _2DIGIT_ATOI(b,o)   (((b)[o]-'0')*10 + ((b)[o+1] - '0'))
+#define _2DIGIT_ATOI(b,o)   (((b)[o] - '0') * 10 + ((b)[o + 1] - '0'))
 
 #define RMC_DATE_DAY_POS    0
 #define RMC_DATE_MONTH_POS  2
@@ -54,22 +54,22 @@ static Time rmcTime;
 char
 rmc_status(Rmc *p)
 {
-	return (char)(p->status[0]);
+    return (char)(p->status[0]);
 }
 
 int
 rmc_timeUpdate(Rmc *p)
 {
-	char *pUtc, *pDate;
+    char *pUtc, *pDate;
 
-	pUtc = p->utc;
-	pDate = p->date;
+    pUtc = p->utc;
+    pDate = p->date;
 
-	if (strlen(pUtc) == 0 || strlen(pDate) == 0)
-	{
-		memset(&rmcTime, 0, sizeof(rmcTime));
-		return -1;
-	}
+    if ((strlen(pUtc) == 0) || (strlen(pDate) == 0))
+    {
+        memset(&rmcTime, 0, sizeof(rmcTime));
+        return -1;
+    }
 
     rmcTime.tm_year = RMC_YEAR(pDate);
     rmcTime.tm_mon = RMC_MONTH(pDate);
@@ -78,16 +78,18 @@ rmc_timeUpdate(Rmc *p)
     rmcTime.tm_min = RMC_MIN(pUtc);
     rmcTime.tm_sec = RMC_SEC(pUtc);
 
-	if ((rmcTime.tm_year < 1970) ||
-		(rmcTime.tm_mon < 1) || (rmcTime.tm_mon > 12) ||
-		(rmcTime.tm_mday < 1) || (rmcTime.tm_mday > 31) ||
-		(rmcTime.tm_hour < 0) || (rmcTime.tm_hour > 23) ||
-		(rmcTime.tm_min < 0) || (rmcTime.tm_min > 59) ||
-		(rmcTime.tm_sec < 0) || (rmcTime.tm_sec > 59)
-		)
-		return -1;
+    if ((rmcTime.tm_year < 1970) ||
+        (rmcTime.tm_mon < 1) || (rmcTime.tm_mon > 12) ||
+        (rmcTime.tm_mday < 1) || (rmcTime.tm_mday > 31) ||
+        (rmcTime.tm_hour < 0) || (rmcTime.tm_hour > 23) ||
+        (rmcTime.tm_min < 0) || (rmcTime.tm_min > 59) ||
+        (rmcTime.tm_sec < 0) || (rmcTime.tm_sec > 59)
+        )
+    {
+        return -1;
+    }
 
-	return 0;
+    return 0;
 }
 
 Time *

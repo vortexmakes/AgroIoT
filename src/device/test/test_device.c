@@ -67,13 +67,13 @@ RKH_SMA_DEF_PTR(collector);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static void 
+static void
 MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 {
     TEST_PASS();
 }
 
-static int 
+static int
 DevA_test(Device *const me)
 {
     DevAJobCond *jc;
@@ -82,7 +82,7 @@ DevA_test(Device *const me)
 
     jc = (DevAJobCond *)(me->jobCond);
     realMe = (DevA *)me;
-    if ((realMe->x > jc->xMax) || (realMe->x < jc->xMin) || 
+    if ((realMe->x > jc->xMax) || (realMe->x < jc->xMin) ||
         (realMe->y < jc->yMin))
     {
         result = 0;
@@ -113,7 +113,7 @@ DevA_update(Device *const me, RKH_EVT_T *evt)
     dev->y = devEvt->y;
 }
 
-static void 
+static void
 DevA_updateRaw(Device *const me)
 {
     ((Collector *)(me->collector))->status.devData.a.y = ((DevA *)me)->x;
@@ -124,13 +124,13 @@ static Device *
 DevA_ctor(int xMin, int xMax, int yMin) /* Parameters of job condition */
 {
     DevAJobCond *jc;
-    static DevVtbl vtbl = {DevA_test, 
-                           DevA_makeEvt, 
-                           DevA_update, 
+    static DevVtbl vtbl = {DevA_test,
+                           DevA_makeEvt,
+                           DevA_update,
                            DevA_updateRaw};
 
     DevA *me = &devA;
-    device_ctor((Device *)me, DEVA, (RKH_SMA_T *)collector, 
+    device_ctor((Device *)me, DEVA, (RKH_SMA_T *)collector,
                 (JobCond *)&devAJobCond, &vtbl);
     me->x = 0; /* atttibute default initialization */
     me->y = 0;
@@ -158,12 +158,12 @@ getDevice(int devId)
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
 }
 
-void 
+void
 tearDown(void)
 {
 }
@@ -174,7 +174,7 @@ test_InitAttr(void)
     Device *me = (Device *)&devA;
     DevVtbl vtbl;
 
-    device_ctor(me, DEVA, (RKH_SMA_T *)&collector, (JobCond *)&devAJobCond, 
+    device_ctor(me, DEVA, (RKH_SMA_T *)&collector, (JobCond *)&devAJobCond,
                 &vtbl);
 
     TEST_ASSERT_EQUAL(DEVA, me->id);
@@ -211,9 +211,9 @@ test_MakesAnEventFromReceivedRawData(void)
     CBOX_STR rawData;
 
     devAObj = DevA_ctor(2, 8, 3);   /* from main() */
-	rawData.a.x = DEVA;             /* from ps callback */
-	rawData.a.y = 4;
-	rawData.a.z = 5;
+    rawData.a.x = DEVA;             /* from ps callback */
+    rawData.a.y = 4;
+    rawData.a.z = 5;
     dev = getDevice(rawData.a.x);
     TEST_ASSERT_NOT_NULL(dev);
 
@@ -233,7 +233,7 @@ test_UpdateDeviceAttributes(void)
     evtDevAData.base.dev = devAObj; /* from ps callback */
     evtDevAData.x = 4;
     evtDevAData.y = 5;
-                                    /* from collector effect action */
+    /* from collector effect action */
     evt = (RKH_EVT_T *)&evtDevAData;/* effect action argument */
     me->dev = ((EvtDevData *)evt)->dev; /* connected device */
     dev = me->dev;

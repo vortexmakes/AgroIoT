@@ -6,7 +6,7 @@
 /* -------------------------- Development history -------------------------- */
 /*
  *  2018.06.05  DaBa  v1.0.00   Initial version
- *  2019.16.01  LeFr  v2.0.00   
+ *  2019.16.01  LeFr  v2.0.00
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -35,8 +35,9 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WAIT_TIME    RKH_TIME_MS(2000)
-#define TEST_FRAME   "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
-                     "000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
+#define TEST_FRAME \
+    "!0|12359094043105600,120000,-38.0050660,-057.5443696," \
+    "000.000,000,050514,00FF,0000,00,00,FFFF,FFFF,FFFF,+0"
 
 #define YFRAME_SEPARATOR        ","
 #define YFRAME_MARK             "|"
@@ -54,9 +55,9 @@ typedef struct CommMgr CommMgr;
 /* ................... Declares states and pseudostates .................... */
 RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingAck, EndCycle,
                      SendingHist, SendingEndOfHist;
-RKH_DCLR_COMP_STATE Active; 
+RKH_DCLR_COMP_STATE Active;
 RKH_DCLR_CHOICE_STATE ChkRecv, ChkPendStatus, ChkHist, ChkEndOfBlock;
-                    
+
 /* ........................ Declares initial action ........................ */
 static void init(CommMgr *const me, RKH_EVT_T *pe);
 
@@ -89,80 +90,80 @@ rbool_t isEndOfBlock(CommMgr *const me, RKH_EVT_T *pe);
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(Idle, NULL, NULL, RKH_ROOT, NULL);
 RKH_CREATE_TRANS_TABLE(Idle)
-    RKH_TRREG(evNetConnected, NULL, NULL, &Active),
+RKH_TRREG(evNetConnected, NULL, NULL, &Active),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_COMP_REGION_STATE(Active, NULL, NULL, RKH_ROOT, 
+RKH_CREATE_COMP_REGION_STATE(Active, NULL, NULL, RKH_ROOT,
                              &WaitSync, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(Active)
-    RKH_TRINT(evGStatus,         NULL, updateStatus),
-    RKH_TRREG(evNetDisconnected, NULL, NULL, &Idle),
+RKH_TRINT(evGStatus,         NULL, updateStatus),
+RKH_TRREG(evNetDisconnected, NULL, NULL, &Idle),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(WaitSync, enWaitSync, exWaitSync, &Active, NULL);
 RKH_CREATE_TRANS_TABLE(WaitSync)
-    RKH_TRREG(evSyncTout, NULL, NULL, &SendingStatus),
+RKH_TRREG(evSyncTout, NULL, NULL, &SendingStatus),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(SendingStatus, sendStatus, NULL, &Active, NULL);
 RKH_CREATE_TRANS_TABLE(SendingStatus)
-    RKH_TRREG(evSent,     NULL, NULL, &ReceivingAck),
-    RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
+RKH_TRREG(evSent,     NULL, NULL, &ReceivingAck),
+RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ReceivingAck, receive, NULL, &Active, NULL);
 RKH_CREATE_TRANS_TABLE(ReceivingAck)
-    RKH_TRREG(evReceived, NULL, parseRecv, &ChkRecv),
-    RKH_TRREG(evRecvFail, NULL, recvFail, &EndCycle),
+RKH_TRREG(evReceived, NULL, parseRecv, &ChkRecv),
+RKH_TRREG(evRecvFail, NULL, recvFail, &EndCycle),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(ChkRecv);
 RKH_CREATE_BRANCH_TABLE(ChkRecv)
-    RKH_BRANCH(isAck, NULL, &ChkPendStatus),
-    RKH_BRANCH(ELSE,  parseError, &EndCycle),
+RKH_BRANCH(isAck, NULL, &ChkPendStatus),
+RKH_BRANCH(ELSE,  parseError, &EndCycle),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_CHOICE_STATE(ChkPendStatus);
 RKH_CREATE_BRANCH_TABLE(ChkPendStatus)
-    RKH_BRANCH(isPending, NULL, &SendingStatus),
-    RKH_BRANCH(ELSE,      NULL, &ChkHist),
+RKH_BRANCH(isPending, NULL, &SendingStatus),
+RKH_BRANCH(ELSE,      NULL, &ChkHist),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_CHOICE_STATE(ChkHist);
 RKH_CREATE_BRANCH_TABLE(ChkHist)
-    RKH_BRANCH(isThereMsg, initSendBlock, &SendingHist),
-    RKH_BRANCH(ELSE,       NULL, &EndCycle),
+RKH_BRANCH(isThereMsg, initSendBlock, &SendingHist),
+RKH_BRANCH(ELSE,       NULL, &EndCycle),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BASIC_STATE(SendingHist, sendOneMsg, NULL, &Active, NULL);
 RKH_CREATE_TRANS_TABLE(SendingHist)
-    RKH_TRREG(evSent,     NULL, nextSend, &ChkEndOfBlock),
-    RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
+RKH_TRREG(evSent,     NULL, nextSend, &ChkEndOfBlock),
+RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(ChkEndOfBlock);
 RKH_CREATE_BRANCH_TABLE(ChkEndOfBlock)
-    RKH_BRANCH(isEndOfBlock, NULL, &SendingHist),
-    RKH_BRANCH(ELSE,         NULL, &SendingEndOfHist),
+RKH_BRANCH(isEndOfBlock, NULL, &SendingHist),
+RKH_BRANCH(ELSE,         NULL, &SendingEndOfHist),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BASIC_STATE(SendingEndOfHist, sendEndOfHist, NULL, &Active, NULL);
 RKH_CREATE_TRANS_TABLE(SendingEndOfHist)
-    RKH_TRREG(evSent,     NULL, NULL, &ReceivingAck),
-    RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
+RKH_TRREG(evSent,     NULL, NULL, &ReceivingAck),
+RKH_TRREG(evSendFail, NULL, sendMsgFail, &EndCycle),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(EndCycle, NULL, NULL, RKH_ROOT, NULL);
 RKH_CREATE_TRANS_TABLE(EndCycle)
-    RKH_TRCOMPLETION(NULL, NULL, &WaitSync),
+RKH_TRCOMPLETION(NULL, NULL, &WaitSync),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
 struct CommMgr
 {
     RKH_SMA_T ao;
-    RKH_TMR_T syncTmr;    
+    RKH_TMR_T syncTmr;
     GStatus currStatus;
 };
 
@@ -187,9 +188,9 @@ static CBOX_STR cbox;
 static void
 init(CommMgr *const me, RKH_EVT_T *pe)
 {
-	(void)pe;
+    (void)pe;
 
-	topic_subscribe(tcpConnection, me);
+    topic_subscribe(tcpConnection, me);
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->syncTmr);
@@ -256,17 +257,17 @@ get_frame(GStatus *currStatus, char *buf)
     strcat(frame, YFRAME_SEPARATOR);
     sprintf(temp, "%02x%02x,", io->digOut, io->digIn);
     strcat(frame, temp);
-    sprintf(temp, "%04x,", dev->h.hoard );
+    sprintf(temp, "%04x,", dev->h.hoard);
     strcat(frame, temp);
-    sprintf(temp, "%02x,", dev->h.pqty );
+    sprintf(temp, "%02x,", dev->h.pqty);
     strcat(frame, temp);
-    sprintf(temp, "%02x,", dev->hum );
+    sprintf(temp, "%02x,", dev->hum);
     strcat(frame, temp);
-    sprintf(temp, "%04x,", dev->a.x );
+    sprintf(temp, "%04x,", dev->a.x);
     strcat(frame, temp);
-    sprintf(temp, "%04x,", dev->a.y );
+    sprintf(temp, "%04x,", dev->a.y);
     strcat(frame, temp);
-    sprintf(temp, "%04x,", dev->a.z );
+    sprintf(temp, "%04x,", dev->a.z);
     strcat(frame, temp);
     sprintf(temp, "%02,", BatChr_getStatus());
     strcat(frame, temp);
@@ -275,7 +276,7 @@ get_frame(GStatus *currStatus, char *buf)
 }
 
 /* ............................ Effect actions ............................. */
-static void 
+static void
 activateSync(CommMgr *const me, RKH_EVT_T *pe)
 {
 }
@@ -287,32 +288,32 @@ updateStatus(CommMgr *const me, RKH_EVT_T *pe)
     get_frame(&(me->currStatus), (char *)evSendObj.buf);
 }
 
-static void 
+static void
 sendMsgFail(CommMgr *const me, RKH_EVT_T *pe)
 {
 }
 
-static void 
+static void
 recvFail(CommMgr *const me, RKH_EVT_T *pe)
 {
 }
 
-static void 
+static void
 parseRecv(CommMgr *const me, RKH_EVT_T *pe)
 {
 }
 
-static void 
+static void
 parseError(CommMgr *const me, RKH_EVT_T *pe)
 {
 }
 
-static void 
+static void
 initSendBlock(CommMgr *const me, RKH_EVT_T *pe)
 {
 }
 
-static void 
+static void
 nextSend(CommMgr *const me, RKH_EVT_T *pe)
 {
 }
@@ -326,25 +327,25 @@ receive(CommMgr *const me)
 #endif
 }
 
-static void 
+static void
 sendStatus(CommMgr *const me)
 {
     (void)me;
 }
 
-static void 
+static void
 sendOneMsg(CommMgr *const me)
 {
     (void)me;
 }
 
-static void 
+static void
 sendEndOfHist(CommMgr *const me)
 {
     (void)me;
 }
 
-static void 
+static void
 enWaitSync(CommMgr *const me)
 {
 #if 0
@@ -353,7 +354,7 @@ enWaitSync(CommMgr *const me)
 }
 
 /* ............................. Exit actions .............................. */
-static void 
+static void
 exWaitSync(CommMgr *const me)
 {
 #if 0
@@ -372,17 +373,19 @@ isAck(CommMgr *const me, RKH_EVT_T *pe)
     return (evt->size != 0) ? RKH_TRUE : RKH_FALSE;
 }
 
-rbool_t isPending(CommMgr *const me, RKH_EVT_T *pe)
+rbool_t
+isPending(CommMgr *const me, RKH_EVT_T *pe)
 {
     return RKH_FALSE;
 }
 
-rbool_t isThereMsg(CommMgr *const me, RKH_EVT_T *pe)
+rbool_t
+isThereMsg(CommMgr *const me, RKH_EVT_T *pe)
 {
     return RKH_FALSE;
 }
 
-rbool_t 
+rbool_t
 isEndOfBlock(CommMgr *const me, RKH_EVT_T *pe)
 {
     return RKH_FALSE;

@@ -41,7 +41,7 @@ topic_subscribe(Topics topic, RKH_SMA_T *ao)
 void
 topic_publish(Topics topic, RKH_EVT_T *evt, RKH_SMA_T *ao)
 {
-    RKH_REQUIRE((topic < NumOfTopics) && 
+    RKH_REQUIRE((topic < NumOfTopics) &&
                 (evt != (RKH_EVT_T *)0) &&
                 (ao != (RKH_SMA_T *)0));
     rkh_pubsub_publish(topic, evt, ao);

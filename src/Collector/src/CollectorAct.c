@@ -48,11 +48,11 @@ static GPS_STR oldStatus; /* Should be deprecated in future releases */
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static void 
+static void
 dispatch(RKH_SMA_T *me, void *arg)
 {
     Mapping *region;
-    
+
     region = &(RKH_DOWNCAST(Collector, me)->itsMapping);
     rkh_sm_dispatch((RKH_SM_T *)me, (RKH_EVT_T *)arg);
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, region), (RKH_EVT_T *)arg);
@@ -70,7 +70,6 @@ getMapTimeOnStopped(void)
     return RKH_TIME_SEC(Config_getConnPeriodTime());
 }
 
-
 static RKH_TNT_T
 getMapTimeOnRunning(void)
 {
@@ -87,7 +86,7 @@ propagateMappingEvent(Collector *const me, int result)
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 Collector_ctor(void)
 {
     Collector *me;
@@ -101,8 +100,8 @@ Collector_ctor(void)
 
     me->itsMapping.itsCollector = me;
     me->itsMapping.nStoreLastSync = 0;
-    RKH_SM_INIT(&me->itsMapping, 
-                mapping, 0, HCAL, 
+    RKH_SM_INIT(&me->itsMapping,
+                mapping, 0, HCAL,
                 Mapping_Active, NULL, NULL);
     collectorMapping = (RKH_SM_T *)&(me->itsMapping);
 }
@@ -111,7 +110,7 @@ Collector_ctor(void)
 void
 Collector_init(Collector *const me, RKH_EVT_T *pe)
 {
-	(void)pe;
+    (void)pe;
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_AO(collectorMapping);
@@ -131,19 +130,19 @@ Collector_init(Collector *const me, RKH_EVT_T *pe)
     rkh_sm_init(RKH_UPCAST(RKH_SM_T, &me->itsMapping));
 }
 
-void 
+void
 Collector_updatePosition(Collector *const me, RKH_EVT_T *pe)
 {
     me->status.position = RKH_DOWNCAST(GeoEvt, pe)->position;
 }
 
-void 
+void
 Collector_updateDigOut(Collector *const me, RKH_EVT_T *pe)
 {
     me->status.ioStatus.digOut = RKH_DOWNCAST(DigOutChangedEvt, pe)->status;
 }
 
-void 
+void
 Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
 {
     GStatusEvt *evt;
@@ -154,12 +153,12 @@ Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
     }
     evt = RKH_ALLOC_EVT(GStatusEvt, evGStatus, me);
     evt->status = me->status;
-    topic_publish(status, 
-                  RKH_UPCAST(RKH_EVT_T, evt), 
+    topic_publish(status,
+                  RKH_UPCAST(RKH_EVT_T, evt),
                   RKH_UPCAST(RKH_SMA_T, me));
 }
 
-void 
+void
 Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe)
 {
     int result;
@@ -169,13 +168,13 @@ Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe)
     propagateMappingEvent(me, result);
 }
 
-void 
+void
 Collector_updateDigIn(Collector *const me, RKH_EVT_T *pe)
 {
     me->status.ioStatus.digIn = RKH_DOWNCAST(DigInChangedEvt, pe)->status;
 }
 
-void 
+void
 Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe)
 {
     EvtDevData *evtDevData;
@@ -215,11 +214,11 @@ void
 Collector_enActive(Collector *const me)
 {
     RKH_SET_STATIC_EVENT(&me->updateStatusTmr, evTimeout);
-    RKH_TMR_INIT(&me->updateStatusTmr.tmr, 
-                 RKH_UPCAST(RKH_EVT_T, &me->updateStatusTmr), 
+    RKH_TMR_INIT(&me->updateStatusTmr.tmr,
+                 RKH_UPCAST(RKH_EVT_T, &me->updateStatusTmr),
                  NULL);
-    RKH_TMR_PERIODIC(&me->updateStatusTmr.tmr, 
-                     RKH_UPCAST(RKH_SMA_T, me), 
+    RKH_TMR_PERIODIC(&me->updateStatusTmr.tmr,
+                     RKH_UPCAST(RKH_SMA_T, me),
                      0, UPDATING_STATUS_TIME);
 }
 
@@ -238,10 +237,10 @@ void
 Mapping_enStopped(Mapping *const me)
 {
     RKH_SET_STATIC_EVENT(&me->syncStoppedTmr.tmr, evToutSyncStopped);
-    RKH_TMR_INIT(&me->syncStoppedTmr.tmr, 
+    RKH_TMR_INIT(&me->syncStoppedTmr.tmr,
                  RKH_UPCAST(RKH_EVT_T, &me->syncStoppedTmr), NULL);
-    RKH_TMR_PERIODIC(&me->syncStoppedTmr.tmr, 
-                     RKH_UPCAST(RKH_SMA_T, me->itsCollector), 
+    RKH_TMR_PERIODIC(&me->syncStoppedTmr.tmr,
+                     RKH_UPCAST(RKH_SMA_T, me->itsCollector),
                      0, getMapTimeOnStopped());
 }
 
@@ -249,10 +248,10 @@ void
 Mapping_enRunning(Mapping *const me)
 {
     RKH_SET_STATIC_EVENT(&me->syncRunningTmr.tmr, evToutSyncRunning);
-    RKH_TMR_INIT(&me->syncRunningTmr.tmr, 
+    RKH_TMR_INIT(&me->syncRunningTmr.tmr,
                  RKH_UPCAST(RKH_EVT_T, &me->syncRunningTmr), NULL);
-    RKH_TMR_PERIODIC(&me->syncRunningTmr.tmr, 
-                     RKH_UPCAST(RKH_SMA_T, me->itsCollector), 
+    RKH_TMR_PERIODIC(&me->syncRunningTmr.tmr,
+                     RKH_UPCAST(RKH_SMA_T, me->itsCollector),
                      0, getMapTimeOnRunning());
 }
 
@@ -276,24 +275,24 @@ Mapping_exRunning(Mapping *const me)
 }
 
 /* ................................ Guards ................................. */
-rbool_t 
+rbool_t
 Mapping_isSyncDirOnStopped(const RKH_SM_T *me, RKH_EVT_T *pe)
 {
-	(void)pe;
+    (void)pe;
 
     /* Should be defined in Config_getNumStoreInStopped() -> 240 */
-    return (RKH_UPCAST(Mapping, me)->nStoreLastSync >= 240) ? 
-            RKH_TRUE : RKH_FALSE;
+    return (RKH_UPCAST(Mapping, me)->nStoreLastSync >= 240) ?
+           RKH_TRUE : RKH_FALSE;
 }
 
-rbool_t 
+rbool_t
 Mapping_isSyncDirOnRunning(const RKH_SM_T *me, RKH_EVT_T *pe)
 {
-	(void)pe;
+    (void)pe;
 
     /* Should be defined in Config_getNumStoreInRunning() -> 100 */
-    return (RKH_UPCAST(Mapping, me)->nStoreLastSync >= 100) ? 
-            RKH_TRUE : RKH_FALSE;
+    return (RKH_UPCAST(Mapping, me)->nStoreLastSync >= 100) ?
+           RKH_TRUE : RKH_FALSE;
 }
 
 /* ------------------------------ End of file ------------------------------ */

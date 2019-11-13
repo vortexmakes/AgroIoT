@@ -90,8 +90,8 @@ RKH_SMA_DEF_PTR(deviceMgr);
 /* ------------------------------- Constants ------------------------------- */
 static const PS_PLBUFF_T reqs[] =
 {
-    {1, {CBOX_NULL      }},
-    {1, {CBOX_READ_ALL  }}
+    {1, {CBOX_NULL}},
+    {1, {CBOX_READ_ALL}}
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -176,8 +176,8 @@ stopPs(DeviceMgr *const me, RKH_EVT_T *pe)
 static void
 nIdle(DeviceMgr *const me)
 {
-    RKH_TMR_ONESHOT(&me->tmr.tmr, 
-                    RKH_UPCAST(RKH_SMA_T, me), 
+    RKH_TMR_ONESHOT(&me->tmr.tmr,
+                    RKH_UPCAST(RKH_SMA_T, me),
                     DEVICE_CYCLE_TIME);
 }
 
@@ -270,7 +270,7 @@ ps_onStationRun(ST_T station)
     (void)station;
 }
 
-/* 
+/*
  * tplink callback functions
  */
 void

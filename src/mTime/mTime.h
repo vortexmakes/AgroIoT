@@ -1,6 +1,6 @@
 /**
  *  \file       mTime.h
- * 	\bried      Module to manage timer interrupt.
+ *  \bried      Module to manage timer interrupt.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -29,8 +29,8 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 typedef struct
 {
-	unsigned short timer;
-	void (* const *ptimeact)(void);
+    unsigned short timer;
+    void (*const *ptimeact)(void);
 } timerChain_t;
 
 /* -------------------------- External variables --------------------------- */
@@ -38,15 +38,14 @@ typedef struct
 void mTime_init(void);
 
 /*
- * 	This is the main timer interrupt In abstract form, this interrupt
- * 	is called each MTIME_TIME_TICK expressed in terms of msecs.
- * 	that is, if MTIME_TIME_TICK is set to 10, 
- *  then is called in each 10 milliseconds. 
+ *  This is the main timer interrupt In abstract form, this interrupt
+ *  is called each MTIME_TIME_TICK expressed in terms of msecs.
+ *  that is, if MTIME_TIME_TICK is set to 10,
+ *  then is called in each 10 milliseconds.
  * From here, is controlled all of the timing chain for the project
- * 	This timing chain is controlled	by table 'timer_chain'
+ *  This timing chain is controlled	by table 'timer_chain'
  */
 void mTime_tick(void);
-
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

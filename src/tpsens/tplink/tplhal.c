@@ -12,18 +12,20 @@ static char xmit_thr;
 static MUInt tpl_running;
 
 void
-tplink_rx_isr( unsigned char byte )
+tplink_rx_isr(unsigned char byte)
 {
-	tplfsm_rcv_isr( byte );
+    tplfsm_rcv_isr(byte);
 }
 
 void
-tplink_tx_isr( void )
+tplink_tx_isr(void)
 {
-	tplfsm_xmit_isr();
+    tplfsm_xmit_isr();
 
-	if( enable_xmit )
-	    bsp_serial_putchar( TPSENS_PORT, xmit_thr );
+    if (enable_xmit)
+    {
+        bsp_serial_putchar(TPSENS_PORT, xmit_thr);
+    }
 }
 
 /*
@@ -31,48 +33,49 @@ tplink_tx_isr( void )
  */
 
 void
-init_tpl_hal( void )
+init_tpl_hal(void)
 {
-	bsp_serial_open(TPSENS_PORT);
+    bsp_serial_open(TPSENS_PORT);
 
-	tpl_running = 1;
+    tpl_running = 1;
 }
 
 void
-deinit_tpl_hal( void )
+deinit_tpl_hal(void)
 {
-	tpl_running = 0;
+    tpl_running = 0;
 
-	bsp_serial_close(TPSENS_PORT);
+    bsp_serial_close(TPSENS_PORT);
 }
 
 void
-tpl_choke_xmit( uchar data )
+tpl_choke_xmit(uchar data)
 {
-	enable_xmit = 1;
-	bsp_serial_putchar( TPSENS_PORT, data );
+    enable_xmit = 1;
+    bsp_serial_putchar(TPSENS_PORT, data);
 }
 
 void
-tpl_xmit( uchar data )
+tpl_xmit(uchar data)
 {
-	xmit_thr = data;
+    xmit_thr = data;
 }
 
 void
-tpl_stop_xmit( void )
+tpl_stop_xmit(void)
 {
-	enable_xmit = 0;
+    enable_xmit = 0;
 }
 
 void
-call_to_feox( void ) 
+call_to_feox(void)
 {
-	tplink_tx_isr();
+    tplink_tx_isr();
 }
 
 void
-tpl_eoftx( void )
+tpl_eoftx(void)
 {
-}	
+}
 
+/* ------------------------------ End of file ------------------------------ */
