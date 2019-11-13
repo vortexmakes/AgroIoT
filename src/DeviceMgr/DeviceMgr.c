@@ -81,7 +81,7 @@ RKH_END_TRANS_TABLE
 struct DeviceMgr
 {
     RKH_SMA_T ao;       /* Base structure */
-    RKH_TMR_T timer;
+    RKHTmEvt tmr;
 };
 
 RKH_SMA_CREATE(DeviceMgr, deviceMgr, 3, HCAL, &DeviceMgr_Inactive, init, NULL);
@@ -99,9 +99,8 @@ static const PS_PLBUFF_T reqs[] =
 extern Device *sprayer;
 
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_STATIC_EVENT(evEndOfCycleObj, evEndOfCycle);
-static RKH_STATIC_EVENT(evTimeoutObj, evTimeout);
-static RKH_STATIC_EVENT(evNoDevObj, evNoDev);
+static RKH_ROM_STATIC_EVENT(evEndOfCycleObj, evEndOfCycle);
+static RKH_ROM_STATIC_EVENT(evNoDevObj, evNoDev);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -135,14 +134,15 @@ init(DeviceMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 
     RKH_TR_FWK_AO(me);
-    RKH_TR_FWK_TIMER(&me->timer);
+    RKH_TR_FWK_TIMER(&me->tmr.tmr);
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
     RKH_TR_FWK_STATE(me, &DeviceMgr_Inactive);
     RKH_TR_FWK_STATE(me, &DeviceMgr_Active);
     RKH_TR_FWK_STATE(me, &DeviceMgr_Idle);
     RKH_TR_FWK_STATE(me, &DeviceMgr_InCycle);
 
-    RKH_TMR_INIT(&me->timer, &evTimeoutObj, NULL);
+    RKH_SET_STATIC_EVENT(&me->tmr.tmr, evTimeout);
+    RKH_TMR_INIT(&me->tmr.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmr), NULL);
     ps_init();
 }
 
@@ -176,14 +176,16 @@ stopPs(DeviceMgr *const me, RKH_EVT_T *pe)
 static void
 nIdle(DeviceMgr *const me)
 {
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), DEVICE_CYCLE_TIME);
+    RKH_TMR_ONESHOT(&me->tmr.tmr, 
+                    RKH_UPCAST(RKH_SMA_T, me), 
+                    DEVICE_CYCLE_TIME);
 }
 
 /* ............................. Exit actions .............................. */
 static void
 xIdle(DeviceMgr *const me)
 {
-    rkh_tmr_stop(&me->timer);
+    rkh_tmr_stop(&me->tmr.tmr);
 }
 
 /* ................................ Guards ................................. */
