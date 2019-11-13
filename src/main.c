@@ -32,9 +32,9 @@
 #include "sim5320parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"
+#include "Collector.h"
 #include "CollectorAct.h"
 #include "StatQue.h"
-
 #include "ffile.h"
 #include "Config.h"
 #include "mTime.h"
@@ -42,20 +42,21 @@
 #include "epoch.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define COMMMGR_QSTO_SIZE	16
-#define CONMGR_QSTO_SIZE    8
-#define MODMGR_QSTO_SIZE    4
-#define GEOMGR_QSTO_SIZE    4
-#define DEVSRV_QSTO_SIZE    4
+#define COMMMGR_QSTO_SIZE	    16
+#define CONMGR_QSTO_SIZE        8
+#define MODMGR_QSTO_SIZE        4
+#define GEOMGR_QSTO_SIZE        4
+#define DEVSRV_QSTO_SIZE        4
+#define COLLECTOR_QSTO_SIZE     4
 
-#define SIZEOF_EP0STO       16
-#define SIZEOF_EP0_BLOCK    sizeof(RKH_EVT_T)
+#define SIZEOF_EP0STO           16
+#define SIZEOF_EP0_BLOCK        sizeof(RKH_EVT_T)
 
-#define SIZEOF_EP1_BLOCK    sizeof(RmcEvt)
-#define SIZEOF_EP1STO       (16*SIZEOF_EP1_BLOCK)
+#define SIZEOF_EP1_BLOCK        sizeof(RmcEvt)
+#define SIZEOF_EP1STO           (16 * SIZEOF_EP1_BLOCK)
 
-#define SIZEOF_EP2_BLOCK    sizeof(ModMgrEvt)
-#define SIZEOF_EP2STO       (16*SIZEOF_EP2_BLOCK)
+#define SIZEOF_EP2_BLOCK        sizeof(ModMgrEvt)
+#define SIZEOF_EP2STO           (16 * SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -66,11 +67,12 @@ static RKH_EVT_T *ConMgr_qsto[CONMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
 static RKH_EVT_T *GeoMgr_qsto[GEOMGR_QSTO_SIZE];
 static RKH_EVT_T *DeviceMgr_qsto[DEVSRV_QSTO_SIZE];
+static RKH_EVT_T *Collector_qsto[COLLECTOR_QSTO_SIZE];
 static rui8_t evPool0Sto[SIZEOF_EP0STO], 
               evPool1Sto[SIZEOF_EP1STO], 
               evPool2Sto[SIZEOF_EP2STO];
 
-static RKH_ROM_STATIC_EVENT(e_Open, evOpen);
+static RKH_ROM_STATIC_EVENT(evOpenObj, evOpen);
 Device *sprayer;
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -133,11 +135,11 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(modMgr, ModMgr_qsto, MODMGR_QSTO_SIZE, 0, 0);
 	RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(deviceMgr, DeviceMgr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
-
     RKH_SMA_ACTIVATE(commMgr, CommMgr_qsto, COMMMGR_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(collector, Collector_qsto, COLLECTOR_QSTO_SIZE, 0, 0);
 
-    RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);
-	RKH_SMA_POST_FIFO(deviceMgr, &e_Open, 0);
+    RKH_SMA_POST_FIFO(conMgr, &evOpenObj, 0);
+	RKH_SMA_POST_FIFO(deviceMgr, &evOpenObj, 0);
 
     rkh_fwk_enter();
 
