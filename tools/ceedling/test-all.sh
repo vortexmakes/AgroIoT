@@ -17,9 +17,46 @@ if [ ! -d $source_dir ]; then
     exit 1
 fi
 
+cleanModules()
+{
+    for sm in $stateMachines;
+    do
+        echo ""
+        echo "Clean "$sm "state machine"
+        echo "-------------------------"
+        cd $source_dir/$sm
+         if [[ ! -e project.yml || ! -e project-sm.yml || ! -e project-action.yml ]]; then
+             echo "[ERROR] Ceedling project not found"
+             exit 1
+         else
+            ceedling clean
+            ceedling clobber
+         fi
+    done
+    currdir=$PWD
+    for module in $modules;
+    do
+        echo ""
+        echo "Clean "$module "module"
+        echo "----------------------"
+        cd $source_dir/$module
+        if [ ! -e "project.yml" ]; then
+            echo "[ERROR] Ceedling project not found"
+            exit 1
+        else
+            ceedling clean
+            ceedling clobber
+        fi
+    done
+}
+
 case "$1" in
     clean)
         clobber=1
+        ;;
+    clobber)
+        cleanModules
+        exit 0
         ;;
     *)
         clobber=0
@@ -51,9 +88,7 @@ do
     echo "Run all test of "$sm "state machine"
     echo "-----------------------------------"
     cd $source_dir/$sm
-     if [ [ ! -e "project.yml" ] && 
-          [ ! -e "project-sm.yml" ] && 
-          [ ! -e "project-action.yml" ] ]; then
+     if [[ ! -e "project.yml" || ! -e "project-sm.yml" || ! -e "project-action.yml" ]]; then
          echo "[ERROR] Ceedling project not found"
          exit 1
      else
