@@ -95,7 +95,7 @@
  *  \range      [1..128]
  *  \default    16
  */
-#define RKH_CFG_FWK_MAX_SUBS_CHANNELS   16
+#define RKH_CFG_FWK_MAX_SUBS_CHANNELS   8
 
 /**
  *	If the #RKH_CFG_HOOK_DISPATCH_EN is set to 1, RKH will invoke the
