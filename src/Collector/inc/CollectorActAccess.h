@@ -1,26 +1,23 @@
 /**
- *  \file       DeviceServer.h
- *  \brief      TpSensor Externals Devices Server
+ *  \file   CollectorActAccess.h
+ *  \brief
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.02  DaBa  v1.0.00   Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __DEVICESERVER_H__
-#define __DEVICESERVER_H__
+#ifndef __COLLECTORACTACCESS_H__
+#define __COLLECTORACTACCESS_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
-
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -28,12 +25,6 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define DEVICE_CYCLE_TIME     RKH_TIME_MS(2000)
-
-/* ................................ Signals ................................ */
-/* ........................ Declares active object ......................... */
-RKH_SMA_DCLR(deviceServer);
-
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */

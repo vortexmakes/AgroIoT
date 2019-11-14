@@ -1,25 +1,25 @@
 /**
- *  \file       IOStatus.h
- *  \brief      Specifies the interface of IOStatus module.
+ *  \file       DeviceMgr.h
+ *  \brief      TpSensor Externals Devices Server
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2019.28.01  LeFr  v1.0.00  Initial version
+ *  2018.05.02  DaBa  v1.0.00   Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ *  DaBa  Dario Baliña db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __IOSTATUS_H_
-#define __IOSTATUS_H_
+#ifndef __DEVICESERVER_H__
+#define __DEVICESERVER_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkhtype.h"
+#include "rkh.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -28,17 +28,13 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+#define DEVICE_CYCLE_TIME     RKH_TIME_MS(2000)
+
+/* ................................ Signals ................................ */
+/* ........................ Declares active object ......................... */
+RKH_SMA_DCLR(deviceMgr);
+
 /* ------------------------------- Data types ------------------------------ */
-typedef rui8_t DigIn;
-typedef rui8_t DigOut;
-
-typedef struct IOStatus IOStatus;
-struct IOStatus 
-{
-    DigIn digIn;
-    DigOut digOut;
-};
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

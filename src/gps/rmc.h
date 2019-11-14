@@ -67,48 +67,48 @@ typedef enum
 typedef struct
 {
     /* Universal time coordinated hhmmss.ss*/
-    char utc[RMC_UTC_LEN+1];
+    char utc[RMC_UTC_LEN + 1];
 
     /* Status A=Valid, V=Invalid */
-    char status[RMC_INDICATOR_LEN+1];
+    char status[RMC_INDICATOR_LEN + 1];
 
     /* Latitude ddmm.mmmmm */
-    char latitude[RMC_LATITUDE_LEN+1];
+    char latitude[RMC_LATITUDE_LEN + 1];
 
     /* Northing Indicator N=North, S=South */
-    char northingIndicator[RMC_INDICATOR_LEN+1];
+    char northingIndicator[RMC_INDICATOR_LEN + 1];
 
     /* Longitud dddmm.mmmmm */
-    char longitude[RMC_LONGITUDE_LEN+1];
+    char longitude[RMC_LONGITUDE_LEN + 1];
 
     /* Easting Indicator E=East, W=West */
-    char eastingIndicator[RMC_INDICATOR_LEN+1];
+    char eastingIndicator[RMC_INDICATOR_LEN + 1];
 
     /* Speed Over Ground [knots] sss.sss */
-    char sog[RMC_SOG_LEN+1];
+    char sog[RMC_SOG_LEN + 1];
 
     /* Course Over Ground [degrees] ddd.ddd */
-    char cog[RMC_COG_LEN+1];
+    char cog[RMC_COG_LEN + 1];
 
     /* Universarl date coordinate ddmmyy */
-    char date[RMC_DATE_LEN+1];
+    char date[RMC_DATE_LEN + 1];
 
     /* Magnetic Variation [degrees] */
-    char magneticVariation[RMC_MAGVAR_LEN+1];
-    
-    /* Magnetic Variation Indicator E=East, W=West */
-    char magneticVarIndicator[RMC_INDICATOR_LEN+1];
+    char magneticVariation[RMC_MAGVAR_LEN + 1];
 
-    /* Mode Indicator 
+    /* Magnetic Variation Indicator E=East, W=West */
+    char magneticVarIndicator[RMC_INDICATOR_LEN + 1];
+
+    /* Mode Indicator
      * A=Autonomus, D=Differential, R=Fixed RTK,
      * F=Float RTK, E=DeadReckoning, N=None
      */
-    char modeIndicator[RMC_INDICATOR_LEN+1];      
+    char modeIndicator[RMC_INDICATOR_LEN + 1];
 
     /* Navigational Status Indicator
      * S=Safe, C=Caution, U=Unsafe, V=NotValid
      */
-    char navigationalStatus[RMC_INDICATOR_LEN+1]; 
+    char navigationalStatus[RMC_INDICATOR_LEN + 1];
 }Rmc;
 
 /* -------------------------- External variables --------------------------- */

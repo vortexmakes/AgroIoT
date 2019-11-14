@@ -1,5 +1,5 @@
 /*
- * 	genled.h
+ *  genled.h
  */
 
 #ifndef __GENLED_H__
@@ -10,6 +10,7 @@
 #include "seqlog.h"
 #include "seqdefs.h"
 
-#define set_led(ch,x)	set_sequence(MAJOR_LED,(ch),(x))
+#define set_led(ch,x)   set_sequence(MAJOR_LED,(ch),(x))
 
 #endif
+/* ------------------------------ End of file ------------------------------ */

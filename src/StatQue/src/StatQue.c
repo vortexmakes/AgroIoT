@@ -27,57 +27,57 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 StatQue_init(void)
 {
-	(void)ffile_queue_open_as_random(FFD0, OPEN_FROM_BEGINNING);
+    (void)ffile_queue_open_as_random(FFD0, OPEN_FROM_BEGINNING);
 }
 
-rui16_t 
+rui16_t
 StatQue_getNumElem(void)
 {
     return (rui16_t)ffile_tell(FFD0);
 }
 
-rbool_t 
+rbool_t
 StatQue_isEmpty(void)
 {
-	return (ffile_tell(FFD0) == (ffui16_t)0);
+    return (ffile_tell(FFD0) == (ffui16_t)0);
 }
 
-rInt 
+rInt
 StatQue_remove(GPS_STR *elem)
 {
     rInt res;
 
-	res = ffile_queue_remove(FFD0, elem);
+    res = ffile_queue_remove(FFD0, elem);
     return (res == FQFILE_OK) ? 0 : 1;
 }
 
-rInt 
+rInt
 StatQue_delete(rui16_t *nElem)
 {
     rInt res;
 
-	res = ffile_queue_delete(FFD0, (NR_T *)nElem);
+    res = ffile_queue_delete(FFD0, (NR_T *)nElem);
     return (res == FQFILE_OK) ? 0 : 1;
 }
 
-rInt 
+rInt
 StatQue_read(GPS_STR *elem)
 {
     rInt res;
 
-	res = ffile_queue_random_read(FFD0, READ_FORWARD, elem);
+    res = ffile_queue_random_read(FFD0, READ_FORWARD, elem);
     return (res == FQFILE_OK) ? 0 : 1;
 }
 
-rInt 
+rInt
 StatQue_put(GPS_STR *elem)
 {
     rInt res;
 
-	res = ffile_queue_insert(FFD0, elem);
+    res = ffile_queue_insert(FFD0, elem);
     return (res == FQFILE_OK) ? 0 : 1;
 }
 

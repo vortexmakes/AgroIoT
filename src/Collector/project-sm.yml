@@ -1,0 +1,25 @@
+#
+# Usage:
+#   $ sudo ceedling [clean|clobber] options:project-sm test:Collector
+#
+
+:paths:
+  :test:
+  :source:
+    - src/Collector.c
+  :include:
+    - ../GStatus/inc
+    - ../gps
+    - ../tpsens/cbox
+    - ../BatChr
+    - ../bsp
+    - ../ioChg
+    - ../topic/inc
+    - ../epoch/inc
+    - ../device/inc
+    - ../Config/inc
+    - ../StatQue/inc
+    - ../ffile/portable/test
+    - ../ffile/inc
+    - ../
+  :support:

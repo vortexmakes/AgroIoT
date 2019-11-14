@@ -29,7 +29,7 @@
     - ../../third-party/rkh/source/portable/test
     - ../../third-party/rkh/source/fwk/inc
     - ../tpsens/cbox
-    - ../collector
+    - ../Collector/inc
     - ../gps
     - ../BatChr
     - ../GStatus/inc

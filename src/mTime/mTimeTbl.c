@@ -1,6 +1,6 @@
 /**
  *  \file       mTimeTble.c
- * 	\bried      mTime timers Table.
+ *  \bried      mTime timers Table.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  DaBa  Dario Balina       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -30,41 +30,36 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static void(* const actions_100[])( void ) =
+static void (*const actions_100[])(void) =
 {
-	(void(*)(void))epoch_updateByStep,
+    (void (*)(void))epoch_updateByStep,
 #ifdef MODPWR_CTRL_ENABLE
-	modPwr_ctrl, 
+    modPwr_ctrl,
 #endif
-    (void(*)(void))sequence_interrupt,
-	dIn_scan,
+    (void (*)(void))sequence_interrupt,
+    dIn_scan,
     dOut_process,
     NULL
 };
 
-static void(* const actions_1000[])( void ) =
+static void (*const actions_1000[])(void) =
 {
-	NULL
+    NULL
 };
 
-static void(* const actions_10000[])( void ) =
+static void (*const actions_10000[])(void) =
 {
-	NULL
+    NULL
 };
 
 const timerChain_t timerChain[] =
 {
-	{ MTIME_100MSEC/MTIME_TIME_TICK, actions_100 },
-	{ MTIME_1SEC/MTIME_TIME_TICK, actions_1000 },
-	{ MTIME_10SEC/MTIME_TIME_TICK, actions_10000 }
+    {MTIME_100MSEC / MTIME_TIME_TICK, actions_100},
+    {MTIME_1SEC / MTIME_TIME_TICK, actions_1000},
+    {MTIME_10SEC / MTIME_TIME_TICK, actions_10000}
 };
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 /* ------------------------------ End of file ------------------------------ */
-
-
-
-
-

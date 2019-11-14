@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña      db@vortexmakes.com
+ *  DaBa  Dario Balina      db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */

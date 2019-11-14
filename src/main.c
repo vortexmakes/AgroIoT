@@ -6,11 +6,11 @@
 /* -------------------------- Development history -------------------------- */
 /*
  *  2018.05.17  DaBa  v1.0.00  Initial version
-  */
+ */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  DaBa  Dario Balin¿½a       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -26,13 +26,15 @@
 #include "conmgr.h"
 #include "modmgr.h"
 #include "geoMgr.h"
-#include "FsMgr.h"
 #include "ioChg.h"
-#include "DeviceServer.h"
+#include "DeviceMgr.h"
+#include "sprayer.h"
 #include "sim5320parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"
-
+#include "Collector.h"
+#include "CollectorAct.h"
+#include "StatQue.h"
 #include "ffile.h"
 #include "Config.h"
 #include "mTime.h"
@@ -40,21 +42,21 @@
 #include "epoch.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define COMMMGR_QSTO_SIZE	16
-#define CONMGR_QSTO_SIZE    8
-#define MODMGR_QSTO_SIZE    4
-#define GEOMGR_QSTO_SIZE    4
-#define DEVSRV_QSTO_SIZE    4
-#define FSMGR_QSTO_SIZE     4
+#define COMMMGR_QSTO_SIZE       16
+#define CONMGR_QSTO_SIZE        8
+#define MODMGR_QSTO_SIZE        4
+#define GEOMGR_QSTO_SIZE        4
+#define DEVSRV_QSTO_SIZE        4
+#define COLLECTOR_QSTO_SIZE     4
 
-#define SIZEOF_EP0STO       16
-#define SIZEOF_EP0_BLOCK    sizeof(RKH_EVT_T)
+#define SIZEOF_EP0STO           16
+#define SIZEOF_EP0_BLOCK        sizeof(RKH_EVT_T)
 
-#define SIZEOF_EP1_BLOCK    sizeof(RmcEvt)
-#define SIZEOF_EP1STO       (16*SIZEOF_EP1_BLOCK)
+#define SIZEOF_EP1_BLOCK        sizeof(RmcEvt)
+#define SIZEOF_EP1STO           (16 * SIZEOF_EP1_BLOCK)
 
-#define SIZEOF_EP2_BLOCK    sizeof(ModMgrEvt)
-#define SIZEOF_EP2STO       (16*SIZEOF_EP2_BLOCK)
+#define SIZEOF_EP2_BLOCK        sizeof(ModMgrEvt)
+#define SIZEOF_EP2STO           (16 * SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -64,13 +66,14 @@ static RKH_EVT_T *CommMgr_qsto[COMMMGR_QSTO_SIZE];
 static RKH_EVT_T *ConMgr_qsto[CONMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
 static RKH_EVT_T *GeoMgr_qsto[GEOMGR_QSTO_SIZE];
-static RKH_EVT_T *DevSvr_qsto[DEVSRV_QSTO_SIZE];
-static RKH_EVT_T *FsMgr_qsto[FSMGR_QSTO_SIZE];
-static rui8_t evPool0Sto[SIZEOF_EP0STO], 
-              evPool1Sto[SIZEOF_EP1STO], 
+static RKH_EVT_T *DeviceMgr_qsto[DEVSRV_QSTO_SIZE];
+static RKH_EVT_T *Collector_qsto[COLLECTOR_QSTO_SIZE];
+static rui8_t evPool0Sto[SIZEOF_EP0STO],
+              evPool1Sto[SIZEOF_EP1STO],
               evPool2Sto[SIZEOF_EP2STO];
 
-static RKH_ROM_STATIC_EVENT(e_Open, evOpen);
+static RKH_ROM_STATIC_EVENT(evOpenObj, evOpen);
+Device *sprayer;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -79,21 +82,21 @@ setupTraceFilters(void)
 {
     RKH_FILTER_ON_GROUP(RKH_TRC_ALL_GROUPS);
     RKH_FILTER_ON_EVENT(RKH_TRC_ALL_EVENTS);
-	RKH_FILTER_OFF_EVENT(MODCMD_USR_TRACE);
-	//RKH_FILTER_OFF_GROUP_ALL_EVENTS(RKH_TG_USR);
+    RKH_FILTER_OFF_EVENT(MODCMD_USR_TRACE);
+    /*RKH_FILTER_OFF_GROUP_ALL_EVENTS(RKH_TG_USR); */
     RKH_FILTER_OFF_EVENT(RKH_TE_TMR_TOUT);
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_STATE);
-    //RKH_FILTER_OFF_EVENT(RKH_TE_SMA_FIFO);
-    //RKH_FILTER_OFF_EVENT(RKH_TE_SMA_LIFO);
-    //RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_SMA_FIFO); */
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_SMA_LIFO); */
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE); */
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
-    //RKH_FILTER_OFF_SMA(modMgr);
+    /*RKH_FILTER_OFF_SMA(modMgr); */
     RKH_FILTER_OFF_SMA(conMgr);
-	//RKH_FILTER_OFF_SMA(geoMgr);
-	//RKH_FILTER_OFF_SMA(deviceServer);
-	//RKH_FILTER_OFF_SMA(commMgr);
+    /*RKH_FILTER_OFF_SMA(geoMgr); */
+    /*RKH_FILTER_OFF_SMA(deviceMgr); */
+    /*RKH_FILTER_OFF_SMA(commMgr); */
     RKH_FILTER_OFF_SMA(fsMgr);
-	RKH_FILTER_OFF_ALL_SIGNALS();
+    RKH_FILTER_OFF_ALL_SIGNALS();
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -106,6 +109,7 @@ main(int argc, char *argv[])
     init_seqs();
     mTime_init();
     ffile_init();
+    StatQue_init();
     Config_init();
 
     rkh_fwk_init();
@@ -115,13 +119,14 @@ main(int argc, char *argv[])
 
     RKH_TRC_OPEN();
 
+    sprayer = sprayer_ctor(0);
+    Collector_ctor();
     signals_publishSymbols();
 
     RKH_TR_FWK_ACTOR(&inChg, "inChg");
     RKH_TR_FWK_ACTOR(&sim5320parser, "sim5320parser");
     RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
-	RKH_TR_FWK_ACTOR(&tpSens, "tpSens");
-	
+
     rkh_dynEvt_init();
     rkh_fwk_registerEvtPool(evPool0Sto, SIZEOF_EP0STO, SIZEOF_EP0_BLOCK);
     rkh_fwk_registerEvtPool(evPool1Sto, SIZEOF_EP1STO, SIZEOF_EP1_BLOCK);
@@ -129,15 +134,13 @@ main(int argc, char *argv[])
 
     RKH_SMA_ACTIVATE(conMgr, ConMgr_qsto, CONMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(modMgr, ModMgr_qsto, MODMGR_QSTO_SIZE, 0, 0);
-	RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
-    RKH_SMA_ACTIVATE(deviceServer, DevSvr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
-
+    RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(deviceMgr, DeviceMgr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(commMgr, CommMgr_qsto, COMMMGR_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(collector, Collector_qsto, COLLECTOR_QSTO_SIZE, 0, 0);
 
-    RKH_SMA_ACTIVATE(fsMgr, FsMgr_qsto, FSMGR_QSTO_SIZE, 0, 0);
-
-    RKH_SMA_POST_FIFO(conMgr, &e_Open, 0);
-	RKH_SMA_POST_FIFO(deviceServer, &e_Open, 0);
+    RKH_SMA_POST_FIFO(conMgr, &evOpenObj, 0);
+    RKH_SMA_POST_FIFO(deviceMgr, &evOpenObj, 0);
 
     rkh_fwk_enter();
 

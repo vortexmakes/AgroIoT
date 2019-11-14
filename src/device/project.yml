@@ -31,8 +31,9 @@
     - ../../third-party/rkh/source/sma/inc
     - ../../third-party/rkh/source/sm/inc
     - ../../third-party/rkh/source/queue/inc
+    - ../../third-party/rkh/source/tmr/inc
     - ../tpsens/cbox
-    - ../collector
+    - ../Collector/inc
     - ../gps
     - ../GStatus/inc
     - ../BatChr

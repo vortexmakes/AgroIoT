@@ -44,12 +44,12 @@ gps_parserInit(void)
     RKH_SR_ALLOC();
 
     RKH_ENTER_CRITICAL_();
-  	ssp_init(&gpsParser, &rootGpsParser);
+    ssp_init(&gpsParser, &rootGpsParser);
     RKH_EXIT_CRITICAL_();
     return &doSearch;
 }
 
-rbool_t 
+rbool_t
 Geo_isValid(Geo *const me)
 {
     return me->status[0] == 'a';

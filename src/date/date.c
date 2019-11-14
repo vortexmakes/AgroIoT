@@ -106,7 +106,7 @@ mk_date(long tim, Time *tm)
 
     /* Number of months in days left */
     for (i = leapyear(tm->tm_year), p = &month_days[i][j = 1];
-         day >= *p; 
+         day >= *p;
          ++j, ++p)
     {
         day -= *p;
@@ -124,12 +124,12 @@ char *
 str_time(char *p, const Time *time)
 {
     sprintf(p, "%4d-%02d-%02d %02d:%02d:%02d",
-            time->tm_year, time->tm_mon, time->tm_mday, 
+            time->tm_year, time->tm_mon, time->tm_mday,
             time->tm_hour, time->tm_min, time->tm_sec);
     return p;
 }
 
-unsigned long 
+unsigned long
 mk_time(Time *date)
 {
     return epoch_mktime(date);

@@ -42,7 +42,8 @@ typedef struct EvtSprayerData EvtSprayerData;
 struct EvtSprayerData
 {
     EvtDevData base;
-    Sprayer param;
+    int nSection;       /* Device's attributes */
+    int dose;
 };
 
 /* -------------------------- External variables --------------------------- */

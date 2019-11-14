@@ -23,6 +23,7 @@
 #include "Mock_ffdata.h"
 #include "Mock_rkhassert.h"
 #include "Mock_rkhport.h"
+#include "Mock_IOStatus.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -59,19 +60,19 @@ static Config cfgFile =
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static void 
+static void
 MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 {
     TEST_PASS();
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
 }
 
-void 
+void
 tearDown(void)
 {
 }
@@ -84,15 +85,15 @@ test_InitWithoutStoredSettings(void)
     cfg = (Config *)0;
     cfgErased.status = 0xff;
 
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 1);
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 1);
     ffile_random_access_IgnoreArg_preg();
     ffile_random_access_ReturnThruPtr_preg(&cfgErased);
     rkh_enter_critical_Expect();
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, 0, 1, 1);
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, 0, 1, 1);
     ffile_random_access_IgnoreArg_preg();
-	ffile_sync_Expect();
+    ffile_sync_Expect();
     rkh_exit_critical_Expect();
 
     cfg = Config_init();
@@ -118,8 +119,8 @@ test_InitWithStoredSettings(void)
     cfg = (Config *)0;
     cfgFile.status = 1;
 
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 1);
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 1);
     ffile_random_access_IgnoreArg_preg();
     ffile_random_access_ReturnThruPtr_preg(&cfgFile);
 
@@ -146,14 +147,14 @@ test_InitWithFileError(void)
     cfg = (Config *)0;
     cfgErased.status = 0xff;
 
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 0);
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 0);
     ffile_random_access_IgnoreArg_preg();
     rkh_enter_critical_Expect();
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, 0, 1, 1);
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, 0, 1, 1);
     ffile_random_access_IgnoreArg_preg();
-	ffile_sync_Expect();
+    ffile_sync_Expect();
     rkh_exit_critical_Expect();
 
     cfg = Config_init();
@@ -178,15 +179,15 @@ test_Get(void)
 
     cfg = (Config *)0;
     cfgErased.status = 0xff;
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 1);
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 1);
     ffile_random_access_IgnoreArg_preg();
     ffile_random_access_ReturnThruPtr_preg(&cfgErased);
     rkh_enter_critical_Expect();
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, 0, 1, 1);
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, 0, 1, 1);
     ffile_random_access_IgnoreArg_preg();
-	ffile_sync_Expect();
+    ffile_sync_Expect();
     rkh_exit_critical_Expect();
 
     cfg = Config_init();
@@ -211,9 +212,9 @@ test_GetBeforeInitFile(void)
 
     cfgErased.status = 0xff;
     rkh_enter_critical_Expect();
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, &cfgErased, 1, 1);
-	ffile_sync_Expect();
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, &cfgErased, 1, 1);
+    ffile_sync_Expect();
     rkh_exit_critical_Expect();
 
     Config_set(&cfgErased);
@@ -232,9 +233,9 @@ void
 test_Set(void)
 {
     rkh_enter_critical_Expect();
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, &cfgFile, 1, 1);
-	ffile_sync_Expect();
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, &cfgFile, 1, 1);
+    ffile_sync_Expect();
     rkh_exit_critical_Expect();
 
     Config_set(&cfgFile);
@@ -255,14 +256,298 @@ void
 test_SetFailsWrongFileAccess(void)
 {
     rkh_enter_critical_Expect();
-	ffile_seek_Expect(FFD1, 0);
-	ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, &cfgFile, 1, 0);
+    ffile_seek_Expect(FFD1, 0);
+    ffile_random_access_ExpectAndReturn(FFD1, WRITE_ACCESS, &cfgFile, 1, 0);
     rkh_assert_Expect("Config", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
 
     Config_set(&cfgFile);
+}
+
+void
+test_SetGetMappingTime(void)
+{
+    rui8_t time;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    time = 4;
+    Config_setMappingTime(time);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(time, cfg->smptime);
+
+    time = 0;
+    time = Config_getMappingTime();
+    TEST_ASSERT_EQUAL(time, cfg->smptime);
+}
+
+void
+test_SetGetDftDigOut(void)
+{
+    DigOut out;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    out = 4;
+    Config_setDftDigOut(out);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(out, cfg->digOut);
+
+    out = 0;
+    out = Config_getDftDigOut();
+    TEST_ASSERT_EQUAL(out, cfg->digOut);
+}
+
+void
+test_SetGetUpdateLocTime(void)
+{
+    rui8_t time;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    time = 4;
+    Config_setUpdateLocTime(time);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(time, cfg->gpsttime);
+
+    time = 0;
+    time = Config_getUpdateLocTime();
+    TEST_ASSERT_EQUAL(time, cfg->gpsttime);
+}
+
+void
+test_SetGetConnPeriodTime(void)
+{
+    rui8_t time;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    time = 4;
+    Config_setConnPeriodTime(time);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(time, cfg->conntime);
+
+    time = 0;
+    time = Config_getConnPeriodTime();
+    TEST_ASSERT_EQUAL(time, cfg->conntime);
+}
+
+void
+test_SetIP(void)
+{
+    char ip[64];
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    strcpy(ip, "8.8.8.8");
+    Config_setIP(ip);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL_STRING(ip, cfg->ip);
+
+    rkh_assert_Expect("Config", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+    strcpy(ip, "deadbeaddeadbeaddeadbeaddeadbead");
+    Config_setIP(ip);
+
+    rkh_assert_Expect("Config", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+    Config_setIP((char *)0);
+}
+
+void
+test_GetIP(void)
+{
+    char ip[64];
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    Config_getIP(ip);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL_STRING(ip, cfg->ip);
+
+    rkh_assert_Expect("Config", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+    Config_getIP((char *)0);
+}
+
+void
+test_SetPort(void)
+{
+    char port[64];
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    strcpy(port, "99999");
+    Config_setPort(port);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL_STRING(port, cfg->port);
+
+    rkh_assert_Expect("Config", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+    strcpy(port, "deadbeaddeadbeaddeadbeaddeadbead");
+    Config_setPort(port);
+
+    rkh_assert_Expect("Config", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+    Config_setPort((char *)0);
+}
+
+void
+test_GetPort(void)
+{
+    char port[64];
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    Config_getPort(port);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL_STRING(port, cfg->port);
+
+    rkh_assert_Expect("Config", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+    Config_getPort((char *)0);
+}
+
+void
+test_SetGetDefault(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    value = 1;
+    Config_setDefault(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->status);
+
+    value = 0;
+    value = Config_getDefault();
+    TEST_ASSERT_EQUAL(value, cfg->status);
+}
+
+void
+test_SetGetAccLimit(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    value = 4;
+    Config_setAccLimit(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->aclimit);
+
+    value = 0;
+    value = Config_getAccLimit();
+    TEST_ASSERT_EQUAL(value, cfg->aclimit);
+}
+
+void
+test_SetGetBrakeLimit(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    value = 4;
+    Config_setBrakeLimit(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->brlimit);
+
+    value = 0;
+    value = Config_getBrakeLimit();
+    TEST_ASSERT_EQUAL(value, cfg->brlimit);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -37,11 +37,11 @@ extern "C" {
  */
 enum
 {
-	GSM_PORT, 
-	GPS_PORT,
-	TPSENS_PORT,
+    GSM_PORT,
+    GPS_PORT,
+    TPSENS_PORT,
 
-  	NUM_CHANNELS
+    NUM_CHANNELS
 };
 
 /*
@@ -57,23 +57,21 @@ enum
  */
 typedef enum
 {
-    MainSIM, 
+    MainSIM,
     SecSIM
 } SIMSelect_t;
 
 /*
- * Status Led´s 
+ * Status Led´s
  */
 typedef enum
 {
-    DisconnectedSt, 
+    DisconnectedSt,
     UnregisteredSt = DisconnectedSt,
 
     ConnectedSt,
     RegisteredSt = ConnectedSt,
 } Status_t;
-
-
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */

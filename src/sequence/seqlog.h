@@ -1,8 +1,8 @@
 /*
- * 	seqlog.h
- * 		Logical implementation of hardware
- * 		routines related to sequences
- * 		Now tones, rings and leds
+ *  seqlog.h
+ *      Logical implementation of hardware
+ *      routines related to sequences
+ *      Now tones, rings and leds
  */
 
 #ifndef __SEQLOG_H__
@@ -14,24 +14,25 @@
 extern volatile MUInt sem;
 
 /*
- * 	Sequence generation
+ *  Sequence generation
  */
 
-#define NO_ARG	0
+#define NO_ARG  0
 
 /*
- * 	Led enumeraction
+ *  Led enumeraction
  */
 
 enum
 {
-	LED_ON = NO_ARG+1,
+    LED_ON = NO_ARG + 1,
 
-	NUM_LED_IX
+    NUM_LED_IX
 };
 
-void set_hard_leds( unsigned short minor, MUInt arga, MUInt argb );
-void wait_for_semaphore( void );
+void set_hard_leds(unsigned short minor, MUInt arga, MUInt argb);
+void wait_for_semaphore(void);
 
 #endif
 
+/* ------------------------------ End of file ------------------------------ */

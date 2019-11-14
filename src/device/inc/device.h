@@ -22,7 +22,7 @@
 #include "cbox.h"
 #include "rkhevt.h"
 #include "rkhsma.h"
-#include "collector.h"
+#include "Collector.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -79,12 +79,12 @@ typedef struct EvtDevData EvtDevData;
 struct EvtDevData
 {
     RKH_EVT_T base;
-    Device *dev;
+    Device *dev;        /* Points to a device's instance */
 };
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void device_ctor(Device *const me, int id, RKH_SMA_T *collector, 
+void device_ctor(Device *const me, int id, RKH_SMA_T *collector,
                  JobCond *jobCond, DevVtbl *vtbl);
 RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
 void device_update(Device *const me, RKH_EVT_T *evt);

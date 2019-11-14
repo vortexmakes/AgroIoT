@@ -1,4 +1,3 @@
----
 #
 # YAML for ceedling test in module level
 #
@@ -53,11 +52,6 @@
     int8:     INT8
     bool:     UINT8
 
-#:tools:
-# Ceedling defaults to using gcc for compiling, linking, etc.
-# As [:tools] is blank, gcc will be used (so long as it's in your system path)
-# See documentation to configure a given toolchain for use
-
 :tools_test_linker:
   :arguments:
     - -lm
@@ -76,4 +70,3 @@
     - stdout_pretty_tests_report
     - module_generator
     - gcov
-

@@ -29,12 +29,12 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
 }
 
-void 
+void
 tearDown(void)
 {
 }

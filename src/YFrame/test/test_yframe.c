@@ -48,9 +48,11 @@ static GStatus status1 =
     3
 };
 
-static const char singleFrame[] = "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+static const char singleFrame[] =
+    "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 
-static const char multipleFrame[] = "!1|0002|355826018345180|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3#";
+static const char multipleFrame[] =
+    "!1|0002|355826018345180|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3#";
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -62,12 +64,12 @@ static int size;
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
 }
 
-void 
+void
 tearDown(void)
 {
 }
@@ -105,7 +107,7 @@ test_ValidGetFlags(void)
 
     flags = 0;
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
-    cbox_isMoving_ExpectAndReturn(&(status0.dev), 0);
+    cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
 
     err = YFrame_getFlags((GStatus *)&status0, &flags, YFRAME_SGP_TYPE);
@@ -117,7 +119,7 @@ void
 test_MakeSingleHeader(void)
 {
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
-    cbox_isMoving_ExpectAndReturn(&(status0.dev), 0);
+    cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     ConMgr_Imei_ExpectAndReturn("355826018345180");
 
@@ -132,7 +134,7 @@ test_MakeSingleFrame(void)
 
     expLen = strlen(singleFrame);
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
-    cbox_isMoving_ExpectAndReturn(&(status0.dev), 0);
+    cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     ConMgr_Imei_ExpectAndReturn("355826018345180");
 
@@ -166,7 +168,7 @@ test_MakeMultipleFrame(void)
     for (i = 0; i < 2; ++i)
     {
         Geo_isValid_ExpectAndReturn(&(status0.position), 1);
-        cbox_isMoving_ExpectAndReturn(&(status0.dev), 0);
+        cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
         BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
         size += YFrame_data(&status0, &buf[size], YFRAME_MGP_TYPE);
     }

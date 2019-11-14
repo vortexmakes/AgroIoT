@@ -1,5 +1,5 @@
 /*
- * 	sequence.c
+ *  sequence.c
  */
 
 #include <stdio.h>
@@ -14,337 +14,344 @@
 #include "seqdefs.h"
 #include "seqerr.h"
 
-#ifdef	__linux__
+#ifdef  __linux__
 #include "utils.h"
 #endif
 
-
 /*
- * 	Defines
+ *  Defines
  */
 
-#define NOT_USED	-1
+#define NOT_USED    -1
 
 /*
- * 	Type definitions for parser
+ *  Type definitions for parser
  */
 
 typedef struct
 {
-	MUInt next_state;
-	void (*paction)( const MAJOR_T *, SEQ_VT * );
+    MUInt next_state;
+    void (*paction)(const MAJOR_T *, SEQ_VT *);
 } COND_STATE;
 
 typedef struct
 {
-	MUInt (*pcond)( SEQ_T * );
-	COND_STATE conds_actions[ 4 ];
+    MUInt (*pcond)(SEQ_T *);
+    COND_STATE conds_actions[4];
 } STATE;
 
 /*
- * 	Predefinition of action functions
+ *  Predefinition of action functions
  */
 
-static	void
-			load_seq	( const MAJOR_T *, SEQ_VT * ),
-			load_sil	( const MAJOR_T *, SEQ_VT * ),
-			kill_chn	( const MAJOR_T *, SEQ_VT * ),
-			load_rest	( const MAJOR_T *, SEQ_VT * ),
-			load_next	( const MAJOR_T *, SEQ_VT * )
+static void
+load_seq(const MAJOR_T *, SEQ_VT *),
+load_sil    (const MAJOR_T *, SEQ_VT *),
+kill_chn    (const MAJOR_T *, SEQ_VT *),
+load_rest   (const MAJOR_T *, SEQ_VT *),
+load_next   (const MAJOR_T *, SEQ_VT *)
 ;
 
 /*
- * 	Predefinition of test functions
+ *  Predefinition of test functions
  */
 
-static	MUInt
-			tst_sil( SEQ_T * ),
-			tst_new( SEQ_T * )
+static MUInt
+tst_sil(SEQ_T *),
+tst_new(SEQ_T *)
 ;
 
 /*
- * 	States enumeration
+ *  States enumeration
  */
 
 enum
 {
-	SEQ_RESET, IN_SEQ, IN_SILENCE, IN_PERIOD,
-	NUM_STATES
+    SEQ_RESET, IN_SEQ, IN_SILENCE, IN_PERIOD,
+    NUM_STATES
 };
 
 /*
- * 	State transition table
+ *  State transition table
  *
- * 	Each test function returns 0, 1, 2 or 3, selecting
- * 	which transition and which action will be selected.
- * 	If pointer to test function is NULL, all selections
- * 	are the same
+ *  Each test function returns 0, 1, 2 or 3, selecting
+ *  which transition and which action will be selected.
+ *  If pointer to test function is NULL, all selections
+ *  are the same
  */
 
 static const STATE states[] =
 {
-	{ NULL,											/*	SEQ_RESET	*/
-		{
-			{ IN_SEQ, 		load_seq	},
-		   	{ IN_SEQ,		load_seq 	},
-		   	{ IN_SEQ,		load_seq 	},
-		   	{ IN_SEQ,		load_seq 	}
-		}
-	},
-	{ tst_sil, 										/*	IN_SEQ		*/
-		{
-			{ IN_SILENCE,	load_sil	},			/*	toff != 0	*/
-		   	{ SEQ_RESET,	kill_chn 	},			/*	is 1shot?	*/
-			{ IN_SEQ,		load_seq	},			/*	num != 0	*/
-			{ IN_SEQ,		load_next	}			/*	else		*/
-	   	}
-	},
-	{ tst_new,										/*	IN_SILENCE	*/
-		{
-			{ IN_SEQ,		load_seq	},			/*	--num != 0	*/
-			{ SEQ_RESET,	kill_chn 	},			/*	is 1shot?	*/
-			{ IN_SEQ,		load_next	},			/*	period <= 0	*/
-			{ IN_PERIOD,	load_rest	}			/*	else		*/
-	   	}
-	},
-	{ NULL,											/*	IN_PERIOD	*/
-		{
-			{ IN_SEQ,		load_next	},
-			{ IN_SEQ,		load_next	},
-			{ IN_SEQ,		load_next	},
-			{ IN_SEQ,		load_next	}
-		}
-	}
+    {NULL,                                          /*	SEQ_RESET	*/
+     {
+         {IN_SEQ,       load_seq},
+         {IN_SEQ,       load_seq},
+         {IN_SEQ,       load_seq},
+         {IN_SEQ,       load_seq}
+     }},
+    {tst_sil,                                       /*	IN_SEQ		*/
+     {
+         {IN_SILENCE,   load_sil},                  /*	toff != 0	*/
+         {SEQ_RESET,    kill_chn},                  /*	is 1shot?	*/
+         {IN_SEQ,       load_seq},                  /*	num != 0	*/
+         {IN_SEQ,       load_next}                  /*	else		*/
+     }},
+    {tst_new,                                       /*	IN_SILENCE	*/
+     {
+         {IN_SEQ,       load_seq},                  /*	--num != 0	*/
+         {SEQ_RESET,    kill_chn},                  /*	is 1shot?	*/
+         {IN_SEQ,       load_next},                 /*	period <= 0	*/
+         {IN_PERIOD,    load_rest}                  /*	else		*/
+     }},
+    {NULL,                                          /*	IN_PERIOD	*/
+     {
+         {IN_SEQ,       load_next},
+         {IN_SEQ,       load_next},
+         {IN_SEQ,       load_next},
+         {IN_SEQ,       load_next}
+     }}
 };
 
-
 /*
- * 	Static variables
+ *  Static variables
  */
 
-static SEQ_VT	sequence_channels[ NUM_SEQ_CHANNELS ];
+static SEQ_VT sequence_channels[NUM_SEQ_CHANNELS];
 static MUInt sync;
 
 /*
- * 	Parser action functions
+ *  Parser action functions
  */
 
 static
 void
-load_seq( const MAJOR_T *pmajor, SEQ_VT *pwork )
+load_seq(const MAJOR_T *pmajor, SEQ_VT *pwork)
 {
-	pwork->count_time = pwork->seq_t.ton;
-	(*pmajor->phard)( pwork->minor, pwork->seq_t.arg0 & ~UNIQ, pwork->seq_t.arg1 );
-	pwork->running = 1;
+    pwork->count_time = pwork->seq_t.ton;
+    (*pmajor->phard)(pwork->minor, pwork->seq_t.arg0 & ~UNIQ,
+                     pwork->seq_t.arg1);
+    pwork->running = 1;
 }
 
 static
 void
-load_sil( const MAJOR_T *pmajor, SEQ_VT *pwork )
+load_sil(const MAJOR_T *pmajor, SEQ_VT *pwork)
 {
-	pwork->count_time = pwork->seq_t.toff;
-	(*pmajor->phard)( pwork->minor, NO_ARG, NO_ARG );
+    pwork->count_time = pwork->seq_t.toff;
+    (*pmajor->phard)(pwork->minor, NO_ARG, NO_ARG);
 }
 
 static
 void
-kill_chn( const MAJOR_T *pmajor, SEQ_VT *pwork )
+kill_chn(const MAJOR_T *pmajor, SEQ_VT *pwork)
 {
-	(*pmajor->phard)( pwork->minor, NO_ARG, NO_ARG );
-	pwork->running = 0;
-	pwork->code = NOT_USED;
-}
-
-
-static
-void
-load_rest( const MAJOR_T *pmajor, SEQ_VT *pwork )
-{
-	(*pmajor->phard)( pwork->minor, NO_ARG, NO_ARG );
-	pwork->count_time = pwork->seq_t.period;
+    (*pmajor->phard)(pwork->minor, NO_ARG, NO_ARG);
+    pwork->running = 0;
+    pwork->code = NOT_USED;
 }
 
 static
 void
-load_next( const MAJOR_T *pmajor, SEQ_VT *pwork )
+load_rest(const MAJOR_T *pmajor, SEQ_VT *pwork)
+{
+    (*pmajor->phard)(pwork->minor, NO_ARG, NO_ARG);
+    pwork->count_time = pwork->seq_t.period;
+}
+
+static
+void
+load_next(const MAJOR_T *pmajor, SEQ_VT *pwork)
 {
     /*	Transfer data from table to RAM	*/
-	pwork->seq_t = pmajor->pseq_t[ pwork->seq_t.index ];	
-	pwork->running = 0;
-	pwork->count_time = pwork->seq_t.ton;
-	(*pmajor->phard)( pwork->minor, pwork->seq_t.arg0 & ~UNIQ, pwork->seq_t.arg1 );	
-	pwork->running = 1;
+    pwork->seq_t = pmajor->pseq_t[pwork->seq_t.index];
+    pwork->running = 0;
+    pwork->count_time = pwork->seq_t.ton;
+    (*pmajor->phard)(pwork->minor, pwork->seq_t.arg0 & ~UNIQ,
+                     pwork->seq_t.arg1);
+    pwork->running = 1;
 }
 
 /*
- * 	Test functions
- * 		Return condition <0-3>.
+ *  Test functions
+ *      Return condition <0-3>.
  */
 
 static
 MUInt
-tst_sil( SEQ_T *pimage )
+tst_sil(SEQ_T *pimage)
 {
-	return pimage->toff ? 0 : 
-            ( pimage->index < 0 ? 1 : ( pimage->num_pulse ? 2 : 3 ) );
+    return pimage->toff ? 0 :
+           (pimage->index < 0 ? 1 : (pimage->num_pulse ? 2 : 3));
 }
 
 static
 MUInt
-tst_new( SEQ_T *pimage )
+tst_new(SEQ_T *pimage)
 {
-	return pimage->num_pulse && --pimage->num_pulse ? 0 : 
-            ( pimage->index < 0 ? 1 : ( pimage->period <= 0 ? 2 : 3 ) );
+    return pimage->num_pulse && --pimage->num_pulse ? 0 :
+           (pimage->index < 0 ? 1 : (pimage->period <= 0 ? 2 : 3));
 }
 
 /*
- * 	parse function
+ *  parse function
  */
 
 static
 void
-parse( const MAJOR_T *pmajor, SEQ_VT *pwork )
+parse(const MAJOR_T *pmajor, SEQ_VT *pwork)
 {
-	const STATE *p;
-	const COND_STATE *q;
-	
-	p = &states[ pwork->state ];
-	q = &p->conds_actions[ p->pcond == NULL ? 0 : (*p->pcond)( &pwork->seq_t ) ];
-	pwork->state = q->next_state;
-	if( q->paction != NULL )
-		(*q->paction)( pmajor, pwork );
+    const STATE *p;
+    const COND_STATE *q;
+
+    p = &states[pwork->state];
+    q = &p->conds_actions[p->pcond == NULL ? 0 : (*p->pcond)(&pwork->seq_t)];
+    pwork->state = q->next_state;
+    if (q->paction != NULL)
+    {
+        (*q->paction)(pmajor, pwork);
+    }
 }
 
-
 /*
- * 	Functions to install and destroy sequences
+ *  Functions to install and destroy sequences
  */
 
-
 /*
- * 	is_continuous_sequence:
- * 		Determines if sequence for 'code' in
- * 		'major' is continuous or one-shot
+ *  is_continuous_sequence:
+ *      Determines if sequence for 'code' in
+ *      'major' is continuous or one-shot
  */
 
 static
 MInt
-is_continuous_sequence( MUInt major, MUInt code )
+is_continuous_sequence(MUInt major, MUInt code)
 {
-	return ( majors_t[ major ].pseq_t[ code ].arg0 & UNIQ ) == 0;
-}	
-	
+    return (majors_t[major].pseq_t[code].arg0 & UNIQ) == 0;
+}
 
 static
 unsigned
-kill_devices( SEQ_VT *p, unsigned minor )
+kill_devices(SEQ_VT *p, unsigned minor)
 {
-	unsigned to_switch_off;
+    unsigned to_switch_off;
 
-    /* 	some to shut off ?	*/
-	if( ( to_switch_off = ( p->minor & minor ) ) != 0 )
-	{
+    /*  some to shut off ?	*/
+    if ((to_switch_off = (p->minor & minor)) != 0)
+    {
         /*	Devices that remains to shut off */
-		minor &= ~p->minor;			
+        minor &= ~p->minor;
         /* shut it off!	*/
-		( *majors_t[ p->major ].phard )( to_switch_off, NO_ARG, NO_ARG );	
+        (*majors_t[p->major].phard)(to_switch_off, NO_ARG, NO_ARG);
         /*	Set in slot which devices are still running	*/
-		p->minor &= ~to_switch_off;	
+        p->minor &= ~to_switch_off;
         /*	Are there devices running with this code ?	*/
-		if( p->minor == 0 )			
-		{
-        /*  Dispose slot, free channel	*/
-			p->running = 0;			
-			p->code = NOT_USED;
-		}
-	}
-	return minor;
+        if (p->minor == 0)
+        {
+            /*  Dispose slot, free channel	*/
+            p->running = 0;
+            p->code = NOT_USED;
+        }
+    }
+    return minor;
 }
 
 static
 void
-install_new( MUInt major, unsigned minor, MUInt code )
+install_new(MUInt major, unsigned minor, MUInt code)
 {
-	SEQ_VT *p, *prun;
-	unsigned minor_to_off;
+    SEQ_VT *p, *prun;
+    unsigned minor_to_off;
 
-	if( minor == 0 )
-		return;
-    
-	prun = NULL;            /*	to remember running slot */	
-	minor_to_off = minor;	/*	devices to shut off */
-			/*	
-			 *	Sweep all channels.
-			 *	Kill devices running with different code
-			 *	Remember which channel has the same code
-			 *	and which channel is free
-			 */
+    if (minor == 0)
+    {
+        return;
+    }
 
-	for( p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS ; ++p )
-	{
-		if( p->code == NOT_USED ) /*	slot free ?											*/
-			continue;
-		if( p->major != major )	 /*	if not same major number, not interested ! */
-			continue;
-		if( code != 0 && p->code == code )	/*	Same code executing ? */
-			prun = p;			/*	Remember which slot has same code */
-		else if( minor_to_off != 0 )
-			minor_to_off = kill_devices( p, minor_to_off );
-	}
-	if( code == 0 )     /* If kill code, done ! */
-		return;
-	/*
-	 * 	Exists an slot with the same code and sequence
-	 *	is continuous?
-	 *	If true, then add devices !
-	 */
+    prun = NULL;            /*	to remember running slot */
+    minor_to_off = minor;   /*	devices to shut off */
+    /*
+     *	Sweep all channels.
+     *	Kill devices running with different code
+     *	Remember which channel has the same code
+     *	and which channel is free
+     */
 
-	if( prun != NULL && is_continuous_sequence( major, code ) )
-	{
-		prun->minor |= minor;
-		return;
-	}
+    for (p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS; ++p)
+    {
+        if (p->code == NOT_USED)  /*	slot free ?											*/
+        {
+            continue;
+        }
+        if (p->major != major)   /*	if not same major number, not interested !
+                                  * */
+        {
+            continue;
+        }
+        if ((code != 0) && (p->code == code))  /*	Same code executing ? */
+        {
+            prun = p;           /*	Remember which slot has same code */
+        }
+        else if (minor_to_off != 0)
+        {
+            minor_to_off = kill_devices(p, minor_to_off);
+        }
+    }
+    if (code == 0)      /* If kill code, done ! */
+    {
+        return;
+    }
+    /*
+     *  Exists an slot with the same code and sequence
+     *	is continuous?
+     *	If true, then add devices !
+     */
 
- 	/*	
-	 *	There is no code or sequence is not continuous.
-	 *	If exists a free slot, contruct a new sequence
-	 */
-	for( p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS ; ++p )
-	{
-		if( p->code == NOT_USED )   /* slot free ?	*/
-		{
-			p->running	= 0;
-			p->major	= major;
-			p->code		= code;
-			p->minor	= minor;
-			p->state	= SEQ_RESET;
-			p->seq_t	= majors_t[ major ].pseq_t[ code ];
-			parse( &majors_t[ major ], p );
-			break;
-		}
-	}
+    if ((prun != NULL) && is_continuous_sequence(major, code))
+    {
+        prun->minor |= minor;
+        return;
+    }
+
+    /*
+     *	There is no code or sequence is not continuous.
+     *	If exists a free slot, contruct a new sequence
+     */
+    for (p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS; ++p)
+    {
+        if (p->code == NOT_USED)    /* slot free ?	*/
+        {
+            p->running = 0;
+            p->major = major;
+            p->code = code;
+            p->minor = minor;
+            p->state = SEQ_RESET;
+            p->seq_t = majors_t[major].pseq_t[code];
+            parse(&majors_t[major], p);
+            break;
+        }
+    }
 }
 
 /*
- * 	Public functions
+ *  Public functions
  */
 
 /*
- * 	init_seqs:
- * 		To be called after hardware initialization
- * 		but before enabling interrupts
+ *  init_seqs:
+ *      To be called after hardware initialization
+ *      but before enabling interrupts
  */
 
 void
-init_seqs( void )
+init_seqs(void)
 {
-	SEQ_VT *p;
+    SEQ_VT *p;
 
-	for( p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS ; ++p )
-		p->code = NOT_USED;	
-	
+    for (p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS; ++p)
+        p->code = NOT_USED;
+
 #ifdef __linux__
-	init_log();
+    init_log();
 #endif
 }
 
@@ -352,172 +359,191 @@ init_seqs( void )
 
 static
 MUInt
-count_minors( unsigned minor_pattern )
+count_minors(unsigned minor_pattern)
 {
-	MUInt num;
+    MUInt num;
 
-	for( num = 0 ; minor_pattern > 0 ; minor_pattern >>= 1 )
-		if( minor_pattern & 1 )
-			++num;
-	return num;
+    for (num = 0; minor_pattern > 0; minor_pattern >>= 1)
+        if (minor_pattern & 1)
+        {
+            ++num;
+        }
+    return num;
 }
 
 #endif
 
 /*
- * 	set_sequence:
- * 		This is the sole function
- * 		for generating time sequences
- * 		as in tone, ring or leds.
+ *  set_sequence:
+ *      This is the sole function
+ *      for generating time sequences
+ *      as in tone, ring or leds.
  *
- * 		Arguments:
- * 			major is an index to
- * 				device type given by
- * 				MAJOR_ENUM.
- * 			minor is a bit pattern of
- * 				the devices that has the same
- * 				sequence (Bit order must be
- * 				coordinated with hardware module).
- * 			code is the sequence code for the
- * 				aforementioned device type.
- * 	
+ *      Arguments:
+ *          major is an index to
+ *              device type given by
+ *              MAJOR_ENUM.
+ *          minor is a bit pattern of
+ *              the devices that has the same
+ *              sequence (Bit order must be
+ *              coordinated with hardware module).
+ *          code is the sequence code for the
+ *              aforementioned device type.
+ *
  */
 
 void
-set_sequence( MUInt major, unsigned minor, MUInt code )
+set_sequence(MUInt major, unsigned minor, MUInt code)
 {
-#ifndef	FINAL
-	const MAJOR_T *pmajor;
-	MUInt minors_num, minors_max, seqs_max;
+#ifndef FINAL
+    const MAJOR_T *pmajor;
+    MUInt minors_num, minors_max, seqs_max;
 
-	if( major >= NUM_MAJOR )
-		fatal_driver( BAD_MAJOR );
-	pmajor		= &majors_t[ major ];
-	minors_max	= pmajor->minors_num;
-	minors_num	= count_minors( minor );
-	seqs_max	= pmajor->seqs_num;
-	if( minors_num == 0 || minors_num > minors_max  )
-		fatal_driver( BAD_MINORS );
-	if( code >= seqs_max )
-		fatal_driver( BAD_CODE );
+    if (major >= NUM_MAJOR)
+    {
+        fatal_driver(BAD_MAJOR);
+    }
+    pmajor = &majors_t[major];
+    minors_max = pmajor->minors_num;
+    minors_num = count_minors(minor);
+    seqs_max = pmajor->seqs_num;
+    if ((minors_num == 0) || (minors_num > minors_max))
+    {
+        fatal_driver(BAD_MINORS);
+    }
+    if (code >= seqs_max)
+    {
+        fatal_driver(BAD_CODE);
+    }
 #endif
-    for( sync = 1; sync; );
+    for (sync = 1; sync;)
+        ;
 
-	install_new( major, minor, code );
+    install_new(major, minor, code);
 }
 
 #ifdef __BURST_INTERRUPT__
 
 /*
- * 	sequence_interrupt:
- * 		Function called from background
- * 		each 0.1 s
- * 		Sweeps all majors and in each one
- * 		all channels that are assigned and active
- * 		Decrements period and count_time and if
- * 		count_time reaches 0, call parser
+ *  sequence_interrupt:
+ *      Function called from background
+ *      each 0.1 s
+ *      Sweeps all majors and in each one
+ *      all channels that are assigned and active
+ *      Decrements period and count_time and if
+ *      count_time reaches 0, call parser
  */
 
 MUInt
-sequence_interrupt( void )
+sequence_interrupt(void)
 {
-	SEQ_VT *p;
-	MUInt count;
+    SEQ_VT *p;
+    MUInt count;
 
 #ifdef __linux__
-	begin_seqlog();
+    begin_seqlog();
 #endif
     sync = 0;
 
-	for( p = sequence_channels, count = 0; p 
-         < sequence_channels + NUM_SEQ_CHANNELS ; ++p )
-	{
-		if( !p->running )
-			continue;
-		--p->seq_t.period;
-		if( --p->count_time == 0 )
-			parse( &majors_t[ p->major ], p);
-		++count;
-	}
+    for (p = sequence_channels, count = 0; p
+         < sequence_channels + NUM_SEQ_CHANNELS; ++p)
+    {
+        if (!p->running)
+        {
+            continue;
+        }
+        --p->seq_t.period;
+        if (--p->count_time == 0)
+        {
+            parse(&majors_t[p->major], p);
+        }
+        ++count;
+    }
 #ifdef __linux__
-	flush_seqlog();
+    flush_seqlog();
 #endif
 
-	return count;
+    return count;
 }
 
 #else
 
-#define BASE_INTER	4000
-#define HUNDRED_MS	(unsigned int)(100000L/BASE_INTER)
+#define BASE_INTER  4000
+#define HUNDRED_MS  (unsigned int)(100000L / BASE_INTER)
 
-static MUInt waiting_100ms( unsigned short counter );
-static MUInt (*pfinter)( unsigned short counter ) = waiting_100ms;
+static MUInt waiting_100ms(unsigned short counter);
+static MUInt (*pfinter)(unsigned short counter) = waiting_100ms;
 static SEQ_VT *pdi;
 static MUInt count, freeze_count;
 
 static
 MUInt
-sweep_interrupt( unsigned short counter )
+sweep_interrupt(unsigned short counter)
 {
-	if( counter >= NUM_SEQ_CHANNELS )
-	{
+    if (counter >= NUM_SEQ_CHANNELS)
+    {
 #ifdef __linux__
-		flush_seqlog();
+        flush_seqlog();
 #endif
-		pfinter = waiting_100ms;
-		return freeze_count = count;
-	}
-	if( pdi->running )
-	{
-		--pdi->seq_t.period;
-		if( --pdi->count_time == 0 )
-			parse( &majors_t[ pdi->major ], pdi);
-		++count;
-	}
-	++pdi;
-	return freeze_count;
+        pfinter = waiting_100ms;
+        return freeze_count = count;
+    }
+    if (pdi->running)
+    {
+        --pdi->seq_t.period;
+        if (--pdi->count_time == 0)
+        {
+            parse(&majors_t[pdi->major], pdi);
+        }
+        ++count;
+    }
+    ++pdi;
+    return freeze_count;
 }
 
 static
 MUInt
-waiting_100ms( unsigned short counter )
+waiting_100ms(unsigned short counter)
 {
-	if( counter != 0 )
-		return freeze_count;
+    if (counter != 0)
+    {
+        return freeze_count;
+    }
 #ifdef __linux__
-	begin_seqlog();
+    begin_seqlog();
 #endif
-	pdi = sequence_channels;
-	count = 0;
-	return (*(pfinter = sweep_interrupt))( counter );
+    pdi = sequence_channels;
+    count = 0;
+    return (*(pfinter = sweep_interrupt))(counter);
 }
 
-
 /*
- * 	sequence_interrupt:
- * 		Function called from background
- * 		in periods of 2 mseg.
- * 		Sweeps all channels that are assigned and active
- * 		Decrements period and count_time and if
- * 		count_time reaches 0, call parser
- * 		In each interrupt, and begining in the
- * 		100 msec. slot, sweeps only one channel
+ *  sequence_interrupt:
+ *      Function called from background
+ *      in periods of 2 mseg.
+ *      Sweeps all channels that are assigned and active
+ *      Decrements period and count_time and if
+ *      count_time reaches 0, call parser
+ *      In each interrupt, and begining in the
+ *      100 msec. slot, sweeps only one channel
  */
 MUInt
-sequence_interrupt( void )
+sequence_interrupt(void)
 {
-	MUInt status;
-	static unsigned short interrupt_counter = 1;
+    MUInt status;
+    static unsigned short interrupt_counter = 1;
 
     sync = 0;
 
-	status = (*pfinter)( interrupt_counter );
-	if( ++interrupt_counter >= HUNDRED_MS )
-		interrupt_counter = 0;
+    status = (*pfinter)(interrupt_counter);
+    if (++interrupt_counter >= HUNDRED_MS)
+    {
+        interrupt_counter = 0;
+    }
 
-	return status;
+    return status;
 }
 
 #endif
 
+/* ------------------------------ End of file ------------------------------ */

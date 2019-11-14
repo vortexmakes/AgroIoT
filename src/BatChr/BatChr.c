@@ -25,7 +25,7 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-BatChrStatus 
+BatChrStatus
 BatChr_getStatus(void)
 {
     return EXT_PWR_FAIL;

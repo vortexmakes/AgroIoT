@@ -136,7 +136,7 @@ rfile_page_dirty(SPG_T page)
 }
 #endif
 
-void 
+void
 rfile_getDirtyDir(DirId dir)
 {
     ffdir_getDirty(dir);

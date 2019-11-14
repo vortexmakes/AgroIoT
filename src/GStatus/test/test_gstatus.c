@@ -24,14 +24,14 @@
 static GStatus status0 =
 {
     {
-        "185124", 
-        "A", 
-        "37.8402883", 
-        "-", 
-        "057.6884350", 
-        "-", 
+        "185124",
+        "A",
+        "37.8402883",
+        "-",
+        "057.6884350",
+        "-",
         "0.078",
-        "", 
+        "",
         "310119"
     },
     {1, 1, {0, 0, 1}, {0xdddd, 0xffff, 0xffff}, 0},
@@ -41,16 +41,16 @@ static GStatus status0 =
 
 static GPS_STR status1 =
 {
-    "185124", 
-    "A", 
-    "37", 
-    "8402883", 
-    "-", 
-    "057", 
-    "6884350", 
-    "-", 
+    "185124",
+    "A",
+    "37",
+    "8402883",
+    "-",
+    "057",
+    "6884350",
+    "-",
     "0.078",
-    "", 
+    "",
     "310119",
     "3fff",
     "3",
@@ -63,12 +63,12 @@ static GPS_STR status1 =
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
 }
 
-void 
+void
 tearDown(void)
 {
 }
@@ -118,9 +118,9 @@ test_ConvertGStatusToGpsStr(void)
     TEST_ASSERT_EQUAL_STRING(status0.position.speed, oldStatus.speed);
     TEST_ASSERT_EQUAL_STRING(status0.position.course, oldStatus.course);
     TEST_ASSERT_EQUAL_STRING(status0.position.date, oldStatus.date);
-    sprintf(temp, "%02X%02X", status0.io.digOut, status0.io.digIn);
+    sprintf(temp, "%02X%02X", status0.ioStatus.digOut, status0.ioStatus.digIn);
     TEST_ASSERT_EQUAL_STRING(temp, oldStatus.in_out_st);
-    sprintf(temp, "%d", status0.batChr);
+    sprintf(temp, "%d", status0.batChrStatus);
     TEST_ASSERT_EQUAL_STRING(temp, oldStatus.acbk_st);
     TEST_ASSERT_EQUAL(0, result);
 }

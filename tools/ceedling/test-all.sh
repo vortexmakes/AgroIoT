@@ -3,8 +3,8 @@
 
 source_dir="../../src"
 ceedling_dir="tools/ceedling"
-modules="Config epoch GStatus StatQue YFrame"
-stateMachines=""
+modules="Config epoch GStatus StatQue YFrame device topic"
+stateMachines="Collector"
 
 #echo $PATH
 export PATH="$PATH:/home/travis/.rvm/gems/ruby-2.4.1/bin"
@@ -17,9 +17,85 @@ if [ ! -d $source_dir ]; then
     exit 1
 fi
 
+cleanModules()
+{
+    for sm in $stateMachines;
+    do
+        echo ""
+        echo "Clean "$sm "state machine"
+        echo "-------------------------"
+        cd $source_dir/$sm
+         if [[ ! -e project.yml || ! -e project-sm.yml || ! -e project-action.yml ]]; then
+             echo "[ERROR] Ceedling project not found"
+             exit 1
+         else
+            ceedling clean
+            ceedling clobber
+         fi
+    done
+    currdir=$PWD
+    for module in $modules;
+    do
+        echo ""
+        echo "Clean "$module "module"
+        echo "----------------------"
+        cd $source_dir/$module
+        if [ ! -e "project.yml" ]; then
+            echo "[ERROR] Ceedling project not found"
+            exit 1
+        else
+            ceedling clean
+            ceedling clobber
+        fi
+    done
+}
+
+testModuleExceptions()
+{
+    echo ""
+    echo "Run all test of ffile module"
+    echo "----------------------------"
+    cd $source_dir/ffile
+    if [ ! -e "project.yml" ]; then
+        echo "[ERROR] Ceedling project not found"
+        exit 1
+    else
+        if [ $clobber == 0 ]; then
+            ceedling clean gcov:ffile
+            ceedling clean options:project-ffdir gcov:ffdir
+            ceedling clean options:project-complete-eeprom gcov:ffile-complete
+            ceedling clean options:project-complete-dataflash gcov:ffile-complete
+        else
+            ceedling clean clobber gcov:ffile
+            ceedling clean clobber options:project-ffdir gcov:ffdir
+            ceedling clean clobber options:project-complete-eeprom gcov:ffile-complete
+            ceedling clean clobber options:project-complete-dataflash gcov:ffile-complete
+        fi
+    fi
+}
+
+coverModuleExceptions()
+{
+    echo ""
+    echo "Generating code coverage report for ffile"
+    echo "-----------------------------------------"
+    cd $currdir
+    cd $source_dir/ffile
+    lcov -e ../../$ceedling_dir/gcov/coverage-total.info "$(pwd)/src/ffile.c" -o ../../$ceedling_dir/gcov/ffile.info
+    lcov -e ../../$ceedling_dir/gcov/coverage-total.info "$(pwd)/src/devflash.c" -o ../../$ceedling_dir/gcov/devflash.info
+    lcov -e ../../$ceedling_dir/gcov/coverage-total.info "$(pwd)/src/rfile.c" -o ../../$ceedling_dir/gcov/rfile.info
+    add+=(-a devflash.info)
+    add+=(-a ffile.info)
+    add+=(-a rfile.info)
+}
+
 case "$1" in
     clean)
         clobber=1
+        ;;
+    clobber)
+        cleanModules
+        exit 0
         ;;
     *)
         clobber=0
@@ -51,9 +127,7 @@ do
     echo "Run all test of "$sm "state machine"
     echo "-----------------------------------"
     cd $source_dir/$sm
-     if [ [ ! -e "project.yml" ] && 
-          [ ! -e "project-sm.yml" ] && 
-          [ ! -e "project-action.yml" ] ]; then
+     if [[ ! -e "project.yml" || ! -e "project-sm.yml" || ! -e "project-action.yml" ]]; then
          echo "[ERROR] Ceedling project not found"
          exit 1
      else
@@ -66,6 +140,8 @@ do
          fi
      fi
 done
+
+testModuleExceptions
 
 echo ""
 echo "Generating code coverage report for modules"
@@ -97,6 +173,8 @@ do
     lcov -e ../../$ceedling_dir/gcov/coverage-total.info "$(pwd)/src/$sm"Act".c" -o ../../$ceedling_dir/gcov/$sm"Act".info
     add+=(-a $sm"Act"".info")
 done
+
+coverModuleExceptions
 
 echo ""
 echo "Generating complete code coverage report"

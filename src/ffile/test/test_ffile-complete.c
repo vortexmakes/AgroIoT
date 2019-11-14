@@ -43,12 +43,12 @@ crashDirectory(void)
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
 }
 
-void 
+void
 tearDown(void)
 {
     ffile_close();

@@ -1,6 +1,6 @@
 /**
  *  \file       mTimeCfg.h
- * 	\bried      Main timer definitions.
+ *  \bried      Main timer definitions.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  DaBa  Dario Balina       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -29,26 +29,26 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /*
- * 	Here define the time of interrupt in ms
+ *  Here define the time of interrupt in ms
  */
-#define MTIME_TIME_TICK			RKH_TICK_RATE_MS   /* Expressed in msec */
-#define MTIME_100MSEC			100 
-#define MTIME_1SEC			    1000
-#define MTIME_10SEC	    		10000
+#define MTIME_TIME_TICK         RKH_TICK_RATE_MS   /* Expressed in msec */
+#define MTIME_100MSEC           100
+#define MTIME_1SEC              1000
+#define MTIME_10SEC             10000
 
 /*
- * 	Number of slots in table 'timerChain'declared in 'mTimeTbl.h' and
+ *  Number of slots in table 'timerChain'declared in 'mTimeTbl.h' and
  *  user defined in 'mTimeTbl.c'.
  */
-#define NUM_TIMER_DIVISORS		3
+#define NUM_TIMER_DIVISORS      3
 
 /*
  * Scaled time slots constants
  */
-#define MTIME_EPOCH_SCAN_PERIOD			MTIME_100MSEC
-#define MTIME_SEQUENCE_SCAN_PERIOD	    MTIME_100MSEC
-#define MTIME_MODPWR_SCAN_PERIOD	    MTIME_100MSEC
-#define MTIME_1SEC_SCAN_PERIOD			MTIME_1SEC
+#define MTIME_EPOCH_SCAN_PERIOD         MTIME_100MSEC
+#define MTIME_SEQUENCE_SCAN_PERIOD      MTIME_100MSEC
+#define MTIME_MODPWR_SCAN_PERIOD        MTIME_100MSEC
+#define MTIME_1SEC_SCAN_PERIOD          MTIME_1SEC
 #define MTIME_10SEC_SCAN_PERIOD         MTIME_10SEC
 
 /* ------------------------------- Data types ------------------------------ */
@@ -64,6 +64,5 @@ extern "C" {
 
 /* ------------------------------ End of file ------------------------------ */
 /*
- * 	mTimeCfg.h
+ *  mTimeCfg.h
  */
-

@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  DaBa  Dario Balina       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -30,8 +30,8 @@
 #define DEBOUNCE_NSAMPLE    2
 #define DEBOUNCE_MASK       ((uint8_t)((1 << DEBOUNCE_NSAMPLE) - 1))
 #define DEBOUNCE_CHG        ((uint8_t)((1 << (DEBOUNCE_NSAMPLE - 1)) - 1))
-#define DEBOUNCE_NOT_MASK   ((uint8_t)~DEBOUNCE_MASK)
-#define DEBOUNCE_NOT_CHG    ((uint8_t)~DEBOUNCE_CHG)
+#define DEBOUNCE_NOT_MASK   ((uint8_t) ~DEBOUNCE_MASK)
+#define DEBOUNCE_NOT_CHG    ((uint8_t) ~DEBOUNCE_CHG)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -53,7 +53,7 @@ dIn_init(void)
     bsp_DigInPullSelect(pullSelect1, 0);
     bsp_DigInPullSelect(pullSelect2, 0);
 
-    for(i = 0; i < NUM_DIN_SIGNALS; ++i)
+    for (i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
         dIns[i] = 0;
         dInsSt[i] = 0;
@@ -65,31 +65,31 @@ dIn_scan(void)
 {
     DigInSignalId i;
     uint8_t din;
-    InChgEvt *p;
+    DigInChangedEvt *p;
 
-    for(i=0; i < NUM_DIN_SIGNALS; ++i)
+    for (i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
         din = (dIns[i] << 1) | bsp_getDigIn(i);
-        
-        if((dIns[i] == DEBOUNCE_CHG) && (din == DEBOUNCE_MASK) &&
-           (dInsSt[i] == 0))
+
+        if ((dIns[i] == DEBOUNCE_CHG) && (din == DEBOUNCE_MASK) &&
+            (dInsSt[i] == 0))
         {
             dInsSt[i] = 1;
 
-            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
+            p = RKH_ALLOC_EVT(DigInChangedEvt, evDigInChanged, &inChg);
             p->din |= 1 << i;
 
-            topic_publish(deviceStatus, p, &inChg);
+            topic_publish(status, p, &inChg);
         }
-        else if((dIns[i] == DEBOUNCE_NOT_CHG) && (din == DEBOUNCE_NOT_MASK) &&
-                (dInsSt[i] == 1))
+        else if ((dIns[i] == DEBOUNCE_NOT_CHG) && (din == DEBOUNCE_NOT_MASK) &&
+                 (dInsSt[i] == 1))
         {
             dInsSt[i] = 0;
 
-            p = RKH_ALLOC_EVT(InChgEvt, evIoChg, &inChg);
+            p = RKH_ALLOC_EVT(DigInChangedEvt, evDigInChanged, &inChg);
             p->din &= ~(1 << i);
 
-            topic_publish(deviceStatus, p, &inChg);
+            topic_publish(status, p, &inChg);
         }
 
         dIns[i] = din;

@@ -32,7 +32,8 @@
 
 #define FF_NSECTOR              (NUM_PHYS_BLOCKS - (FF_DIR_BACKUP + 1)) /* 8192
                                                                          * -(1+1))=
-                                                                         * 8190 */
+                                                                         * 8190
+                                                                         **/
 
 /**
  *	Max. number of registers per flash memory sector.

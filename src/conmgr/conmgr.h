@@ -11,7 +11,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario Balina db@vortexmakes.com
  *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
@@ -38,7 +38,7 @@ extern "C" {
 #define SYNC_DELAY_TIME     RKH_TIME_MS(1000)
 
 /**
- * Specifies the maximum tries seeking for GSM modem response. 
+ * Specifies the maximum tries seeking for GSM modem response.
  */
 #define MAX_SYNC_RETRY      10
 
@@ -120,7 +120,7 @@ extern "C" {
  */
 /* .................................. APN .................................. */
 #define MOVISTAR_OPERATOR       "72207"
-#define MOVISTAR_APN_ADDR       "INTERNET.GPRS.UNIFON.COM.AR"  
+#define MOVISTAR_APN_ADDR       "INTERNET.GPRS.UNIFON.COM.AR"
 #define MOVISTAR_APN_USER       "WAP"
 #define MOVISTAR_APN_PASS       "WAP"
 
@@ -145,8 +145,8 @@ extern "C" {
     #define DOCKLIGHT_PORT      "33498"
 
 #define CONNECTION_PROT         "TCP"
-#define CONNECTION_DOMAIN       YIPIES_SERVER //DOCKLIGHT_SERVER
-#define CONNECTION_PORT         YIPIES_PORT //DOCKLIGHT_PORT
+#define CONNECTION_DOMAIN       YIPIES_SERVER /*DOCKLIGHT_SERVER */
+#define CONNECTION_PORT         YIPIES_PORT /*DOCKLIGHT_PORT */
 
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */

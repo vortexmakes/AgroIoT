@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  DaBa  Dario Balina       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
-#define DOUT_TIME(t)        (t/DOUT_BASE_TIME)
+#define DOUT_TIME(t)        (t / DOUT_BASE_TIME)
 
 /* -------------------------------- Constants ------------------------------ */
 #define DOUT_BASE_TIME      100

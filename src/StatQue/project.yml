@@ -33,7 +33,7 @@
     - ../../third-party/rkh/source/queue/inc
     - ../../third-party/rkh/source/tmr/inc
     - ../tpsens/cbox
-    - ../collector
+    - ../Collector/inc
     - ../gps
     - ../BatChr
     - ../GStatus/inc

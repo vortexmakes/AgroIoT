@@ -69,14 +69,14 @@ makeDirSector(DirSector *sector)
 
     TEST_ASSERT_NOT_NULL(sector);
     dir = &sector->main;
-    memcpy(dir->file, 
-           (ffui8_t *)defdir, 
+    memcpy(dir->file,
+           (ffui8_t *)defdir,
            sizeof(FFILE_T) * NUM_FLASH_FILES);
     dir->checksum = calculate_checksum((ffui8_t *)dir->file);
 
     dir = &sector->backup;
-    memcpy(dir->file, 
-           (ffui8_t *)defdir, 
+    memcpy(dir->file,
+           (ffui8_t *)defdir,
            sizeof(FFILE_T) * NUM_FLASH_FILES);
     dir->checksum = calculate_checksum((ffui8_t *)dir->file);
 }
@@ -88,29 +88,29 @@ crashDirSector(Dir *sector)
     sector->checksum = ~sector->checksum;
 }
 
-static void 
-MockEepromReadCallback(uint8_t *p, uint16_t addr, uint16_t qty, 
+static void
+MockEepromReadCallback(uint8_t *p, uint16_t addr, uint16_t qty,
                        int cmock_num_calls)
 {
     memcpy(p, &dirSectorRead, qty);
 }
 
-static void 
-MockEepromWriteCallback(uint8_t *p, uint16_t addr, uint16_t qty, 
+static void
+MockEepromWriteCallback(uint8_t *p, uint16_t addr, uint16_t qty,
                         int cmock_num_calls)
 {
     memcpy((uint8_t *)&dirSectorWrite + addr, p, qty);
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void 
+void
 setUp(void)
 {
     Mock_eeprom_Init();
     makeDirSector(&dirSectorRead);
 }
 
-void 
+void
 tearDown(void)
 {
     Mock_eeprom_Verify();
@@ -225,11 +225,11 @@ test_RestoreDirFromBackupChecksumNotEqual(void)
     ffui8_t status;
     FFILE_T *dir;
 
-    memcpy(&dirSectorRead.main.file[1], 
-           &dirSectorRead.main.file[0], 
+    memcpy(&dirSectorRead.main.file[1],
+           &dirSectorRead.main.file[0],
            sizeof(FFILE_T));
-    dirSectorRead.main.checksum = 
-            calculate_checksum((ffui8_t *)dirSectorRead.main.file);
+    dirSectorRead.main.checksum =
+        calculate_checksum((ffui8_t *)dirSectorRead.main.file);
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
@@ -262,7 +262,7 @@ test_GetDirtyDirectory(void)
 
     ffdir_getDirty(DirMainId);
 
-    TEST_ASSERT_EQUAL_HEX16(~dirSectorRead.main.checksum, 
+    TEST_ASSERT_EQUAL_HEX16(~dirSectorRead.main.checksum,
                             dirSectorWrite.main.checksum);
 
     eeprom_read_Expect(0, 0, sizeof(DirSector));
@@ -274,7 +274,7 @@ test_GetDirtyDirectory(void)
 
     ffdir_getDirty(DirBackupId);
 
-    TEST_ASSERT_EQUAL_HEX16(~dirSectorRead.backup.checksum, 
+    TEST_ASSERT_EQUAL_HEX16(~dirSectorRead.backup.checksum,
                             dirSectorWrite.backup.checksum);
 }
 
@@ -298,8 +298,8 @@ test_StoreWholeDirectoryInMemory(void)
 
     ffdir_update((FFILE_T *)0);
 
-    TEST_ASSERT_EQUAL_MEMORY(&dirSectorRead, 
-                             &dirSectorWrite, 
+    TEST_ASSERT_EQUAL_MEMORY(&dirSectorRead,
+                             &dirSectorWrite,
                              sizeof(DirSector));
 }
 
@@ -318,8 +318,8 @@ test_StoreOneFileInMemory(void)
     ffdir_restore(&status);
 
     dirSectorRead.main.file[FFD1].type = QFILE_TYPE;
-    dirSectorRead.main.checksum = 
-            calculate_checksum((ffui8_t *)dirSectorRead.main.file);
+    dirSectorRead.main.checksum =
+        calculate_checksum((ffui8_t *)dirSectorRead.main.file);
     dirSectorRead.backup = dirSectorRead.main;
 
     eeprom_write_Expect(0, 0, sizeof(DirSector));
@@ -328,8 +328,8 @@ test_StoreOneFileInMemory(void)
 
     ffdir_update(&dirSectorRead.main.file[FFD1]);
 
-    TEST_ASSERT_EQUAL_MEMORY(&dirSectorRead, 
-                             &dirSectorWrite, 
+    TEST_ASSERT_EQUAL_MEMORY(&dirSectorRead,
+                             &dirSectorWrite,
                              sizeof(DirSector));
 }
 

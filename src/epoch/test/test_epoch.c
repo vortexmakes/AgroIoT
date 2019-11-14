@@ -1,18 +1,3 @@
-/*
- *  --------------------------------------------------------------------------
- *
- *                               GICSAFe-Firmware
- *                               ----------------
- *
- *                      Copyright (C) 2019 CONICET-GICSAFe
- *          All rights reserved. Protected by international copyright laws.
- *
- *  Contact information:
- *  site: https://github.com/gicsafe-firmware
- *  e-mail: <someone>@<somewhere>
- *  ---------------------------------------------------------------------------
- */
-
 /**
  *  \file       test_Epoch.c
  *  \brief      Unit test for epoch time of Unix
@@ -25,8 +10,7 @@
 /* -------------------------------- Authors -------------------------------- */
 /*
  *  LeFr  Leandro Francucci  lf@vortexmakes.com
- *  CIM   Carlos Mancón manconci@gmail.com
- *  DaBa  Darío Baliña db@vortexmakes.com
+ *  DaBa  Dario Balina db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */

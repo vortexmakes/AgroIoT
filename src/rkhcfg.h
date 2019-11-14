@@ -81,21 +81,21 @@
  *  publish-subscriber module.
  *
  *  \type       Boolean
- *  \range      
+ *  \range
  *  \default    RKH_ENABLED
  */
 #define RKH_CFG_FWK_PUBSUB_EN           RKH_ENABLED
 
 /**
  *  \brief
- *  Specify the maximum number of channels (topics) to which an active 
+ *  Specify the maximum number of channels (topics) to which an active
  *  object wants to subscribe (can be a number in the range [1..128]).
  *
  *  \type       Integer
  *  \range      [1..128]
  *  \default    16
  */
-#define RKH_CFG_FWK_MAX_SUBS_CHANNELS   16
+#define RKH_CFG_FWK_MAX_SUBS_CHANNELS   8
 
 /**
  *	If the #RKH_CFG_HOOK_DISPATCH_EN is set to 1, RKH will invoke the
@@ -372,10 +372,10 @@
 
 /**
  *  \brief
- *  If RKH_CFG_SMA_ORTHREG_EN is set to RKH_ENABLED, the state machine 
- *  functions are reentrant, therefore it could be used as workaround to 
- *  easily emulates a state machine or composite state with orthogonal 
- *  regions, for example, dispatching the same event to multiple state 
+ *  If RKH_CFG_SMA_ORTHREG_EN is set to RKH_ENABLED, the state machine
+ *  functions are reentrant, therefore it could be used as workaround to
+ *  easily emulates a state machine or composite state with orthogonal
+ *  regions, for example, dispatching the same event to multiple state
  *  machines (regions) at the same time.
  *
  *  \type       Boolean

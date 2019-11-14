@@ -1,28 +1,27 @@
 /**
- *  \file       GStatus.h
- *  \brief      Specifies the interface of GStatus module.
+ *  \file       topic.h
+ *  \brief      Specifies the interface of topic module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2019.25.01  LeFr  v1.0.00  Initial version
+ *  2018.05.02  DaBa  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ *  DaBa  Dario Balina db@vortexmakes.com
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __RAWDATA_H__
-#define __RAWDATA_H__
+#ifndef __TOPIC_H__
+#define __TOPIC_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "Geo.h"
-#include "cbox.h"
-#include "IOStatus.h"
-#include "BatChr.h"
+#include "rkhsma.h"
+#include "rkhevt.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -31,21 +30,21 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-/* ................................ Signals ................................ */
-/* ................................. Events ................................ */
-/* ........................ Declares active object ......................... */
-typedef struct GStatus GStatus;
-struct GStatus 
+typedef enum Topics Topics;
+enum Topics
 {
-    Geo position;
-    CBOX_STR dev;
-    IOStatus io;
-    BatChrStatus batChr;
+    tcpConnection,
+    modURC,
+    status,
+    NumOfTopics
 };
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void topic_subscribe(Topics topic, RKH_SMA_T *ao);
+void topic_publish(Topics topic, RKH_EVT_T *evt, RKH_SMA_T *ao);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }
