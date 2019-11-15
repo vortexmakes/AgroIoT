@@ -1,7 +1,8 @@
 ---
 #
 # Usage:
-#   $ sudo ceedling [clean|clobber] options:project-sm test:SigMon
+#   $ sudo ceedling [clean|clobber] options:project-sm test:CommMgr
+#   $ sudo ceedling [clean|clobber] options:project-action test:CommMgrAct
 #
 
 :project:

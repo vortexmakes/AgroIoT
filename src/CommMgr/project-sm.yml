@@ -1,14 +1,12 @@
 #
 # Usage:
-#   $ sudo ceedling [clean|clobber] options:project-sm test:SigMon
+#   $ sudo ceedling [clean|clobber] options:project-sm test:CommMgr
 #
 
 :paths:
   :test:
   :source:
-    - src/SigMon.c
-    - ../DigIn/inc
-    - ../../third-party/rkh/source/sm/src
+    - src/CommMgr.c
   :include:
+    - ../
   :support:
-    - ../../third-party/rkh/source/trc/src

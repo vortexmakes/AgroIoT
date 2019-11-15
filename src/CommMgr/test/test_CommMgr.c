@@ -1,5 +1,5 @@
 /**
- *  \file       test_Collector.c
+ *  \file       test_CommMgr.c
  *  \brief      Unit test for state machine module.
  */
 
@@ -15,8 +15,8 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
-#include "Collector.h"
-#include "Mock_CollectorAct.h"
+#include "CommMgr.h"
+#include "Mock_CommMgrAct.h"
 #include "Mock_rkhsma.h"
 #include "Mock_rkhsm.h"
 
@@ -25,7 +25,7 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static Collector *me;
+static CommMgr *me;
 const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
 {
     rkh_sma_activate,
@@ -40,7 +40,7 @@ const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
 void
 setUp(void)
 {
-    me = RKH_DOWNCAST(Collector, collector);
+    me = RKH_DOWNCAST(CommMgr, commMgr);
 }
 
 void

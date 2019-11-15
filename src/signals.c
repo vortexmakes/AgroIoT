@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Balin¿½a       db@vortexmakes.com
+ *  DaBa  Dario Balina       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -85,6 +85,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evMapping);
     RKH_TR_FWK_SIG(evDiskConnected);
     RKH_TR_FWK_SIG(evDiskDisconnected);
+    RKH_TR_FWK_SIG(evTout0);
 }
 
 /* ------------------------------ End of file ------------------------------ */

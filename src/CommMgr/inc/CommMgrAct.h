@@ -32,8 +32,8 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* ........................ Declares effect actions ........................ */
-void CommMgr_ToidleExt0(CommMgr *const me, RKH_EVT_T *pe);
-void CommMgr_idleToactiveExt1(CommMgr *const me, RKH_EVT_T *pe);
+void CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe);
+void CommMgr_IdleToActiveExt1(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ReceivingAckToC1Ext6(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ReceivingAckToEndCycleExt7(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_SendingEndOfHistToEndCycleExt9(CommMgr *const me, RKH_EVT_T *pe);
@@ -41,7 +41,7 @@ void CommMgr_SendingHistToC0Ext12(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_SendingHistToEndCycleExt13(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C1ToEndCycleExt14(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C3ToSendingHistExt18(CommMgr *const me, RKH_EVT_T *pe);
-void CommMgr_activeToactiveLoc0(CommMgr *const me, RKH_EVT_T *pe);
+void CommMgr_ActiveToActiveLoc0(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 void CommMgr_enWaitSync(CommMgr *const me);

@@ -1,3 +1,16 @@
+/**
+ *  \file       CommMgr.h
+ *  \brief      Active object specification.
+ */
+
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ */
+
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
 #ifndef __COMMMGR_H__
@@ -18,9 +31,11 @@ extern "C" {
 RKH_SMA_DCLR(commMgr);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE idle, WaitSync, SendingStatus, ReceivingAck, SendingEndOfHist, SendingHist, EndCycle;
-RKH_DCLR_COMP_STATE active;
-RKH_DCLR_CHOICE_STATE C0, C1, C2, C3;
+RKH_DCLR_BASIC_STATE CommMgr_Idle, CommMgr_WaitSync, CommMgr_SendingStatus, 
+                     CommMgr_ReceivingAck, CommMgr_SendingEndOfHist, 
+                     CommMgr_SendingHist, CommMgr_EndCycle;
+RKH_DCLR_COMP_STATE CommMgr_Active;
+RKH_DCLR_CHOICE_STATE CommMgr_C0, CommMgr_C1, CommMgr_C2, CommMgr_C3;
 
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */
