@@ -9,8 +9,8 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ *  DaBa  Dario Balina db@vortexmakes.com
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -27,8 +27,8 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-RKHROM RKH_SBSC_T CommMgr_Idle, CommMgr_WaitSync, CommMgr_SendingStatus, 
-                  CommMgr_ReceivingAck, CommMgr_SendingEndOfHist, 
+RKHROM RKH_SBSC_T CommMgr_Idle, CommMgr_WaitSync, CommMgr_SendingStatus,
+                  CommMgr_ReceivingAck, CommMgr_SendingEndOfHist,
                   CommMgr_SendingHist, CommMgr_EndCycle;
 RKHROM RKH_SCMP_T CommMgr_Active;
 RKHROM RKH_SCHOICE_T CommMgr_C0, CommMgr_C1, CommMgr_C2, CommMgr_C3;
