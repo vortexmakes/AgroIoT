@@ -19,11 +19,13 @@
 #include "CommMgr.h"
 #include "CommMgrAct.h"
 #include "signals.h"
+#include "events.h"
 #include "rkhfwk_cast.h"
 #include "Mock_rkhtmr.h"
 #include "Mock_rkhtrc_record.h"
 #include "Mock_rkhassert.h"
 #include "Mock_rkhsma.h"
+#include "Mock_GStatus.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -110,7 +112,13 @@ test_StopSync(void)
 void
 test_UpdateStatus(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    GStatusEvt event;
+
+    event.status.ioStatus.digIn = 0xde;
+    event.status.ioStatus.digOut = 0xad;
+
+    CommMgr_activeToactiveLoc0(me, &event);
+    TEST_ASSERT_EQUAL_MEM(&event.status, me->status, sizeof(GStatus));
 }
 
 void
