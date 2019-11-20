@@ -16,6 +16,7 @@
 #include "rkh.h"
 #include "rkhtmr.h"
 #include "signals.h"
+#include "events.h"
 #include "CommMgr.h"
 #include "CommMgrAct.h"
 #include "CommMgrActRequired.h"
@@ -105,9 +106,13 @@ CommMgr_C3ToSendingHistExt18(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 void 
-CommMgr_activeToactiveLoc0(CommMgr *const me, RKH_EVT_T *pe)
+CommMgr_ActiveToActiveLoc0(CommMgr *const me, RKH_EVT_T *pe)
 {
+    GStatusEvt *realEvt;
+
 	/*updateStatus();*/
+    realEvt = RKH_DOWNCAST(GStatusEvt, pe);
+    me->status = realEvt->status;
 }
 
 /* ............................. Entry actions ............................. */

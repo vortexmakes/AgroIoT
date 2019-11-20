@@ -117,8 +117,8 @@ test_UpdateStatus(void)
     event.status.ioStatus.digIn = 0xde;
     event.status.ioStatus.digOut = 0xad;
 
-    CommMgr_activeToactiveLoc0(me, &event);
-    TEST_ASSERT_EQUAL_MEM(&event.status, me->status, sizeof(GStatus));
+    CommMgr_ActiveToActiveLoc0(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL_MEMORY(&event.status, &me->status, sizeof(GStatus));
 }
 
 void

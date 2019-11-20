@@ -9,6 +9,11 @@
     - src/CommMgrAct.c
   :include:
     - ../GStatus/inc
+    - ../gps
+    - ../tpsens/cbox
+    - ../BatChr
+    - ../Collector/inc
+    - ../epoch/inc
     - ../
   :support:
 

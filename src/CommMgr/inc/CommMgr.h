@@ -19,6 +19,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhsma.h"
 #include "rkhtmr.h"
+#include "GStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -44,6 +45,7 @@ struct CommMgr
 {
     RKH_SMA_T sma;      /* base structure */
     RKHTmEvt tmEvtObj0;
+    GStatus status;
 };
 
 /* -------------------------- External variables --------------------------- */
