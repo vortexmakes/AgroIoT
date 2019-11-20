@@ -21,7 +21,7 @@
 #include "CommMgrActRequired.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define WaitTime0	RKH_TIME_SEC(3)
+#define WaitTime0	RKH_TIME_SEC(60)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -116,7 +116,9 @@ CommMgr_enWaitSync(CommMgr *const me)
 {
 	/*enWaitSync();*/
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
-	RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
+	RKH_TMR_INIT(&me->tmEvtObj0.tmr, 
+                 RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), 
+                 NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
 }
 

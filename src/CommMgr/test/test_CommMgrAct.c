@@ -88,4 +88,101 @@ test_Initialize(void)
     CommMgr_ToIdleExt0(me, evt);
 }
 
+void
+test_StartSync(void)
+{
+    rkh_tmr_init__Expect(&me->tmEvtObj0.tmr,
+                         RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0));
+    rkh_tmr_start_Expect(&me->tmEvtObj0.tmr,
+                         RKH_UPCAST(RKH_SMA_T, me),
+                         RKH_TIME_SEC(60), 0);
+    CommMgr_enWaitSync(me);
+    TEST_ASSERT_EQUAL(evTout0, me->tmEvtObj0.evt.e);
+}
+
+void
+test_StopSync(void)
+{
+    rkh_tmr_stop_ExpectAndReturn(&me->tmEvtObj0.tmr, 0);
+    CommMgr_exWaitSync(me);
+}
+
+void
+test_UpdateStatus(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_OnSyncSendStatus(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_CheckPendingStatus(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_ReceiveAck(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_ReceiveUnknownResponse(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_CheckHistory(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_StartHistoryMessage(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_PrepareNextStatusBlock(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_SendABlockOfStatus(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_CheckEndOfBlock(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_EndHistoryMessage(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_FailToSend(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_FailToReceive(void)
+{
+    TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
 /* ------------------------------ End of file ------------------------------ */
