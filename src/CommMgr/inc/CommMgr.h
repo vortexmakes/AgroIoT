@@ -46,6 +46,7 @@ struct CommMgr
     RKH_SMA_T sma;      /* base structure */
     RKHTmEvt tmEvtObj0;
     GStatus status;
+    rbool_t isPendingStatus;
 };
 
 /* -------------------------- External variables --------------------------- */

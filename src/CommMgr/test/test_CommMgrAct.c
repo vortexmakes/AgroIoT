@@ -88,6 +88,7 @@ test_Initialize(void)
     rkh_trc_obj_Ignore();
 
     CommMgr_ToIdleExt0(me, evt);
+    TEST_ASSERT_EQUAL(0, me->isPendingStatus);
 }
 
 void
@@ -118,7 +119,9 @@ test_UpdateStatus(void)
     event.status.ioStatus.digOut = 0xad;
 
     CommMgr_ActiveToActiveLoc0(me, RKH_UPCAST(RKH_EVT_T, &event));
+
     TEST_ASSERT_EQUAL_MEMORY(&event.status, &me->status, sizeof(GStatus));
+    TEST_ASSERT_EQUAL(1, me->isPendingStatus);
 }
 
 void

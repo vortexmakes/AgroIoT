@@ -35,6 +35,7 @@
 void 
 CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
 {
+	/*init();*/
 	RKH_TR_FWK_AO(me);
 	RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
 	RKH_TR_FWK_STATE(me, &CommMgr_Idle);
@@ -54,7 +55,7 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_SIG(evGStatus);
 	RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
 	
-	/*init();*/
+    me->isPendingStatus = 0;
 }
 
 void 
@@ -113,6 +114,7 @@ CommMgr_ActiveToActiveLoc0(CommMgr *const me, RKH_EVT_T *pe)
 	/*updateStatus();*/
     realEvt = RKH_DOWNCAST(GStatusEvt, pe);
     me->status = realEvt->status;
+    me->isPendingStatus = 1;
 }
 
 /* ............................. Entry actions ............................. */
