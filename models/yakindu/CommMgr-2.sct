@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="internal:&#xA;&#xA;interface:&#xA;&#xA;in event evNetConnected&#xA;in event evNetDisconnected&#xA;in event evSent&#xA;in event evReceived&#xA;in event evRecvFail&#xA;in event evSendFail&#xA;in event evGStatus&#xA;&#xA;operation init()&#xA;operation activateSync()&#xA;operation sendEndOfHist()&#xA;operation parseRecv()&#xA;operation receive()&#xA;operation recvFail()&#xA;operation parseError()&#xA;operation sendOneMsg()&#xA;operation sendStatus()&#xA;operation sendMsgFail()&#xA;operation nextSend()&#xA;operation sendStartOfHist()&#xA;operation updateStatus()&#xA;operation checkHist()&#xA;&#xA;operation isPending(): boolean&#xA;operation  isAck(): boolean&#xA;operation isThereMsg(): boolean&#xA;operation isEndOfBlock(): boolean&#xA;" name="CommMgr">
+  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="internal:&#xA;&#xA;interface:&#xA;&#xA;in event evNetConnected&#xA;in event evNetDisconnected&#xA;in event evSent&#xA;in event evReceived&#xA;in event evRecvFail&#xA;in event evSendFail&#xA;in event evGStatus&#xA;&#xA;operation init()&#xA;operation activateSync()&#xA;operation sendEndOfHist()&#xA;operation parseRecv()&#xA;operation receive()&#xA;operation recvFail()&#xA;operation parseError()&#xA;operation sendOneMsg()&#xA;operation sendStatus()&#xA;operation sendMsgFail()&#xA;operation nextSend()&#xA;operation sendStartOfHist()&#xA;operation updateStatus()&#xA;operation checkHist()&#xA;&#xA;operation isPending(): boolean&#xA;operation  isAck(): boolean&#xA;operation isThereMsg(): boolean&#xA;operation isEndOfBlock(): boolean&#xA;" name="CommMgr2">
     <regions xmi:id="_yt2m0zjpEemSZunftq3MwQ" name="main region">
       <vertices xsi:type="sgraph:Entry" xmi:id="_yt7fUDjpEemSZunftq3MwQ">
         <outgoingTransitions xmi:id="_yt97kzjpEemSZunftq3MwQ" specification="/ init()" target="_yt8GZzjpEemSZunftq3MwQ"/>
@@ -385,11 +385,11 @@
     <edges xmi:id="_jLEjsVZcEemoSZsNy-dO8w" type="Transition" element="_jLEjsFZcEemoSZsNy-dO8w" source="_yt8tcjjpEemSZunftq3MwQ" target="_nM6qZFfOEemGKbF7wB8Eyw">
       <children xsi:type="notation:DecorationNode" xmi:id="_jLEjtVZcEemoSZsNy-dO8w" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_jLEjtlZcEemoSZsNy-dO8w"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_jLEjt1ZcEemoSZsNy-dO8w" x="-1" y="-112"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_jLEjt1ZcEemoSZsNy-dO8w" x="-1" y="-114"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_jLEjslZcEemoSZsNy-dO8w" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_jLEjtFZcEemoSZsNy-dO8w" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_jLEjs1ZcEemoSZsNy-dO8w" points="[-11, 21, 0, -81]$[-11, 97, 0, -5]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_jLEjs1ZcEemoSZsNy-dO8w" points="[-14, 21, -60, -59]$[-14, 71, -60, -9]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_jLNtoFZcEemoSZsNy-dO8w" id="(0.5811749494611752,0.5788566583481353)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_jLNtoVZcEemoSZsNy-dO8w" id="(0.14341167380779218,0.0117406521973808)"/>
     </edges>

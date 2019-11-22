@@ -3,7 +3,7 @@ GeneratorModel for yakindu::c::rkh {
 	statechart CommMgr {
 
 		feature Outlet {
-			targetProject = "AgroIot"
+			targetProject = "AgroIoT"
 			targetFolder = "src-gen-CommMgr"
 			libraryTargetFolder = "src-gen-CommMgr"
 		}
