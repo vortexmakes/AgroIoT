@@ -29,11 +29,11 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-RKHROM RKH_SBSC_T CommMgr_Idle, CommMgr_WaitSync, CommMgr_SendingStatus,
-                  CommMgr_ReceivingAck, CommMgr_SendingEndOfHist,
-                  CommMgr_SendingHist, CommMgr_EndCycle;
-RKHROM RKH_SCMP_T CommMgr_Active;
-RKHROM RKH_SCHOICE_T CommMgr_C0, CommMgr_C1, CommMgr_C2, CommMgr_C3;
+RKHROM RKH_SBSC_T Idle, WaitSync, SendingStatus, ReceivingStatusAck, 
+                     SendingEndOfHist, SendingHist, ReceivingMsgAck;
+RKHROM RKH_SCMP_T Active, Current, History;
+RKHROM RKH_SCHOICE_T C0, C1, C2, C3, C4;
+RKHROM RKH_FINAL_T CurrentFinal, HistoryFinal;
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */

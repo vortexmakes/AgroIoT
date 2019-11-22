@@ -31,13 +31,6 @@ extern "C" {
 /* ........................ Declares active object ......................... */
 RKH_SMA_DCLR(commMgr);
 
-/* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE CommMgr_Idle, CommMgr_WaitSync, CommMgr_SendingStatus, 
-                     CommMgr_ReceivingAck, CommMgr_SendingEndOfHist, 
-                     CommMgr_SendingHist, CommMgr_EndCycle;
-RKH_DCLR_COMP_STATE CommMgr_Active;
-RKH_DCLR_CHOICE_STATE CommMgr_C0, CommMgr_C1, CommMgr_C2, CommMgr_C3;
-
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */
 typedef struct CommMgr CommMgr;
