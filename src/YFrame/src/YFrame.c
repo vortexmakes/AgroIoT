@@ -27,6 +27,7 @@
 #define YFRAME_MARK             "|"
 #define YFRAME_SEPARATOR        ","
 #define YFRAME_TERMINATOR       "#"
+#define YFRAME_ACK              "!2|"
 
 #define FLG_GPS_VALID           1
 #define FLG_HISTORY             2
@@ -172,6 +173,22 @@ YFrame_multipleTail(char *to)
         size = strlen(frame);
     }
     return size;
+}
+
+rbool_t 
+YFrame_isAck(char *from)
+{
+    ruint size;
+
+    if (from != (char *)0)
+    {
+        size = strlen(from);
+        if ((size == 3) && strcmp(from, YFRAME_ACK) == 0)
+        {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* ------------------------------ End of file ------------------------------ */

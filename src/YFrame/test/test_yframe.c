@@ -177,4 +177,29 @@ test_MakeMultipleFrame(void)
     TEST_ASSERT_EQUAL(expLen, size);
 }
 
+void
+test_CheckResponseAck(void)
+{
+    rbool_t res;
+
+    strcpy(buf, "!2|");
+    res = YFrame_isAck(buf);
+    TEST_ASSERT_TRUE(res == true);
+
+    strcpy(buf, "!3|");
+    res = YFrame_isAck(buf);
+    TEST_ASSERT_TRUE(res == false);
+
+    strcpy(buf, "!2,");
+    res = YFrame_isAck(buf);
+    TEST_ASSERT_TRUE(res == false);
+
+    res = YFrame_isAck((char *)0);
+    TEST_ASSERT_TRUE(res == false);
+
+    strcpy(buf, "!2||");
+    res = YFrame_isAck(buf);
+    TEST_ASSERT_TRUE(res == false);
+}
+
 /* ------------------------------ End of file ------------------------------ */
