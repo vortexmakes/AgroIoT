@@ -23,6 +23,7 @@
 #include "YFrame.h"
 #include "topic.h"
 #include "StatQue.h"
+#include "settings.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WaitTime0	RKH_TIME_SEC(60)
@@ -31,8 +32,6 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static SendEvt evSendObj;
-
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ............................ Effect actions ............................. */
@@ -63,9 +62,8 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
 	
     topic_subscribe(Status, RKH_UPCAST(RKH_SMA_T, me));
     me->isPendingStatus = false;
-    me->isHistEmpty= true;
     me->lastRecvResponse = TypeOfRespUnknown;
-    RKH_SET_STATIC_EVENT(&evSendObj, evSend);
+    RKH_SET_STATIC_EVENT(&me->evSendObj, evSend);
 }
 
 void 
@@ -118,7 +116,6 @@ void
 CommMgr_ToC1Ext16(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
-    me->isHistEmpty = StatQue_isEmpty();
 }
 
 void 
@@ -149,7 +146,6 @@ void
 CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
-    me->isHistEmpty = StatQue_isEmpty();
 }
 
 void 
@@ -178,10 +174,10 @@ CommMgr_enSendingStatus(CommMgr *const me)
 	/*sendStatus();*/
     ruint len;
 
-    len = YFrame_header(&me->status, evSendObj.buf, 0, YFRAME_SGP_TYPE);
-    YFrame_data(&me->status, &evSendObj.buf[len], YFRAME_SGP_TYPE);
+    len = YFrame_header(&me->status, me->evSendObj.buf, 0, YFRAME_SGP_TYPE);
+    YFrame_data(&me->status, &me->evSendObj.buf[len], YFRAME_SGP_TYPE);
     topic_publish(TCPConnection, 
-                  RKH_UPCAST(RKH_EVT_T, &evSendObj), 
+                  RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                   RKH_UPCAST(RKH_SMA_T, me));
 }
 
@@ -201,6 +197,12 @@ void
 CommMgr_enSendingHist(CommMgr *const me)
 {
 	/*sendOneMsg();*/
+    me->framesToSend = 0;
+    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 
+                                       me->nFramesToSend, YFRAME_MGP_TYPE);
+    topic_publish(TCPConnection, 
+                  RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
 }
 
 void 
@@ -228,6 +230,12 @@ rbool_t
 CommMgr_isCondC1ToSendingHist20(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isThereMsg()) ? true : false;*/
+    me->nFramesToSend = StatQue_getNumElem();
+    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
+    {
+        me->nFramesToSend = MAX_NFRAMES_TOSEND;
+    }
+	return (me->nFramesToSend == 0) ? true : false;
 }
 
 rbool_t 

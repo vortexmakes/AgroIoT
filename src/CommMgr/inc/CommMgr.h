@@ -21,6 +21,8 @@
 #include "rkhtmr.h"
 #include "GStatus.h"
 #include "YFrame.h"
+#include "events.h"
+#include "settings.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -42,7 +44,9 @@ struct CommMgr
     GStatus status;
     rbool_t isPendingStatus;
     TypeOfResp lastRecvResponse;
-    rbool_t isHistEmpty;
+    SendEvt evSendObj;
+    ruint nFramesToSend;
+    ruint framesToSend;
 };
 
 /* -------------------------- External variables --------------------------- */
