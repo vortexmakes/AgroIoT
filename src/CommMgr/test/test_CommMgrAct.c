@@ -24,12 +24,12 @@
 #include "rkhfwk_cast.h"
 #include "Mock_rkhtmr.h"
 #include "Mock_rkhtrc_record.h"
-#include "Mock_rkhassert.h"
 #include "Mock_rkhsma.h"
 #include "Mock_GStatus.h"
 #include "Mock_YFrame.h"
 #include "Mock_topic.h"
 #include "Mock_StatQue.h"
+#include "Mock_rkhassert.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -66,6 +66,8 @@ static GStatus gStatus =
 };
 static const char singleFrame[] =
     "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+static const char multipleFrame[] =
+    "!1|0002|355826018345180|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3#";
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -278,7 +280,7 @@ test_CheckHistoryMaxFramesToSend(void)
 void
 test_StartHistoryMessage(void)
 {
-    ruint frameLen, len, headerLen;
+    ruint headerLen;
 
     StatQue_getNumElem_ExpectAndReturn(2);
     CommMgr_isCondC1ToSendingHist20(me, 
@@ -290,32 +292,61 @@ test_StartHistoryMessage(void)
     YFrame_header_ExpectAndReturn(&me->status, me->evSendObj.buf,
                                   me->nFramesToSend, 
                                   YFRAME_MGP_TYPE, headerLen);
-    topic_publish_Expect(TCPConnection, 
-                         RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
-                         RKH_UPCAST(RKH_SMA_T, me));
 
-    CommMgr_enSendingHist(me);
+    CommMgr_C1ToSendingHistExt20(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
 
-    TEST_ASSERT_EQUAL(0, me->framesToSend);
+    TEST_ASSERT_EQUAL(me->nFramesToSend, me->framesToSend);
     TEST_ASSERT_EQUAL(headerLen, me->evSendObj.size);
 }
 
 void
 test_PrepareNextStatusBlock(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    int len;
+    GPS_STR *elem;
+    GStatus *to;
+    ruint nFrames;
+
+    len = strlen(singleFrame);
+    nFrames = 2;
+    me->framesToSend = nFrames;
+
+    StatQue_read_ExpectAndReturn(elem, 0);
+    StatQue_read_IgnoreArg_elem();
+    GStatus_fromGpsStr_ExpectAndReturn(elem, to, 0);
+    GStatus_fromGpsStr_IgnoreArg_from();
+    GStatus_fromGpsStr_IgnoreArg_to();
+    YFrame_data_ExpectAndReturn(to, 
+                                &me->evSendObj.buf[me->evSendObj.size], 
+                                YFRAME_MGP_TYPE, len);
+    YFrame_data_IgnoreArg_from(); 
+
+    CommMgr_SendingHistToC2Ext18(me, evt);
+    TEST_ASSERT_EQUAL(nFrames - 1, me->framesToSend);
 }
 
 void
 test_SendABlockOfStatus(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    topic_publish_Expect(TCPConnection, 
+                         RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
+                         RKH_UPCAST(RKH_SMA_T, me));
+
+    CommMgr_enSendingHist(me);
 }
 
 void
 test_CheckEndOfBlock(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    rbool_t res;
+
+    me->framesToSend = 0;
+    res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+
+    me->framesToSend = 1;
+    res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
+    TEST_ASSERT_TRUE(res == false);
 }
 
 void

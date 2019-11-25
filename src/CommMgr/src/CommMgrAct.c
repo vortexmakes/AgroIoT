@@ -24,6 +24,9 @@
 #include "topic.h"
 #include "StatQue.h"
 #include "settings.h"
+#include "rkhassert.h"
+
+RKH_MODULE_NAME(CommMgrAct);
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WaitTime0	RKH_TIME_SEC(60)
@@ -122,6 +125,18 @@ void
 CommMgr_SendingHistToC2Ext18(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*nextSend();*/
+    rInt res;
+    GPS_STR from;
+    GStatus to;
+
+    res = StatQue_read(&from);
+    RKH_ENSURE(res == 0);
+    res = GStatus_fromGpsStr(&from, &to);
+    RKH_ENSURE(res == 0);
+    me->evSendObj.size = YFrame_data(&to, 
+                                     &me->evSendObj.buf[me->evSendObj.size], 
+                                     YFRAME_MGP_TYPE);
+    --me->framesToSend;
 }
 
 void 
@@ -134,6 +149,9 @@ void
 CommMgr_C1ToSendingHistExt20(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*sendStartOfHist();*/
+    me->framesToSend = me->nFramesToSend;
+    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 
+                                       me->nFramesToSend, YFRAME_MGP_TYPE);
 }
 
 void 
@@ -197,9 +215,6 @@ void
 CommMgr_enSendingHist(CommMgr *const me)
 {
 	/*sendOneMsg();*/
-    me->framesToSend = 0;
-    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 
-                                       me->nFramesToSend, YFRAME_MGP_TYPE);
     topic_publish(TCPConnection, 
                   RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                   RKH_UPCAST(RKH_SMA_T, me));
@@ -242,6 +257,7 @@ rbool_t
 CommMgr_isCondC2ToSendingEndOfHist23(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isEndOfBlock()) ? true : false;*/
+	return (me->framesToSend == 0) ? true : false;
 }
 
 rbool_t 
