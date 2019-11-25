@@ -29,6 +29,7 @@
 #include "Mock_GStatus.h"
 #include "Mock_YFrame.h"
 #include "Mock_topic.h"
+#include "Mock_StatQue.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -109,7 +110,9 @@ test_Initialize(void)
 
     CommMgr_ToIdleExt0(me, evt);
 
-    TEST_ASSERT_EQUAL(0, me->isPendingStatus);
+    TEST_ASSERT_EQUAL(false, me->isPendingStatus);
+    TEST_ASSERT_EQUAL(true, me->isHistEmpty);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, me->lastRecvResponse);
 }
 
 void
@@ -187,11 +190,17 @@ test_ReceiveAck(void)
 {
     rbool_t res;
 
-    YFrame_isAck_ExpectAndReturn(evReceivedObj.buf, true);
+    strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
+    evReceivedObj.size = strlen("!2|");
+
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespAck);
+    CommMgr_ReceivingStatusAckToC0Ext9(me, 
+                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespAck, me->lastRecvResponse);
+
     res = CommMgr_isCondC3ToC425(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
 
-    YFrame_isAck_ExpectAndReturn(evReceivedObj.buf, true);
     res = CommMgr_isCondC0ToHistory11(me, 
                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
@@ -200,13 +209,31 @@ test_ReceiveAck(void)
 void
 test_ReceiveUnknownResponse(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    rbool_t res;
+
+    strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
+    evReceivedObj.size = strlen("!2|");
+
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespUnknown);
+    CommMgr_ReceivingStatusAckToC0Ext9(me, 
+                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, me->lastRecvResponse);
+
+    res = CommMgr_isCondC3ToC425(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == false);
 }
 
 void
 test_CheckHistory(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
+    evReceivedObj.size = strlen("!2|");
+
+    StatQue_isEmpty_ExpectAndReturn(true);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+
+    StatQue_isEmpty_ExpectAndReturn(true);
+    CommMgr_C4ToC1Ext27(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
 }
 
 void

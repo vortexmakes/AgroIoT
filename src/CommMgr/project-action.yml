@@ -16,6 +16,7 @@
     - ../epoch/inc
     - ../YFrame/inc
     - ../topic/inc
+    - ../StatQue/inc
     - ../
   :support:
 

@@ -30,6 +30,15 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+typedef enum TypeOfResp TypeOfResp;
+enum TypeOfResp
+{
+    TypeOfRespAck,
+    TypeOfRespCmd,
+    TypeOfRespUnknown,
+    NumTypeOfResp
+};
+
 #define YFRAME_SGP_TYPE        0
 #define YFRAME_MGP_TYPE        1
 
@@ -40,7 +49,7 @@ rInt YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type);
 ruint YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type);
 ruint YFrame_data(GStatus *from, char *to, rInt type);
 ruint YFrame_multipleTail(char *to);
-rbool_t YFrame_isAck(char *from);
+TypeOfResp YFrame_parse(char *from);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -180,26 +180,26 @@ test_MakeMultipleFrame(void)
 void
 test_CheckResponseAck(void)
 {
-    rbool_t res;
+    TypeOfResp res;
 
     strcpy(buf, "!2|");
-    res = YFrame_isAck(buf);
-    TEST_ASSERT_TRUE(res == true);
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespAck, res);
 
     strcpy(buf, "!3|");
-    res = YFrame_isAck(buf);
-    TEST_ASSERT_TRUE(res == false);
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 
     strcpy(buf, "!2,");
-    res = YFrame_isAck(buf);
-    TEST_ASSERT_TRUE(res == false);
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 
-    res = YFrame_isAck((char *)0);
-    TEST_ASSERT_TRUE(res == false);
+    res = YFrame_parse((char *)0);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 
     strcpy(buf, "!2||");
-    res = YFrame_isAck(buf);
-    TEST_ASSERT_TRUE(res == false);
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 }
 
 /* ------------------------------ End of file ------------------------------ */

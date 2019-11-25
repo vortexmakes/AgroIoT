@@ -175,20 +175,24 @@ YFrame_multipleTail(char *to)
     return size;
 }
 
-rbool_t 
-YFrame_isAck(char *from)
+TypeOfResp
+YFrame_parse(char *from)
 {
     ruint size;
 
     if (from != (char *)0)
     {
+        /* Check Ack */
         size = strlen(from);
         if ((size == 3) && strcmp(from, YFRAME_ACK) == 0)
         {
-            return 1;
+            return TypeOfRespAck;
         }
+
+        /* Check Cmd */
+        /* 636D643A XX ... XX 3B */
     }
-    return 0;
+    return TypeOfRespUnknown;
 }
 
 /* ------------------------------ End of file ------------------------------ */

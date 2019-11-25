@@ -20,6 +20,7 @@
 #include "rkhsma.h"
 #include "rkhtmr.h"
 #include "GStatus.h"
+#include "YFrame.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -40,6 +41,8 @@ struct CommMgr
     RKHTmEvt tmEvtObj0;
     GStatus status;
     rbool_t isPendingStatus;
+    TypeOfResp lastRecvResponse;
+    rbool_t isHistEmpty;
 };
 
 /* -------------------------- External variables --------------------------- */

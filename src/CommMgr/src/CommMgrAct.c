@@ -22,6 +22,7 @@
 #include "CommMgrActRequired.h"
 #include "YFrame.h"
 #include "topic.h"
+#include "StatQue.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WaitTime0	RKH_TIME_SEC(60)
@@ -61,7 +62,9 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
 	
     topic_subscribe(Status, RKH_UPCAST(RKH_SMA_T, me));
-    me->isPendingStatus = 0;
+    me->isPendingStatus = false;
+    me->isHistEmpty= true;
+    me->lastRecvResponse = TypeOfRespUnknown;
     RKH_SET_STATIC_EVENT(&evSendObj, evSend);
 }
 
@@ -87,6 +90,10 @@ void
 CommMgr_ReceivingStatusAckToC0Ext9(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*parseRecv();*/
+    ReceivedEvt *realEvt;
+
+    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
+	me->lastRecvResponse = YFrame_parse(realEvt->buf);
 }
 
 void 
@@ -111,6 +118,7 @@ void
 CommMgr_ToC1Ext16(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
+    me->isHistEmpty = StatQue_isEmpty();
 }
 
 void 
@@ -141,6 +149,7 @@ void
 CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
+    me->isHistEmpty = StatQue_isEmpty();
 }
 
 void 
@@ -212,10 +221,7 @@ rbool_t
 CommMgr_isCondC0ToHistory11(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isAck()) ? true : false;*/
-    ReceivedEvt *realEvt;
-
-    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
-	return (YFrame_isAck(realEvt->buf)) ? true : false;
+	return (me->lastRecvResponse == TypeOfRespAck) ? true : false;
 }
 
 rbool_t 
@@ -234,10 +240,7 @@ rbool_t
 CommMgr_isCondC3ToC425(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isAck()) ? true : false;*/
-    ReceivedEvt *realEvt;
-
-    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
-	return (YFrame_isAck(realEvt->buf)) ? true : false;
+	return (me->lastRecvResponse == TypeOfRespAck) ? true : false;
 }
 
 rbool_t 
