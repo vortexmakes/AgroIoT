@@ -53,6 +53,7 @@ const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
     rkh_sma_post_lifo
 };
 static SendEvt evSendObj;
+static ReceivedEvt evReceivedObj;
 static GStatus gStatus =
 {
     {
@@ -75,6 +76,7 @@ setUp(void)
     me = RKH_DOWNCAST(CommMgr, commMgr);
     evt = &evtObj;
     RKH_SET_STATIC_EVENT(&evSendObj, evSend);
+    RKH_SET_STATIC_EVENT(&evReceivedObj, evReceived);
 }
 
 void
@@ -169,13 +171,30 @@ test_SendCurrentStatus(void)
 void
 test_CheckPendingStatus(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    rbool_t res;
+
+    me->isPendingStatus = true;
+    res = CommMgr_isCondC4ToCurrent26(me, RKH_UPCAST(RKH_EVT_T, &evSendObj));
+    TEST_ASSERT_TRUE(res == true);
+
+    me->isPendingStatus = false;
+    res = CommMgr_isCondC4ToCurrent26(me, RKH_UPCAST(RKH_EVT_T, &evSendObj));
+    TEST_ASSERT_TRUE(res == false);
 }
 
 void
 test_ReceiveAck(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    rbool_t res;
+
+    YFrame_isAck_ExpectAndReturn(evReceivedObj.buf, true);
+    res = CommMgr_isCondC3ToC425(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
+
+    YFrame_isAck_ExpectAndReturn(evReceivedObj.buf, true);
+    res = CommMgr_isCondC0ToHistory11(me, 
+                                      RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
 }
 
 void

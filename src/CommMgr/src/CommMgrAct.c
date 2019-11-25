@@ -212,6 +212,10 @@ rbool_t
 CommMgr_isCondC0ToHistory11(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isAck()) ? true : false;*/
+    ReceivedEvt *realEvt;
+
+    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
+	return (YFrame_isAck(realEvt->buf)) ? true : false;
 }
 
 rbool_t 
@@ -230,12 +234,17 @@ rbool_t
 CommMgr_isCondC3ToC425(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isAck()) ? true : false;*/
+    ReceivedEvt *realEvt;
+
+    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
+	return (YFrame_isAck(realEvt->buf)) ? true : false;
 }
 
 rbool_t 
 CommMgr_isCondC4ToCurrent26(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isPending()) ? true : false;*/
+	return (me->isPendingStatus) ? true : false;
 }
 
 /* ---------------------------- Global functions --------------------------- */
