@@ -126,7 +126,7 @@ Collector_init(Collector *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_PSTATE(me, &Mapping_C3);
     RKH_FILTER_OFF_SMA(collectorMapping);
 
-    topic_subscribe(status, RKH_UPCAST(RKH_SMA_T, me));
+    topic_subscribe(Status, RKH_UPCAST(RKH_SMA_T, me));
     rkh_sm_init(RKH_UPCAST(RKH_SM_T, &me->itsMapping));
 }
 
@@ -153,7 +153,7 @@ Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
     }
     evt = RKH_ALLOC_EVT(GStatusEvt, evGStatus, me);
     evt->status = me->status;
-    topic_publish(status,
+    topic_publish(Status,
                   RKH_UPCAST(RKH_EVT_T, evt),
                   RKH_UPCAST(RKH_SMA_T, me));
 }

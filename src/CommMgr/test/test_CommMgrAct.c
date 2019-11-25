@@ -103,7 +103,7 @@ test_Initialize(void)
     rkh_trc_sig_Ignore();
     rkh_trc_sig_Ignore();
     rkh_trc_obj_Ignore();
-    topic_subscribe_Expect(status, RKH_UPCAST(RKH_SMA_T, me));
+    topic_subscribe_Expect(Status, RKH_UPCAST(RKH_SMA_T, me));
 
     CommMgr_ToIdleExt0(me, evt);
 
@@ -158,7 +158,7 @@ test_SendCurrentStatus(void)
     YFrame_data_ExpectAndReturn(&me->status, &evSendObj.buf[len], 
                                 YFRAME_SGP_TYPE, frameLen);
     YFrame_data_IgnoreArg_to();
-    topic_publish_Expect(tcpConnection, 
+    topic_publish_Expect(TCPConnection, 
                          RKH_UPCAST(RKH_EVT_T, &evSendObj), 
                          RKH_UPCAST(RKH_SMA_T, me));
     topic_publish_IgnoreArg_evt();

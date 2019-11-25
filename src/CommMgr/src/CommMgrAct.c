@@ -60,7 +60,7 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_SIG(evGStatus);
 	RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
 	
-    topic_subscribe(status, RKH_UPCAST(RKH_SMA_T, me));
+    topic_subscribe(Status, RKH_UPCAST(RKH_SMA_T, me));
     me->isPendingStatus = 0;
     RKH_SET_STATIC_EVENT(&evSendObj, evSend);
 }
@@ -171,7 +171,7 @@ CommMgr_enSendingStatus(CommMgr *const me)
 
     len = YFrame_header(&me->status, evSendObj.buf, 0, YFRAME_SGP_TYPE);
     YFrame_data(&me->status, &evSendObj.buf[len], YFRAME_SGP_TYPE);
-    topic_publish(tcpConnection, 
+    topic_publish(TCPConnection, 
                   RKH_UPCAST(RKH_EVT_T, &evSendObj), 
                   RKH_UPCAST(RKH_SMA_T, me));
 }

@@ -186,7 +186,7 @@ notifyURC(ModMgr *const me, RKH_EVT_T *pe)
 
     presp->evt.e = presp->fwdEvt;
 
-    topic_publish(modURC, presp, me);
+    topic_publish(ModURC, presp, me);
 }
 
 static void

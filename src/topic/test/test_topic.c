@@ -45,7 +45,7 @@ setUp(void)
 {
     evt = &evtObj;
     ao = &aoObj;
-    topic = status;
+    topic = Status;
 }
 
 void

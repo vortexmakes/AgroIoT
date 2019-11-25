@@ -33,9 +33,9 @@ extern "C" {
 typedef enum Topics Topics;
 enum Topics
 {
-    tcpConnection,
-    modURC,
-    status,
+    TCPConnection,
+    ModURC,
+    Status,
     NumOfTopics
 };
 

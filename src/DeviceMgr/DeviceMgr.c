@@ -201,7 +201,7 @@ ps_onStartCycle(void)
 void
 ps_onStop(void)
 {
-    topic_publish(status, &evNoDevObj, deviceMgr);
+    topic_publish(Status, &evNoDevObj, deviceMgr);
 }
 
 void
@@ -235,7 +235,7 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
 
             dev = getDevice(cbox.a.x);
             evt = device_makeEvt(dev, &cbox);
-            topic_publish(status, evt, deviceMgr);
+            topic_publish(Status, evt, deviceMgr);
             break;
 
         case ADDR_CAUDALIMETRO:

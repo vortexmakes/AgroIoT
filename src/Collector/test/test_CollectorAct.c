@@ -120,7 +120,7 @@ test_Init(void)
     rkh_trc_state_Ignore();
     rkh_trc_state_Ignore();
     rkh_trc_symFil_Ignore();
-    topic_subscribe_Expect(status, RKH_UPCAST(RKH_SMA_T, me));
+    topic_subscribe_Expect(Status, RKH_UPCAST(RKH_SMA_T, me));
     rkh_sm_init_Expect(RKH_UPCAST(RKH_SM_T, &me->itsMapping));
 
     Collector_init(me, evt);
@@ -169,7 +169,7 @@ test_PublishCurrStatusWithNoDev(void)
 
     rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
-    topic_publish_Expect(status,
+    topic_publish_Expect(Status,
                          RKH_UPCAST(RKH_EVT_T, &event),
                          RKH_UPCAST(RKH_SMA_T, me));
 
@@ -186,7 +186,7 @@ test_PublishCurrStatusWithDevConnected(void)
     device_updateRaw_Expect(me->dev);
     rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
-    topic_publish_Expect(status,
+    topic_publish_Expect(Status,
                          RKH_UPCAST(RKH_EVT_T, &event),
                          RKH_UPCAST(RKH_SMA_T, me));
 

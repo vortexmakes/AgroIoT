@@ -190,7 +190,7 @@ init(CommMgr *const me, RKH_EVT_T *pe)
 {
     (void)pe;
 
-    topic_subscribe(tcpConnection, me);
+    topic_subscribe(TCPConnection, me);
 
     RKH_TR_FWK_AO(me);
     RKH_TR_FWK_TIMER(&me->syncTmr);
