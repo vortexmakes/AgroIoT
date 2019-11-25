@@ -133,9 +133,9 @@ CommMgr_SendingHistToC2Ext18(CommMgr *const me, RKH_EVT_T *pe)
     RKH_ENSURE(res == 0);
     res = GStatus_fromGpsStr(&from, &to);
     RKH_ENSURE(res == 0);
-    me->evSendObj.size = YFrame_data(&to, 
-                                     &me->evSendObj.buf[me->evSendObj.size], 
-                                     YFRAME_MGP_TYPE);
+    me->evSendObj.size += YFrame_data(&to, 
+                                      &me->evSendObj.buf[me->evSendObj.size], 
+                                      YFRAME_MGP_TYPE);
     --me->framesToSend;
 }
 
@@ -209,6 +209,11 @@ void
 CommMgr_enSendingEndOfHist(CommMgr *const me)
 {
 	/*sendEndOfHist();*/
+    me->evSendObj.size += YFrame_multipleTail(
+                                &me->evSendObj.buf[me->evSendObj.size]);
+    topic_publish(TCPConnection, 
+                  RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
 }
 
 void 

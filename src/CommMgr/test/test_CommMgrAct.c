@@ -302,14 +302,16 @@ test_StartHistoryMessage(void)
 void
 test_PrepareNextStatusBlock(void)
 {
-    int len;
+    ruint len, size;
     GPS_STR *elem;
     GStatus *to;
     ruint nFrames;
 
     len = strlen(singleFrame);
     nFrames = 2;
+    size = 32;
     me->framesToSend = nFrames;
+    me->evSendObj.size = size;
 
     StatQue_read_ExpectAndReturn(elem, 0);
     StatQue_read_IgnoreArg_elem();
@@ -322,7 +324,9 @@ test_PrepareNextStatusBlock(void)
     YFrame_data_IgnoreArg_from(); 
 
     CommMgr_SendingHistToC2Ext18(me, evt);
+
     TEST_ASSERT_EQUAL(nFrames - 1, me->framesToSend);
+    TEST_ASSERT_EQUAL(size + len, me->evSendObj.size);
 }
 
 void
@@ -352,7 +356,17 @@ test_CheckEndOfBlock(void)
 void
 test_EndHistoryMessage(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    ruint size = 32, len = 16;
+
+    me->evSendObj.size = size;
+    YFrame_multipleTail_ExpectAndReturn(
+                    &me->evSendObj.buf[me->evSendObj.size], len);
+    topic_publish_Expect(TCPConnection, 
+                         RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
+                         RKH_UPCAST(RKH_SMA_T, me));
+
+    CommMgr_enSendingEndOfHist(me);
+    TEST_ASSERT_EQUAL(size + len, me->evSendObj.size);
 }
 
 void
