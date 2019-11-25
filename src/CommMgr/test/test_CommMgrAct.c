@@ -15,6 +15,7 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <string.h>
 #include "unity.h"
 #include "CommMgr.h"
 #include "CommMgrAct.h"
@@ -26,6 +27,8 @@
 #include "Mock_rkhassert.h"
 #include "Mock_rkhsma.h"
 #include "Mock_GStatus.h"
+#include "Mock_YFrame.h"
+#include "Mock_topic.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -49,6 +52,19 @@ const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
     rkh_sma_post_fifo,
     rkh_sma_post_lifo
 };
+static SendEvt evSendObj;
+static GStatus gStatus =
+{
+    {
+        "185124", "A", "37.8402883", "-", "057.6884350", "-", "0.078",
+        "", "310119"
+    },
+    {1, 1, {0, 0, 1}, {0xdddd, 0xffff, 0xffff}, 0},
+    {0xff, 0x3f},
+    3
+};
+static const char singleFrame[] =
+    "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -58,6 +74,7 @@ setUp(void)
 {
     me = RKH_DOWNCAST(CommMgr, commMgr);
     evt = &evtObj;
+    RKH_SET_STATIC_EVENT(&evSendObj, evSend);
 }
 
 void
@@ -86,8 +103,10 @@ test_Initialize(void)
     rkh_trc_sig_Ignore();
     rkh_trc_sig_Ignore();
     rkh_trc_obj_Ignore();
+    topic_subscribe_Expect(status, RKH_UPCAST(RKH_SMA_T, me));
 
     CommMgr_ToIdleExt0(me, evt);
+
     TEST_ASSERT_EQUAL(0, me->isPendingStatus);
 }
 
@@ -125,9 +144,26 @@ test_UpdateStatus(void)
 }
 
 void
-test_OnSyncSendStatus(void)
+test_SendCurrentStatus(void)
 {
-    TEST_IGNORE_MESSAGE(__FUNCTION__);
+    ruint frameLen, len, headerLen;
+
+    me->status = gStatus;
+    frameLen = strlen(singleFrame);
+    headerLen = strlen("!0|19355826018345180,");
+
+    YFrame_header_ExpectAndReturn(&me->status, evSendObj.buf, 0, 
+                                  YFRAME_SGP_TYPE, headerLen);
+    YFrame_header_IgnoreArg_to();
+    YFrame_data_ExpectAndReturn(&me->status, &evSendObj.buf[len], 
+                                YFRAME_SGP_TYPE, frameLen);
+    YFrame_data_IgnoreArg_to();
+    topic_publish_Expect(tcpConnection, 
+                         RKH_UPCAST(RKH_EVT_T, &evSendObj), 
+                         RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish_IgnoreArg_evt();
+
+    CommMgr_enSendingStatus(me);
 }
 
 void

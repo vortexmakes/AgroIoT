@@ -20,6 +20,8 @@
 #include "CommMgr.h"
 #include "CommMgrAct.h"
 #include "CommMgrActRequired.h"
+#include "YFrame.h"
+#include "topic.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WaitTime0	RKH_TIME_SEC(60)
@@ -28,6 +30,8 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static SendEvt evSendObj;
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ............................ Effect actions ............................. */
@@ -56,7 +60,9 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_SIG(evGStatus);
 	RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
 	
+    topic_subscribe(status, RKH_UPCAST(RKH_SMA_T, me));
     me->isPendingStatus = 0;
+    RKH_SET_STATIC_EVENT(&evSendObj, evSend);
 }
 
 void 
@@ -161,6 +167,13 @@ void
 CommMgr_enSendingStatus(CommMgr *const me)
 {
 	/*sendStatus();*/
+    ruint len;
+
+    len = YFrame_header(&me->status, evSendObj.buf, 0, YFRAME_SGP_TYPE);
+    YFrame_data(&me->status, &evSendObj.buf[len], YFRAME_SGP_TYPE);
+    topic_publish(tcpConnection, 
+                  RKH_UPCAST(RKH_EVT_T, &evSendObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
 }
 
 void 
