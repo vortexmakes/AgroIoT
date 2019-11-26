@@ -31,13 +31,6 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-/* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingStatusAck, 
-                     SendingEndOfHist, SendingHist, ReceivingMsgAck;
-RKH_DCLR_COMP_STATE Active, Current, History;
-RKH_DCLR_CHOICE_STATE C0, C1, C2, C3, C4;
-RKH_DCLR_FINAL_STATE CurrentFinal, HistoryFinal;
-
 /* ........................ Declares effect actions ........................ */
 void CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_IdleToActiveExt1(CommMgr *const me, RKH_EVT_T *pe);
@@ -52,6 +45,7 @@ void CommMgr_SendingHistToC2Ext18(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ReceivingMsgAckToC3Ext19(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C1ToSendingHistExt20(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C3ToHistoryFinalExt24(CommMgr *const me, RKH_EVT_T *pe);
+void CommMgr_C3ToC4Ext25(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ActiveToActiveLoc0(CommMgr *const me, RKH_EVT_T *pe);
 

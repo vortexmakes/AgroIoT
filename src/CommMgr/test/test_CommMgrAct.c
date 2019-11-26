@@ -71,6 +71,12 @@ static const char multipleFrame[] =
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static void
+MockAssertCallback(const char* const file, int line, int cmock_num_calls)
+{
+    TEST_PASS();
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 setUp(void)
@@ -145,7 +151,7 @@ test_UpdateStatus(void)
     CommMgr_ActiveToActiveLoc0(me, RKH_UPCAST(RKH_EVT_T, &event));
 
     TEST_ASSERT_EQUAL_MEMORY(&event.status, &me->status, sizeof(GStatus));
-    TEST_ASSERT_EQUAL(1, me->isPendingStatus);
+    TEST_ASSERT_TRUE(me->isPendingStatus == true);
 }
 
 void
@@ -166,6 +172,23 @@ test_SendCurrentStatus(void)
                          RKH_UPCAST(RKH_SMA_T, me));
 
     CommMgr_enSendingStatus(me);
+    TEST_ASSERT_TRUE(me->isPendingStatus == false);
+}
+
+void
+test_Receive(void)
+{
+    RKH_EVT_T evRecvObj;
+
+    topic_publish_Expect(TCPConnection, &evRecvObj, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish_IgnoreArg_evt();
+
+    CommMgr_enReceivingStatusAck(me);
+
+    topic_publish_Expect(TCPConnection, &evRecvObj, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish_IgnoreArg_evt();
+
+    CommMgr_enReceivingMsgAck(me);
 }
 
 void
@@ -203,6 +226,35 @@ test_ReceiveAck(void)
     res = CommMgr_isCondC0ToHistory11(me, 
                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
+}
+
+void
+test_DeleteAckedSentMessage(void)
+{
+    rui16_t nFrames;
+
+    nFrames = (rui16_t)me->nFramesToSend;
+    StatQue_delete_ExpectAndReturn(&nFrames, 0);
+    StatQue_delete_IgnoreArg_nElem();
+
+    CommMgr_C3ToC4Ext25(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+}
+
+void
+test_FailToDeleteAckedSentFrames(void)
+{
+    rui16_t nFrames;
+
+    nFrames = (rui16_t)me->nFramesToSend;
+    StatQue_delete_ExpectAndReturn(&nFrames, 1);
+    StatQue_delete_IgnoreArg_nElem();
+    rkh_assert_Expect("CommMgrAct", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+
+    CommMgr_C3ToC4Ext25(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
 }
 
 void

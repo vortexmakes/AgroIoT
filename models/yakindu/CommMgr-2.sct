@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="internal:&#xA;&#xA;interface:&#xA;&#xA;in event evNetConnected&#xA;in event evNetDisconnected&#xA;in event evSent&#xA;in event evReceived&#xA;in event evRecvFail&#xA;in event evSendFail&#xA;in event evGStatus&#xA;&#xA;operation init()&#xA;operation activateSync()&#xA;operation sendEndOfHist()&#xA;operation parseRecv()&#xA;operation receive()&#xA;operation recvFail()&#xA;operation parseError()&#xA;operation sendOneMsg()&#xA;operation sendStatus()&#xA;operation sendMsgFail()&#xA;operation nextSend()&#xA;operation sendStartOfHist()&#xA;operation updateStatus()&#xA;operation checkHist()&#xA;&#xA;operation isPending(): boolean&#xA;operation  isAck(): boolean&#xA;operation isThereMsg(): boolean&#xA;operation isEndOfBlock(): boolean&#xA;" name="CommMgr2">
+  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="internal:&#xA;&#xA;interface:&#xA;&#xA;in event evNetConnected&#xA;in event evNetDisconnected&#xA;in event evSent&#xA;in event evReceived&#xA;in event evRecvFail&#xA;in event evSendFail&#xA;in event evGStatus&#xA;&#xA;operation init()&#xA;operation activateSync()&#xA;operation sendEndOfHist()&#xA;operation parseRecv()&#xA;operation receive()&#xA;operation recvFail()&#xA;operation parseError()&#xA;operation sendOneMsg()&#xA;operation sendStatus()&#xA;operation sendMsgFail()&#xA;operation nextSend()&#xA;operation sendStartOfHist()&#xA;operation updateStatus()&#xA;operation checkHist()&#xA;operation deleteAcked()&#xA;&#xA;operation isPending(): boolean&#xA;operation  isAck(): boolean&#xA;operation isThereMsg(): boolean&#xA;operation isEndOfBlock(): boolean&#xA;" name="CommMgr2">
     <regions xmi:id="_yt2m0zjpEemSZunftq3MwQ" name="main region">
       <vertices xsi:type="sgraph:Entry" xmi:id="_yt7fUDjpEemSZunftq3MwQ">
         <outgoingTransitions xmi:id="_yt97kzjpEemSZunftq3MwQ" specification="/ init()" target="_yt8GZzjpEemSZunftq3MwQ"/>
@@ -65,7 +65,7 @@
               </vertices>
               <vertices xsi:type="sgraph:Choice" xmi:id="_A_KQ4wyvEeq6afq2I0jQuA" incomingTransitions="_CtT0wAyvEeq6afq2I0jQuA">
                 <outgoingTransitions xmi:id="_knUKMAyxEeq6afq2I0jQuA" specification="else/&#xD;&#xA;parseError()" target="_wElwsAyvEeq6afq2I0jQuA"/>
-                <outgoingTransitions xmi:id="_v4z3IAyyEeq6afq2I0jQuA" specification="[isAck()]" target="_XnrOgAyyEeq6afq2I0jQuA"/>
+                <outgoingTransitions xmi:id="_v4z3IAyyEeq6afq2I0jQuA" specification="[isAck()]/deleteAcked()" target="_XnrOgAyyEeq6afq2I0jQuA"/>
               </vertices>
               <vertices xsi:type="sgraph:FinalState" xmi:id="_wElwsAyvEeq6afq2I0jQuA" incomingTransitions="_xx61MAyvEeq6afq2I0jQuA _knUKMAyxEeq6afq2I0jQuA"/>
               <vertices xsi:type="sgraph:Choice" xmi:id="_XnrOgAyyEeq6afq2I0jQuA" incomingTransitions="_v4z3IAyyEeq6afq2I0jQuA">

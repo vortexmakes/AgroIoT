@@ -14,5 +14,6 @@
     - ../BatChr
     - ../Collector/inc
     - ../epoch/inc
+    - ../YFrame/inc
     - ../
   :support:

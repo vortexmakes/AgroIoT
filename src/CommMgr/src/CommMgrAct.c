@@ -32,6 +32,8 @@ RKH_MODULE_NAME(CommMgrAct);
 #define WaitTime0	RKH_TIME_SEC(60)
 
 /* ------------------------------- Constants ------------------------------- */
+static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
@@ -161,6 +163,18 @@ CommMgr_C3ToHistoryFinalExt24(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 void 
+CommMgr_C3ToC4Ext25(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*deleteAcked();*/
+    rui16_t nFrames;
+    rInt res;
+
+    nFrames = (rui16_t)me->nFramesToSend;
+    res = StatQue_delete(&nFrames);
+    RKH_ENSURE((nFrames == me->nFramesToSend) && (res == 0));
+}
+
+void 
 CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
@@ -174,7 +188,7 @@ CommMgr_ActiveToActiveLoc0(CommMgr *const me, RKH_EVT_T *pe)
 	/*updateStatus();*/
     realEvt = RKH_DOWNCAST(GStatusEvt, pe);
     me->status = realEvt->status;
-    me->isPendingStatus = 1;
+    me->isPendingStatus = true;
 }
 
 /* ............................. Entry actions ............................. */
@@ -197,12 +211,16 @@ CommMgr_enSendingStatus(CommMgr *const me)
     topic_publish(TCPConnection, 
                   RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                   RKH_UPCAST(RKH_SMA_T, me));
+    me->isPendingStatus = false;
 }
 
 void 
 CommMgr_enReceivingStatusAck(CommMgr *const me)
 {
 	/*receive();*/
+    topic_publish(TCPConnection, 
+                  RKH_CAST(RKH_EVT_T, &evRecvObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
 }
 
 void 
@@ -229,6 +247,9 @@ void
 CommMgr_enReceivingMsgAck(CommMgr *const me)
 {
 	/*receive();*/
+    topic_publish(TCPConnection, 
+                  RKH_CAST(RKH_EVT_T, &evRecvObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
 }
 
 /* ............................. Exit actions .............................. */
@@ -276,7 +297,7 @@ rbool_t
 CommMgr_isCondC4ToCurrent26(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isPending()) ? true : false;*/
-	return (me->isPendingStatus) ? true : false;
+	return (me->isPendingStatus == true) ? true : false;
 }
 
 /* ---------------------------- Global functions --------------------------- */
