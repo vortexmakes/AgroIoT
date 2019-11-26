@@ -31,7 +31,9 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define UPDATING_STATUS_TIME   RKH_TIME_MS(1500)
+#define UPDATING_STATUS_TIME    RKH_TIME_MS(1500)
+#define MAPPING_STOP            (short)0xdddd
+#define MAPPING_RUNNING         (short)0xffff
 
 /* ................................ Signals ................................ */
 /* ................................. Events ................................ */

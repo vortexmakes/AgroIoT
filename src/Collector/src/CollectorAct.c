@@ -31,11 +31,23 @@
 #include "StatQue.h"
 #include "GStatus.h"
 #include "ffile.h"
+#include "geoMgr.h"
 
 RKH_MODULE_NAME(CollectorAct)
 
 /* ----------------------------- Local macros ------------------------------ */
+#define GEO_INVALID_GEOSTAMP    \
+    { \
+        {GEO_INVALID_UTC}, {RMC_StatusInvalid}, \
+        {GEO_INVALID_LATITUDE}, {GEO_INVALID_LATITUDE_IND}, \
+        {GEO_INVALID_LONGITUDE}, {GEO_INVALID_LONGITUDE_IND}, \
+        {GEO_INVALID_SPEED}, {GEO_INVALID_COURSE}, \
+        {GEO_INVALID_DATE} \
+    }
+
 /* ------------------------------- Constants ------------------------------- */
+static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 RKH_DCLR_SM_CONST_GLOBAL(mapping);
@@ -94,6 +106,8 @@ Collector_ctor(void)
     me = RKH_DOWNCAST(Collector, collector);
     me->vtbl = rkhSmaVtbl;
     me->vtbl.task = dispatch;
+    me->status.position = invalidPosition;
+    me->status.devData.a.x = MAPPING_STOP;
     me->status.ioStatus.digIn = 0xff;
     me->status.ioStatus.digOut = 0;
     rkh_sma_ctor(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);

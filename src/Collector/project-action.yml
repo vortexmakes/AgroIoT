@@ -21,6 +21,7 @@
     - ../StatQue/inc
     - ../ffile/portable/test
     - ../ffile/inc
+    - ../geoMgr
     - ../
   :support:
 

@@ -33,13 +33,24 @@
 #include "Mock_StatQue.h"
 #include "Mock_GStatus.h"
 #include "Mock_ffile.h"
+#include "Mock_geoMgr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
+#define GEO_INVALID_GEOSTAMP    \
+    { \
+        {GEO_INVALID_UTC}, {RMC_StatusInvalid}, \
+        {GEO_INVALID_LATITUDE}, {GEO_INVALID_LATITUDE_IND}, \
+        {GEO_INVALID_LONGITUDE}, {GEO_INVALID_LONGITUDE_IND}, \
+        {GEO_INVALID_SPEED}, {GEO_INVALID_COURSE}, \
+        {GEO_INVALID_DATE} \
+    }
+
 /* ------------------------------- Constants ------------------------------- */
 RKHROM RKH_SCMP_T DevStatus_Active, Mapping_Active;
 RKHROM RKH_SBSC_T DevStatus_DevNotConnected, DevStatus_DevConnected,
                   Mapping_Stopped, Mapping_Running;
 RKHROM RKH_SCHOICE_T Mapping_C1, Mapping_C2, Mapping_C3;
+static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
 
 /* ---------------------------- Local data types --------------------------- */
 typedef struct DevA DevA;
@@ -98,6 +109,10 @@ test_Constructor(void)
     TEST_ASSERT_NOT_NULL(me->vtbl.task);
     TEST_ASSERT_EQUAL(me, me->itsMapping.itsCollector);
     TEST_ASSERT_NULL(me->dev);
+    TEST_ASSERT_EQUAL_MEMORY(&invalidPosition, 
+                             &me->status.position, 
+                             sizeof(Geo));
+    TEST_ASSERT_EQUAL(MAPPING_STOP, me->status.devData.a.x);
     TEST_ASSERT_EQUAL(0xff, me->status.ioStatus.digIn);
     TEST_ASSERT_EQUAL(0, me->status.ioStatus.digOut);
     TEST_ASSERT_EQUAL(LINE_BATT, me->status.batChrStatus);
@@ -163,10 +178,11 @@ test_StartAndStopUpdatingStatusTmr(void)
 }
 
 void
-test_PublishCurrStatusWithNoDev(void)
+test_PublishCurrStatusWithNoDevAndMappingStopped(void)
 {
     GStatusEvt event;
 
+    me->itsMapping.sm.state = RKH_CAST(RKH_ST_T, &Mapping_Stopped);
     rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
     topic_publish_Expect(Status,
@@ -174,6 +190,23 @@ test_PublishCurrStatusWithNoDev(void)
                          RKH_UPCAST(RKH_SMA_T, me));
 
     Collector_publishCurrStatus(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, event.status.devData.a.x);
+}
+
+void
+test_PublishCurrStatusWithNoDevAndMappingRunning(void)
+{
+    GStatusEvt event;
+
+    me->itsMapping.sm.state = RKH_CAST(RKH_ST_T, &Mapping_Running);
+    rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
+                               RKH_UPCAST(RKH_EVT_T, &event));
+    topic_publish_Expect(Status,
+                         RKH_UPCAST(RKH_EVT_T, &event),
+                         RKH_UPCAST(RKH_SMA_T, me));
+
+    Collector_publishCurrStatus(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL_HEX32(MAPPING_RUNNING, event.status.devData.a.x);
 }
 
 void
@@ -288,6 +321,7 @@ test_StartAndStopSyncStoppedTmr(void)
 {
     Mapping *region;
 
+    /* set me state to DevNotConnected */
     region = &me->itsMapping;
     rkh_tmr_init__Expect(&region->syncStoppedTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncStoppedTmr));
@@ -296,6 +330,7 @@ test_StartAndStopSyncStoppedTmr(void)
                          RKH_UPCAST(RKH_SMA_T, me),
                          0, RKH_TIME_SEC(60));
     Mapping_enStopped(region);
+    /* TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.devData.a.x);*/
 
     rkh_tmr_stop_ExpectAndReturn(&region->syncStoppedTmr.tmr, 0);
     Mapping_exStopped(region);
@@ -335,6 +370,7 @@ test_StartAndStopSyncRunningTmr(void)
 {
     Mapping *region;
 
+    /* set me state to DevNotConnected */
     region = &me->itsMapping;
     rkh_tmr_init__Expect(&region->syncRunningTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncRunningTmr));
@@ -343,6 +379,7 @@ test_StartAndStopSyncRunningTmr(void)
                          RKH_UPCAST(RKH_SMA_T, me),
                          0, RKH_TIME_SEC(60));
     Mapping_enRunning(region);
+    /* TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.devData.a.x);*/
 
     rkh_tmr_stop_ExpectAndReturn(&region->syncRunningTmr.tmr, 0);
     Mapping_exRunning(region);
