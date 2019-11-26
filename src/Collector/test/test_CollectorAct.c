@@ -198,7 +198,6 @@ test_PublishCurrStatusWithNoDevAndMappingRunning(void)
 {
     GStatusEvt event;
 
-    me->itsMapping.sm.state = RKH_CAST(RKH_ST_T, &Mapping_Running);
     rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
     topic_publish_Expect(Status,
@@ -206,7 +205,6 @@ test_PublishCurrStatusWithNoDevAndMappingRunning(void)
                          RKH_UPCAST(RKH_SMA_T, me));
 
     Collector_publishCurrStatus(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL_HEX32(MAPPING_RUNNING, event.status.devData.a.x);
 }
 
 void
@@ -321,7 +319,7 @@ test_StartAndStopSyncStoppedTmr(void)
 {
     Mapping *region;
 
-    /* set me state to DevNotConnected */
+    me->base.sm.state = RKH_CAST(RKH_ST_T, &DevStatus_DevNotConnected);
     region = &me->itsMapping;
     rkh_tmr_init__Expect(&region->syncStoppedTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncStoppedTmr));
@@ -330,7 +328,7 @@ test_StartAndStopSyncStoppedTmr(void)
                          RKH_UPCAST(RKH_SMA_T, me),
                          0, RKH_TIME_SEC(60));
     Mapping_enStopped(region);
-    /* TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.devData.a.x);*/
+    TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.devData.a.x);
 
     rkh_tmr_stop_ExpectAndReturn(&region->syncStoppedTmr.tmr, 0);
     Mapping_exStopped(region);
@@ -370,7 +368,7 @@ test_StartAndStopSyncRunningTmr(void)
 {
     Mapping *region;
 
-    /* set me state to DevNotConnected */
+    me->base.sm.state = RKH_CAST(RKH_ST_T, &DevStatus_DevNotConnected);
     region = &me->itsMapping;
     rkh_tmr_init__Expect(&region->syncRunningTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncRunningTmr));
@@ -379,7 +377,7 @@ test_StartAndStopSyncRunningTmr(void)
                          RKH_UPCAST(RKH_SMA_T, me),
                          0, RKH_TIME_SEC(60));
     Mapping_enRunning(region);
-    /* TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.devData.a.x);*/
+    TEST_ASSERT_EQUAL_HEX32(MAPPING_RUNNING, me->status.devData.a.x);
 
     rkh_tmr_stop_ExpectAndReturn(&region->syncRunningTmr.tmr, 0);
     Mapping_exRunning(region);

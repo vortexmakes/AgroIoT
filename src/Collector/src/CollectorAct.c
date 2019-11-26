@@ -97,6 +97,16 @@ propagateMappingEvent(Collector *const me, int result)
     RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, me), evt, me);
 }
 
+static void
+setMappingStatus(Mapping *const me, int status)
+{
+    if (me->itsCollector->base.sm.state == 
+        RKH_CAST(RKH_ST_T, &DevStatus_DevNotConnected))
+    {
+        me->itsCollector->status.devData.a.x = status;
+    }
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 Collector_ctor(void)
@@ -256,6 +266,7 @@ Mapping_enStopped(Mapping *const me)
     RKH_TMR_PERIODIC(&me->syncStoppedTmr.tmr,
                      RKH_UPCAST(RKH_SMA_T, me->itsCollector),
                      0, getMapTimeOnStopped());
+    setMappingStatus(me, MAPPING_STOP);
 }
 
 void
@@ -267,6 +278,7 @@ Mapping_enRunning(Mapping *const me)
     RKH_TMR_PERIODIC(&me->syncRunningTmr.tmr,
                      RKH_UPCAST(RKH_SMA_T, me->itsCollector),
                      0, getMapTimeOnRunning());
+    setMappingStatus(me, MAPPING_RUNNING);
 }
 
 /* ............................. Exit actions .............................. */
