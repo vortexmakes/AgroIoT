@@ -286,14 +286,14 @@ test_CheckHistoryEmpty(void)
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
-    TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(res == false);
     TEST_ASSERT_EQUAL(0, me->nFramesToSend);
 
     StatQue_getNumElem_ExpectAndReturn(2);
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
-    TEST_ASSERT_TRUE(res == false);
+    TEST_ASSERT_TRUE(res == true);
     TEST_ASSERT_EQUAL(2, me->nFramesToSend);
 }
 
@@ -309,7 +309,7 @@ test_CheckHistoryNoEmpty(void)
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
-    TEST_ASSERT_TRUE(res == false);
+    TEST_ASSERT_TRUE(res == true);
     TEST_ASSERT_EQUAL(2, me->nFramesToSend);
 }
 
@@ -325,7 +325,7 @@ test_CheckHistoryMaxFramesToSend(void)
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
-    TEST_ASSERT_TRUE(res == false);
+    TEST_ASSERT_TRUE(res == true);
     TEST_ASSERT_EQUAL(MAX_NFRAMES_TOSEND, me->nFramesToSend);
 }
 

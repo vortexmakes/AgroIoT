@@ -276,7 +276,7 @@ CommMgr_isCondC1ToSendingHist20(CommMgr *const me, RKH_EVT_T *pe)
     {
         me->nFramesToSend = MAX_NFRAMES_TOSEND;
     }
-	return (me->nFramesToSend == 0) ? true : false;
+	return (me->nFramesToSend != 0) ? true : false;
 }
 
 rbool_t 
