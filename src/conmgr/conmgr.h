@@ -141,12 +141,12 @@ extern "C" {
     #define YIPIES_SERVER       "71.6.135.77"
     #define YIPIES_PORT         "33499"
 
-    #define DOCKLIGHT_SERVER    "181.228.35.124"
+    #define DOCKLIGHT_SERVER    "179.41.2.32"
     #define DOCKLIGHT_PORT      "33498"
 
 #define CONNECTION_PROT         "TCP"
-#define CONNECTION_DOMAIN       YIPIES_SERVER /*DOCKLIGHT_SERVER */
-#define CONNECTION_PORT         YIPIES_PORT /*DOCKLIGHT_PORT */
+#define CONNECTION_DOMAIN       DOCKLIGHT_SERVER /*DOCKLIGHT_SERVER */
+#define CONNECTION_PORT         DOCKLIGHT_PORT /*DOCKLIGHT_PORT */
 
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */

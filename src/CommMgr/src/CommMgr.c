@@ -110,7 +110,7 @@ RKH_END_BRANCH_TABLE
 
 
 /* ............................. Active object ............................. */
-RKH_SMA_CREATE(CommMgr, commMgr, 0, HCAL, &Idle, CommMgr_ToIdleExt0, NULL);
+RKH_SMA_CREATE(CommMgr, commMgr, 4, HCAL, &Idle, CommMgr_ToIdleExt0, NULL);
 RKH_SMA_DEF_PTR(commMgr);
 
 /* ------------------------------- Constants ------------------------------- */
