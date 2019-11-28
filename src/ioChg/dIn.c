@@ -77,7 +77,7 @@ dIn_scan(void)
             dInsSt[i] = 1;
 
             p = RKH_ALLOC_EVT(DigInChangedEvt, evDigInChanged, &inChg);
-            p->din |= 1 << i;
+            p->status |= 1 << i;
 
             topic_publish(Status, p, &inChg);
         }
@@ -87,7 +87,7 @@ dIn_scan(void)
             dInsSt[i] = 0;
 
             p = RKH_ALLOC_EVT(DigInChangedEvt, evDigInChanged, &inChg);
-            p->din &= ~(1 << i);
+            p->status &= ~(1 << i);
 
             topic_publish(Status, p, &inChg);
         }

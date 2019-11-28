@@ -27,6 +27,7 @@
 #include "events.h"
 #include "topic.h"
 #include "DeviceMgr.h"
+#include "device.h"
 #include "ps.h"
 #include "tplink.h"
 #include "tplhal.h"

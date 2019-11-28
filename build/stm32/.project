@@ -47,6 +47,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/BatChr</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/Collector</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/collector</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/CommMgr</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/CommMgr</locationURI>
@@ -57,9 +62,9 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/Config</locationURI>
 		</link>
 		<link>
-			<name>Sources/src/DeviceServer</name>
+			<name>Sources/src/DeviceMgr</name>
 			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/src/DeviceServer</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/src/DeviceMgr</locationURI>
 		</link>
 		<link>
 			<name>Sources/src/FsMgr</name>
@@ -85,11 +90,6 @@
 			<name>Sources/src/bsp</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/bsp</locationURI>
-		</link>
-		<link>
-			<name>Sources/src/collector</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/src/collector</locationURI>
 		</link>
 		<link>
 			<name>Sources/src/conmgr</name>
