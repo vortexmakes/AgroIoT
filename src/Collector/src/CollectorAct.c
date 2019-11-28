@@ -243,7 +243,7 @@ Collector_enActive(Collector *const me)
                  NULL);
     RKH_TMR_PERIODIC(&me->updateStatusTmr.tmr,
                      RKH_UPCAST(RKH_SMA_T, me),
-                     0, UPDATING_STATUS_TIME);
+					 UPDATING_STATUS_TIME, UPDATING_STATUS_TIME);
 }
 
 void
