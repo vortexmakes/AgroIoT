@@ -650,8 +650,9 @@ data_ready(unsigned char pos)
 {
     (void)pos;
 
-    *prx = '\0';
     precv->size -= (sizeof(END_OF_RECV_STR) - 1);
+    prx = precv->buf + precv->size;
+    *prx = '\0';
 
     sendModResp_noArgs(evOk);
 }
