@@ -278,7 +278,7 @@ Mapping_enRunning(Mapping *const me)
     RKH_TNT_T nTicks;
 
     nTicks = getMapTimeOnRunning();
-    RKH_SET_STATIC_EVENT(&me->syncRunningTmr.tmr, evToutSyncRunning);
+    RKH_SET_STATIC_EVENT(&me->syncRunningTmr.evt, evToutSyncRunning);
     RKH_TMR_INIT(&me->syncRunningTmr.tmr,
                  RKH_UPCAST(RKH_EVT_T, &me->syncRunningTmr), NULL);
     RKH_TMR_PERIODIC(&me->syncRunningTmr.tmr,
