@@ -37,6 +37,7 @@ SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_cga,
                      at_plus_cgs, at_plus_ci, at_plus_cip, at_plus_cips,
                      at_plus_cipsta, at_plus_ciprxget,
                      at_plus_ciprxget_2, at_plus_ciprxget_2_wdata,
+                     at_plus_ciprxget_error,
                      at_plus_cipstatus, at_plus_cipstatus_status,
                      at_plus_cipopen, at_plus_cipclose,
                      at_plus_cipsend, at_plus_cipsending, at_plus_cipsent,
@@ -91,6 +92,7 @@ static void disconnected(unsigned char pos);
 static void data_init(unsigned char pos);
 static void data_collect(unsigned char c);
 static void data_ready(unsigned char pos);
+static void data_empty(unsigned char pos);
 static void netClock_rcv(unsigned char pos);
 static void lTimeInit(unsigned char pos);
 static void yearCollect(unsigned char c);
@@ -335,7 +337,8 @@ SSP_END_BR_TABLE
 SSP_CREATE_NORMAL_NODE(at_plus_ciprxget_2);
 SSP_CREATE_BR_TABLE(at_plus_ciprxget_2)
 SSPBR("ERROR",             cmd_error, &rootCmdParser),
-SSPBR("+CIPRXGET: 2",      debug /*NULL*/,   &at_plus_ciprxget_2_wdata),
+SSPBR("CIPRXGET: 2",      NULL,   &at_plus_ciprxget_2_wdata),
+SSPBR("IP ERROR:",        data_init,   &at_plus_ciprxget_error),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_ciprxget_2_wdata);
@@ -346,6 +349,12 @@ SSP_END_BR_TABLE
 SSP_CREATE_TRN_NODE(at_plus_ciprxget_data, data_collect);
 SSP_CREATE_BR_TABLE(at_plus_ciprxget_data)
 SSPBR(END_OF_RECV_STR, data_ready,   &rootCmdParser),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_ciprxget_error);
+SSP_CREATE_BR_TABLE(at_plus_ciprxget_error)
+SSPBR("ERROR",        NULL, &rootCmdParser),
+SSPBR("No data",      data_empty, &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */
@@ -643,6 +652,18 @@ data_ready(unsigned char pos)
 
     *prx = '\0';
     precv->size -= (sizeof(END_OF_RECV_STR) - 1);
+
+    sendModResp_noArgs(evOk);
+}
+
+static void
+data_empty(unsigned char pos)
+{
+    (void)pos;
+
+    precv = ConMgr_ReceiveDataGetRef();
+    precv->size = 0;
+    prx = precv->buf;
 
     sendModResp_noArgs(evOk);
 }
