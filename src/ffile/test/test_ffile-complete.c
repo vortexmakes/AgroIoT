@@ -15,6 +15,7 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <string.h>
 #include "unity.h"
 #include "ffile.h"
 #include "rfile.h"
@@ -153,12 +154,8 @@ test_WriteAndReadRandomFile(void)
     Config writeData;
     Config readData;
 
-    writeData.aclimit = 8;
-    writeData.brlimit = 4;
-    writeData.status = 2;
-    readData.aclimit = 1;
-    readData.brlimit = 1;
-    readData.status = 1;
+    memset(&writeData, 0xde, sizeof(Config));
+    memset(&readData, 0xad, sizeof(Config));
 
     crashDirectory();
     ffile_init();
