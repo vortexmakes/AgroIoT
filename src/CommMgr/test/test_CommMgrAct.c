@@ -217,12 +217,17 @@ test_ReceiveAck(void)
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
     YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespAck);
-    CommMgr_ReceivingStatusAckToC0Ext9(me, 
-                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    CommMgr_ReceivingMsgAckToC3Ext19(me, 
+                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespAck, me->lastRecvResponse);
 
     res = CommMgr_isCondC3ToC425(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
+
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespAck);
+    CommMgr_ReceivingStatusAckToC0Ext9(me, 
+                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespAck, me->lastRecvResponse);
 
     res = CommMgr_isCondC0ToHistory11(me, 
                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
@@ -237,7 +242,21 @@ test_ReceiveEmptyResponse(void)
     strcpy(evReceivedObj.buf, "");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespEmpty);
+    CommMgr_ReceivingStatusAckToC0Ext9(me, 
+                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespEmpty, me->lastRecvResponse);
+
     res = CommMgr_isCondC0ToReceivingStatusAck28(me, 
+                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
+
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespEmpty);
+    CommMgr_ReceivingMsgAckToC3Ext19(me, 
+                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespEmpty, me->lastRecvResponse);
+
+    res = CommMgr_isCondC3ToReceivingMsgAck29(me, 
                                      RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
 }

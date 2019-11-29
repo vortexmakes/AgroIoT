@@ -36,6 +36,7 @@ enum TypeOfResp
     TypeOfRespAck,
     TypeOfRespCmd,
     TypeOfRespUnknown,
+    TypeOfRespEmpty,        /* indicates an empty frame */
     NumTypeOfResp
 };
 
