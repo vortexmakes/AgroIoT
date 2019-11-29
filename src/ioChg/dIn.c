@@ -32,6 +32,7 @@
 #define DEBOUNCE_CHG        ((uint8_t)((1 << (DEBOUNCE_NSAMPLE - 1)) - 1))
 #define DEBOUNCE_NOT_MASK   ((uint8_t) ~DEBOUNCE_MASK)
 #define DEBOUNCE_NOT_CHG    ((uint8_t) ~DEBOUNCE_CHG)
+#define DUMMY_MASK          0xFC
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -43,7 +44,24 @@ static unsigned char dIns[NUM_DIN_SIGNALS];
 static uint8_t dInsSt[NUM_DIN_SIGNALS];
 
 /* ----------------------- Local function prototypes ----------------------- */
+static DigIn assembleDin(void);
+
 /* ---------------------------- Local functions ---------------------------- */
+static
+DigIn
+assembleDin(void)
+{
+    DigInSignalId i;
+    DigIn status = DUMMY_MASK;
+
+    for (i = 0; i < NUM_DIN_SIGNALS; ++i)
+    {
+        status |= dInsSt[i] << i; 
+    }
+
+    return status;
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 dIn_init(void)
@@ -77,7 +95,8 @@ dIn_scan(void)
             dInsSt[i] = 1;
 
             p = RKH_ALLOC_EVT(DigInChangedEvt, evDigInChanged, &inChg);
-            p->status |= 1 << i;
+
+            p->status = assembleDin();
 
             topic_publish(Status, p, &inChg);
         }
@@ -87,7 +106,8 @@ dIn_scan(void)
             dInsSt[i] = 0;
 
             p = RKH_ALLOC_EVT(DigInChangedEvt, evDigInChanged, &inChg);
-            p->status &= ~(1 << i);
+
+            p->status = assembleDin();
 
             topic_publish(Status, p, &inChg);
         }
