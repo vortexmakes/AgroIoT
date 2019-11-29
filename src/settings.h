@@ -19,6 +19,8 @@
 #define __SETTINGS_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "rkh.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -35,11 +37,11 @@ extern "C" {
 #define BRLIMIT_DFT             20
 #define IP_DFT                  "\"216.75.55.101\""
 #define PORT_DFT                "33499"
-#define CONNTIME_DFT            60
-#define TOTACTTIME              110
-#define GPSTTIME                8
+#define CONNTIME_DFT            RKH_TIME_SEC(60)
+#define TOTACTTIME              RKH_TIME_SEC(110)
+#define GPSTTIME                RKH_TIME_SEC(2)
 #define DIGOUT_DFT              0
-#define SMPTIME_DFT             3
+#define SMPTIME_DFT             RKH_TIME_SEC(3)
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
