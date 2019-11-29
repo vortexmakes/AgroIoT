@@ -664,6 +664,7 @@ data_empty(unsigned char pos)
     precv = ConMgr_ReceiveDataGetRef();
     precv->size = 0;
     prx = precv->buf;
+    *prx = '\0';
 
     sendModResp_noArgs(evOk);
 }
