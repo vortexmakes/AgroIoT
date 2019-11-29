@@ -61,8 +61,8 @@ RKH_CREATE_COMP_REGION_STATE(Mapping_Active, NULL, NULL, RKH_ROOT,
 RKH_CREATE_TRANS_TABLE(Mapping_Active)
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_BASIC_STATE(Mapping_Stopped, NULL,
-                       NULL, &Mapping_Active, NULL);
+RKH_CREATE_BASIC_STATE(Mapping_Stopped, Mapping_enStopped,
+                       Mapping_exStopped, &Mapping_Active, NULL);
 RKH_CREATE_TRANS_TABLE(Mapping_Stopped)
 RKH_TRREG(evToutSyncStopped, NULL, Mapping_storeStatus, &Mapping_C1),
 RKH_TRREG(evMapping, NULL, NULL, &Mapping_Running),
@@ -74,8 +74,8 @@ RKH_BRANCH(Mapping_isSyncDirOnStopped, Mapping_syncDir, &Mapping_Stopped),
 RKH_BRANCH(ELSE, NULL, &Mapping_Stopped),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_BASIC_STATE(Mapping_Running, NULL,
-                       NULL, &Mapping_Active, NULL);
+RKH_CREATE_BASIC_STATE(Mapping_Running, Mapping_enRunning,
+                       Mapping_exRunning, &Mapping_Active, NULL);
 RKH_CREATE_TRANS_TABLE(Mapping_Running)
 RKH_TRREG(evToutSyncRunning, NULL, Mapping_storeStatus, &Mapping_C3),
 RKH_TRREG(evNoMapping, NULL, NULL, &Mapping_C2),
