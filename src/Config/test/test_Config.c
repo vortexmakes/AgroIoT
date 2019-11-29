@@ -99,7 +99,7 @@ test_InitWithoutStoredSettings(void)
     cfg = Config_init();
 
     TEST_ASSERT_NOT_NULL(cfg);
-    TEST_ASSERT_EQUAL(cfgDft.aclimit, cfg->aclimit);
+    TEST_ASSERT_EQUAL(cfgDft.accLimit, cfg->accLimit);
     TEST_ASSERT_EQUAL(cfgDft.brlimit, cfg->brlimit);
     TEST_ASSERT_EQUAL(cfgDft.status, cfg->status);
     TEST_ASSERT_EQUAL_STRING(cfgDft.ip, cfg->ip);
@@ -127,7 +127,7 @@ test_InitWithStoredSettings(void)
     cfg = Config_init();
 
     TEST_ASSERT_NOT_NULL(cfg);
-    TEST_ASSERT_EQUAL(cfgFile.aclimit, cfg->aclimit);
+    TEST_ASSERT_EQUAL(cfgFile.accLimit, cfg->accLimit);
     TEST_ASSERT_EQUAL(cfgFile.brlimit, cfg->brlimit);
     TEST_ASSERT_EQUAL(cfgFile.status, cfg->status);
     TEST_ASSERT_EQUAL_STRING(cfgFile.ip, cfg->ip);
@@ -160,7 +160,7 @@ test_InitWithFileError(void)
     cfg = Config_init();
 
     TEST_ASSERT_NOT_NULL(cfg);
-    TEST_ASSERT_EQUAL(cfgDft.aclimit, cfg->aclimit);
+    TEST_ASSERT_EQUAL(cfgDft.accLimit, cfg->accLimit);
     TEST_ASSERT_EQUAL(cfgDft.brlimit, cfg->brlimit);
     TEST_ASSERT_EQUAL(cfgDft.status, cfg->status);
     TEST_ASSERT_EQUAL_STRING(cfgDft.ip, cfg->ip);
@@ -519,11 +519,11 @@ test_SetGetAccLimit(void)
     value = 4;
     Config_setAccLimit(value);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL(value, cfg->aclimit);
+    TEST_ASSERT_EQUAL(value, cfg->accLimit);
 
     value = 0;
     value = Config_getAccLimit();
-    TEST_ASSERT_EQUAL(value, cfg->aclimit);
+    TEST_ASSERT_EQUAL(value, cfg->accLimit);
 }
 
 void

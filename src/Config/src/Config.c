@@ -261,7 +261,7 @@ Config_setAccLimit(rui8_t value)
     Config *cfg;
 
     cfg = Config_get();
-    cfg->aclimit = value;
+    cfg->accLimit = value;
     Config_set(cfg);
 }
 
@@ -271,7 +271,7 @@ Config_getAccLimit(void)
     Config *cfg;
 
     cfg = Config_get();
-    return cfg->aclimit;
+    return cfg->accLimit;
 }
 
 void

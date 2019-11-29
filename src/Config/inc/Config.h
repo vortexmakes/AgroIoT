@@ -41,7 +41,7 @@ struct Config
     /**
      * Indicates the value in which the system has suddenly accelerated
      */
-    rui8_t aclimit;
+    rui8_t accLimit;
 
     /**
      * Indicates the value in which the system has suddenly braked
@@ -103,6 +103,7 @@ Config *config_read(void);
 Config *Config_get(void);
 void Config_set(Config *cfg);
 
+/** Setters and getters */
 void Config_setMappingTime(rui8_t value);
 rui8_t Config_getMappingTime(void);
 void Config_setDftDigOut(DigOut value);
