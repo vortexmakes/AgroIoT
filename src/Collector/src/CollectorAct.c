@@ -260,24 +260,30 @@ Collector_initAndTestDevNull(Collector *const me)
 void
 Mapping_enStopped(Mapping *const me)
 {
+    RKH_TNT_T nTicks;
+
+    nTicks = getMapTimeOnStopped();
     RKH_SET_STATIC_EVENT(&me->syncStoppedTmr.tmr, evToutSyncStopped);
     RKH_TMR_INIT(&me->syncStoppedTmr.tmr,
                  RKH_UPCAST(RKH_EVT_T, &me->syncStoppedTmr), NULL);
     RKH_TMR_PERIODIC(&me->syncStoppedTmr.tmr,
                      RKH_UPCAST(RKH_SMA_T, me->itsCollector),
-                     0, getMapTimeOnStopped());
+                     nTicks, nTicks);
     setMappingStatus(me, MAPPING_STOP);
 }
 
 void
 Mapping_enRunning(Mapping *const me)
 {
+    RKH_TNT_T nTicks;
+
+    nTicks = getMapTimeOnRunning();
     RKH_SET_STATIC_EVENT(&me->syncRunningTmr.tmr, evToutSyncRunning);
     RKH_TMR_INIT(&me->syncRunningTmr.tmr,
                  RKH_UPCAST(RKH_EVT_T, &me->syncRunningTmr), NULL);
     RKH_TMR_PERIODIC(&me->syncRunningTmr.tmr,
                      RKH_UPCAST(RKH_SMA_T, me->itsCollector),
-                     0, getMapTimeOnRunning());
+                     nTicks, nTicks);
     setMappingStatus(me, MAPPING_RUNNING);
 }
 

@@ -170,7 +170,7 @@ test_StartAndStopUpdatingStatusTmr(void)
                          RKH_UPCAST(RKH_EVT_T, &me->updateStatusTmr));
     rkh_tmr_start_Expect(&me->updateStatusTmr.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
-                         0, UPDATING_STATUS_TIME);
+                         UPDATING_STATUS_TIME, UPDATING_STATUS_TIME);
     Collector_enActive(me);
 
     rkh_tmr_stop_ExpectAndReturn(&me->updateStatusTmr.tmr, 0);
@@ -321,12 +321,13 @@ test_StartAndStopSyncStoppedTmr(void)
 
     me->base.sm.state = RKH_CAST(RKH_ST_T, &DevStatus_DevNotConnected);
     region = &me->itsMapping;
+
+    Config_getConnPeriodTime_ExpectAndReturn(60);
     rkh_tmr_init__Expect(&region->syncStoppedTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncStoppedTmr));
-    Config_getConnPeriodTime_ExpectAndReturn(60);
     rkh_tmr_start_Expect(&region->syncStoppedTmr.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
-                         0, RKH_TIME_SEC(60));
+                         RKH_TIME_SEC(60), RKH_TIME_SEC(60));
     Mapping_enStopped(region);
     TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.devData.a.x);
 
@@ -370,12 +371,13 @@ test_StartAndStopSyncRunningTmr(void)
 
     me->base.sm.state = RKH_CAST(RKH_ST_T, &DevStatus_DevNotConnected);
     region = &me->itsMapping;
+
+    Config_getMappingTime_ExpectAndReturn(3);
     rkh_tmr_init__Expect(&region->syncRunningTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncRunningTmr));
-    Config_getMappingTime_ExpectAndReturn(60);
     rkh_tmr_start_Expect(&region->syncRunningTmr.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
-                         0, RKH_TIME_SEC(60));
+                         RKH_TIME_SEC(3), RKH_TIME_SEC(3));
     Mapping_enRunning(region);
     TEST_ASSERT_EQUAL_HEX32(MAPPING_RUNNING, me->status.devData.a.x);
 
