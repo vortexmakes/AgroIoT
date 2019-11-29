@@ -272,6 +272,16 @@ CommMgr_isCondC0ToHistory11(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 rbool_t 
+CommMgr_isCondC0ToReceivingStatusAck28(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*return (isEmpty()) ? true : false;*/
+    ReceivedEvt *realEvt;
+
+    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
+	return (realEvt->size == 0) ? true : false;
+}
+
+rbool_t 
 CommMgr_isCondC1ToSendingHist20(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isThereMsg()) ? true : false;*/

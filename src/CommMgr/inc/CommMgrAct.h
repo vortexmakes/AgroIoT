@@ -62,6 +62,7 @@ void CommMgr_exWaitSync(CommMgr *const me);
 
 /* ............................ Declares guards ............................ */
 rbool_t CommMgr_isCondC0ToHistory11(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t CommMgr_isCondC0ToReceivingStatusAck28(CommMgr *const me, RKH_EVT_T *pe);
 rbool_t CommMgr_isCondC1ToSendingHist20(CommMgr *const me, RKH_EVT_T *pe);
 rbool_t CommMgr_isCondC2ToSendingEndOfHist23(CommMgr *const me, RKH_EVT_T *pe);
 rbool_t CommMgr_isCondC3ToC425(CommMgr *const me, RKH_EVT_T *pe);
