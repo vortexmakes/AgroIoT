@@ -146,6 +146,10 @@ void
 CommMgr_ReceivingMsgAckToC3Ext19(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*parseRecv();*/
+    ReceivedEvt *realEvt;
+
+    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
+	me->lastRecvResponse = YFrame_parse(realEvt->buf);
 }
 
 void 
@@ -272,6 +276,13 @@ CommMgr_isCondC0ToHistory11(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 rbool_t 
+CommMgr_isCondC0ToReceivingStatusAck28(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*return (isEmpty()) ? true : false;*/
+	return (me->lastRecvResponse == TypeOfRespEmpty) ? true : false;
+}
+
+rbool_t 
 CommMgr_isCondC1ToSendingHist20(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isThereMsg()) ? true : false;*/
@@ -295,6 +306,13 @@ CommMgr_isCondC3ToC425(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isAck()) ? true : false;*/
 	return (me->lastRecvResponse == TypeOfRespAck) ? true : false;
+}
+
+rbool_t 
+CommMgr_isCondC3ToReceivingMsgAck29(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*return (isEmpty()) ? true : false;*/
+	return (me->lastRecvResponse == TypeOfRespEmpty) ? true : false;
 }
 
 rbool_t 
