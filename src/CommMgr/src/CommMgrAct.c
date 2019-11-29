@@ -207,11 +207,11 @@ CommMgr_enSendingStatus(CommMgr *const me)
 	/*sendStatus();*/
     ruint len;
 
-    len = YFrame_header(&me->status, me->evSendObj.buf, 0, YFRAME_SGP_TYPE);
-    me->evSendObj.size = len;
-    YFrame_data(&me->status, &me->evSendObj.buf[len], YFRAME_SGP_TYPE);
-    me->evSendObj.size += YFrame_data(&me->status, &me->evSendObj.buf[len], 
-                                        YFRAME_SGP_TYPE);
+    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 0, 
+                                       YFRAME_SGP_TYPE);
+    me->evSendObj.size += YFrame_data(&me->status,
+                                      &me->evSendObj.buf[me->evSendObj.size], 
+                                      YFRAME_SGP_TYPE);
     topic_publish(TCPConnection, 
                   RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                   RKH_UPCAST(RKH_SMA_T, me));
