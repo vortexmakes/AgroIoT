@@ -17,6 +17,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "GStatus.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -77,11 +78,32 @@ GStatus_fromGpsStr(GPS_STR *from, GStatus *to)
     res = 0;
     if ((to != (GStatus *)0) && (from != (GPS_STR *)0))
     {
+        /* Convert GStatus::position */
         pos = &(to->position);
         strcpy(pos->utc, from->utc);
         strcpy(pos->status, from->status);
         sprintf(temp, "%s.%s", from->latdeg, from->latmin);
         strcpy(pos->latitude, temp);
+        strcpy(pos->latInd, from->lat_ind);
+        sprintf(temp, "%s.%s", from->longdeg, from->longmin);
+        strcpy(pos->longitude, temp);
+        strcpy(pos->longInd, from->long_ind);
+        strcpy(pos->speed, from->speed);
+        strcpy(pos->course, from->course);
+        strcpy(pos->date, from->date);
+
+        /* Convert GStatus::devData */
+        to->devData = from->cbox;
+
+        /* Convert GStatus::ioStatus */
+        strcpy(temp, from->in_out_st);
+        temp[2] = '\0';
+        to->ioStatus.digOut = (DigOut)strtol(temp, NULL, 16);
+        strcpy(temp, from->in_out_st);
+        to->ioStatus.digIn = (DigIn)strtol(&temp[2], NULL, 16);
+
+        /* Convert GStatus::batChrStatus */
+        to->batChrStatus = atoi(from->acbk_st);
     }
     else
     {
