@@ -103,7 +103,7 @@ GStatus_fromGpsStr(GPS_STR *from, GStatus *to)
         to->ioStatus.digIn = (DigIn)strtol(&temp[2], NULL, 16);
 
         /* Convert GStatus::batChrStatus */
-        to->batChrStatus = atoi(from->acbk_st);
+        to->batChrStatus = (BatChrStatus)atoi(from->acbk_st);
     }
     else
     {
