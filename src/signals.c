@@ -83,6 +83,9 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evNoDev);
     RKH_TR_FWK_SIG(evSyncTout);
     RKH_TR_FWK_SIG(evMapping);
+    RKH_TR_FWK_SIG(evNoMapping);
+    RKH_TR_FWK_SIG(evToutSyncStopped);
+    RKH_TR_FWK_SIG(evToutSyncRunning);
     RKH_TR_FWK_SIG(evDiskConnected);
     RKH_TR_FWK_SIG(evDiskDisconnected);
     RKH_TR_FWK_SIG(evTout0);

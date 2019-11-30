@@ -32,7 +32,7 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void StatQue_init(void);
+rui16_t StatQue_init(void);
 rui16_t StatQue_getNumElem(void);
 rbool_t StatQue_isEmpty(void);
 rInt StatQue_remove(GPS_STR *elem);

@@ -263,7 +263,7 @@ Mapping_enStopped(Mapping *const me)
     RKH_TNT_T nTicks;
 
     nTicks = getMapTimeOnStopped();
-    RKH_SET_STATIC_EVENT(&me->syncStoppedTmr.tmr, evToutSyncStopped);
+    RKH_SET_STATIC_EVENT(&me->syncStoppedTmr, evToutSyncStopped);
     RKH_TMR_INIT(&me->syncStoppedTmr.tmr,
                  RKH_UPCAST(RKH_EVT_T, &me->syncStoppedTmr), NULL);
     RKH_TMR_PERIODIC(&me->syncStoppedTmr.tmr,

@@ -122,6 +122,11 @@ void
 CommMgr_ToC1Ext16(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
+    me->nFramesToSend = StatQue_init();
+    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
+    {
+        me->nFramesToSend = MAX_NFRAMES_TOSEND;
+    }
 }
 
 void 
@@ -183,6 +188,11 @@ void
 CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
+    me->nFramesToSend = StatQue_init();
+    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
+    {
+        me->nFramesToSend = MAX_NFRAMES_TOSEND;
+    }
 }
 
 void 
@@ -286,11 +296,6 @@ rbool_t
 CommMgr_isCondC1ToSendingHist20(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isThereMsg()) ? true : false;*/
-    me->nFramesToSend = StatQue_getNumElem();
-    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
-    {
-        me->nFramesToSend = MAX_NFRAMES_TOSEND;
-    }
 	return (me->nFramesToSend != 0) ? true : false;
 }
 
