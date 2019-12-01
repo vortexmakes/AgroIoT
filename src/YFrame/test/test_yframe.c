@@ -202,4 +202,14 @@ test_CheckResponseAck(void)
     TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 }
 
+void
+test_CheckEmptyFrame(void)
+{
+    TypeOfResp res;
+
+    strcpy(buf, "");
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespEmpty, res);
+}
+
 /* ------------------------------ End of file ------------------------------ */

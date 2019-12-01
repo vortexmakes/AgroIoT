@@ -43,9 +43,13 @@ tearDown(void)
 void
 test_InitOpenFile(void)
 {
+    rui16_t nElem, nElemExp;
+
+    nElemExp = 8;
     ffile_queue_open_as_random_ExpectAndReturn(FFD0,
-                                               OPEN_FROM_BEGINNING, 0);
-    StatQue_init();
+                                               OPEN_FROM_BEGINNING, nElemExp);
+    nElem = StatQue_init();
+    TEST_ASSERT_EQUAL(nElemExp, nElem);
 }
 
 void

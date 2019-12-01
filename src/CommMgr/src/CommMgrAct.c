@@ -122,6 +122,11 @@ void
 CommMgr_ToC1Ext16(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
+    me->nFramesToSend = StatQue_init();
+    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
+    {
+        me->nFramesToSend = MAX_NFRAMES_TOSEND;
+    }
 }
 
 void 
@@ -146,6 +151,10 @@ void
 CommMgr_ReceivingMsgAckToC3Ext19(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*parseRecv();*/
+    ReceivedEvt *realEvt;
+
+    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
+	me->lastRecvResponse = YFrame_parse(realEvt->buf);
 }
 
 void 
@@ -179,6 +188,11 @@ void
 CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
+    me->nFramesToSend = StatQue_init();
+    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
+    {
+        me->nFramesToSend = MAX_NFRAMES_TOSEND;
+    }
 }
 
 void 
@@ -207,11 +221,11 @@ CommMgr_enSendingStatus(CommMgr *const me)
 	/*sendStatus();*/
     ruint len;
 
-    len = YFrame_header(&me->status, me->evSendObj.buf, 0, YFRAME_SGP_TYPE);
-    me->evSendObj.size = len;
-    YFrame_data(&me->status, &me->evSendObj.buf[len], YFRAME_SGP_TYPE);
-    me->evSendObj.size += YFrame_data(&me->status, &me->evSendObj.buf[len], 
-                                        YFRAME_SGP_TYPE);
+    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 0, 
+                                       YFRAME_SGP_TYPE);
+    me->evSendObj.size += YFrame_data(&me->status,
+                                      &me->evSendObj.buf[me->evSendObj.size], 
+                                      YFRAME_SGP_TYPE);
     topic_publish(TCPConnection, 
                   RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                   RKH_UPCAST(RKH_SMA_T, me));
@@ -272,14 +286,16 @@ CommMgr_isCondC0ToHistory11(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 rbool_t 
+CommMgr_isCondC0ToReceivingStatusAck28(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*return (isEmpty()) ? true : false;*/
+	return (me->lastRecvResponse == TypeOfRespEmpty) ? true : false;
+}
+
+rbool_t 
 CommMgr_isCondC1ToSendingHist20(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isThereMsg()) ? true : false;*/
-    me->nFramesToSend = StatQue_getNumElem();
-    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
-    {
-        me->nFramesToSend = MAX_NFRAMES_TOSEND;
-    }
 	return (me->nFramesToSend != 0) ? true : false;
 }
 
@@ -295,6 +311,13 @@ CommMgr_isCondC3ToC425(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isAck()) ? true : false;*/
 	return (me->lastRecvResponse == TypeOfRespAck) ? true : false;
+}
+
+rbool_t 
+CommMgr_isCondC3ToReceivingMsgAck29(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*return (isEmpty()) ? true : false;*/
+	return (me->lastRecvResponse == TypeOfRespEmpty) ? true : false;
 }
 
 rbool_t 

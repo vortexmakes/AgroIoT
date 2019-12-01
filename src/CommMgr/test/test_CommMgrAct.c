@@ -113,6 +113,7 @@ test_Initialize(void)
     rkh_trc_sig_Ignore();
     rkh_trc_obj_Ignore();
     topic_subscribe_Expect(Status, RKH_UPCAST(RKH_SMA_T, me));
+    topic_subscribe_Expect(TCPConnection, RKH_UPCAST(RKH_SMA_T, me));
 
     CommMgr_ToIdleExt0(me, evt);
 
@@ -213,18 +214,50 @@ test_ReceiveAck(void)
     rbool_t res;
 
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
-    evReceivedObj.size = strlen("!2|");
+    evReceivedObj.size = strlen(evReceivedObj.buf);
+
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespAck);
+    CommMgr_ReceivingMsgAckToC3Ext19(me, 
+                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespAck, me->lastRecvResponse);
+
+    res = CommMgr_isCondC3ToC425(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
 
     YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespAck);
     CommMgr_ReceivingStatusAckToC0Ext9(me, 
                                        RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespAck, me->lastRecvResponse);
 
-    res = CommMgr_isCondC3ToC425(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
-    TEST_ASSERT_TRUE(res == true);
-
     res = CommMgr_isCondC0ToHistory11(me, 
                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
+}
+
+void
+test_ReceiveEmptyResponse(void)
+{
+    rbool_t res;
+    
+    strcpy(evReceivedObj.buf, "");   /* in ConnMgr */
+    evReceivedObj.size = strlen(evReceivedObj.buf);
+
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespEmpty);
+    CommMgr_ReceivingStatusAckToC0Ext9(me, 
+                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespEmpty, me->lastRecvResponse);
+
+    res = CommMgr_isCondC0ToReceivingStatusAck28(me, 
+                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
+
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespEmpty);
+    CommMgr_ReceivingMsgAckToC3Ext19(me, 
+                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespEmpty, me->lastRecvResponse);
+
+    res = CommMgr_isCondC3ToReceivingMsgAck29(me, 
+                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
 }
 
@@ -263,7 +296,7 @@ test_ReceiveUnknownResponse(void)
     rbool_t res;
 
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
-    evReceivedObj.size = strlen("!2|");
+    evReceivedObj.size = strlen(evReceivedObj.buf);
 
     YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespUnknown);
     CommMgr_ReceivingStatusAckToC0Ext9(me, 
@@ -275,26 +308,39 @@ test_ReceiveUnknownResponse(void)
 }
 
 void
+test_CheckHistory(void)
+{
+    strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
+    evReceivedObj.size = strlen(evReceivedObj.buf);
+
+    StatQue_init_ExpectAndReturn(8);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(8, me->nFramesToSend);
+}
+
+void
 test_CheckHistoryEmpty(void)
 {
     rbool_t res;
 
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
-    evReceivedObj.size = strlen("!2|");
+    evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    StatQue_getNumElem_ExpectAndReturn(0);
+    StatQue_init_ExpectAndReturn(0);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
     TEST_ASSERT_TRUE(res == false);
     TEST_ASSERT_EQUAL(0, me->nFramesToSend);
 
-    StatQue_getNumElem_ExpectAndReturn(2);
+    StatQue_init_ExpectAndReturn(8);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
-    TEST_ASSERT_EQUAL(2, me->nFramesToSend);
+    TEST_ASSERT_EQUAL(8, me->nFramesToSend);
 }
 
 void
@@ -303,9 +349,10 @@ test_CheckHistoryNoEmpty(void)
     rbool_t res;
 
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
-    evReceivedObj.size = strlen("!2|");
+    evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    StatQue_getNumElem_ExpectAndReturn(2);
+    StatQue_init_ExpectAndReturn(2);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
@@ -319,9 +366,10 @@ test_CheckHistoryMaxFramesToSend(void)
     rbool_t res;
 
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
-    evReceivedObj.size = strlen("!2|");
+    evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    StatQue_getNumElem_ExpectAndReturn(MAX_NFRAMES_TOSEND + 1);
+    StatQue_init_ExpectAndReturn(MAX_NFRAMES_TOSEND + 1);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
@@ -334,7 +382,8 @@ test_StartHistoryMessage(void)
 {
     ruint headerLen;
 
-    StatQue_getNumElem_ExpectAndReturn(2);
+    StatQue_init_ExpectAndReturn(2);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     CommMgr_isCondC1ToSendingHist20(me, 
                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
 

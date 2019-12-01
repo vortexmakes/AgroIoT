@@ -52,7 +52,7 @@ static GPS_STR status1 =
     "0.078",
     "",
     "310119",
-    "3fff",
+    "3FFF",
     "3",
     {1, 1, {0, 0, 1}, {0xdddd, 0xffff, 0xffff}, 0}
 };
@@ -107,6 +107,7 @@ test_ConvertGStatusToGpsStr(void)
     char temp[32];
 
     result = GStatus_toGpsStr(&status0, &oldStatus);
+
     TEST_ASSERT_EQUAL_STRING(status0.position.utc, oldStatus.utc);
     TEST_ASSERT_EQUAL_STRING(status0.position.status, oldStatus.status);
     sprintf(temp, "%s.%s", oldStatus.latdeg, oldStatus.latmin);
@@ -133,10 +134,32 @@ test_ConvertGpsStrToGStatus(void)
     char temp[32];
 
     result = GStatus_fromGpsStr(&status1, &newStatus);
+
+    /* Check GStatus::position */
     TEST_ASSERT_EQUAL_STRING(status1.utc, newStatus.position.utc);
     TEST_ASSERT_EQUAL_STRING(status1.status, newStatus.position.status);
     sprintf(temp, "%s.%s", status1.latdeg, status1.latmin);
     TEST_ASSERT_EQUAL_STRING(temp, newStatus.position.latitude);
+    TEST_ASSERT_EQUAL_STRING(status1.lat_ind, newStatus.position.latInd);
+    sprintf(temp, "%s.%s", status1.longdeg, status1.longmin);
+    TEST_ASSERT_EQUAL_STRING(temp, newStatus.position.longitude);
+    TEST_ASSERT_EQUAL_STRING(status1.long_ind, newStatus.position.longInd);
+    TEST_ASSERT_EQUAL_STRING(status1.speed, newStatus.position.speed);
+    TEST_ASSERT_EQUAL_STRING(status1.course, newStatus.position.course);
+    TEST_ASSERT_EQUAL_STRING(status1.date, newStatus.position.date);
+
+    /* Check GStatus::devData */
+    TEST_ASSERT_EQUAL_MEMORY(&status1.cbox, &newStatus.devData, 
+                             sizeof(CBOX_STR));
+    /* Check GStatus::ioStatus */
+    sprintf(temp, "%02X%02X", newStatus.ioStatus.digOut,
+            newStatus.ioStatus.digIn);
+    TEST_ASSERT_EQUAL_STRING(status1.in_out_st, temp);
+
+    /* Check GStatus::batChrStatus */
+    sprintf(temp, "%d", newStatus.batChrStatus);
+    TEST_ASSERT_EQUAL_STRING(temp, status1.acbk_st);
+
     TEST_ASSERT_EQUAL(0, result);
 }
 

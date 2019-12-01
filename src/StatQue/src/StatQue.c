@@ -27,10 +27,10 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void
+rui16_t
 StatQue_init(void)
 {
-    (void)ffile_queue_open_as_random(FFD0, OPEN_FROM_BEGINNING);
+    return ffile_queue_open_as_random(FFD0, OPEN_FROM_BEGINNING);
 }
 
 rui16_t

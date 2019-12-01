@@ -188,6 +188,10 @@ YFrame_parse(char *from)
         {
             return TypeOfRespAck;
         }
+        else if (size == 0)
+        {
+            return TypeOfRespEmpty;
+        }
 
         /* Check Cmd */
         /* 636D643A XX ... XX 3B */
