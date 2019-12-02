@@ -27,6 +27,7 @@ RKH_CREATE_BASIC_STATE(ReceivingStatusAck, CommMgr_enReceivingStatusAck, NULL, &
 RKH_CREATE_BASIC_STATE(SendingEndOfHist, CommMgr_enSendingEndOfHist, NULL, &History, NULL);
 RKH_CREATE_BASIC_STATE(SendingHist, CommMgr_enSendingHist, NULL, &History, NULL);
 RKH_CREATE_BASIC_STATE(ReceivingMsgAck, CommMgr_enReceivingMsgAck, NULL, &History, NULL);
+RKH_CREATE_BASIC_STATE(SendingStartOfHist, CommMgr_enSendingStartOfHist, NULL, &History, NULL);
 
 RKH_CREATE_COMP_REGION_STATE(Active, NULL, NULL, RKH_ROOT, &WaitSync, CommMgr_ToC1Ext16, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Current, NULL, NULL, &Active, &SendingStatus, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
@@ -77,6 +78,10 @@ RKH_CREATE_TRANS_TABLE(ReceivingMsgAck)
 	RKH_TRREG(evReceived, NULL, CommMgr_ReceivingMsgAckToC3Ext19, &C3),
 RKH_END_TRANS_TABLE
 
+RKH_CREATE_TRANS_TABLE(SendingStartOfHist)
+	RKH_TRREG(evSent, NULL, CommMgr_SendingStartOfHistToSendingHistExt30, &SendingHist),
+RKH_END_TRANS_TABLE
+
 RKH_CREATE_CHOICE_STATE(C0);
 RKH_CREATE_CHOICE_STATE(C1);
 RKH_CREATE_CHOICE_STATE(C2);
@@ -90,7 +95,7 @@ RKH_CREATE_BRANCH_TABLE(C0)
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C1)
-	RKH_BRANCH(CommMgr_isCondC1ToSendingHist20, CommMgr_C1ToSendingHistExt20, &SendingHist),
+	RKH_BRANCH(CommMgr_isCondC1ToSendingHist20, NULL, &SendingStartOfHist),
 	RKH_BRANCH(ELSE, NULL, &HistoryFinal),
 RKH_END_BRANCH_TABLE
 

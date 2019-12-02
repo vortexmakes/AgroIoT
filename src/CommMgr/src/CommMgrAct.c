@@ -155,15 +155,6 @@ CommMgr_ReceivingMsgAckToC3Ext19(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 void 
-CommMgr_C1ToSendingHistExt20(CommMgr *const me, RKH_EVT_T *pe)
-{
-	/*sendStartOfHist();*/
-    me->framesToSend = me->nFramesToSend;
-    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 
-                                       me->nFramesToSend, YFRAME_MGP_TYPE);
-}
-
-void 
 CommMgr_C3ToHistoryFinalExt24(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*parseError();*/
@@ -201,6 +192,21 @@ CommMgr_ActiveToActiveLoc0(CommMgr *const me, RKH_EVT_T *pe)
     realEvt = RKH_DOWNCAST(GStatusEvt, pe);
     me->status = realEvt->status;
     me->isPendingStatus = true;
+}
+
+void 
+CommMgr_SendingStartOfHistToSendingHistExt30(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*sendFirst();*/
+    rInt res;
+    GPS_STR from;
+    GStatus to;
+
+    res = StatQue_read(&from);
+    RKH_ENSURE(res == 0);
+    res = GStatus_fromGpsStr(&from, &to);
+    RKH_ENSURE(res == 0);
+    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
 }
 
 /* ............................. Entry actions ............................. */
@@ -267,6 +273,18 @@ CommMgr_enReceivingMsgAck(CommMgr *const me)
 	/*receive();*/
     topic_publish(TCPConnection, 
                   RKH_CAST(RKH_EVT_T, &evRecvObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
+}
+
+void 
+CommMgr_enSendingStartOfHist(CommMgr *const me)
+{
+	/*sendStartOfHist();*/
+    me->framesToSend = me->nFramesToSend;
+    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 
+                                       me->nFramesToSend, YFRAME_MGP_TYPE);
+    topic_publish(TCPConnection, 
+                  RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                   RKH_UPCAST(RKH_SMA_T, me));
 }
 
