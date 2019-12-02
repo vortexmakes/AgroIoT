@@ -432,6 +432,17 @@ test_PrepareFirstMessage(void)
 }
 
 void
+test_DecrementNumFrameToSend(void)
+{
+    ruint nFrames;
+
+    nFrames = 2;
+    me->framesToSend = nFrames;
+    CommMgr_SendingHistToC2Ext18(me, evt);
+    TEST_ASSERT_EQUAL(nFrames - 1, me->framesToSend);
+}
+
+void
 test_PrepareNextStatusBlock(void)
 {
     ruint len;
@@ -453,9 +464,9 @@ test_PrepareNextStatusBlock(void)
                                 YFRAME_MGP_TYPE, len);
     YFrame_data_IgnoreArg_from(); 
 
-    CommMgr_SendingHistToC2Ext18(me, evt);
+    CommMgr_C1ToSendingHistExt31(me, evt);
 
-    TEST_ASSERT_EQUAL(nFrames - 1, me->framesToSend);
+    TEST_ASSERT_EQUAL(nFrames, me->framesToSend);
     TEST_ASSERT_EQUAL(len, me->evSendObj.size);
 }
 
