@@ -63,7 +63,6 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_TRANS_TABLE(History)
 	RKH_TRREG(evRecvFail, NULL, CommMgr_HistoryToWaitSyncExt13, &WaitSync),
 	RKH_TRREG(evSendFail, NULL, CommMgr_HistoryToWaitSyncExt14, &WaitSync),
-	RKH_TRCOMPLETION(NULL, NULL, &WaitSync),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(SendingEndOfHist)
@@ -96,7 +95,7 @@ RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C1)
 	RKH_BRANCH(CommMgr_isCondC1ToSendingHist20, CommMgr_C1ToSendingHistExt31, &SendingStartOfHist),
-	RKH_BRANCH(ELSE, NULL, &HistoryFinal),
+	RKH_BRANCH(ELSE, NULL, &WaitSync),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C2)
@@ -107,7 +106,7 @@ RKH_END_BRANCH_TABLE
 RKH_CREATE_BRANCH_TABLE(C3)
 	RKH_BRANCH(CommMgr_isCondC3ToC425, CommMgr_C3ToC4Ext25, &C4),
 	RKH_BRANCH(CommMgr_isCondC3ToReceivingMsgAck29, NULL, &ReceivingMsgAck),
-	RKH_BRANCH(ELSE, CommMgr_C3ToHistoryFinalExt24, &HistoryFinal),
+	RKH_BRANCH(ELSE, CommMgr_C3ToHistoryFinalExt24, &WaitSync),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C4)
