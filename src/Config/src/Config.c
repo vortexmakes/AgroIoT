@@ -38,16 +38,20 @@ enum
 
 static const Config cfgDft =
 {
-    ACLIMIT_DFT,
-    BRLIMIT_DFT,
+    ACC_LIMIT_DFT,
+    BR_LIMIT_DFT,
     1,
     IP_DFT,
     PORT_DFT,
-    CONNTIME_DFT,
-    TOTACTTIME,
-    GPSTTIME,
-    DIGOUT_DFT,
-    SMPTIME_DFT
+    MAP_TIME_ON_RUNNING_DFT,
+    MAP_TIME_ON_STOPPED_DFT,
+    CONN_TIME_DFT,
+    DEV_POLL_CYCLE_TIME_DFT,
+    MAX_NUM_FRAMES_TO_SEND_DFT,
+    UPDATE_GPS_TIME,
+    DFT_DIG_OUT_DFT,
+    MAX_NUM_STORE_ON_STOPPED_DFT,
+    MAX_NUM_STORE_ON_RUNNING_DFT
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -129,79 +133,60 @@ Config_set(Config *cfg)
 }
 
 void
-Config_setMappingTime(rui8_t value)
+Config_setAccLimit(rui8_t value)
 {
     Config *cfg;
 
     cfg = Config_get();
-    cfg->smptime = value;
+    cfg->accLimit = value;
     Config_set(cfg);
 }
 
 rui8_t
-Config_getMappingTime(void)
+Config_getAccLimit(void)
 {
     Config *cfg;
 
     cfg = Config_get();
-    return cfg->smptime;
+    return cfg->accLimit;
 }
 
 void
-Config_setDftDigOut(DigOut value)
+Config_setBrLimit(rui8_t value)
 {
     Config *cfg;
 
     cfg = Config_get();
-    cfg->digOut = value;
-    Config_set(cfg);
-}
-
-DigOut
-Config_getDftDigOut(void)
-{
-    Config *cfg;
-
-    cfg = Config_get();
-    return cfg->digOut;
-}
-
-void
-Config_setUpdateLocTime(rui8_t value)
-{
-    Config *cfg;
-
-    cfg = Config_get();
-    cfg->gpsttime = value;
+    cfg->brLimit = value;
     Config_set(cfg);
 }
 
 rui8_t
-Config_getUpdateLocTime(void)
+Config_getBrLimit(void)
 {
     Config *cfg;
 
     cfg = Config_get();
-    return cfg->gpsttime;
+    return cfg->brLimit;
 }
 
 void
-Config_setConnPeriodTime(rui8_t value)
+Config_setDefault(rui8_t value)
 {
     Config *cfg;
 
     cfg = Config_get();
-    cfg->conntime = value;
+    cfg->status = value;
     Config_set(cfg);
 }
 
 rui8_t
-Config_getConnPeriodTime(void)
+Config_getDefault(void)
 {
     Config *cfg;
 
     cfg = Config_get();
-    return cfg->conntime;
+    return cfg->status;
 }
 
 void
@@ -237,60 +222,174 @@ Config_getPort(char *value)
 }
 
 void
-Config_setDefault(rui8_t value)
+Config_setMapTimeOnRunning(rui8_t value)
 {
     Config *cfg;
 
     cfg = Config_get();
-    cfg->status = value;
+    cfg->mapTimeOnRunning = value;
     Config_set(cfg);
 }
 
 rui8_t
-Config_getDefault(void)
+Config_getMapTimeOnRunning(void)
 {
     Config *cfg;
 
     cfg = Config_get();
-    return cfg->status;
+    return cfg->mapTimeOnRunning;
 }
 
 void
-Config_setAccLimit(rui8_t value)
+Config_setMapTimeOnStopped(rui8_t value)
 {
     Config *cfg;
 
     cfg = Config_get();
-    cfg->aclimit = value;
+    cfg->mapTimeOnStopped = value;
     Config_set(cfg);
 }
 
 rui8_t
-Config_getAccLimit(void)
+Config_getMapTimeOnStopped(void)
 {
     Config *cfg;
 
     cfg = Config_get();
-    return cfg->aclimit;
+    return cfg->mapTimeOnStopped;
 }
 
 void
-Config_setBrakeLimit(rui8_t value)
+Config_setConnTime(rui8_t value)
 {
     Config *cfg;
 
     cfg = Config_get();
-    cfg->brlimit = value;
+    cfg->connTime = value;
     Config_set(cfg);
 }
 
 rui8_t
-Config_getBrakeLimit(void)
+Config_getConnTime(void)
 {
     Config *cfg;
 
     cfg = Config_get();
-    return cfg->brlimit;
+    return cfg->connTime;
+}
+
+void
+Config_setDevPollCycleTime(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->devPollCycleTime = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getDevPollCycleTime(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->devPollCycleTime;
+}
+
+void
+Config_setMaxNumFramesToSend(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->maxNumFramesToSend = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getMaxNumFramesToSend(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->maxNumFramesToSend;
+}
+
+void
+Config_setUpdateGPSTime(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->updateGPSTime = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getUpdateGPSTime(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->updateGPSTime;
+}
+
+void
+Config_setDftDigOut(DigOut value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->dftDigOut = value;
+    Config_set(cfg);
+}
+
+DigOut
+Config_getDftDigOut(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->dftDigOut;
+}
+
+void
+Config_setMaxNumStoreOnStopped(DigOut value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->maxNumStoreOnStopped = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getMaxNumStoreOnStopped(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->maxNumStoreOnStopped;
+}
+
+void
+Config_setMaxNumStoreOnRunning(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->maxNumStoreOnRunning = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getMaxNumStoreOnRunning(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->maxNumStoreOnRunning;
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -369,7 +369,7 @@ turnsDetect(GeoMgr *const me)
         cog = diff < (360 - diff) ? diff : (360 - diff);
         me->cog = currCog;
 
-        if (cog > Config_getBrakeLimit())
+        if (cog > Config_getBrLimit())
         {
             topic_publish(Status, &turnEvt, me);
         }

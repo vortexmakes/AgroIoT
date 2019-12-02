@@ -79,13 +79,13 @@ testDevNullJobCond(Collector *const me)
 static RKH_TNT_T
 getMapTimeOnStopped(void)
 {
-    return RKH_TIME_SEC(Config_getConnPeriodTime());
+    return RKH_TIME_SEC(Config_getConnTime());
 }
 
 static RKH_TNT_T
 getMapTimeOnRunning(void)
 {
-    return RKH_TIME_SEC(Config_getMappingTime());
+    return RKH_TIME_SEC(Config_getMapTimeOnRunning());
 }
 
 static void
@@ -312,9 +312,8 @@ Mapping_isSyncDirOnStopped(const RKH_SM_T *me, RKH_EVT_T *pe)
 {
     (void)pe;
 
-    /* Should be defined in Config_getNumStoreInStopped() -> 240 */
-    return (RKH_UPCAST(Mapping, me)->nStoreLastSync >= 240) ?
-           RKH_TRUE : RKH_FALSE;
+    return (RKH_UPCAST(Mapping, me)->nStoreLastSync >= 
+            Config_getMaxNumStoreOnStopped()) ? RKH_TRUE : RKH_FALSE;
 }
 
 rbool_t
@@ -322,9 +321,8 @@ Mapping_isSyncDirOnRunning(const RKH_SM_T *me, RKH_EVT_T *pe)
 {
     (void)pe;
 
-    /* Should be defined in Config_getNumStoreInRunning() -> 100 */
-    return (RKH_UPCAST(Mapping, me)->nStoreLastSync >= 100) ?
-           RKH_TRUE : RKH_FALSE;
+    return (RKH_UPCAST(Mapping, me)->nStoreLastSync >= 
+            Config_getMaxNumStoreOnRunning()) ? RKH_TRUE : RKH_FALSE;
 }
 
 /* ------------------------------ End of file ------------------------------ */
