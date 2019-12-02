@@ -31,6 +31,7 @@
 #include "ps.h"
 #include "tplink.h"
 #include "tplhal.h"
+#include "Config.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
@@ -179,7 +180,7 @@ nIdle(DeviceMgr *const me)
 {
     RKH_TMR_ONESHOT(&me->tmr.tmr,
                     RKH_UPCAST(RKH_SMA_T, me),
-                    DEVICE_CYCLE_TIME);
+                    Config_getDevPollCycleTime());
 }
 
 /* ............................. Exit actions .............................. */

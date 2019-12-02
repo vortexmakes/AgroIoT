@@ -322,7 +322,7 @@ test_StartAndStopSyncStoppedTmr(void)
     me->base.sm.state = RKH_CAST(RKH_ST_T, &DevStatus_DevNotConnected);
     region = &me->itsMapping;
 
-    Config_getConnPeriodTime_ExpectAndReturn(60);
+    Config_getConnTime_ExpectAndReturn(60);
     rkh_tmr_init__Expect(&region->syncStoppedTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncStoppedTmr));
     rkh_tmr_start_Expect(&region->syncStoppedTmr.tmr,
@@ -372,7 +372,7 @@ test_StartAndStopSyncRunningTmr(void)
     me->base.sm.state = RKH_CAST(RKH_ST_T, &DevStatus_DevNotConnected);
     region = &me->itsMapping;
 
-    Config_getMappingTime_ExpectAndReturn(3);
+    Config_getMapTimeOnRunning_ExpectAndReturn(3);
     rkh_tmr_init__Expect(&region->syncRunningTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &region->syncRunningTmr));
     rkh_tmr_start_Expect(&region->syncRunningTmr.tmr,
@@ -393,11 +393,13 @@ test_IsSyncDirOnStopped(void)
 
     region = &me->itsMapping;
     region->nStoreLastSync = 80;
+    Config_getMaxNumStoreOnStopped_ExpectAndReturn(240);
     result = Mapping_isSyncDirOnStopped(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_FALSE, result);
 
     region->nStoreLastSync = 240;
+    Config_getMaxNumStoreOnStopped_ExpectAndReturn(240);
     result = Mapping_isSyncDirOnStopped(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_TRUE, result);
@@ -411,11 +413,13 @@ test_IsSyncDirOnRunning(void)
 
     region = &me->itsMapping;
     region->nStoreLastSync = 80;
+    Config_getMaxNumStoreOnRunning_ExpectAndReturn(100);
     result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_FALSE, result);
 
     region->nStoreLastSync = 100;
+    Config_getMaxNumStoreOnRunning_ExpectAndReturn(100);
     result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_TRUE, result);

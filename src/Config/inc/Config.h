@@ -46,7 +46,7 @@ struct Config
     /**
      * Indicates the value in which the system has suddenly braked
      */
-    rui8_t brlimit;
+    rui8_t brLimit;
 
     /**
      * If status is set to 0, the configuration is set to default
@@ -90,23 +90,31 @@ struct Config
     rui8_t devPollCycleTime;
 
     /**
+     * Max. number of frames (status) to send in a multiframe message.
+     */
+    rui8_t maxNumFramesToSend;
+
+    /**
      * The location is received by the GPS device every T seconds
      */
-    rui8_t gpsttime;
+    rui8_t updateGPSTime;
 
     /**
      * Default logic state of digital outputs
      */
-    DigOut digOut;
+    DigOut dftDigOut;
 
     /**
-     * The mapping is performed by collecting the different
-     * status of the system, including its location, every T seconds,
-     * which is called the mapping time. This period depends on the
-     * mapping state (Stopped or Running). In Stopped state the system
-     * stores its status every smptime.
+     * Max. number of status storage in mapping stopped state before 
+     * synchronize the file system.
      */
-    rui8_t smptime;
+    rui8_t maxNumStoreOnStopped;
+
+    /**
+     * Max. number of status storage in mapping running state before 
+     * synchronize the file system.
+     */
+    rui8_t maxNumStoreOnRunning;
 };
 
 /* -------------------------- External variables --------------------------- */
@@ -117,24 +125,34 @@ Config *Config_get(void);
 void Config_set(Config *cfg);
 
 /** Setters and getters */
-void Config_setMappingTime(rui8_t value);
-rui8_t Config_getMappingTime(void);
-void Config_setDftDigOut(DigOut value);
-DigOut Config_getDftDigOut(void);
-void Config_setUpdateLocTime(rui8_t value);
-rui8_t Config_getUpdateLocTime(void);
-void Config_setConnPeriodTime(rui8_t value);
-rui8_t Config_getConnPeriodTime(void);
+void Config_setAccLimit(rui8_t value);
+rui8_t Config_getAccLimit(void);
+void Config_setBrLimit(rui8_t value);
+rui8_t Config_getBrLimit(void);
+void Config_setDefault(rui8_t value);
+rui8_t Config_getDefault(void);
 void Config_setIP(char *value);
 void Config_getIP(char *value);
 void Config_setPort(char *value);
 void Config_getPort(char *value);
-void Config_setDefault(rui8_t value);
-rui8_t Config_getDefault(void);
-void Config_setAccLimit(rui8_t value);
-rui8_t Config_getAccLimit(void);
-void Config_setBrakeLimit(rui8_t value);
-rui8_t Config_getBrakeLimit(void);
+void Config_setMapTimeOnRunning(rui8_t value);
+rui8_t Config_getMapTimeOnRunning(void);
+void Config_setMapTimeOnStopped(rui8_t value);
+rui8_t Config_getMapTimeOnStopped(void);
+void Config_setConnTime(rui8_t value);
+rui8_t Config_getConnTime(void);
+void Config_setDevPollCycleTime(rui8_t value);
+rui8_t Config_getDevPollCycleTime(void);
+void Config_setMaxNumFramesToSend(rui8_t value);
+rui8_t Config_getMaxNumFramesToSend(void);
+void Config_setUpdateGPSTime(rui8_t value);
+rui8_t Config_getUpdateGPSTime(void);
+void Config_setDftDigOut(DigOut value);
+DigOut Config_getDftDigOut(void);
+void Config_setMaxNumStoreOnStopped(rui8_t value);
+rui8_t Config_getMaxNumStoreOnStopped(void);
+void Config_setMaxNumStoreOnRunning(rui8_t value);
+rui8_t Config_getMaxNumStoreOnRunning(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

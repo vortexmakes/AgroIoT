@@ -25,12 +25,11 @@
 #include "StatQue.h"
 #include "settings.h"
 #include "rkhassert.h"
+#include "Config.h"
 
 RKH_MODULE_NAME(CommMgrAct);
 
 /* ----------------------------- Local macros ------------------------------ */
-#define WaitTime0	RKH_TIME_SEC(60)
-
 /* ------------------------------- Constants ------------------------------- */
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 
@@ -211,8 +210,12 @@ void
 CommMgr_enWaitSync(CommMgr *const me)
 {
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
-	RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
+	RKH_TMR_INIT(&me->tmEvtObj0.tmr, 
+                 RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), 
+                 NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, 
+                    RKH_UPCAST(RKH_SMA_T, me), 
+                    RKH_TIME_SEC(Config_getConnTime()));
 }
 
 void 

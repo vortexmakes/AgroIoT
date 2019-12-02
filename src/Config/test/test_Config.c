@@ -29,16 +29,20 @@
 /* ------------------------------- Constants ------------------------------- */
 static const Config cfgDft =
 {
-    ACLIMIT_DFT,
-    BRLIMIT_DFT,
+    ACC_LIMIT_DFT,
+    BR_LIMIT_DFT,
     1,
     IP_DFT,
     PORT_DFT,
-    CONNTIME_DFT,
-    TOTACTTIME,
-    GPSTTIME,
-    DIGOUT_DFT,
-    SMPTIME_DFT
+    MAP_TIME_ON_RUNNING_DFT,
+    MAP_TIME_ON_STOPPED_DFT,
+    CONN_TIME_DFT,
+    DEV_POLL_CYCLE_TIME_DFT,
+    MAX_NUM_FRAMES_TO_SEND_DFT,
+    UPDATE_GPS_TIME,
+    DFT_DIG_OUT_DFT,
+    MAX_NUM_STORE_ON_STOPPED_DFT,
+    MAX_NUM_STORE_ON_RUNNING_DFT
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -46,16 +50,20 @@ static const Config cfgDft =
 /* ---------------------------- Local variables ---------------------------- */
 static Config cfgFile =
 {
-    ACLIMIT_DFT,
-    BRLIMIT_DFT,
+    ACC_LIMIT_DFT,
+    BR_LIMIT_DFT,
     1,
     "\"111.22.33.444\"",
     "44500",
-    70,
+    3,
+    60,
+    60,
+    2,
     100,
-    9,
-    1,
-    2
+    2,
+    0,
+    240,
+    100
 };
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -100,15 +108,19 @@ test_InitWithoutStoredSettings(void)
 
     TEST_ASSERT_NOT_NULL(cfg);
     TEST_ASSERT_EQUAL(cfgDft.accLimit, cfg->accLimit);
-    TEST_ASSERT_EQUAL(cfgDft.brlimit, cfg->brlimit);
+    TEST_ASSERT_EQUAL(cfgDft.brLimit, cfg->brLimit);
     TEST_ASSERT_EQUAL(cfgDft.status, cfg->status);
     TEST_ASSERT_EQUAL_STRING(cfgDft.ip, cfg->ip);
     TEST_ASSERT_EQUAL_STRING(cfgDft.port, cfg->port);
     TEST_ASSERT_EQUAL(cfgDft.mapTimeOnRunning, cfg->mapTimeOnRunning);
     TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
-    TEST_ASSERT_EQUAL(cfgDft.gpsttime, cfg->gpsttime);
-    TEST_ASSERT_EQUAL(cfgDft.digOut, cfg->digOut);
-    TEST_ASSERT_EQUAL(cfgDft.smptime, cfg->smptime);
+    TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
+    TEST_ASSERT_EQUAL(cfgDft.devPollCycleTime, cfg->devPollCycleTime);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumFramesToSend, cfg->maxNumFramesToSend);
+    TEST_ASSERT_EQUAL(cfgDft.updateGPSTime, cfg->updateGPSTime);
+    TEST_ASSERT_EQUAL(cfgDft.dftDigOut, cfg->dftDigOut);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
 }
 
 void
@@ -128,15 +140,19 @@ test_InitWithStoredSettings(void)
 
     TEST_ASSERT_NOT_NULL(cfg);
     TEST_ASSERT_EQUAL(cfgFile.accLimit, cfg->accLimit);
-    TEST_ASSERT_EQUAL(cfgFile.brlimit, cfg->brlimit);
+    TEST_ASSERT_EQUAL(cfgFile.brLimit, cfg->brLimit);
     TEST_ASSERT_EQUAL(cfgFile.status, cfg->status);
     TEST_ASSERT_EQUAL_STRING(cfgFile.ip, cfg->ip);
     TEST_ASSERT_EQUAL_STRING(cfgFile.port, cfg->port);
-    TEST_ASSERT_EQUAL(cfgFile.connTime, cfg->connTime);
-    TEST_ASSERT_EQUAL(cfgFile.totacttime, cfg->totacttime);
-    TEST_ASSERT_EQUAL(cfgFile.gpsttime, cfg->gpsttime);
-    TEST_ASSERT_EQUAL(cfgFile.digOut, cfg->digOut);
-    TEST_ASSERT_EQUAL(cfgFile.smptime, cfg->smptime);
+    TEST_ASSERT_EQUAL(cfgFile.mapTimeOnRunning, cfg->mapTimeOnRunning);
+    TEST_ASSERT_EQUAL(cfgFile.mapTimeOnStopped, cfg->mapTimeOnStopped);
+    TEST_ASSERT_EQUAL(cfgFile.mapTimeOnStopped, cfg->mapTimeOnStopped);
+    TEST_ASSERT_EQUAL(cfgFile.devPollCycleTime, cfg->devPollCycleTime);
+    TEST_ASSERT_EQUAL(cfgFile.maxNumFramesToSend, cfg->maxNumFramesToSend);
+    TEST_ASSERT_EQUAL(cfgFile.updateGPSTime, cfg->updateGPSTime);
+    TEST_ASSERT_EQUAL(cfgFile.dftDigOut, cfg->dftDigOut);
+    TEST_ASSERT_EQUAL(cfgFile.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
+    TEST_ASSERT_EQUAL(cfgFile.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
 }
 
 void
@@ -161,15 +177,19 @@ test_InitWithFileError(void)
 
     TEST_ASSERT_NOT_NULL(cfg);
     TEST_ASSERT_EQUAL(cfgDft.accLimit, cfg->accLimit);
-    TEST_ASSERT_EQUAL(cfgDft.brlimit, cfg->brlimit);
+    TEST_ASSERT_EQUAL(cfgDft.brLimit, cfg->brLimit);
     TEST_ASSERT_EQUAL(cfgDft.status, cfg->status);
     TEST_ASSERT_EQUAL_STRING(cfgDft.ip, cfg->ip);
     TEST_ASSERT_EQUAL_STRING(cfgDft.port, cfg->port);
-    TEST_ASSERT_EQUAL(cfgDft.conntime, cfg->conntime);
-    TEST_ASSERT_EQUAL(cfgDft.totacttime, cfg->totacttime);
-    TEST_ASSERT_EQUAL(cfgDft.gpsttime, cfg->gpsttime);
-    TEST_ASSERT_EQUAL(cfgDft.digOut, cfg->digOut);
-    TEST_ASSERT_EQUAL(cfgDft.smptime, cfg->smptime);
+    TEST_ASSERT_EQUAL(cfgDft.mapTimeOnRunning, cfg->mapTimeOnRunning);
+    TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
+    TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
+    TEST_ASSERT_EQUAL(cfgDft.devPollCycleTime, cfg->devPollCycleTime);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumFramesToSend, cfg->maxNumFramesToSend);
+    TEST_ASSERT_EQUAL(cfgDft.updateGPSTime, cfg->updateGPSTime);
+    TEST_ASSERT_EQUAL(cfgDft.dftDigOut, cfg->dftDigOut);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
 }
 
 void
@@ -267,9 +287,9 @@ test_SetFailsWrongFileAccess(void)
 }
 
 void
-test_SetGetMappingTime(void)
+test_SetGetAccLimit(void)
 {
-    rui8_t time;
+    rui8_t value;
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -280,20 +300,20 @@ test_SetGetMappingTime(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    time = 4;
-    Config_setMappingTime(time);
+    value = 4;
+    Config_setAccLimit(value);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL(time, cfg->smptime);
+    TEST_ASSERT_EQUAL(value, cfg->accLimit);
 
-    time = 0;
-    time = Config_getMappingTime();
-    TEST_ASSERT_EQUAL(time, cfg->smptime);
+    value = 0;
+    value = Config_getAccLimit();
+    TEST_ASSERT_EQUAL(value, cfg->accLimit);
 }
 
 void
-test_SetGetDftDigOut(void)
+test_SetGetBrakeLimit(void)
 {
-    DigOut out;
+    rui8_t value;
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -304,20 +324,20 @@ test_SetGetDftDigOut(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    out = 4;
-    Config_setDftDigOut(out);
+    value = 4;
+    Config_setBrLimit(value);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL(out, cfg->digOut);
+    TEST_ASSERT_EQUAL(value, cfg->brLimit);
 
-    out = 0;
-    out = Config_getDftDigOut();
-    TEST_ASSERT_EQUAL(out, cfg->digOut);
+    value = 0;
+    value = Config_getBrLimit();
+    TEST_ASSERT_EQUAL(value, cfg->brLimit);
 }
 
 void
-test_SetGetUpdateLocTime(void)
+test_SetGetDefault(void)
 {
-    rui8_t time;
+    rui8_t value;
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -328,38 +348,14 @@ test_SetGetUpdateLocTime(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    time = 4;
-    Config_setUpdateLocTime(time);
+    value = 1;
+    Config_setDefault(value);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL(time, cfg->gpsttime);
+    TEST_ASSERT_EQUAL(value, cfg->status);
 
-    time = 0;
-    time = Config_getUpdateLocTime();
-    TEST_ASSERT_EQUAL(time, cfg->gpsttime);
-}
-
-void
-test_SetGetConnPeriodTime(void)
-{
-    rui8_t time;
-    Config *cfg;
-
-    rkh_enter_critical_Ignore();
-    rkh_exit_critical_Ignore();
-    rkh_enter_critical_Ignore();
-    ffile_seek_Ignore();
-    ffile_random_access_IgnoreAndReturn(1);
-    ffile_sync_Ignore();
-    rkh_exit_critical_Ignore();
-
-    time = 4;
-    Config_setConnPeriodTime(time);
-    cfg = Config_get();
-    TEST_ASSERT_EQUAL(time, cfg->conntime);
-
-    time = 0;
-    time = Config_getConnPeriodTime();
-    TEST_ASSERT_EQUAL(time, cfg->conntime);
+    value = 0;
+    value = Config_getDefault();
+    TEST_ASSERT_EQUAL(value, cfg->status);
 }
 
 void
@@ -479,9 +475,9 @@ test_GetPort(void)
 }
 
 void
-test_SetGetDefault(void)
+test_SetGetMapTimeOnRunning(void)
 {
-    rui8_t value;
+    rui8_t time;
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -492,20 +488,20 @@ test_SetGetDefault(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    value = 1;
-    Config_setDefault(value);
+    time = 4;
+    Config_setMapTimeOnRunning(time);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL(value, cfg->status);
+    TEST_ASSERT_EQUAL(time, cfg->mapTimeOnRunning);
 
-    value = 0;
-    value = Config_getDefault();
-    TEST_ASSERT_EQUAL(value, cfg->status);
+    time = 0;
+    time = Config_getMapTimeOnRunning();
+    TEST_ASSERT_EQUAL(time, cfg->mapTimeOnRunning);
 }
 
 void
-test_SetGetAccLimit(void)
+test_SetGetMapTimeOnStopped(void)
 {
-    rui8_t value;
+    rui8_t time;
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -516,20 +512,20 @@ test_SetGetAccLimit(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    value = 4;
-    Config_setAccLimit(value);
+    time = 4;
+    Config_setMapTimeOnStopped(time);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL(value, cfg->accLimit);
+    TEST_ASSERT_EQUAL(time, cfg->mapTimeOnStopped);
 
-    value = 0;
-    value = Config_getAccLimit();
-    TEST_ASSERT_EQUAL(value, cfg->accLimit);
+    time = 0;
+    time = Config_getMapTimeOnStopped();
+    TEST_ASSERT_EQUAL(time, cfg->mapTimeOnStopped);
 }
 
 void
-test_SetGetBrakeLimit(void)
+test_SetGetConnTime(void)
 {
-    rui8_t value;
+    rui8_t time;
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -540,14 +536,158 @@ test_SetGetBrakeLimit(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    value = 4;
-    Config_setBrakeLimit(value);
+    time = 4;
+    Config_setConnTime(time);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL(value, cfg->brlimit);
+    TEST_ASSERT_EQUAL(time, cfg->connTime);
 
-    value = 0;
-    value = Config_getBrakeLimit();
-    TEST_ASSERT_EQUAL(value, cfg->brlimit);
+    time = 0;
+    time = Config_getConnTime();
+    TEST_ASSERT_EQUAL(time, cfg->connTime);
+}
+
+void
+test_SetGetDevPollCycleTime(void)
+{
+    rui8_t time;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    time = 4;
+    Config_setDevPollCycleTime(time);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(time, cfg->devPollCycleTime);
+
+    time = 0;
+    time = Config_getDevPollCycleTime();
+    TEST_ASSERT_EQUAL(time, cfg->devPollCycleTime);
+}
+
+void
+test_SetGetMaxNumFramesToSend(void)
+{
+    rui8_t time;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    time = 4;
+    Config_setMaxNumFramesToSend(time);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(time, cfg->maxNumFramesToSend);
+
+    time = 0;
+    time = Config_getMaxNumFramesToSend();
+    TEST_ASSERT_EQUAL(time, cfg->maxNumFramesToSend);
+}
+
+void
+test_SetGetUpdateGPSTime(void)
+{
+    rui8_t time;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    time = 4;
+    Config_setUpdateGPSTime(time);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(time, cfg->updateGPSTime);
+
+    time = 0;
+    time = Config_getUpdateGPSTime();
+    TEST_ASSERT_EQUAL(time, cfg->updateGPSTime);
+}
+
+void
+test_SetGetDftDigOut(void)
+{
+    DigOut out;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    out = 4;
+    Config_setDftDigOut(out);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(out, cfg->dftDigOut);
+
+    out = 0;
+    out = Config_getDftDigOut();
+    TEST_ASSERT_EQUAL(out, cfg->dftDigOut);
+}
+
+void
+test_SetMaxNumStoreOnStopped(void)
+{
+    DigOut out;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    out = 4;
+    Config_setMaxNumStoreOnStopped(out);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(out, cfg->maxNumStoreOnStopped);
+
+    out = 0;
+    out = Config_getMaxNumStoreOnStopped();
+    TEST_ASSERT_EQUAL(out, cfg->maxNumStoreOnStopped);
+}
+
+void
+test_SetMaxNumStoreOnRunning(void)
+{
+    DigOut out;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    out = 4;
+    Config_setMaxNumStoreOnRunning(out);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(out, cfg->maxNumStoreOnRunning);
+
+    out = 0;
+    out = Config_getMaxNumStoreOnRunning();
+    TEST_ASSERT_EQUAL(out, cfg->maxNumStoreOnRunning);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -17,6 +17,7 @@
     - ../YFrame/inc
     - ../topic/inc
     - ../StatQue/inc
+    - ../Config/inc
     - ../
   :support:
 
