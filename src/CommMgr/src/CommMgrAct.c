@@ -132,15 +132,6 @@ void
 CommMgr_SendingHistToC2Ext18(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*nextSend();*/
-    rInt res;
-    GPS_STR from;
-    GStatus to;
-
-    res = StatQue_read(&from);
-    RKH_ENSURE(res == 0);
-    res = GStatus_fromGpsStr(&from, &to);
-    RKH_ENSURE(res == 0);
-    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
     --me->framesToSend;
 }
 
@@ -198,6 +189,21 @@ void
 CommMgr_SendingStartOfHistToSendingHistExt30(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*sendFirst();*/
+    rInt res;
+    GPS_STR from;
+    GStatus to;
+
+    res = StatQue_read(&from);
+    RKH_ENSURE(res == 0);
+    res = GStatus_fromGpsStr(&from, &to);
+    RKH_ENSURE(res == 0);
+    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
+}
+
+void 
+CommMgr_C1ToSendingHistExt31(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*prepareNext();*/
     rInt res;
     GPS_STR from;
     GStatus to;
