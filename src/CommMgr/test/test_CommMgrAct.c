@@ -35,7 +35,8 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 RKHROM RKH_SBSC_T Idle, WaitSync, SendingStatus, ReceivingStatusAck, 
-                     SendingEndOfHist, SendingHist, ReceivingMsgAck;
+                     SendingEndOfHist, SendingHist, ReceivingMsgAck,
+                     SendingStartOfHist;
 RKHROM RKH_SCMP_T Active, Current, History;
 RKHROM RKH_SCHOICE_T C0, C1, C2, C3, C4;
 RKHROM RKH_FINAL_T CurrentFinal, HistoryFinal;
@@ -384,22 +385,50 @@ test_StartHistoryMessage(void)
 {
     ruint headerLen;
 
-    StatQue_init_ExpectAndReturn(2);
-    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
-    CommMgr_isCondC1ToSendingHist20(me, 
-                                    RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
-
     me->status = gStatus;
     headerLen = strlen("!1|0002|355826018345180");
 
+    StatQue_init_ExpectAndReturn(2);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     YFrame_header_ExpectAndReturn(&me->status, me->evSendObj.buf,
                                   me->nFramesToSend, 
                                   YFRAME_MGP_TYPE, headerLen);
+    topic_publish_Expect(TCPConnection, 
+                         RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
+                         RKH_UPCAST(RKH_SMA_T, me));
 
-    CommMgr_C1ToSendingHistExt20(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    CommMgr_enSendingStartOfHist(me);
 
     TEST_ASSERT_EQUAL(me->nFramesToSend, me->framesToSend);
     TEST_ASSERT_EQUAL(headerLen, me->evSendObj.size);
+}
+
+void
+test_PrepareFirstMessage(void)
+{
+    ruint len;
+    GPS_STR *elem;
+    GStatus *to;
+    ruint nFrames;
+
+    len = strlen(singleFrame);
+    nFrames = 2;
+    me->framesToSend = nFrames;
+
+    StatQue_read_ExpectAndReturn(elem, 0);
+    StatQue_read_IgnoreArg_elem();
+    GStatus_fromGpsStr_ExpectAndReturn(elem, to, 0);
+    GStatus_fromGpsStr_IgnoreArg_from();
+    GStatus_fromGpsStr_IgnoreArg_to();
+    YFrame_data_ExpectAndReturn(to, 
+                                me->evSendObj.buf, 
+                                YFRAME_MGP_TYPE, len);
+    YFrame_data_IgnoreArg_from(); 
+
+    CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
+
+    TEST_ASSERT_EQUAL(nFrames, me->framesToSend);
+    TEST_ASSERT_EQUAL(len, me->evSendObj.size);
 }
 
 void
