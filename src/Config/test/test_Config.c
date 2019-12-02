@@ -104,8 +104,8 @@ test_InitWithoutStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgDft.status, cfg->status);
     TEST_ASSERT_EQUAL_STRING(cfgDft.ip, cfg->ip);
     TEST_ASSERT_EQUAL_STRING(cfgDft.port, cfg->port);
-    TEST_ASSERT_EQUAL(cfgDft.conntime, cfg->conntime);
-    TEST_ASSERT_EQUAL(cfgDft.totacttime, cfg->totacttime);
+    TEST_ASSERT_EQUAL(cfgDft.mapTimeOnRunning, cfg->mapTimeOnRunning);
+    TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
     TEST_ASSERT_EQUAL(cfgDft.gpsttime, cfg->gpsttime);
     TEST_ASSERT_EQUAL(cfgDft.digOut, cfg->digOut);
     TEST_ASSERT_EQUAL(cfgDft.smptime, cfg->smptime);
@@ -132,7 +132,7 @@ test_InitWithStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgFile.status, cfg->status);
     TEST_ASSERT_EQUAL_STRING(cfgFile.ip, cfg->ip);
     TEST_ASSERT_EQUAL_STRING(cfgFile.port, cfg->port);
-    TEST_ASSERT_EQUAL(cfgFile.conntime, cfg->conntime);
+    TEST_ASSERT_EQUAL(cfgFile.connTime, cfg->connTime);
     TEST_ASSERT_EQUAL(cfgFile.totacttime, cfg->totacttime);
     TEST_ASSERT_EQUAL(cfgFile.gpsttime, cfg->gpsttime);
     TEST_ASSERT_EQUAL(cfgFile.digOut, cfg->digOut);

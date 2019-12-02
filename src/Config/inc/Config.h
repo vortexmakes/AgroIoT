@@ -49,7 +49,7 @@ struct Config
     rui8_t brlimit;
 
     /**
-     * When status is set to 0 configuration is set to default
+     * If status is set to 0, the configuration is set to default
      */
     rui8_t status;
 
@@ -64,17 +64,30 @@ struct Config
     char port[PORT_LENGTH + 1];
 
     /**
-     * The system connects to remote server in order to send it messages
-     * every conntime seconds
+     * The mapping is performed by collecting the different
+     * status of the system, including its location, every T seconds,
+     * which is called mapping time. This period depends on the
+     * mapping state (Stopped or Running). If it is in Stopped, it will store 
+     * its status every mapTimeOnStopped seconds, otherwise it will do every 
+     * mapTimeOnRunning seconds.
      */
-    rui8_t conntime;
+    rui8_t mapTimeOnRunning;
 
     /**
-     * Maximum time to register in the GSM network, open a TCP/IP socket,
-     * and send a message to the remote server
-     * Should it be deprecated?
+     * Find out more information in mapTimeOnRunning
      */
-    rui8_t totacttime;
+    rui8_t mapTimeOnStopped;
+
+    /**
+     * The system connects to a remote server in order to send it messages
+     * every connTime seconds. 
+     */
+    rui8_t connTime;
+
+    /**
+     * Every devPollCycleTime seconds a polling cycle starts over the RS485.
+     */
+    rui8_t devPollCycleTime;
 
     /**
      * The location is received by the GPS device every T seconds
