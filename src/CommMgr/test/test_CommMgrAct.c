@@ -30,6 +30,7 @@
 #include "Mock_topic.h"
 #include "Mock_StatQue.h"
 #include "Mock_rkhassert.h"
+#include "Mock_Config.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -127,6 +128,7 @@ test_StartSync(void)
 {
     rkh_tmr_init__Expect(&me->tmEvtObj0.tmr,
                          RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0));
+    Config_getConnTime_ExpectAndReturn(60);
     rkh_tmr_start_Expect(&me->tmEvtObj0.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
                          RKH_TIME_SEC(60), 0);
