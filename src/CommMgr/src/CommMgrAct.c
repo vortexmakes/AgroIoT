@@ -55,6 +55,7 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &SendingEndOfHist);
 	RKH_TR_FWK_STATE(me, &SendingHist);
 	RKH_TR_FWK_STATE(me, &ReceivingMsgAck);
+	RKH_TR_FWK_STATE(me, &SendingStartOfHist);
 	RKH_TR_FWK_SIG(evNetConnected);
 	RKH_TR_FWK_SIG(evNetDisconnected);
 	RKH_TR_FWK_SIG(evSent);
