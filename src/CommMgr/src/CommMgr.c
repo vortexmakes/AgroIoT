@@ -29,7 +29,7 @@ RKH_CREATE_BASIC_STATE(SendingHist, CommMgr_enSendingHist, NULL, &History, NULL)
 RKH_CREATE_BASIC_STATE(ReceivingMsgAck, CommMgr_enReceivingMsgAck, NULL, &History, NULL);
 RKH_CREATE_BASIC_STATE(SendingStartOfHist, CommMgr_enSendingStartOfHist, NULL, &History, NULL);
 
-RKH_CREATE_COMP_REGION_STATE(Active, NULL, NULL, RKH_ROOT, &WaitSync, CommMgr_ToC1Ext16, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(Active, NULL, NULL, RKH_ROOT, &WaitSync, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Current, NULL, NULL, &Active, &SendingStatus, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(History, NULL, NULL, &Active, &C1, CommMgr_ToC1Ext16, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 
@@ -63,6 +63,7 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_TRANS_TABLE(History)
 	RKH_TRREG(evRecvFail, NULL, CommMgr_HistoryToWaitSyncExt13, &WaitSync),
 	RKH_TRREG(evSendFail, NULL, CommMgr_HistoryToWaitSyncExt14, &WaitSync),
+    RKH_TRCOMPLETION(NULL, NULL, &WaitSync),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(SendingEndOfHist)
@@ -94,19 +95,19 @@ RKH_CREATE_BRANCH_TABLE(C0)
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C1)
-	RKH_BRANCH(CommMgr_isCondC1ToSendingHist20, CommMgr_C1ToSendingHistExt31, &SendingStartOfHist),
-	RKH_BRANCH(ELSE, NULL, &WaitSync),
+	RKH_BRANCH(CommMgr_isCondC1ToSendingHist20, NULL, &SendingStartOfHist),
+	RKH_BRANCH(ELSE, NULL, &HistoryFinal),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C2)
 	RKH_BRANCH(CommMgr_isCondC2ToSendingEndOfHist23, NULL, &SendingEndOfHist),
-	RKH_BRANCH(ELSE, NULL, &SendingHist),
+	RKH_BRANCH(ELSE, CommMgr_C1ToSendingHistExt31, &SendingHist),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C3)
 	RKH_BRANCH(CommMgr_isCondC3ToC425, CommMgr_C3ToC4Ext25, &C4),
 	RKH_BRANCH(CommMgr_isCondC3ToReceivingMsgAck29, NULL, &ReceivingMsgAck),
-	RKH_BRANCH(ELSE, CommMgr_C3ToHistoryFinalExt24, &WaitSync),
+	RKH_BRANCH(ELSE, CommMgr_C3ToHistoryFinalExt24, &HistoryFinal),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C4)
