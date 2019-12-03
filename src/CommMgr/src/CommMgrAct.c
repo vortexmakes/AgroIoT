@@ -25,12 +25,11 @@
 #include "StatQue.h"
 #include "settings.h"
 #include "rkhassert.h"
+#include "Config.h"
 
 RKH_MODULE_NAME(CommMgrAct);
 
 /* ----------------------------- Local macros ------------------------------ */
-#define WaitTime0	RKH_TIME_SEC(60)
-
 /* ------------------------------- Constants ------------------------------- */
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 
@@ -56,6 +55,7 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &SendingEndOfHist);
 	RKH_TR_FWK_STATE(me, &SendingHist);
 	RKH_TR_FWK_STATE(me, &ReceivingMsgAck);
+	RKH_TR_FWK_STATE(me, &SendingStartOfHist);
 	RKH_TR_FWK_SIG(evNetConnected);
 	RKH_TR_FWK_SIG(evNetDisconnected);
 	RKH_TR_FWK_SIG(evSent);
@@ -133,15 +133,6 @@ void
 CommMgr_SendingHistToC2Ext18(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*nextSend();*/
-    rInt res;
-    GPS_STR from;
-    GStatus to;
-
-    res = StatQue_read(&from);
-    RKH_ENSURE(res == 0);
-    res = GStatus_fromGpsStr(&from, &to);
-    RKH_ENSURE(res == 0);
-    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
     --me->framesToSend;
 }
 
@@ -153,15 +144,6 @@ CommMgr_ReceivingMsgAckToC3Ext19(CommMgr *const me, RKH_EVT_T *pe)
 
     realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
 	me->lastRecvResponse = YFrame_parse(realEvt->buf);
-}
-
-void 
-CommMgr_C1ToSendingHistExt20(CommMgr *const me, RKH_EVT_T *pe)
-{
-	/*sendStartOfHist();*/
-    me->framesToSend = me->nFramesToSend;
-    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 
-                                       me->nFramesToSend, YFRAME_MGP_TYPE);
 }
 
 void 
@@ -204,13 +186,47 @@ CommMgr_ActiveToActiveLoc0(CommMgr *const me, RKH_EVT_T *pe)
     me->isPendingStatus = true;
 }
 
+void 
+CommMgr_SendingStartOfHistToSendingHistExt30(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*sendFirst();*/
+    rInt res;
+    GPS_STR from;
+    GStatus to;
+
+    res = StatQue_read(&from);
+    RKH_ENSURE(res == 0);
+    res = GStatus_fromGpsStr(&from, &to);
+    RKH_ENSURE(res == 0);
+    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
+}
+
+void 
+CommMgr_C1ToSendingHistExt31(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*prepareNext();*/
+    rInt res;
+    GPS_STR from;
+    GStatus to;
+
+    res = StatQue_read(&from);
+    RKH_ENSURE(res == 0);
+    res = GStatus_fromGpsStr(&from, &to);
+    RKH_ENSURE(res == 0);
+    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
+}
+
 /* ............................. Entry actions ............................. */
 void 
 CommMgr_enWaitSync(CommMgr *const me)
 {
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
-	RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
+	RKH_TMR_INIT(&me->tmEvtObj0.tmr, 
+                 RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), 
+                 NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, 
+                    RKH_UPCAST(RKH_SMA_T, me), 
+                    RKH_TIME_SEC(Config_getConnTime()));
 }
 
 void 
@@ -264,6 +280,18 @@ CommMgr_enReceivingMsgAck(CommMgr *const me)
 	/*receive();*/
     topic_publish(TCPConnection, 
                   RKH_CAST(RKH_EVT_T, &evRecvObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
+}
+
+void 
+CommMgr_enSendingStartOfHist(CommMgr *const me)
+{
+	/*sendStartOfHist();*/
+    me->framesToSend = me->nFramesToSend;
+    me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 
+                                       me->nFramesToSend, YFRAME_MGP_TYPE);
+    topic_publish(TCPConnection, 
+                  RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                   RKH_UPCAST(RKH_SMA_T, me));
 }
 
