@@ -51,6 +51,23 @@ checkHist(CommMgr *const me)
     }
 }
 
+void
+parseReceived(CommMgr *const me, RKH_EVT_T *pe)
+{
+    ReceivedEvt *realEvt;
+
+    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
+	me->lastRecvResponse = YFrame_parse(realEvt->buf);
+}
+
+void
+publishReceive(CommMgr *const me)
+{
+    topic_publish(TCPConnection, 
+                  RKH_CAST(RKH_EVT_T, &evRecvObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
+}
+
 /* ............................ Effect actions ............................. */
 void 
 CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
@@ -107,10 +124,7 @@ void
 CommMgr_ReceivingStatusAckToC0Ext9(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*parseRecv();*/
-    ReceivedEvt *realEvt;
-
-    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
-	me->lastRecvResponse = YFrame_parse(realEvt->buf);
+	parseReceived(me, pe);
 }
 
 void 
@@ -149,10 +163,7 @@ void
 CommMgr_ReceivingMsgAckToC3Ext19(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*parseRecv();*/
-    ReceivedEvt *realEvt;
-
-    realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
-	me->lastRecvResponse = YFrame_parse(realEvt->buf);
+	parseReceived(me, pe);
 }
 
 void 
@@ -253,9 +264,7 @@ void
 CommMgr_enReceivingStatusAck(CommMgr *const me)
 {
 	/*receive();*/
-    topic_publish(TCPConnection, 
-                  RKH_CAST(RKH_EVT_T, &evRecvObj), 
-                  RKH_UPCAST(RKH_SMA_T, me));
+    publishReceive(me);
 }
 
 void 
@@ -281,9 +290,7 @@ void
 CommMgr_enReceivingMsgAck(CommMgr *const me)
 {
 	/*receive();*/
-    topic_publish(TCPConnection, 
-                  RKH_CAST(RKH_EVT_T, &evRecvObj), 
-                  RKH_UPCAST(RKH_SMA_T, me));
+    publishReceive(me);
 }
 
 void 
