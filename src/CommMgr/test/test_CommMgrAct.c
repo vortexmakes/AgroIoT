@@ -317,6 +317,7 @@ test_CheckHistory(void)
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
     StatQue_init_ExpectAndReturn(8);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(8, me->nFramesToSend);
 }
@@ -330,6 +331,7 @@ test_CheckHistoryEmpty(void)
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
     StatQue_init_ExpectAndReturn(0);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
@@ -338,6 +340,7 @@ test_CheckHistoryEmpty(void)
     TEST_ASSERT_EQUAL(0, me->nFramesToSend);
 
     StatQue_init_ExpectAndReturn(8);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
@@ -355,6 +358,7 @@ test_CheckHistoryNoEmpty(void)
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
     StatQue_init_ExpectAndReturn(2);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
@@ -371,7 +375,8 @@ test_CheckHistoryMaxFramesToSend(void)
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    StatQue_init_ExpectAndReturn(MAX_NFRAMES_TOSEND + 1);
+    StatQue_init_ExpectAndReturn(100 + 1);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
@@ -389,6 +394,7 @@ test_StartHistoryMessage(void)
     headerLen = strlen("!1|0002|355826018345180");
 
     StatQue_init_ExpectAndReturn(2);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     YFrame_header_ExpectAndReturn(&me->status, me->evSendObj.buf,
                                   me->nFramesToSend, 

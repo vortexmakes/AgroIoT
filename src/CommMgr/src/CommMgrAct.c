@@ -38,6 +38,19 @@ static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static void
+checkHist(CommMgr *const me)
+{
+    rui8_t maxNumFrames;
+
+    me->nFramesToSend = StatQue_init();
+    maxNumFrames = Config_getMaxNumFramesToSend();
+    if (me->nFramesToSend > maxNumFrames)
+    {
+        me->nFramesToSend = maxNumFrames;
+    }
+}
+
 /* ............................ Effect actions ............................. */
 void 
 CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
@@ -122,11 +135,7 @@ void
 CommMgr_ToC1Ext16(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
-    me->nFramesToSend = StatQue_init();
-    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
-    {
-        me->nFramesToSend = MAX_NFRAMES_TOSEND;
-    }
+	checkHist(me);
 }
 
 void 
@@ -168,11 +177,7 @@ void
 CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
-    me->nFramesToSend = StatQue_init();
-    if (me->nFramesToSend > MAX_NFRAMES_TOSEND)
-    {
-        me->nFramesToSend = MAX_NFRAMES_TOSEND;
-    }
+	checkHist(me);
 }
 
 void 
