@@ -185,7 +185,7 @@ static const CmdTbl cmdTbl =
 #ifdef GPRS_QUICK_SEND
      RKH_TIME_MS(10000), RKH_TIME_MS(500)},
 #else
-     RKH_TIME_MS(15000), RKH_TIME_MS(500)},
+     RKH_TIME_MS(20000), RKH_TIME_MS(500)},
 #endif
 
     /* readData */
