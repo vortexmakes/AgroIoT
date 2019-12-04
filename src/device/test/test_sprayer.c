@@ -36,12 +36,6 @@ RKH_SMA_DEF_PTR(collector);
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void
-MockAssertCallback(const char* const file, int line, int cmock_num_calls)
-{
-    TEST_PASS();
-}
-
-static void
 Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
                           JobCond *jobCond, DevVtbl *vtbl,
                           int cmock_num_calls)

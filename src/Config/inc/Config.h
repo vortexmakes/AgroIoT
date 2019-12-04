@@ -143,16 +143,16 @@ void Config_setConnTime(rui8_t value);
 rui8_t Config_getConnTime(void);
 void Config_setDevPollCycleTime(rui8_t value);
 rui8_t Config_getDevPollCycleTime(void);
-void Config_setMaxNumFramesToSend(rui8_t value);
-rui8_t Config_getMaxNumFramesToSend(void);
+void Config_setMaxNumFramesToSend(rui16_t value);
+rui16_t Config_getMaxNumFramesToSend(void);
 void Config_setUpdateGPSTime(rui8_t value);
 rui8_t Config_getUpdateGPSTime(void);
 void Config_setDftDigOut(DigOut value);
 DigOut Config_getDftDigOut(void);
-void Config_setMaxNumStoreOnStopped(rui8_t value);
-rui8_t Config_getMaxNumStoreOnStopped(void);
-void Config_setMaxNumStoreOnRunning(rui8_t value);
-rui8_t Config_getMaxNumStoreOnRunning(void);
+void Config_setMaxNumStoreOnStopped(rui16_t value);
+rui16_t Config_getMaxNumStoreOnStopped(void);
+void Config_setMaxNumStoreOnRunning(rui16_t value);
+rui16_t Config_getMaxNumStoreOnRunning(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

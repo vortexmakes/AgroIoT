@@ -99,6 +99,7 @@ DevA_makeEvt(Device *const me, CBOX_STR *rawData)
     evtDevAData.base.dev = me;
     evtDevAData.x = rawData->a.y; /* sets its attributes from rawData */
     evtDevAData.y = rawData->a.z;
+    return RKH_UPCAST(RKH_EVT_T, &evtDevAData);
 }
 
 static void

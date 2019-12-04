@@ -77,22 +77,22 @@ void
 test_InvalidArgs(void)
 {
     rInt result;
-    GPS_STR *oldStatus;
-    GStatus *newStatus;
+    GPS_STR oldStatus;
+    GStatus newStatus;
 
     result = GStatus_toGpsStr((GStatus *)0, (GPS_STR *)0);
     TEST_ASSERT_EQUAL(1, result);
 
-    result = GStatus_toGpsStr((GStatus *)0, oldStatus);
+    result = GStatus_toGpsStr((GStatus *)0, &oldStatus);
     TEST_ASSERT_EQUAL(1, result);
 
-    result = GStatus_toGpsStr(newStatus, (GPS_STR *)0);
+    result = GStatus_toGpsStr(&newStatus, (GPS_STR *)0);
     TEST_ASSERT_EQUAL(1, result);
 
-    result = GStatus_fromGpsStr(oldStatus, (GStatus *)0);
+    result = GStatus_fromGpsStr(&oldStatus, (GStatus *)0);
     TEST_ASSERT_EQUAL(1, result);
 
-    result = GStatus_fromGpsStr((GPS_STR *)0, newStatus);
+    result = GStatus_fromGpsStr((GPS_STR *)0, &newStatus);
     TEST_ASSERT_EQUAL(1, result);
 
     result = GStatus_fromGpsStr((GPS_STR *)0, (GStatus *)0);

@@ -53,8 +53,8 @@ struct CommMgr
     rbool_t isPendingStatus;
     TypeOfResp lastRecvResponse;
     SendEvt evSendObj;
-    ruint nFramesToSend;
-    ruint framesToSend;
+    rui16_t nFramesToSend;
+    rui16_t framesToSend;
 };
 
 /* -------------------------- External variables --------------------------- */

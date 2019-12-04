@@ -298,7 +298,7 @@ Config_getDevPollCycleTime(void)
 }
 
 void
-Config_setMaxNumFramesToSend(rui8_t value)
+Config_setMaxNumFramesToSend(rui16_t value)
 {
     Config *cfg;
 
@@ -307,7 +307,7 @@ Config_setMaxNumFramesToSend(rui8_t value)
     Config_set(cfg);
 }
 
-rui8_t
+rui16_t
 Config_getMaxNumFramesToSend(void)
 {
     Config *cfg;
@@ -355,7 +355,7 @@ Config_getDftDigOut(void)
 }
 
 void
-Config_setMaxNumStoreOnStopped(DigOut value)
+Config_setMaxNumStoreOnStopped(rui16_t value)
 {
     Config *cfg;
 
@@ -364,7 +364,7 @@ Config_setMaxNumStoreOnStopped(DigOut value)
     Config_set(cfg);
 }
 
-rui8_t
+rui16_t
 Config_getMaxNumStoreOnStopped(void)
 {
     Config *cfg;
@@ -374,7 +374,7 @@ Config_getMaxNumStoreOnStopped(void)
 }
 
 void
-Config_setMaxNumStoreOnRunning(rui8_t value)
+Config_setMaxNumStoreOnRunning(rui16_t value)
 {
     Config *cfg;
 
@@ -383,7 +383,7 @@ Config_setMaxNumStoreOnRunning(rui8_t value)
     Config_set(cfg);
 }
 
-rui8_t
+rui16_t
 Config_getMaxNumStoreOnRunning(void)
 {
     Config *cfg;

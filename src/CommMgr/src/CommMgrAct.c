@@ -41,7 +41,7 @@ static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static void
 checkHist(CommMgr *const me)
 {
-    rui8_t maxNumFrames;
+    rui16_t maxNumFrames;
 
     me->nFramesToSend = StatQue_init();
     maxNumFrames = Config_getMaxNumFramesToSend();
@@ -238,8 +238,6 @@ void
 CommMgr_enSendingStatus(CommMgr *const me)
 {
 	/*sendStatus();*/
-    ruint len;
-
     me->evSendObj.size = YFrame_header(&me->status, me->evSendObj.buf, 0, 
                                        YFRAME_SGP_TYPE);
     me->evSendObj.size += YFrame_data(&me->status,

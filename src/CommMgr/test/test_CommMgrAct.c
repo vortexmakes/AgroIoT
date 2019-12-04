@@ -68,8 +68,6 @@ static GStatus gStatus =
 };
 static const char singleFrame[] =
     "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
-static const char multipleFrame[] =
-    "!1|0002|355826018345180|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3#";
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -161,7 +159,7 @@ test_UpdateStatus(void)
 void
 test_SendCurrentStatus(void)
 {
-    ruint frameLen, len, headerLen;
+    ruint frameLen, headerLen;
 
     me->status = gStatus;
     frameLen = strlen(singleFrame);
@@ -169,7 +167,7 @@ test_SendCurrentStatus(void)
 
     YFrame_header_ExpectAndReturn(&me->status, me->evSendObj.buf, 0, 
                                   YFRAME_SGP_TYPE, headerLen);
-    YFrame_data_ExpectAndReturn(&me->status, &me->evSendObj.buf[len], 
+    YFrame_data_ExpectAndReturn(&me->status, &me->evSendObj.buf[headerLen], 
                                 YFRAME_SGP_TYPE, frameLen);
     topic_publish_Expect(TCPConnection, 
                          RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 

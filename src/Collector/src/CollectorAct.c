@@ -249,7 +249,6 @@ Collector_enActive(Collector *const me)
 void
 Collector_initAndTestDevNull(Collector *const me)
 {
-    const RKH_EVT_T *evt;
     int result;
 
     me->dev = (Device *)0;
