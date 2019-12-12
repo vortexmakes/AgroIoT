@@ -1,0 +1,11 @@
+GeneratorModel for yakindu::c::rkh {
+
+	statechart ConMgr {
+
+		feature Outlet {
+			targetProject = "AgroIot"
+			targetFolder = "src-gen-ConMgr"
+			libraryTargetFolder = "src-gen-ConMgr"
+		}
+	}
+}
