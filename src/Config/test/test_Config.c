@@ -158,10 +158,9 @@ test_InitWithStoredSettings(void)
 void
 test_InitWithFileError(void)
 {
-    Config *cfg, cfgErased;
+    Config *cfg;
 
     cfg = (Config *)0;
-    cfgErased.status = 0xff;
 
     ffile_seek_Expect(FFD1, 0);
     ffile_random_access_ExpectAndReturn(FFD1, READ_ACCESS, 0, 1, 0);
@@ -228,7 +227,7 @@ test_Get(void)
 void
 test_GetBeforeInitFile(void)
 {
-    Config *cfg, cfgErased;
+    Config cfgErased;
 
     cfgErased.status = 0xff;
     rkh_enter_critical_Expect();
@@ -239,14 +238,13 @@ test_GetBeforeInitFile(void)
 
     Config_set(&cfgErased);
 
-    cfg = (Config *)0;
     rkh_enter_critical_Expect();
     rkh_assert_Expect("Config", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
 
-    cfg = Config_get();
+    Config_get();
 }
 
 void
@@ -573,7 +571,7 @@ test_SetGetDevPollCycleTime(void)
 void
 test_SetGetMaxNumFramesToSend(void)
 {
-    rui8_t time;
+    rui16_t time;
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -645,7 +643,7 @@ test_SetGetDftDigOut(void)
 void
 test_SetMaxNumStoreOnStopped(void)
 {
-    DigOut out;
+    rui16_t out;
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -669,7 +667,7 @@ test_SetMaxNumStoreOnStopped(void)
 void
 test_SetMaxNumStoreOnRunning(void)
 {
-    DigOut out;
+    rui16_t out;
     Config *cfg;
 
     rkh_enter_critical_Ignore();

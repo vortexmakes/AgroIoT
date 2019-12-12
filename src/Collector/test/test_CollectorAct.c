@@ -164,8 +164,6 @@ test_UpdateDigOut(void)
 void
 test_StartAndStopUpdatingStatusTmr(void)
 {
-    GStatusEvt event;
-
     rkh_tmr_init__Expect(&me->updateStatusTmr.tmr,
                          RKH_UPCAST(RKH_EVT_T, &me->updateStatusTmr));
     rkh_tmr_start_Expect(&me->updateStatusTmr.tmr,

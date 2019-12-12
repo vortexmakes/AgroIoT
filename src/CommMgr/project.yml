@@ -74,6 +74,9 @@
 :tools_test_compiler:
   :arguments:
     - -D__UNITRAZER_LIB__
+    - -Wall
+    - -Wno-pointer-sign
+    - -Wno-missing-braces
 
 :tools_gcov_linker:
   :arguments:

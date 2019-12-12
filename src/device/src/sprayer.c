@@ -66,10 +66,9 @@ sprayer_makeEvt(Device *const me, CBOX_STR *rawData)
 static void
 sprayer_update(Device *const me, RKH_EVT_T *evt)
 {
-    Sprayer *realMe, *currDev;
+    Sprayer *currDev;
     EvtSprayerData *realEvt;
 
-    realMe = (Sprayer *)me;
     realEvt = (EvtSprayerData *)evt;
 
     ((Collector *)(me->collector))->dev = realEvt->base.dev;

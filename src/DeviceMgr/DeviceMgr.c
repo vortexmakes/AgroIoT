@@ -180,7 +180,7 @@ nIdle(DeviceMgr *const me)
 {
     RKH_TMR_ONESHOT(&me->tmr.tmr,
                     RKH_UPCAST(RKH_SMA_T, me),
-                    Config_getDevPollCycleTime());
+                    RKH_TIME_SEC(Config_getDevPollCycleTime()));
 }
 
 /* ............................. Exit actions .............................. */
