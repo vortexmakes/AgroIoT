@@ -106,11 +106,12 @@ static RKH_ROM_STATIC_EVENT(evNoDevObj, evNoDev);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static void
-assembleShort(uchar *buf, short data)
+static uchar *
+assembleShort(uchar *buf, short *data)
 {
-    data = (*buf << 8) | *(buf + 1);
+    *data = (*buf << 8) | *(buf + 1);
     buf += 2;
+    return buf;
 }
 
 static Device *
@@ -226,12 +227,12 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             p = (uchar *)pb->payload;
             cbox.cmd = *p++;
             cbox.m = *p++;
-            assembleShort(p, cbox.h.hoard);
-            assembleShort(p, cbox.h.pqty);
-            assembleShort(p, cbox.h.flow);
-            assembleShort(p, cbox.a.x);
-            assembleShort(p, cbox.a.y);
-            assembleShort(p, cbox.a.z);
+            p = assembleShort(p, (short *)&cbox.h.hoard);
+            p = assembleShort(p, (short *)&cbox.h.pqty);
+            p = assembleShort(p, (short *)&cbox.h.flow);
+            p = assembleShort(p, (short *)&cbox.a.x);
+            p = assembleShort(p, (short *)&cbox.a.y);
+            p = assembleShort(p, (short *)&cbox.a.z);
             cbox.a.m = *p++;
             cbox.hum = *p++;
 
@@ -254,6 +255,7 @@ ps_onStationReq(ST_T station)
         case ADDR_NORIA:
             return (PS_PLBUFF_T *)&reqs[CBOX_READ_ALL];
         case ADDR_CAUDALIMETRO:
+        	return (PS_PLBUFF_T *)&reqs[CBOX_READ_ALL];
         default:
             return (PS_PLBUFF_T *)&reqs[CBOX_NULL];
     }

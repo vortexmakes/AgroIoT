@@ -36,12 +36,11 @@ extern "C" {
 #define EQTYPE_SAMPLER          0xFF06
 #define EQTYPE_SPRAYER          0xFF07
 #define EQTYPE_SPRAYERPRO       0xFF08
-#define ADDR_CAUDALIMETRO       1
 
 enum
 {
     ADDR_NORIA,
-    /* ADDR_CAUDALIMETRO, */
+    ADDR_CAUDALIMETRO,
     NUM_SENSORS_BOX
 };
 
