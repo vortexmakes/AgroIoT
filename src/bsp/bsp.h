@@ -102,6 +102,8 @@ void bsp_GPSStatus(char status);
 
 void bsp_gpsParserHandler_set(void *p);
 
+void bsp_RS485_DIR(ruint val);
+
 void bsp_setDigOut(DigOutSignalId out, ruint val);
 ruint bsp_getDigIn(DigInSignalId in);
 void bsp_DigInPullSelect(DigInPullSelectId ps, uint8_t val);

@@ -24,7 +24,7 @@ tplink_tx_isr(void)
 
     if (enable_xmit)
     {
-        bsp_serial_putchar(TPSENS_PORT, xmit_thr);
+    	bsp_serial_putnchar(TPSENS_PORT, &xmit_thr, 1);
     }
 }
 
@@ -35,6 +35,8 @@ tplink_tx_isr(void)
 void
 init_tpl_hal(void)
 {
+    bsp_RS485_DIR(0);
+
     bsp_serial_open(TPSENS_PORT);
 
     tpl_running = 1;
@@ -52,7 +54,9 @@ void
 tpl_choke_xmit(uchar data)
 {
     enable_xmit = 1;
-    bsp_serial_putchar(TPSENS_PORT, data);
+    bsp_RS485_DIR(1);
+
+    bsp_serial_putnchar(TPSENS_PORT, &data, 1);
 }
 
 void
@@ -64,6 +68,7 @@ tpl_xmit(uchar data)
 void
 tpl_stop_xmit(void)
 {
+	bsp_RS485_DIR(0);
     enable_xmit = 0;
 }
 

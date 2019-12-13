@@ -313,8 +313,8 @@ bsp_serial_open(int ch)
 			break;
 
 		case TPSENS_PORT:
-			//init_serial_hard(ch, &tplink_cback);
-			//connect_serial(ch);
+			init_serial_hard(ch, &tplink_cback);
+			connect_serial(ch);
 			break;
 
 		default:

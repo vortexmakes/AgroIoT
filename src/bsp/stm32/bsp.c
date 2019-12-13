@@ -40,6 +40,7 @@ RKH_THIS_MODULE
 /* ----------------------------- Local macros ------------------------------ */
 #define BlinkLed(b)  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, b)
 #define ModemCTS(b)  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, b)
+#define RS485_DIR(b)  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, b)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -77,6 +78,15 @@ getUartHandle(int ch)
 }
 
 /* ---------------------------- Global functions --------------------------- */
+void
+HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+    if (UartHandle->Instance == USART1)
+    {
+        tplink_tx_isr();
+    }
+}
+
 void
 HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
@@ -118,7 +128,6 @@ bsp_init(int argc, char *argv[])
     MX_GPIO_Init();
     MX_DMA_Init();
     MX_USART6_UART_Init();
-    MX_USART1_UART_Init();
     MX_CAN1_Init();
     MX_ADC1_Init();
     MX_SPI3_Init();
@@ -292,6 +301,12 @@ void
 bsp_gpsParserHandler_set(void *p)
 {
     gpsParser = (GpsRcvHandler)p;
+}
+
+void
+bsp_RS485_DIR(ruint val)
+{
+    RS485_DIR(val);
 }
 
 void
