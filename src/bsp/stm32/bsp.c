@@ -30,6 +30,7 @@
 #include "modmgr.h"
 #include "modcmd.h"
 #include "tplhal.h"
+#include "tplfsm.h"
 #include "conmgr.h"
 #include "mTime.h"
 #include "epoch.h"
@@ -144,6 +145,7 @@ bsp_timeTick(void)
 {
     ++tstamp;
     mTime_tick();
+	tplfsm_timer_isr();
 }
 
 RKH_TS_T
