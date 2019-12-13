@@ -143,7 +143,7 @@ init(DeviceMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &DeviceMgr_Idle);
     RKH_TR_FWK_STATE(me, &DeviceMgr_InCycle);
 
-    RKH_SET_STATIC_EVENT(&me->tmr.tmr, evTimeout);
+    RKH_SET_STATIC_EVENT(&me->tmr.evt, evTimeout);
     RKH_TMR_INIT(&me->tmr.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmr), NULL);
     ps_init();
 }
