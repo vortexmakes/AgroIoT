@@ -73,7 +73,7 @@ dIn_init(void)
 
     for (i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
-        dIns[i] = 1;
+        dIns[i] = 0xFF;
         dInsSt[i] = 1;
     }
 }
