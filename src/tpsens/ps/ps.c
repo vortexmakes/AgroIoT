@@ -334,6 +334,10 @@ ps_dispatch_to_station(ST_T station, PSM_T *pm)
             r = RET_WAITRESP;
             p->state = ST_RDY_WAIT_RESPONSE;
         }
+        else
+        {
+        	r = RET_UNAVAILABLE;
+        }
     }
     else
     {
