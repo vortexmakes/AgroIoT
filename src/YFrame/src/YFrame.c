@@ -33,6 +33,8 @@
 #define FLG_HISTORY             2
 #define FLG_MOVING              4
 
+#define YFRAME_ACK_LEN          (sizeof(YFRAME_ACK) - 1)
+
 static const char *frameType[] = {"0", "1"};
 
 /* ---------------------------- Local data types --------------------------- */
@@ -179,24 +181,31 @@ TypeOfResp
 YFrame_parse(char *from)
 {
     ruint size;
+    char *str;
+    TypeOfResp res;
 
+    res = TypeOfRespUnknown;
     if (from != (char *)0)
     {
         /* Check Ack */
         size = strlen(from);
-        if ((size == 3) && strcmp(from, YFRAME_ACK) == 0)
+        if (size >= YFRAME_ACK_LEN)
         {
-            return TypeOfRespAck;
+            str = (from + (size - YFRAME_ACK_LEN));
+            if (strcmp(str, YFRAME_ACK) == 0)
+            {
+                res = TypeOfRespAck;
+            }
         }
         else if (size == 0)
         {
-            return TypeOfRespEmpty;
+            res = TypeOfRespEmpty;
         }
 
         /* Check Cmd */
         /* 636D643A XX ... XX 3B */
     }
-    return TypeOfRespUnknown;
+    return res;
 }
 
 /* ------------------------------ End of file ------------------------------ */

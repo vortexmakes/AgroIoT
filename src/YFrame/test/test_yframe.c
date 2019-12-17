@@ -182,11 +182,31 @@ test_CheckResponseAck(void)
     res = YFrame_parse(buf);
     TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 
-    res = YFrame_parse((char *)0);
-    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
-
     strcpy(buf, "!2||");
     res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
+
+    strcpy(buf, "!2|!2|");
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespAck, res);
+
+    strcpy(buf, "!3|!2|");
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespAck, res);
+
+    strcpy(buf, "!2|!3|");
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
+
+    strcpy(buf, "cmd:04040404!2|");
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespAck, res);
+
+    strcpy(buf, "cmd:0408!2|cmd:0408");
+    res = YFrame_parse(buf);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
+
+    res = YFrame_parse((char *)0);
     TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 }
 
