@@ -39,7 +39,7 @@ RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingStatusAck,
                      SendingEndOfHist, SendingHist, ReceivingMsgAck,
                      SendingStartOfHist;
 RKH_DCLR_COMP_STATE Active, Current, History;
-RKH_DCLR_CHOICE_STATE C0, C1, C2, C3, C4;
+RKH_DCLR_CHOICE_STATE C0, C1, C2, C3, C4, C5, C6;
 RKH_DCLR_FINAL_STATE CurrentFinal, HistoryFinal;
 
 /* ------------------------------- Data types ------------------------------ */

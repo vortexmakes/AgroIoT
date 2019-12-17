@@ -87,10 +87,12 @@ RKH_CREATE_CHOICE_STATE(C1);
 RKH_CREATE_CHOICE_STATE(C2);
 RKH_CREATE_CHOICE_STATE(C3);
 RKH_CREATE_CHOICE_STATE(C4);
+RKH_CREATE_CHOICE_STATE(C5);
+RKH_CREATE_CHOICE_STATE(C6);
 
 RKH_CREATE_BRANCH_TABLE(C0)
 	RKH_BRANCH(CommMgr_isCondC0ToHistory11, NULL, &History),
-	RKH_BRANCH(CommMgr_isCondC0ToReceivingStatusAck28, NULL, &ReceivingStatusAck),
+	RKH_BRANCH(CommMgr_isCondC0ToC628, NULL, &C6),
 	RKH_BRANCH(ELSE, CommMgr_C0ToCurrentFinalExt12, &CurrentFinal),
 RKH_END_BRANCH_TABLE
 
@@ -106,7 +108,7 @@ RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C3)
 	RKH_BRANCH(CommMgr_isCondC3ToC425, CommMgr_C3ToC4Ext25, &C4),
-	RKH_BRANCH(CommMgr_isCondC3ToReceivingMsgAck29, NULL, &ReceivingMsgAck),
+	RKH_BRANCH(CommMgr_isCondC3ToC529, NULL, &C5),
 	RKH_BRANCH(ELSE, CommMgr_C3ToHistoryFinalExt24, &HistoryFinal),
 RKH_END_BRANCH_TABLE
 
@@ -115,6 +117,15 @@ RKH_CREATE_BRANCH_TABLE(C4)
 	RKH_BRANCH(ELSE, CommMgr_C4ToC1Ext27, &C1),
 RKH_END_BRANCH_TABLE
 
+RKH_CREATE_BRANCH_TABLE(C5)
+	RKH_BRANCH(CommMgr_isCondC5ToHistoryFinalXX, NULL, &HistoryFinal),
+	RKH_BRANCH(ELSE, CommMgr_C5ToReceivingMsgAckExtXX, &ReceivingMsgAck),
+RKH_END_BRANCH_TABLE
+
+RKH_CREATE_BRANCH_TABLE(C6)
+	RKH_BRANCH(CommMgr_isCondC6ToCurrentFinalXX, NULL, &CurrentFinal),
+	RKH_BRANCH(ELSE, CommMgr_C6ToReceivingStatusAckExtXX, &ReceivingStatusAck),
+RKH_END_BRANCH_TABLE
 
 /* ............................. Active object ............................. */
 RKH_SMA_CREATE(CommMgr, commMgr, 4, HCAL, &Idle, CommMgr_ToIdleExt0, NULL);
