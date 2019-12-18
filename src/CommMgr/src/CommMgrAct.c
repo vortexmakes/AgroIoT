@@ -185,6 +185,12 @@ CommMgr_C3ToC4Ext25(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 void 
+CommMgr_C3ToC5Ext32(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*checkRecvTries();*/
+}
+
+void 
 CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*checkHist();*/
@@ -230,6 +236,24 @@ CommMgr_C1ToSendingHistExt31(CommMgr *const me, RKH_EVT_T *pe)
     res = GStatus_fromGpsStr(&from, &to);
     RKH_ENSURE(res == 0);
     me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
+}
+
+void 
+CommMgr_SendingEndOfHistToReceivingMsgAckExt34(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*setReceive();*/
+}
+
+void 
+CommMgr_C0ToC6Ext35(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*checkRecvTries();*/
+}
+
+void
+CommMgr_SendingStatusToReceivingiStatusAckExt37(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*setReceive();*/
 }
 
 /* ............................. Entry actions ............................. */
@@ -321,7 +345,7 @@ CommMgr_isCondC0ToHistory11(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 rbool_t 
-CommMgr_isCondC0ToReceivingStatusAck28(CommMgr *const me, RKH_EVT_T *pe)
+CommMgr_isCondC0ToC628(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isEmpty()) ? true : false;*/
 	return (me->lastRecvResponse == TypeOfRespEmpty) ? true : false;
@@ -349,10 +373,16 @@ CommMgr_isCondC3ToC425(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 rbool_t 
-CommMgr_isCondC3ToReceivingMsgAck29(CommMgr *const me, RKH_EVT_T *pe)
+CommMgr_isCondC3ToC529(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isEmpty()) ? true : false;*/
 	return (me->lastRecvResponse == TypeOfRespEmpty) ? true : false;
+}
+
+rbool_t 
+CommMgr_isCondC5ToHistoryFinal33(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*return (isMaxRecvTries()) ? true : false;*/
 }
 
 rbool_t 
@@ -360,6 +390,12 @@ CommMgr_isCondC4ToCurrent26(CommMgr *const me, RKH_EVT_T *pe)
 {
 	/*return (isPending()) ? true : false;*/
 	return (me->isPendingStatus == true) ? true : false;
+}
+
+rbool_t
+CommMgr_isCondC6ToCurrentFinal36(CommMgr *const me, RKH_EVT_T *pe)
+{
+	/*return (isMaxRecvTries()) ? true : false;*/
 }
 
 /* ---------------------------- Global functions --------------------------- */
