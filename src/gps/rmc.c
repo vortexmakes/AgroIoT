@@ -77,6 +77,7 @@ rmc_timeUpdate(Rmc *p)
     rmcTime.tm_hour = RMC_HOUR(pUtc);
     rmcTime.tm_min = RMC_MIN(pUtc);
     rmcTime.tm_sec = RMC_SEC(pUtc);
+    rmcTime.tm_wday = 1;
 
     if ((rmcTime.tm_year < 1970) ||
         (rmcTime.tm_mon < 1) || (rmcTime.tm_mon > 12) ||

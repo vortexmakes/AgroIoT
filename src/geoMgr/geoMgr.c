@@ -232,6 +232,8 @@ restartTimer(GeoMgr *const me, RKH_EVT_T *pe)
     (void)me;
     (void)pe;
 
+    rmc_timeUpdate(&((RmcEvt *)pe)->rmc);
+
     rkh_tmr_stop(&me->timer);
     RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), GPS_ALIVE_TIME);
 }
