@@ -14,11 +14,13 @@
 /*
  *  DaBa  Dario Baliña     db@vortexmakes.com
  */
+
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "bsp.h"
 #include "cubemx.h"
+#include "trace_msd.h"
 
 #if RKH_CFG_TRC_EN == 1
 /* ----------------------------- Local macros ------------------------------ */
@@ -43,10 +45,10 @@ rkh_trc_open(void)
 
     TRC_UART_Init();
 
+    trace_msd_init();
+
     RKH_TRC_SEND_CFG(BSP_TS_RATE_HZ);
 }
-
-
 
 void
 rkh_trc_close(void)
@@ -70,6 +72,8 @@ rkh_trc_flush(void)
 
         if ((blk != (rui8_t *)0))
         {
+            trace_msd_write(blk, nbytes);
+
         	while(HAL_UART_GetState(TRC_COM_PORT) != HAL_UART_STATE_READY);
 
             HAL_UART_Transmit_DMA(TRC_COM_PORT, blk, nbytes);

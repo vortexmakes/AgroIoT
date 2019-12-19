@@ -73,6 +73,15 @@ typedef enum
     RegisteredSt = ConnectedSt,
 } Status_t;
 
+/*
+ * UsbHost Status
+ */
+typedef enum
+{
+    UsbHostClassReady,
+    UsbHostClassDisconnect,
+} UsbHostStatus_t;
+
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
@@ -107,6 +116,10 @@ void bsp_RS485_DIR(ruint val);
 void bsp_setDigOut(DigOutSignalId out, ruint val);
 ruint bsp_getDigIn(DigInSignalId in);
 void bsp_DigInPullSelect(DigInPullSelectId ps, uint8_t val);
+
+void bsp_usbDeviceEnable(void);
+void bsp_usbDeviceDisable(void);
+UsbHostStatus_t bsp_usbDeviceStatus(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
