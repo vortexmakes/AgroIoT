@@ -248,8 +248,8 @@ test_ReceiveEmptyResponse(void)
                                        RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespEmpty, me->lastRecvResponse);
 
-    res = CommMgr_isCondC0ToReceivingStatusAck28(me, 
-                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    res = CommMgr_isCondC0ToC628(me, 
+                                 RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
 
     YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespEmpty);
@@ -257,8 +257,8 @@ test_ReceiveEmptyResponse(void)
                                      RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespEmpty, me->lastRecvResponse);
 
-    res = CommMgr_isCondC3ToReceivingMsgAck29(me, 
-                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    res = CommMgr_isCondC3ToC529(me, 
+                                 RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
 }
 
@@ -522,6 +522,75 @@ void
 test_FailToReceive(void)
 {
     TEST_IGNORE_MESSAGE(__FUNCTION__);
+}
+
+void
+test_PrepareForReceiving(void)
+{
+    me->nRecvTries = 0;
+    CommMgr_SendingStatusToReceivingiStatusAckExt37(me, evt);
+    TEST_ASSERT_EQUAL(16, me->nRecvTries);
+
+    me->nRecvTries = 0;
+    CommMgr_SendingEndOfHistToReceivingMsgAckExt34(me, evt);
+    TEST_ASSERT_EQUAL(16, me->nRecvTries);
+}
+
+void
+test_DecrementReceivingTries(void)
+{
+    int nTries = 2;
+
+    me->nRecvTries = nTries;
+    CommMgr_C0ToC6Ext35(me, evt);
+    TEST_ASSERT_EQUAL(nTries - 1, me->nRecvTries);
+
+    me->nRecvTries = nTries;
+    CommMgr_C3ToC5Ext32(me, evt);
+    TEST_ASSERT_EQUAL(nTries - 1, me->nRecvTries);
+}
+
+void
+test_CheckReceivingTries(void)
+{
+    rbool_t res;
+    int nTries = 2;
+
+    me->nRecvTries = nTries;
+    res = CommMgr_isCondC5ToHistoryFinal33(me, evt);
+    TEST_ASSERT_TRUE(res == false);
+
+    me->nRecvTries = 0;
+    res = CommMgr_isCondC5ToHistoryFinal33(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+
+    me->nRecvTries = nTries;
+    res = CommMgr_isCondC6ToCurrentFinal36(me, evt);
+    TEST_ASSERT_TRUE(res == false);
+
+    me->nRecvTries = 0;
+    res = CommMgr_isCondC6ToCurrentFinal36(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+}
+
+void
+test_ReOpenConnection(void)
+{
+    RKH_EVT_T evRestartObj;
+
+    topic_publish_Expect(TCPConnection, 
+                         &evRestartObj, 
+                         RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish_IgnoreArg_evt();
+
+    CommMgr_C5ToHistoryFinalExt38(me, evt);
+
+    topic_publish_Expect(TCPConnection, 
+                         &evRestartObj, 
+                         RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish_IgnoreArg_evt();
+
+    CommMgr_C6ToCurrentFinalExt39(me, evt);
 }
 
 /* ------------------------------ End of file ------------------------------ */

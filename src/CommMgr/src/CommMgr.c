@@ -118,12 +118,12 @@ RKH_CREATE_BRANCH_TABLE(C4)
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C5)
-	RKH_BRANCH(CommMgr_isCondC5ToHistoryFinal33, NULL, &HistoryFinal),
+	RKH_BRANCH(CommMgr_isCondC5ToHistoryFinal33, CommMgr_C5ToHistoryFinalExt38, &HistoryFinal),
 	RKH_BRANCH(ELSE, NULL, &ReceivingMsgAck),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C6)
-	RKH_BRANCH(CommMgr_isCondC6ToCurrentFinal36, NULL, &CurrentFinal),
+	RKH_BRANCH(CommMgr_isCondC6ToCurrentFinal36, CommMgr_C6ToCurrentFinalExt39, &CurrentFinal),
 	RKH_BRANCH(ELSE, NULL, &ReceivingStatusAck),
 RKH_END_BRANCH_TABLE
 

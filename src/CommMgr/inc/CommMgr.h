@@ -35,7 +35,7 @@ extern "C" {
 RKH_SMA_DCLR(commMgr);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingStatusAck, 
+RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingStatusAck,
                      SendingEndOfHist, SendingHist, ReceivingMsgAck,
                      SendingStartOfHist;
 RKH_DCLR_COMP_STATE Active, Current, History;
@@ -55,6 +55,7 @@ struct CommMgr
     SendEvt evSendObj;
     rui16_t nFramesToSend;
     rui16_t framesToSend;
+    int nRecvTries;
 };
 
 /* -------------------------- External variables --------------------------- */

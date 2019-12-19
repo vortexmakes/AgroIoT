@@ -50,9 +50,14 @@ void CommMgr_C3ToC4Ext25(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C3ToC5Ext32(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C4ToC1Ext27(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ActiveToActiveLoc0(CommMgr *const me, RKH_EVT_T *pe);
-void CommMgr_SendingStartOfHistToSendingHistExt30(CommMgr *const me, RKH_EVT_T *pe);
-void CommMgr_SendingEndOfHistToReceivingMsgAckExt34(CommMgr *const me, RKH_EVT_T *pe);
-void CommMgr_SendingStatusToReceivingiStatusAckExt37(CommMgr *const me, RKH_EVT_T *pe);
+void CommMgr_SendingStartOfHistToSendingHistExt30(CommMgr *const me,
+                                                  RKH_EVT_T *pe);
+void CommMgr_SendingEndOfHistToReceivingMsgAckExt34(CommMgr *const me,
+                                                    RKH_EVT_T *pe);
+void CommMgr_SendingStatusToReceivingiStatusAckExt37(CommMgr *const me,
+                                                     RKH_EVT_T *pe);
+void CommMgr_C5ToHistoryFinalExt38(CommMgr *const me, RKH_EVT_T *pe);
+void CommMgr_C6ToCurrentFinalExt39(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 void CommMgr_enWaitSync(CommMgr *const me);
