@@ -110,11 +110,15 @@ struct Config
      */
     rui8_t maxNumStoreOnStopped;
 
-    /**
-     * Max. number of status storage in mapping running state before 
-     * synchronize the file system.
-     */
-    rui8_t maxNumStoreOnRunning;
+    char connectionDomain[IP_LENGTH + 1];
+    char connectionPort[PORT_LENGTH + 1];
+    rui16_t SIMPinNumber;
+    rui8_t maxNumRetriesConnNoResp;
+    rui8_t connectionStatusPeriod;
+    rui8_t reopenDelay;
+    rui8_t connectTryDelay;
+    rui8_t maxNumConnectRetries;
+    rui8_t configTryDelay;
 };
 
 /* -------------------------- External variables --------------------------- */

@@ -121,6 +121,17 @@ test_InitWithoutStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgDft.dftDigOut, cfg->dftDigOut);
     TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
     TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
+    TEST_ASSERT_EQUAL(cfgDft.connectionDomain, cfg->connectionDomain);
+    TEST_ASSERT_EQUAL(cfgDft.connectionPort, cfg->connectionPort);
+    TEST_ASSERT_EQUAL(cfgDft.SIMPinNumber, cfg->SIMPinNumber);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumRetriesConnNoResp, 
+                      cfg->maxNumRetriesConnNoResp);
+    TEST_ASSERT_EQUAL(cfgDft.connectionStatusPeriod, 
+                      cfg->connectionStatusPeriod);
+    TEST_ASSERT_EQUAL(cfgDft.reopenDelay, cfg->reopenDelay);
+    TEST_ASSERT_EQUAL(cfgDft.connectTryDelay, cfg->connectTryDelay);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumConnectRetries, cfg->maxNumConnectRetries);
+    TEST_ASSERT_EQUAL(cfgDft.configTryDelay, cfg->configTryDelay);
 }
 
 void
@@ -153,6 +164,17 @@ test_InitWithStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgFile.dftDigOut, cfg->dftDigOut);
     TEST_ASSERT_EQUAL(cfgFile.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
     TEST_ASSERT_EQUAL(cfgFile.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
+    TEST_ASSERT_EQUAL(cfgFile.connectionDomain, cfg->connectionDomain);
+    TEST_ASSERT_EQUAL(cfgFile.connectionPort, cfg->connectionPort);
+    TEST_ASSERT_EQUAL(cfgFile.SIMPinNumber, cfg->SIMPinNumber);
+    TEST_ASSERT_EQUAL(cfgFile.maxNumConnNoRespRetries, 
+                      cfg->maxNumConnNoRespRetries);
+    TEST_ASSERT_EQUAL(cfgFile.connectionStatusPeriod, 
+                      cfg->connectionStatusPeriod);
+    TEST_ASSERT_EQUAL(cfgFile.reopenDelay, cfg->reopenDelay);
+    TEST_ASSERT_EQUAL(cfgFile.connectTryDelay, cfg->connectTryDelay);
+    TEST_ASSERT_EQUAL(cfgFile.maxNumConnectRetries, cfg->maxNumConnectRetries);
+    TEST_ASSERT_EQUAL(cfgFile.configTryDelay, cfg->configTryDelay);
 }
 
 void
