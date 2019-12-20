@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Balin¿½a       db@vortexmakes.com
+ *  DaBa  Dario Baliña       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -94,12 +94,12 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     /*RKH_FILTER_OFF_SMA(modMgr); */
-    RKH_FILTER_OFF_SMA(conMgr);
+    /*RKH_FILTER_OFF_SMA(conMgr); */
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);
     /*RKH_FILTER_OFF_SMA(collector); */
-    /*RKH_FILTER_OFF_SMA(usbMgr); */
+    /*RKH_FILTER_OFF_SMA(usbMgr);*/
     /*RKH_FILTER_OFF_SMA(fsMgr); */
     RKH_FILTER_OFF_ALL_SIGNALS();
     RKH_FILTER_ON_SIGNAL(evGeo);

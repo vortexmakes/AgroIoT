@@ -40,14 +40,17 @@ RKH_DCLR_COMP_STATE UsbMgr_Active;
 static void init(UsbMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ Declares effect actions ........................ */
+static void usbHostProcess(UsbMgr *const me, RKH_EVT_T *pe);
 static void enableUsbDevice(UsbMgr *const me, RKH_EVT_T *pe);
 static void disableUsbDevice(UsbMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
+static void nActive(UsbMgr *const me);
 static void nIdle(UsbMgr *const me);
 static void nReady(UsbMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
+static void xActive(UsbMgr *const me);
 static void xIdle(UsbMgr *const me);
 static void xReady(UsbMgr *const me);
 
@@ -61,28 +64,30 @@ RKH_CREATE_TRANS_TABLE(UsbMgr_Inactive)
 RKH_TRREG(evOpen, NULL, NULL, &UsbMgr_Active),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_COMP_REGION_STATE(UsbMgr_Active, NULL, NULL, RKH_ROOT,
+RKH_CREATE_COMP_REGION_STATE(UsbMgr_Active, nActive, xActive, RKH_ROOT,
                              &UsbMgr_Idle, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(UsbMgr_Active)
+RKH_TRINT(evTout0, NULL, usbHostProcess),
 RKH_TRREG(evClose, NULL, NULL, &UsbMgr_Inactive),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(UsbMgr_Idle, nIdle, xIdle, &UsbMgr_Active, NULL);
 RKH_CREATE_TRANS_TABLE(UsbMgr_Idle)
-RKH_TRREG(evTimeout, usbHostIsReady, enableUsbDevice, &UsbMgr_Ready),
+RKH_TRREG(evTout1, usbHostIsReady, enableUsbDevice, &UsbMgr_Ready),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(UsbMgr_Ready, nReady, xReady, &UsbMgr_Active, NULL);
 RKH_CREATE_TRANS_TABLE(UsbMgr_Ready)
-RKH_TRREG(evTimeout, usbHostIsNotReady, disableUsbDevice, &UsbMgr_Idle),
+RKH_TRREG(evTout1, usbHostIsNotReady, disableUsbDevice, &UsbMgr_Idle),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
 struct UsbMgr
 {
     RKH_SMA_T ao;       /* Base structure */
-    RKHTmEvt tmr;
+    RKHTmEvt tmEvtObj0;
+    RKHTmEvt tmEvtObj1;
 };
 
 RKH_SMA_CREATE(UsbMgr, usbMgr, 7, HCAL, &UsbMgr_Inactive, init, NULL);
@@ -101,18 +106,28 @@ init(UsbMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 
     RKH_TR_FWK_AO(me);
-    RKH_TR_FWK_TIMER(&me->tmr.tmr);
+    RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
+    RKH_TR_FWK_TIMER(&me->tmEvtObj1.tmr);
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
     RKH_TR_FWK_STATE(me, &UsbMgr_Inactive);
     RKH_TR_FWK_STATE(me, &UsbMgr_Active);
     RKH_TR_FWK_STATE(me, &UsbMgr_Idle);
     RKH_TR_FWK_STATE(me, &UsbMgr_Ready);
 
-    RKH_SET_STATIC_EVENT(&me->tmr.evt, evTimeout);
-    RKH_TMR_INIT(&me->tmr.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmr), NULL);
+    RKH_SET_STATIC_EVENT(&me->tmEvtObj0.evt, evTout0);
+    RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
+
+    RKH_SET_STATIC_EVENT(&me->tmEvtObj1.evt, evTout1);
+    RKH_TMR_INIT(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj1), NULL);
 }
 
 /* ............................ Effect actions ............................. */
+static void
+usbHostProcess(UsbMgr *const me, RKH_EVT_T *pe)
+{
+    bsp_usbHostProcess();
+}
+
 static void
 enableUsbDevice(UsbMgr *const me, RKH_EVT_T *pe)
 {
@@ -133,9 +148,19 @@ disableUsbDevice(UsbMgr *const me, RKH_EVT_T *pe)
 
 /* ............................. Entry actions ............................. */
 static void
+nActive(UsbMgr *const me)
+{
+/*
+    RKH_TMR_PERIODIC(&me->tmEvtObj0.tmr,
+                    RKH_UPCAST(RKH_SMA_T, me),
+                    USBHOST_PROCESS_TIME, USBHOST_PROCESS_TIME);
+*/
+}
+
+static void
 nIdle(UsbMgr *const me)
 {
-    RKH_TMR_PERIODIC(&me->tmr.tmr,
+    RKH_TMR_PERIODIC(&me->tmEvtObj1.tmr,
                     RKH_UPCAST(RKH_SMA_T, me),
                     USBHOST_STATUS_TIME, USBHOST_STATUS_TIME);
 }
@@ -143,22 +168,28 @@ nIdle(UsbMgr *const me)
 static void
 nReady(UsbMgr *const me)
 {
-    RKH_TMR_PERIODIC(&me->tmr.tmr,
+    RKH_TMR_PERIODIC(&me->tmEvtObj1.tmr,
                     RKH_UPCAST(RKH_SMA_T, me),
                     USBHOST_STATUS_TIME, USBHOST_STATUS_TIME);
 }
 
 /* ............................. Exit actions .............................. */
 static void
+xActive(UsbMgr *const me)
+{
+//    rkh_tmr_stop(&me->tmEvtObj0.tmr);
+}
+
+static void
 xIdle(UsbMgr *const me)
 {
-    rkh_tmr_stop(&me->tmr.tmr);
+    rkh_tmr_stop(&me->tmEvtObj1.tmr);
 }
 
 static void
 xReady(UsbMgr *const me)
 {
-    rkh_tmr_stop(&me->tmr.tmr);
+    rkh_tmr_stop(&me->tmEvtObj1.tmr);
 }
 
 /* ................................ Guards ................................. */

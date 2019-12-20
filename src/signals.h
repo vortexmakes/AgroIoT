@@ -90,7 +90,8 @@ enum Signals
     evToutSyncRunning,
     evDiskConnected,
     evDiskDisconnected,
-    evTout0
+    evTout0,
+	evTout1
 };
 
 /* ------------------------------- Data types ------------------------------ */

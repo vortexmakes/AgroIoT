@@ -393,4 +393,10 @@ bsp_usbHostStatus(void)
     return UsbHostClassDisconnect;
 }
 
+void
+bsp_usbHostProcess(void)
+{
+//    MX_USB_HOST_Process();
+}
+
 /* ------------------------------ File footer ------------------------------ */

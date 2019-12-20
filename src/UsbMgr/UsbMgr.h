@@ -28,7 +28,8 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define USBHOST_STATUS_TIME    RKH_TIME_MS(1000)
+#define USBHOST_PROCESS_TIME    RKH_TIME_MS(1000)
+#define USBHOST_STATUS_TIME     RKH_TIME_MS(5000)
 
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */
