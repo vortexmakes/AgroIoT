@@ -46,12 +46,15 @@ RKH_THIS_MODULE
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+extern ApplicationTypeDef Appli_state;
+
 /* ---------------------------- Local variables ---------------------------- */
 static rui8_t bsp;
 static RKH_TS_T tstamp;
 static ModCmdRcvHandler gsmCmdParser;
 static GpsRcvHandler    gpsParser;
 static SIMSelect_t      simSelect;
+static UsbHostStatus_t usbHostStatus = UsbHostClassDisconnect;
 
 static uint8_t uart1RxBuff[10];
 static uint8_t uart2RxBuff[10];
@@ -361,6 +364,33 @@ bsp_DigInPullSelect(DigInPullSelectId ps, uint8_t val)
         default:
             break;
     }
+}
+
+void
+bsp_usbDeviceEnable(void)
+{
+    usbHostStatus = UsbHostClassReady;
+}
+
+void
+bsp_usbDeviceDisable(void)
+{
+    usbHostStatus = UsbHostClassDisconnect;
+}
+
+UsbHostStatus_t
+bsp_usbDeviceStatus(void)
+{
+    return usbHostStatus;
+}
+
+UsbHostStatus_t
+bsp_usbHostStatus(void)
+{
+    if(Appli_state == APPLICATION_READY)
+        return UsbHostClassReady; 
+
+    return UsbHostClassDisconnect;
 }
 
 /* ------------------------------ File footer ------------------------------ */

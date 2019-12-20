@@ -28,6 +28,7 @@
 #include "geoMgr.h"
 #include "ioChg.h"
 #include "DeviceMgr.h"
+#include "UsbMgr.h"
 #include "sprayer.h"
 #include "sim5320parser.h"
 #include "ubxm8parser.h"
@@ -48,6 +49,7 @@
 #define GEOMGR_QSTO_SIZE        4
 #define DEVSRV_QSTO_SIZE        4
 #define COLLECTOR_QSTO_SIZE     4
+#define USBMGR_QSTO_SIZE        4
 
 #define SIZEOF_EP0STO           16
 #define SIZEOF_EP0_BLOCK        sizeof(RKH_EVT_T)
@@ -68,6 +70,7 @@ static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
 static RKH_EVT_T *GeoMgr_qsto[GEOMGR_QSTO_SIZE];
 static RKH_EVT_T *DeviceMgr_qsto[DEVSRV_QSTO_SIZE];
 static RKH_EVT_T *Collector_qsto[COLLECTOR_QSTO_SIZE];
+static RKH_EVT_T *UsbMgt_qsto[USBMGR_QSTO_SIZE];
 static rui8_t evPool0Sto[SIZEOF_EP0STO],
               evPool1Sto[SIZEOF_EP1STO],
               evPool2Sto[SIZEOF_EP2STO];
@@ -92,10 +95,11 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     /*RKH_FILTER_OFF_SMA(modMgr); */
     /*RKH_FILTER_OFF_SMA(conMgr); */
-    /*RKH_FILTER_OFF_SMA(geoMgr); */
+    RKH_FILTER_OFF_SMA(geoMgr);
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);
     /*RKH_FILTER_OFF_SMA(collector);*/
+    /*RKH_FILTER_OFF_SMA(usbMgr);*/
     /*RKH_FILTER_OFF_SMA(fsMgr); */
     RKH_FILTER_OFF_ALL_SIGNALS();
     RKH_FILTER_ON_SIGNAL(evGeo);
@@ -141,9 +145,11 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(deviceMgr, DeviceMgr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(commMgr, CommMgr_qsto, COMMMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(collector, Collector_qsto, COLLECTOR_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(usbMgr, UsbMgt_qsto, USBMGR_QSTO_SIZE, 0, 0);
 
     RKH_SMA_POST_FIFO(conMgr, &evOpenObj, 0);
     RKH_SMA_POST_FIFO(deviceMgr, &evOpenObj, 0);
+    RKH_SMA_POST_FIFO(usbMgr, &evOpenObj, 0);
 
     rkh_fwk_enter();
 
