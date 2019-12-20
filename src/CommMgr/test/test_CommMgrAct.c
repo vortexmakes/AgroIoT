@@ -324,56 +324,103 @@ void
 test_CheckHistoryEmpty(void)
 {
     rbool_t res;
+    int nStoredFrames;
 
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    StatQue_init_ExpectAndReturn(0);
+    nStoredFrames = 0;
+    StatQue_init_ExpectAndReturn(nStoredFrames);
     Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
     TEST_ASSERT_TRUE(res == false);
-    TEST_ASSERT_EQUAL(0, me->nFramesToSend);
+    TEST_ASSERT_EQUAL(nStoredFrames, me->nFramesToSend);
 
-    StatQue_init_ExpectAndReturn(8);
+    nStoredFrames = 8;
+    StatQue_init_ExpectAndReturn(nStoredFrames);
     Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
-    TEST_ASSERT_EQUAL(8, me->nFramesToSend);
+    TEST_ASSERT_EQUAL(nStoredFrames, me->nFramesToSend);
 }
 
 void
 test_CheckHistoryNoEmpty(void)
 {
     rbool_t res;
+    int nStoredFrames;
 
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    StatQue_init_ExpectAndReturn(2);
+    nStoredFrames = 2;
+    StatQue_init_ExpectAndReturn(nStoredFrames);
     Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
                                           RKH_UPCAST(RKH_EVT_T, 
                                                      &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
-    TEST_ASSERT_EQUAL(2, me->nFramesToSend);
+    TEST_ASSERT_EQUAL(nStoredFrames, me->nFramesToSend);
+}
+
+void
+test_CheckHistoryWithMinNumOfStoredFrames(void)
+{
+    rbool_t res;
+    int nStoredFrames;
+
+    strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
+    evReceivedObj.size = strlen(evReceivedObj.buf);
+
+    nStoredFrames = MIN_NUM_STORED_FRAMES_TO_SEND - 1;
+    StatQue_init_ExpectAndReturn(nStoredFrames);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    res = CommMgr_isCondC1ToSendingHist20(me, 
+                                          RKH_UPCAST(RKH_EVT_T, 
+                                                     &evReceivedObj));
+    TEST_ASSERT_TRUE(res == false);
+    TEST_ASSERT_EQUAL(nStoredFrames, me->nFramesToSend);
+
+    nStoredFrames = MIN_NUM_STORED_FRAMES_TO_SEND;
+    StatQue_init_ExpectAndReturn(nStoredFrames);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    res = CommMgr_isCondC1ToSendingHist20(me, 
+                                          RKH_UPCAST(RKH_EVT_T, 
+                                                     &evReceivedObj));
+    TEST_ASSERT_TRUE(res == false);
+    TEST_ASSERT_EQUAL(nStoredFrames, me->nFramesToSend);
+
+    nStoredFrames = MIN_NUM_STORED_FRAMES_TO_SEND + 1;
+    StatQue_init_ExpectAndReturn(nStoredFrames);
+    Config_getMaxNumFramesToSend_ExpectAndReturn(100);
+    CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    res = CommMgr_isCondC1ToSendingHist20(me, 
+                                          RKH_UPCAST(RKH_EVT_T, 
+                                                     &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_EQUAL(nStoredFrames, me->nFramesToSend);
 }
 
 void
 test_CheckHistoryMaxFramesToSend(void)
 {
     rbool_t res;
+    int nStoredFrames;
 
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    StatQue_init_ExpectAndReturn(100 + 1);
+    nStoredFrames = 100 + 1;
+    StatQue_init_ExpectAndReturn(nStoredFrames);
     Config_getMaxNumFramesToSend_ExpectAndReturn(100);
     CommMgr_ToC1Ext16(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     res = CommMgr_isCondC1ToSendingHist20(me, 
