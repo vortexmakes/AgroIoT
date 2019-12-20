@@ -89,6 +89,15 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &SendingHist);
     RKH_TR_FWK_STATE(me, &ReceivingMsgAck);
     RKH_TR_FWK_STATE(me, &SendingStartOfHist);
+    RKH_TR_FWK_STATE(me, &CurrentFinal);
+    RKH_TR_FWK_STATE(me, &HistoryFinal);
+    RKH_TR_FWK_PSTATE(me, &C0);
+    RKH_TR_FWK_PSTATE(me, &C1);
+    RKH_TR_FWK_PSTATE(me, &C2);
+    RKH_TR_FWK_PSTATE(me, &C3);
+    RKH_TR_FWK_PSTATE(me, &C4);
+    RKH_TR_FWK_PSTATE(me, &C5);
+    RKH_TR_FWK_PSTATE(me, &C6);
     RKH_TR_FWK_SIG(evNetConnected);
     RKH_TR_FWK_SIG(evNetDisconnected);
     RKH_TR_FWK_SIG(evSent);
@@ -146,6 +155,9 @@ void
 CommMgr_HistoryToWaitSyncExt14(CommMgr *const me, RKH_EVT_T *pe)
 {
     /*sendMsgFail();*/
+    topic_publish(TCPConnection, 
+                  RKH_UPCAST(RKH_EVT_T, &evRestartObj), 
+                  RKH_UPCAST(RKH_SMA_T, me));
 }
 
 void

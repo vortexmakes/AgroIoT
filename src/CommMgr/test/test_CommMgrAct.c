@@ -38,7 +38,7 @@ RKHROM RKH_SBSC_T Idle, WaitSync, SendingStatus, ReceivingStatusAck,
                      SendingEndOfHist, SendingHist, ReceivingMsgAck,
                      SendingStartOfHist;
 RKHROM RKH_SCMP_T Active, Current, History;
-RKHROM RKH_SCHOICE_T C0, C1, C2, C3, C4;
+RKHROM RKH_SCHOICE_T C0, C1, C2, C3, C4, C5, C6;
 RKHROM RKH_FINAL_T CurrentFinal, HistoryFinal;
 
 /* ---------------------------- Local data types --------------------------- */
@@ -638,6 +638,17 @@ test_ReOpenConnection(void)
     topic_publish_IgnoreArg_evt();
 
     CommMgr_C6ToCurrentFinalExt39(me, evt);
+}
+
+void
+test_SendMsgFailInHistory(void)
+{
+    topic_publish_Expect(TCPConnection, 
+                         RKH_UPCAST(RKH_EVT_T, evt), 
+                         RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish_IgnoreArg_evt();
+
+    CommMgr_HistoryToWaitSyncExt14(me, evt);
 }
 
 /* ------------------------------ End of file ------------------------------ */
