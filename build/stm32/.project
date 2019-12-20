@@ -241,5 +241,15 @@
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/third-party/ssp</locationURI>
 		</link>
+		<link>
+			<name>Sources/src/UsbMgr/UsbMgr.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/UsbMgr/UsbMgr.c</locationURI>
+		</link>
+		<link>
+			<name>Sources/src/UsbMgr/UsbMgr.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/UsbMgr/UsbMgr.h</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>
