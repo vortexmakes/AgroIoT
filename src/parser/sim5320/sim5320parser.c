@@ -412,7 +412,7 @@ SSP_END_BR_TABLE
 /* ------------------------- AT+CIPCLOSE ------------------------- */
 SSP_CREATE_NORMAL_NODE(at_plus_cipclose);
 SSP_CREATE_BR_TABLE(at_plus_cipclose)
-SSPBR("CLOSE OK", disconnected,  &rootCmdParser),
+SSPBR("+CIPCLOSE", disconnected,  &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */

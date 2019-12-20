@@ -168,7 +168,7 @@ static const CmdTbl cmdTbl =
 
     /* disconnect */
     {RKH_INIT_STATIC_EVT(evCmd),
-     "AT+CIPCLOSE\r\n",
+     "AT+CIPCLOSE=0\r\n",
      &conMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
