@@ -400,4 +400,23 @@ Config_getMaxNumStoreOnRunning(void)
     return cfg->maxNumStoreOnRunning;
 }
 
+void
+Config_setSIMPinNumber(rui16_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->SIMPinNumber = value;
+    Config_set(cfg);
+}
+
+rui16_t
+Config_getSIMPinNumber(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->SIMPinNumber;
+}
+
 /* ------------------------------ End of file ------------------------------ */

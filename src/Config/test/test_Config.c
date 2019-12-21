@@ -729,4 +729,28 @@ test_SetMaxNumStoreOnRunning(void)
     TEST_ASSERT_EQUAL(out, cfg->maxNumStoreOnRunning);
 }
 
+void
+test_SetGetSIMPinNumber(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+
+    value = 4;
+    Config_setSIMPinNumber(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->SIMPinNumber);
+
+    value = 0;
+    value = Config_getSIMPinNumber();
+    TEST_ASSERT_EQUAL(value, cfg->SIMPinNumber);
+}
+
 /* ------------------------------ End of file ------------------------------ */

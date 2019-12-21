@@ -56,12 +56,12 @@ struct Config
     /**
      * Remote server's IP address
      */
-    char ip[IP_LENGTH + 1];
+    char connectionDomain[IP_LENGTH + 1];
 
     /**
      * Remote server's TCP/IP port number
      */
-    char port[PORT_LENGTH + 1];
+    char connectionPort[PORT_LENGTH + 1];
 
     /**
      * The mapping is performed by collecting the different
@@ -116,8 +116,6 @@ struct Config
      */
     rui8_t maxNumStoreOnRunning;
 
-    char connectionDomain[IP_LENGTH + 1];
-    char connectionPort[PORT_LENGTH + 1];
     rui16_t SIMPinNumber;
     rui8_t maxNumConnNoRespRetries;
 
@@ -184,6 +182,8 @@ void Config_setMaxNumStoreOnStopped(rui16_t value);
 rui16_t Config_getMaxNumStoreOnStopped(void);
 void Config_setMaxNumStoreOnRunning(rui16_t value);
 rui16_t Config_getMaxNumStoreOnRunning(void);
+void Config_setSIMPinNumber(rui16_t value);
+rui16_t Config_getSIMPinNumber(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
