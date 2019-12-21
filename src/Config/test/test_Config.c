@@ -32,8 +32,8 @@ static const Config cfgDft =
     ACC_LIMIT_DFT,
     BR_LIMIT_DFT,
     1,
-    IP_DFT,
-    PORT_DFT,
+    CONNECTION_DOMAIN_DFT,
+    CONNECTION_PORT_DFT,
     MAP_TIME_ON_RUNNING_DFT,
     MAP_TIME_ON_STOPPED_DFT,
     CONN_TIME_DFT,
@@ -43,8 +43,6 @@ static const Config cfgDft =
     DFT_DIG_OUT_DFT,
     MAX_NUM_STORE_ON_STOPPED_DFT,
     MAX_NUM_STORE_ON_RUNNING_DFT,
-    CONNECTION_DOMAIN_DFT,
-    CONNECTION_PORT_DFT,
     SIM_PIN_NUMBER_DFT,
     MAX_NUM_CONNNORESP_RETRIES_DFT,
     CONNECTION_STATUS_PERIOD_DFT,
@@ -62,8 +60,8 @@ static Config cfgFile =
     ACC_LIMIT_DFT,
     BR_LIMIT_DFT,
     1,
-    "\"111.22.33.444\"",
-    "44500",
+    "\"11.2.333.44\"",
+    "11223",
     3,
     60,
     60,
@@ -73,8 +71,6 @@ static Config cfgFile =
     0,
     240,
     100,
-    "\"11.2.333.44\"",
-    "11223",
     9474,
     2,
     2,
@@ -128,8 +124,8 @@ test_InitWithoutStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgDft.accLimit, cfg->accLimit);
     TEST_ASSERT_EQUAL(cfgDft.brLimit, cfg->brLimit);
     TEST_ASSERT_EQUAL(cfgDft.status, cfg->status);
-    TEST_ASSERT_EQUAL_STRING(cfgDft.ip, cfg->ip);
-    TEST_ASSERT_EQUAL_STRING(cfgDft.port, cfg->port);
+    TEST_ASSERT_EQUAL_STRING(cfgDft.connectionDomain, cfg->connectionDomain);
+    TEST_ASSERT_EQUAL_STRING(cfgDft.connectionPort, cfg->connectionPort);
     TEST_ASSERT_EQUAL(cfgDft.mapTimeOnRunning, cfg->mapTimeOnRunning);
     TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
     TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
@@ -139,8 +135,6 @@ test_InitWithoutStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgDft.dftDigOut, cfg->dftDigOut);
     TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
     TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
-    TEST_ASSERT_EQUAL_STRING(cfgDft.connectionDomain, cfg->connectionDomain);
-    TEST_ASSERT_EQUAL_STRING(cfgDft.connectionPort, cfg->connectionPort);
     TEST_ASSERT_EQUAL(cfgDft.SIMPinNumber, cfg->SIMPinNumber);
     TEST_ASSERT_EQUAL(cfgDft.maxNumConnNoRespRetries, 
                       cfg->maxNumConnNoRespRetries);
@@ -171,8 +165,8 @@ test_InitWithStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgFile.accLimit, cfg->accLimit);
     TEST_ASSERT_EQUAL(cfgFile.brLimit, cfg->brLimit);
     TEST_ASSERT_EQUAL(cfgFile.status, cfg->status);
-    TEST_ASSERT_EQUAL_STRING(cfgFile.ip, cfg->ip);
-    TEST_ASSERT_EQUAL_STRING(cfgFile.port, cfg->port);
+    TEST_ASSERT_EQUAL_STRING(cfgFile.connectionDomain, cfg->connectionDomain);
+    TEST_ASSERT_EQUAL_STRING(cfgFile.connectionPort, cfg->connectionPort);
     TEST_ASSERT_EQUAL(cfgFile.mapTimeOnRunning, cfg->mapTimeOnRunning);
     TEST_ASSERT_EQUAL(cfgFile.mapTimeOnStopped, cfg->mapTimeOnStopped);
     TEST_ASSERT_EQUAL(cfgFile.mapTimeOnStopped, cfg->mapTimeOnStopped);
@@ -182,8 +176,6 @@ test_InitWithStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgFile.dftDigOut, cfg->dftDigOut);
     TEST_ASSERT_EQUAL(cfgFile.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
     TEST_ASSERT_EQUAL(cfgFile.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
-    TEST_ASSERT_EQUAL_STRING(cfgFile.connectionDomain, cfg->connectionDomain);
-    TEST_ASSERT_EQUAL_STRING(cfgFile.connectionPort, cfg->connectionPort);
     TEST_ASSERT_EQUAL(cfgFile.SIMPinNumber, cfg->SIMPinNumber);
     TEST_ASSERT_EQUAL(cfgFile.maxNumConnNoRespRetries, 
                       cfg->maxNumConnNoRespRetries);
@@ -218,8 +210,8 @@ test_InitWithFileError(void)
     TEST_ASSERT_EQUAL(cfgDft.accLimit, cfg->accLimit);
     TEST_ASSERT_EQUAL(cfgDft.brLimit, cfg->brLimit);
     TEST_ASSERT_EQUAL(cfgDft.status, cfg->status);
-    TEST_ASSERT_EQUAL_STRING(cfgDft.ip, cfg->ip);
-    TEST_ASSERT_EQUAL_STRING(cfgDft.port, cfg->port);
+    TEST_ASSERT_EQUAL_STRING(cfgDft.connectionDomain, cfg->connectionDomain);
+    TEST_ASSERT_EQUAL_STRING(cfgDft.connectionPort, cfg->connectionPort);
     TEST_ASSERT_EQUAL(cfgDft.mapTimeOnRunning, cfg->mapTimeOnRunning);
     TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
     TEST_ASSERT_EQUAL(cfgDft.mapTimeOnStopped, cfg->mapTimeOnStopped);
@@ -229,6 +221,15 @@ test_InitWithFileError(void)
     TEST_ASSERT_EQUAL(cfgDft.dftDigOut, cfg->dftDigOut);
     TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
     TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
+    TEST_ASSERT_EQUAL(cfgDft.SIMPinNumber, cfg->SIMPinNumber);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumConnNoRespRetries, 
+                      cfg->maxNumConnNoRespRetries);
+    TEST_ASSERT_EQUAL(cfgDft.connectionStatusPeriod, 
+                      cfg->connectionStatusPeriod);
+    TEST_ASSERT_EQUAL(cfgDft.reopenDelay, cfg->reopenDelay);
+    TEST_ASSERT_EQUAL(cfgDft.connectTryDelay, cfg->connectTryDelay);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumConnectRetries, cfg->maxNumConnectRetries);
+    TEST_ASSERT_EQUAL(cfgDft.configTryDelay, cfg->configTryDelay);
 }
 
 void
@@ -399,7 +400,7 @@ test_SetGetDefault(void)
 void
 test_SetIP(void)
 {
-    char ip[64];
+    char connectionDomain[64];
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -410,29 +411,29 @@ test_SetIP(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    strcpy(ip, "8.8.8.8");
-    Config_setIP(ip);
+    strcpy(connectionDomain, "8.8.8.8");
+    Config_setConnectionDomain(connectionDomain);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL_STRING(ip, cfg->ip);
+    TEST_ASSERT_EQUAL_STRING(connectionDomain, cfg->connectionDomain);
 
     rkh_assert_Expect("Config", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
-    strcpy(ip, "deadbeaddeadbeaddeadbeaddeadbead");
-    Config_setIP(ip);
+    strcpy(connectionDomain, "deadbeaddeadbeaddeadbeaddeadbead");
+    Config_setConnectionDomain(connectionDomain);
 
     rkh_assert_Expect("Config", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
-    Config_setIP((char *)0);
+    Config_setConnectionDomain((char *)0);
 }
 
 void
 test_GetIP(void)
 {
-    char ip[64];
+    char connectionDomain[64];
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -443,21 +444,21 @@ test_GetIP(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    Config_getIP(ip);
+    Config_getConnectionDomain(connectionDomain);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL_STRING(ip, cfg->ip);
+    TEST_ASSERT_EQUAL_STRING(connectionDomain, cfg->connectionDomain);
 
     rkh_assert_Expect("Config", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
-    Config_getIP((char *)0);
+    Config_getConnectionDomain((char *)0);
 }
 
 void
 test_SetPort(void)
 {
-    char port[64];
+    char connectionPort[64];
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -468,29 +469,29 @@ test_SetPort(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    strcpy(port, "99999");
-    Config_setPort(port);
+    strcpy(connectionPort, "99999");
+    Config_setConnectionPort(connectionPort);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL_STRING(port, cfg->port);
+    TEST_ASSERT_EQUAL_STRING(connectionPort, cfg->connectionPort);
 
     rkh_assert_Expect("Config", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
-    strcpy(port, "deadbeaddeadbeaddeadbeaddeadbead");
-    Config_setPort(port);
+    strcpy(connectionPort, "deadbeaddeadbeaddeadbeaddeadbead");
+    Config_setConnectionPort(connectionPort);
 
     rkh_assert_Expect("Config", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
-    Config_setPort((char *)0);
+    Config_setConnectionPort((char *)0);
 }
 
 void
-test_GetPort(void)
+test_GetConnectionPort(void)
 {
-    char port[64];
+    char connectionPort[64];
     Config *cfg;
 
     rkh_enter_critical_Ignore();
@@ -501,15 +502,15 @@ test_GetPort(void)
     ffile_sync_Ignore();
     rkh_exit_critical_Ignore();
 
-    Config_getPort(port);
+    Config_getConnectionPort(connectionPort);
     cfg = Config_get();
-    TEST_ASSERT_EQUAL_STRING(port, cfg->port);
+    TEST_ASSERT_EQUAL_STRING(connectionPort, cfg->connectionPort);
 
     rkh_assert_Expect("Config", 0);
     rkh_assert_IgnoreArg_file();
     rkh_assert_IgnoreArg_line();
     rkh_assert_StubWithCallback(MockAssertCallback);
-    Config_getPort((char *)0);
+    Config_getConnectionPort((char *)0);
 }
 
 void
