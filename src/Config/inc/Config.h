@@ -110,14 +110,41 @@ struct Config
      */
     rui8_t maxNumStoreOnStopped;
 
+    /**
+     * Max. number of status storage in mapping running state before
+     * synchronize the file system.
+     */
+    rui8_t maxNumStoreOnRunning;
+
     char connectionDomain[IP_LENGTH + 1];
     char connectionPort[PORT_LENGTH + 1];
     rui16_t SIMPinNumber;
-    rui8_t maxNumRetriesConnNoResp;
+    rui8_t maxNumConnNoRespRetries;
+
+    /**
+     * Specifies the TCP connection status's polling period
+     */
     rui8_t connectionStatusPeriod;
+
+    /**
+     * Specifies time delay between server close and reopen
+     */
     rui8_t reopenDelay;
+
+    /**
+     * Specifies time delay between server connection attemps
+     */
     rui8_t connectTryDelay;
+
+    /**
+     * Specifies time delay between server connection attemps
+     */
     rui8_t maxNumConnectRetries;
+
+    /**
+     * Specifies time delay after configuring error amd before 
+     * restarting connection
+     */
     rui8_t configTryDelay;
 };
 

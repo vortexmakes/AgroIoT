@@ -46,6 +46,15 @@ extern "C" {
 #define DFT_DIG_OUT_DFT                 0
 #define MAX_NUM_STORE_ON_STOPPED_DFT    240
 #define MAX_NUM_STORE_ON_RUNNING_DFT    100
+#define CONNECTION_DOMAIN_DFT           "\"71.6.135.77\""
+#define CONNECTION_PORT_DFT             "33499"
+#define SIM_PIN_NUMBER_DFT              9474
+#define MAX_NUM_CONNNORESP_RETRIES_DFT  2
+#define CONNECTION_STATUS_PERIOD_DFT    2
+#define REOPEN_DELAY_DFT                5
+#define CONNECT_TRY_DELAY_DFT           5
+#define MAX_NUM_CONNECT_RETRIES_DFT     3
+#define CONFIG_TRY_DELAY_DFT            3
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */

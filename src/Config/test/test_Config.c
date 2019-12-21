@@ -42,7 +42,16 @@ static const Config cfgDft =
     UPDATE_GPS_TIME,
     DFT_DIG_OUT_DFT,
     MAX_NUM_STORE_ON_STOPPED_DFT,
-    MAX_NUM_STORE_ON_RUNNING_DFT
+    MAX_NUM_STORE_ON_RUNNING_DFT,
+    CONNECTION_DOMAIN_DFT,
+    CONNECTION_PORT_DFT,
+    SIM_PIN_NUMBER_DFT,
+    MAX_NUM_CONNNORESP_RETRIES_DFT,
+    CONNECTION_STATUS_PERIOD_DFT,
+    REOPEN_DELAY_DFT,
+    CONNECT_TRY_DELAY_DFT,
+    MAX_NUM_CONNECT_RETRIES_DFT,
+    CONFIG_TRY_DELAY_DFT
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -63,7 +72,16 @@ static Config cfgFile =
     2,
     0,
     240,
-    100
+    100,
+    "\"11.2.333.44\"",
+    "11223",
+    9474,
+    2,
+    2,
+    5,
+    5,
+    3,
+    3
 };
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -121,11 +139,11 @@ test_InitWithoutStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgDft.dftDigOut, cfg->dftDigOut);
     TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
     TEST_ASSERT_EQUAL(cfgDft.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
-    TEST_ASSERT_EQUAL(cfgDft.connectionDomain, cfg->connectionDomain);
-    TEST_ASSERT_EQUAL(cfgDft.connectionPort, cfg->connectionPort);
+    TEST_ASSERT_EQUAL_STRING(cfgDft.connectionDomain, cfg->connectionDomain);
+    TEST_ASSERT_EQUAL_STRING(cfgDft.connectionPort, cfg->connectionPort);
     TEST_ASSERT_EQUAL(cfgDft.SIMPinNumber, cfg->SIMPinNumber);
-    TEST_ASSERT_EQUAL(cfgDft.maxNumRetriesConnNoResp, 
-                      cfg->maxNumRetriesConnNoResp);
+    TEST_ASSERT_EQUAL(cfgDft.maxNumConnNoRespRetries, 
+                      cfg->maxNumConnNoRespRetries);
     TEST_ASSERT_EQUAL(cfgDft.connectionStatusPeriod, 
                       cfg->connectionStatusPeriod);
     TEST_ASSERT_EQUAL(cfgDft.reopenDelay, cfg->reopenDelay);
@@ -164,8 +182,8 @@ test_InitWithStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgFile.dftDigOut, cfg->dftDigOut);
     TEST_ASSERT_EQUAL(cfgFile.maxNumStoreOnStopped, cfg->maxNumStoreOnStopped);
     TEST_ASSERT_EQUAL(cfgFile.maxNumStoreOnRunning, cfg->maxNumStoreOnRunning);
-    TEST_ASSERT_EQUAL(cfgFile.connectionDomain, cfg->connectionDomain);
-    TEST_ASSERT_EQUAL(cfgFile.connectionPort, cfg->connectionPort);
+    TEST_ASSERT_EQUAL_STRING(cfgFile.connectionDomain, cfg->connectionDomain);
+    TEST_ASSERT_EQUAL_STRING(cfgFile.connectionPort, cfg->connectionPort);
     TEST_ASSERT_EQUAL(cfgFile.SIMPinNumber, cfg->SIMPinNumber);
     TEST_ASSERT_EQUAL(cfgFile.maxNumConnNoRespRetries, 
                       cfg->maxNumConnNoRespRetries);
