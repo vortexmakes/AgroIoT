@@ -88,6 +88,18 @@ MockAssertCallback(const char* const file, int line, int cmock_num_calls)
     TEST_PASS();
 }
 
+static void
+setupGetterAndSettter(void)
+{
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_enter_critical_Ignore();
+    ffile_seek_Ignore();
+    ffile_random_access_IgnoreAndReturn(1);
+    ffile_sync_Ignore();
+    rkh_exit_critical_Ignore();
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 setUp(void)
@@ -735,22 +747,117 @@ test_SetGetSIMPinNumber(void)
     rui8_t value;
     Config *cfg;
 
-    rkh_enter_critical_Ignore();
-    rkh_exit_critical_Ignore();
-    rkh_enter_critical_Ignore();
-    ffile_seek_Ignore();
-    ffile_random_access_IgnoreAndReturn(1);
-    ffile_sync_Ignore();
-    rkh_exit_critical_Ignore();
+    setupGetterAndSettter();
 
     value = 4;
     Config_setSIMPinNumber(value);
     cfg = Config_get();
     TEST_ASSERT_EQUAL(value, cfg->SIMPinNumber);
 
-    value = 0;
     value = Config_getSIMPinNumber();
     TEST_ASSERT_EQUAL(value, cfg->SIMPinNumber);
+}
+
+void
+test_SetGetMaxNumConnNoRespRetries(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    setupGetterAndSettter();
+
+    value = 4;
+    Config_setMaxNumConnNoRespRetries(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->maxNumConnNoRespRetries);
+
+    value = Config_getMaxNumConnNoRespRetries();
+    TEST_ASSERT_EQUAL(value, cfg->maxNumConnNoRespRetries);
+}
+
+void
+test_SetGetConnectionStatusPeriod(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    setupGetterAndSettter();
+
+    value = 4;
+    Config_setConnectionStatusPeriod(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->connectionStatusPeriod);
+
+    value = Config_getConnectionStatusPeriod();
+    TEST_ASSERT_EQUAL(value, cfg->connectionStatusPeriod);
+}
+
+void
+test_SetGetReopenDelay(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    setupGetterAndSettter();
+
+    value = 4;
+    Config_setReopenDelay(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->reopenDelay);
+
+    value = Config_getReopenDelay();
+    TEST_ASSERT_EQUAL(value, cfg->reopenDelay);
+}
+
+void
+test_SetGetConnectTryDelay(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    setupGetterAndSettter();
+
+    value = 4;
+    Config_setConnectTryDelay(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->connectTryDelay);
+
+    value = Config_getConnectTryDelay();
+    TEST_ASSERT_EQUAL(value, cfg->connectTryDelay);
+}
+
+void
+test_SetGetMaxNumConnectRetries(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    setupGetterAndSettter();
+
+    value = 4;
+    Config_setMaxNumConnectRetries(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->maxNumConnectRetries);
+
+    value = Config_getMaxNumConnectRetries();
+    TEST_ASSERT_EQUAL(value, cfg->maxNumConnectRetries);
+}
+
+void
+test_SetGetConfigTryDelay(void)
+{
+    rui8_t value;
+    Config *cfg;
+
+    setupGetterAndSettter();
+
+    value = 4;
+    Config_setConfigTryDelay(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->configTryDelay);
+
+    value = Config_getConfigTryDelay();
+    TEST_ASSERT_EQUAL(value, cfg->configTryDelay);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -28,6 +28,7 @@
 #include "topic.h"
 #include "rtime.h"
 #include "bsp.h"
+#include "Config.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define SIZEOF_QDEFER   1
@@ -728,7 +729,9 @@ socketOpen(ConMgr *const me, RKH_EVT_T *pe)
     (void)me;
     (void)pe;
 
-    ModCmd_connect(CONNECTION_PROT, CONNECTION_DOMAIN, CONNECTION_PORT);
+    ModCmd_connect(CONNECTION_PROT, 
+                   Config_getConnectionDomain(), 
+                   Config_getConnectionPort());
 }
 
 static void
@@ -851,7 +854,7 @@ setPin(ConMgr *const me)
 {
     (void)me;
 
-    ModCmd_setPin(SIM_PIN_NUMBER);
+    ModCmd_setPin(Config_getSIMPinNumber());
 }
 
 static void
@@ -912,7 +915,8 @@ static void
 waitRetryConfigEntry(ConMgr *const me)
 {
     RKH_SET_STATIC_EVENT(&e_tout, evTimeout);
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), CONFIG_TRY_DELAY);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), 
+                    RKH_TIME_SEC(Config_getConfigTryDelay()));
 }
 
 static void
@@ -984,7 +988,8 @@ connectingEntry(ConMgr *const me)
     (void)me;
 
     RKH_SET_STATIC_EVENT(&e_tout, evTimeout);
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), CONNSTATUS_PERIOD);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), 
+                    RKH_TIME_SEC(Config_getConnectionStatusPeriod()));
 }
 
 static void
@@ -1003,7 +1008,8 @@ wReopenEntry(ConMgr *const me)
     (void)me;
 
     RKH_SET_STATIC_EVENT(&e_tout, evTimeout);
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), REOPEN_DELAY);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), 
+                    RKH_TIME_SEC(Config_getReopenDelay()));
 }
 
 static void
@@ -1012,7 +1018,8 @@ waitRetryConnEntry(ConMgr *const me)
     (void)me;
 
     RKH_SET_STATIC_EVENT(&e_tout, evTimeout);
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), CONNECT_TRY_DELAY);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), 
+                    RKH_TIME_SEC(Config_getConnectTryDelay()));
 }
 
 static void
@@ -1021,7 +1028,8 @@ idleEntry(ConMgr *const me)
     (void)me;
 
     RKH_SET_STATIC_EVENT(&e_tout, evTimeout);
-    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), CONNSTATUS_PERIOD);
+    RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me), 
+                    RKH_TIME_SEC(Config_getConnectionStatusPeriod()));
 }
 
 /* ............................. Exit actions ............................. */
@@ -1129,7 +1137,8 @@ checkConnectTry(ConMgr *const me, RKH_EVT_T *pe)
 {
     (void)pe;
 
-    return (me->retryCount < MAX_CONNECT_RETRY) ? RKH_TRUE : RKH_FALSE;
+    return (me->retryCount < Config_getMaxNumConnectRetries()) ? 
+            RKH_TRUE : RKH_FALSE;
 }
 
 rbool_t
@@ -1137,7 +1146,8 @@ checkConnectedFailCounter(ConMgr *const me, RKH_EVT_T *pe)
 {
     (void)pe;
 
-    return (me->retryCount < MAX_CONSTATUS_NORESP) ? RKH_TRUE : RKH_FALSE;
+    return (me->retryCount < Config_getMaxNumConnNoRespRetries()) ? 
+            RKH_TRUE : RKH_FALSE;
 }
 
 /* ---------------------------- Global functions --------------------------- */

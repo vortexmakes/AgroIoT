@@ -68,36 +68,6 @@ extern "C" {
 #define WAIT_NETCLOCK_TIME  RKH_TIME_MS(10000)
 
 /**
- * Specifies a time delay after config error before to restart connection.
- */
-#define CONFIG_TRY_DELAY    RKH_TIME_MS(3000)
-
-/**
- * Specifies maximum server connection attemps.
- */
-#define MAX_CONNECT_RETRY   3
-
-/**
- * Specifies a time delay between server connection attemps.
- */
-#define CONNECT_TRY_DELAY   RKH_TIME_MS(5000)
-
-/**
- * Specifies a time delay between server close and reopen.
- */
-#define REOPEN_DELAY        RKH_TIME_MS(5000)
-
-/**
- * Specifies connections statuss polling period.
- */
-#define CONNSTATUS_PERIOD   RKH_TIME_MS(2000)
-
-/**
- * Specifies connections statuss polling period.
- */
-#define MAX_CONSTATUS_NORESP 2
-
-/**
  * Specifies sizeof send / receive buffers.
  */
 #define SEND_BUFF_SIZE      2048
@@ -134,19 +104,14 @@ extern "C" {
 #define PERSONAL_APN_USER       "datos"
 #define PERSONAL_APN_PASS       "datos"
 
-/* .................................. SIM PIN .............................. */
-#define SIM_PIN_NUMBER          9474
-
 /* ................................. Server ................................ */
-    #define YIPIES_SERVER       "71.6.135.77"
-    #define YIPIES_PORT         "33499"
+#define YIPIES_SERVER           "71.6.135.77"
+#define YIPIES_PORT             "33499"
 
-    #define DOCKLIGHT_SERVER    "179.41.2.32"
-    #define DOCKLIGHT_PORT      "33498"
+#define DOCKLIGHT_SERVER        "179.41.2.32"
+#define DOCKLIGHT_PORT          "33498"
 
 #define CONNECTION_PROT         "TCP"
-#define CONNECTION_DOMAIN       YIPIES_SERVER /*DOCKLIGHT_SERVER */
-#define CONNECTION_PORT         YIPIES_PORT /*DOCKLIGHT_PORT */
 
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */

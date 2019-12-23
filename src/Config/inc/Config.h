@@ -116,21 +116,27 @@ struct Config
      */
     rui8_t maxNumStoreOnRunning;
 
+    /**
+     * SIM pin number
+     */
     rui16_t SIMPinNumber;
+
+    /**
+     */
     rui8_t maxNumConnNoRespRetries;
 
     /**
-     * Specifies the TCP connection status's polling period
+     * Specifies the TCP connection status's polling period in seconds
      */
     rui8_t connectionStatusPeriod;
 
     /**
-     * Specifies time delay between server close and reopen
+     * Specifies time delay between server close and reopen in seconds
      */
     rui8_t reopenDelay;
 
     /**
-     * Specifies time delay between server connection attemps
+     * Specifies time delay between server connection attemps in seconds
      */
     rui8_t connectTryDelay;
 
@@ -141,7 +147,7 @@ struct Config
 
     /**
      * Specifies time delay after configuring error amd before 
-     * restarting connection
+     * restarting connection in seconds
      */
     rui8_t configTryDelay;
 };
@@ -184,6 +190,18 @@ void Config_setMaxNumStoreOnRunning(rui16_t value);
 rui16_t Config_getMaxNumStoreOnRunning(void);
 void Config_setSIMPinNumber(rui16_t value);
 rui16_t Config_getSIMPinNumber(void);
+void Config_setMaxNumConnNoRespRetries(rui8_t value);
+rui8_t Config_getMaxNumConnNoRespRetries(void);
+void Config_setConnectionStatusPeriod(rui8_t value);
+rui8_t Config_getConnectionStatusPeriod(void);
+void Config_setReopenDelay(rui8_t value);
+rui8_t Config_getReopenDelay(void);
+void Config_setConnectTryDelay(rui8_t value);
+rui8_t Config_getConnectTryDelay(void);
+void Config_setMaxNumConnectRetries(rui8_t value);
+rui8_t Config_getMaxNumConnectRetries(void);
+void Config_setConfigTryDelay(rui8_t value);
+rui8_t Config_getConfigTryDelay(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

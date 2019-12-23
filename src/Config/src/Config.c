@@ -419,4 +419,118 @@ Config_getSIMPinNumber(void)
     return cfg->SIMPinNumber;
 }
 
+void
+Config_setMaxNumConnNoRespRetries(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->maxNumConnNoRespRetries = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getMaxNumConnNoRespRetries(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->maxNumConnNoRespRetries;
+}
+
+void
+Config_setConnectionStatusPeriod(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->connectionStatusPeriod = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getConnectionStatusPeriod(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->connectionStatusPeriod;
+}
+
+void
+Config_setReopenDelay(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->reopenDelay = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getReopenDelay(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->reopenDelay;
+}
+
+void
+Config_setConnectTryDelay(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->connectTryDelay = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getConnectTryDelay(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->connectTryDelay;
+}
+
+void
+Config_setMaxNumConnectRetries(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->maxNumConnectRetries = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getMaxNumConnectRetries(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->maxNumConnectRetries;
+}
+
+void
+Config_setConfigTryDelay(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->configTryDelay = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getConfigTryDelay(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->configTryDelay;
+}
+
 /* ------------------------------ End of file ------------------------------ */
