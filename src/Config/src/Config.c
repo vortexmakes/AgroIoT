@@ -33,7 +33,7 @@ RKH_MODULE_NAME(Config)
 /* ------------------------------- Constants ------------------------------- */
 enum
 {
-    IP_PARAM, PORT_PARAM
+    CONN_DOMAIN_PARAM, CONN_PORT_PARAM
 };
 
 static const Config cfgDft =
@@ -41,8 +41,8 @@ static const Config cfgDft =
     ACC_LIMIT_DFT,
     BR_LIMIT_DFT,
     1,
-    IP_DFT,
-    PORT_DFT,
+    CONNECTION_DOMAIN_DFT,
+    CONNECTION_PORT_DFT,
     MAP_TIME_ON_RUNNING_DFT,
     MAP_TIME_ON_STOPPED_DFT,
     CONN_TIME_DFT,
@@ -51,7 +51,14 @@ static const Config cfgDft =
     UPDATE_GPS_TIME,
     DFT_DIG_OUT_DFT,
     MAX_NUM_STORE_ON_STOPPED_DFT,
-    MAX_NUM_STORE_ON_RUNNING_DFT
+    MAX_NUM_STORE_ON_RUNNING_DFT,
+    SIM_PIN_NUMBER_DFT,
+    MAX_NUM_CONNNORESP_RETRIES_DFT,
+    CONNECTION_STATUS_PERIOD_DFT,
+    REOPEN_DELAY_DFT,
+    CONNECT_TRY_DELAY_DFT,
+    MAX_NUM_CONNECT_RETRIES_DFT,
+    CONFIG_TRY_DELAY_DFT
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -67,10 +74,11 @@ setTCP(int param, char *value)
     Config *cfg;
     int size;
 
-    size = (param == IP_PARAM) ? IP_LENGTH : PORT_LENGTH;
+    size = (param == CONN_DOMAIN_PARAM) ? IP_LENGTH : PORT_LENGTH;
     RKH_ENSURE((value != (char *)0) && (strlen(value) <= size));
     cfg = Config_get();
-    strcpy((param == IP_PARAM) ? cfg->ip : cfg->port, value);
+    strcpy((param == CONN_DOMAIN_PARAM) ? 
+            cfg->connectionDomain : cfg->connectionPort, value);
     Config_set(cfg);
 }
 
@@ -190,35 +198,35 @@ Config_getDefault(void)
 }
 
 void
-Config_setIP(char *value)
+Config_setConnectionDomain(char *value)
 {
-    setTCP(IP_PARAM, value);
+    setTCP(CONN_DOMAIN_PARAM, value);
 }
 
 void
-Config_getIP(char *value)
+Config_getConnectionDomain(char *value)
 {
     Config *cfg;
 
     RKH_ENSURE(value != (char *)0);
     cfg = Config_get();
-    strcpy(value, cfg->ip);
+    strcpy(value, cfg->connectionDomain);
 }
 
 void
-Config_setPort(char *value)
+Config_setConnectionPort(char *value)
 {
-    setTCP(PORT_PARAM, value);
+    setTCP(CONN_PORT_PARAM, value);
 }
 
 void
-Config_getPort(char *value)
+Config_getConnectionPort(char *value)
 {
     Config *cfg;
 
     RKH_ENSURE(value != (char *)0);
     cfg = Config_get();
-    strcpy(value, cfg->port);
+    strcpy(value, cfg->connectionPort);
 }
 
 void
@@ -390,6 +398,139 @@ Config_getMaxNumStoreOnRunning(void)
 
     cfg = Config_get();
     return cfg->maxNumStoreOnRunning;
+}
+
+void
+Config_setSIMPinNumber(rui16_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->SIMPinNumber = value;
+    Config_set(cfg);
+}
+
+rui16_t
+Config_getSIMPinNumber(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->SIMPinNumber;
+}
+
+void
+Config_setMaxNumConnNoRespRetries(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->maxNumConnNoRespRetries = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getMaxNumConnNoRespRetries(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->maxNumConnNoRespRetries;
+}
+
+void
+Config_setConnectionStatusPeriod(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->connectionStatusPeriod = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getConnectionStatusPeriod(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->connectionStatusPeriod;
+}
+
+void
+Config_setReopenDelay(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->reopenDelay = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getReopenDelay(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->reopenDelay;
+}
+
+void
+Config_setConnectTryDelay(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->connectTryDelay = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getConnectTryDelay(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->connectTryDelay;
+}
+
+void
+Config_setMaxNumConnectRetries(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->maxNumConnectRetries = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getMaxNumConnectRetries(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->maxNumConnectRetries;
+}
+
+void
+Config_setConfigTryDelay(rui8_t value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->configTryDelay = value;
+    Config_set(cfg);
+}
+
+rui8_t
+Config_getConfigTryDelay(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->configTryDelay;
 }
 
 /* ------------------------------ End of file ------------------------------ */

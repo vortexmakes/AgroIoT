@@ -56,12 +56,12 @@ struct Config
     /**
      * Remote server's IP address
      */
-    char ip[IP_LENGTH + 1];
+    char connectionDomain[IP_LENGTH + 1];
 
     /**
      * Remote server's TCP/IP port number
      */
-    char port[PORT_LENGTH + 1];
+    char connectionPort[PORT_LENGTH + 1];
 
     /**
      * The mapping is performed by collecting the different
@@ -111,10 +111,45 @@ struct Config
     rui8_t maxNumStoreOnStopped;
 
     /**
-     * Max. number of status storage in mapping running state before 
+     * Max. number of status storage in mapping running state before
      * synchronize the file system.
      */
     rui8_t maxNumStoreOnRunning;
+
+    /**
+     * SIM pin number
+     */
+    rui16_t SIMPinNumber;
+
+    /**
+     */
+    rui8_t maxNumConnNoRespRetries;
+
+    /**
+     * Specifies the TCP connection status's polling period in seconds
+     */
+    rui8_t connectionStatusPeriod;
+
+    /**
+     * Specifies time delay between server close and reopen in seconds
+     */
+    rui8_t reopenDelay;
+
+    /**
+     * Specifies time delay between server connection attemps in seconds
+     */
+    rui8_t connectTryDelay;
+
+    /**
+     * Specifies time delay between server connection attemps
+     */
+    rui8_t maxNumConnectRetries;
+
+    /**
+     * Specifies time delay after configuring error amd before 
+     * restarting connection in seconds
+     */
+    rui8_t configTryDelay;
 };
 
 /* -------------------------- External variables --------------------------- */
@@ -131,10 +166,10 @@ void Config_setBrLimit(rui8_t value);
 rui8_t Config_getBrLimit(void);
 void Config_setDefault(rui8_t value);
 rui8_t Config_getDefault(void);
-void Config_setIP(char *value);
-void Config_getIP(char *value);
-void Config_setPort(char *value);
-void Config_getPort(char *value);
+void Config_setConnectionDomain(char *value);
+void Config_getConnectionDomain(char *value);
+void Config_setConnectionPort(char *value);
+void Config_getConnectionPort(char *value);
 void Config_setMapTimeOnRunning(rui8_t value);
 rui8_t Config_getMapTimeOnRunning(void);
 void Config_setMapTimeOnStopped(rui8_t value);
@@ -153,6 +188,20 @@ void Config_setMaxNumStoreOnStopped(rui16_t value);
 rui16_t Config_getMaxNumStoreOnStopped(void);
 void Config_setMaxNumStoreOnRunning(rui16_t value);
 rui16_t Config_getMaxNumStoreOnRunning(void);
+void Config_setSIMPinNumber(rui16_t value);
+rui16_t Config_getSIMPinNumber(void);
+void Config_setMaxNumConnNoRespRetries(rui8_t value);
+rui8_t Config_getMaxNumConnNoRespRetries(void);
+void Config_setConnectionStatusPeriod(rui8_t value);
+rui8_t Config_getConnectionStatusPeriod(void);
+void Config_setReopenDelay(rui8_t value);
+rui8_t Config_getReopenDelay(void);
+void Config_setConnectTryDelay(rui8_t value);
+rui8_t Config_getConnectTryDelay(void);
+void Config_setMaxNumConnectRetries(rui8_t value);
+rui8_t Config_getMaxNumConnectRetries(void);
+void Config_setConfigTryDelay(rui8_t value);
+rui8_t Config_getConfigTryDelay(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
