@@ -20,6 +20,7 @@
 #include "rkh.h"
 #include "ssp.h"
 #include "Geo.h"
+#include "rmc.h"
 #include "ubxm8parser.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -52,7 +53,7 @@ gps_parserInit(void)
 rbool_t
 Geo_isValid(Geo *const me)
 {
-    return me->status[0] == 'a';
+    return me->status[0] == RMC_StatusValid;
 }
 
 /* ------------------------------ End of file ------------------------------ */
