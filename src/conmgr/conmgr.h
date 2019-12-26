@@ -23,6 +23,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "events.h"
+#include "Config.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -84,6 +85,16 @@ extern "C" {
  */
 #define OPER_LENGTH         10
 #define OPER_BUF_SIZE       OPER_LENGTH + 1
+
+/**
+ *  Domain process definitions
+ */
+#define DOMAIN_BUF_SIZE     IP_LENGTH + 1
+
+/**
+ *  Port process definitions
+ */
+#define PORT_BUF_SIZE       PORT_LENGTH + 1
 
 /**
  * GSM Network Provider and Connection specific configurations.

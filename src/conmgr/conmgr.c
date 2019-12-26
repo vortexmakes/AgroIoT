@@ -432,6 +432,8 @@ struct ConMgr
     int sigLevel;
     char Imei[IMEI_BUF_SIZE];
     char Oper[OPER_BUF_SIZE];
+    char Domain[DOMAIN_BUF_SIZE];
+    char Port[PORT_BUF_SIZE];
 };
 
 typedef struct Apn
@@ -569,6 +571,9 @@ init(ConMgr *const me, RKH_EVT_T *pe)
     RKH_TMR_INIT(&me->timer, &e_tout, NULL);
     RKH_TMR_INIT(&me->timerReg, &e_regTout, NULL);
     me->retryCount = 0;
+
+    Config_getConnectionDomain(me->Domain);
+    Config_getConnectionPort(me->Port);
 }
 
 /* ............................ Effect actions ............................. */
@@ -729,9 +734,7 @@ socketOpen(ConMgr *const me, RKH_EVT_T *pe)
     (void)me;
     (void)pe;
 
-    ModCmd_connect(CONNECTION_PROT, 
-                   Config_getConnectionDomain(), 
-                   Config_getConnectionPort());
+    ModCmd_connect(CONNECTION_PROT, me->Domain, me->Port); 
 }
 
 static void
