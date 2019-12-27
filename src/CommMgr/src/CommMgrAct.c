@@ -71,6 +71,20 @@ publishReceive(CommMgr *const me)
                   RKH_UPCAST(RKH_SMA_T, me));
 }
 
+static void
+sendFrames(CommMgr *const me)
+{
+    rInt res;
+    GPS_STR from;
+    GStatus to;
+
+    res = StatQue_read(&from);
+    RKH_ENSURE(res == 0);
+    res = GStatus_fromGpsStr(&from, &to);
+    RKH_ENSURE(res == 0);
+    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
+}
+
 /* ............................ Effect actions ............................. */
 void
 CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
@@ -228,30 +242,14 @@ void
 CommMgr_SendingStartOfHistToSendingHistExt30(CommMgr *const me, RKH_EVT_T *pe)
 {
     /*sendFirst();*/
-    rInt res;
-    GPS_STR from;
-    GStatus to;
-
-    res = StatQue_read(&from);
-    RKH_ENSURE(res == 0);
-    res = GStatus_fromGpsStr(&from, &to);
-    RKH_ENSURE(res == 0);
-    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
+    sendFrames(me);
 }
 
 void
 CommMgr_C1ToSendingHistExt31(CommMgr *const me, RKH_EVT_T *pe)
 {
     /*prepareNext();*/
-    rInt res;
-    GPS_STR from;
-    GStatus to;
-
-    res = StatQue_read(&from);
-    RKH_ENSURE(res == 0);
-    res = GStatus_fromGpsStr(&from, &to);
-    RKH_ENSURE(res == 0);
-    me->evSendObj.size = YFrame_data(&to, me->evSendObj.buf, YFRAME_MGP_TYPE);
+    sendFrames(me);
 }
 
 void
