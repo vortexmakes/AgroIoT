@@ -44,7 +44,7 @@ void CommMgr_HistoryToWaitSyncExt14(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ToC1Ext16(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_SendingHistToC2Ext18(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ReceivingMsgAckToC3Ext19(CommMgr *const me, RKH_EVT_T *pe);
-void CommMgr_C1ToSendingHistExt31(CommMgr *const me, RKH_EVT_T *pe);
+void CommMgr_C2ToSendingHistExt31(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C3ToHistoryFinalExt24(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C3ToC4Ext25(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C3ToC5Ext32(CommMgr *const me, RKH_EVT_T *pe);

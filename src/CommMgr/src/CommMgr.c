@@ -103,7 +103,7 @@ RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C2)
 	RKH_BRANCH(CommMgr_isCondC2ToSendingEndOfHist23, NULL, &SendingEndOfHist),
-	RKH_BRANCH(ELSE, CommMgr_C1ToSendingHistExt31, &SendingHist),
+	RKH_BRANCH(ELSE, CommMgr_C2ToSendingHistExt31, &SendingHist),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(C3)

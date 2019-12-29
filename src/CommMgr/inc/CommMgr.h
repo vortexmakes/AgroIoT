@@ -32,6 +32,7 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 #define MIN_NUM_STORED_FRAMES_TO_SEND   1
+#define MAX_NUM_FRAMES_PER_MSG          16
 
 /* ........................ Declares active object ......................... */
 RKH_SMA_DCLR(commMgr);
@@ -58,6 +59,7 @@ struct CommMgr
     rui16_t nFramesToSend;
     rui16_t framesToSend;
     int nRecvTries;
+    rui16_t nFramesPerMsg;
 };
 
 /* -------------------------- External variables --------------------------- */

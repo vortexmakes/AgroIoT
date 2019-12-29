@@ -68,6 +68,8 @@ static GStatus gStatus =
 };
 static const char singleFrame[] =
     "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+static const char frameData[] =
+    "|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -75,6 +77,32 @@ static void
 MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 {
     TEST_PASS();
+}
+
+static int
+setupForSendingABlockOfFrames(ruint nFrames, int len)
+{
+    GPS_STR *elem;
+    GStatus *to;
+    int n, i;
+
+    me->framesToSend = nFrames;
+    n = (me->framesToSend > MAX_NUM_FRAMES_PER_MSG) ? 
+                                MAX_NUM_FRAMES_PER_MSG :
+                                me->framesToSend;
+    for (i = 0; i < n; ++i)
+    {
+        StatQue_read_ExpectAndReturn(elem, 0);
+        StatQue_read_IgnoreArg_elem();
+        GStatus_fromGpsStr_ExpectAndReturn(elem, to, 0);
+        GStatus_fromGpsStr_IgnoreArg_from();
+        GStatus_fromGpsStr_IgnoreArg_to();
+        YFrame_data_ExpectAndReturn(to, 
+                                    me->evSendObj.buf + me->evSendObj.size, 
+                                    YFRAME_MGP_TYPE, len);
+        YFrame_data_IgnoreArg_from(); 
+    }
+    return n;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -455,70 +483,63 @@ test_StartHistoryMessage(void)
 }
 
 void
-test_PrepareFirstMessage(void)
-{
-    ruint len;
-    GPS_STR *elem;
-    GStatus *to;
-    ruint nFrames;
-
-    len = strlen(singleFrame);
-    nFrames = 2;
-    me->framesToSend = nFrames;
-
-    StatQue_read_ExpectAndReturn(elem, 0);
-    StatQue_read_IgnoreArg_elem();
-    GStatus_fromGpsStr_ExpectAndReturn(elem, to, 0);
-    GStatus_fromGpsStr_IgnoreArg_from();
-    GStatus_fromGpsStr_IgnoreArg_to();
-    YFrame_data_ExpectAndReturn(to, 
-                                me->evSendObj.buf, 
-                                YFRAME_MGP_TYPE, len);
-    YFrame_data_IgnoreArg_from(); 
-
-    CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
-
-    TEST_ASSERT_EQUAL(nFrames, me->framesToSend);
-    TEST_ASSERT_EQUAL(len, me->evSendObj.size);
-}
-
-void
 test_DecrementNumFrameToSend(void)
 {
     ruint nFrames;
 
-    nFrames = 2;
-    me->framesToSend = nFrames;
+    me->framesToSend = nFrames = 64;
+    me->nFramesPerMsg = MAX_NUM_FRAMES_PER_MSG;
     CommMgr_SendingHistToC2Ext18(me, evt);
-    TEST_ASSERT_EQUAL(nFrames - 1, me->framesToSend);
+    TEST_ASSERT_EQUAL(nFrames - me->nFramesPerMsg, me->framesToSend);
 }
 
 void
-test_PrepareNextStatusBlock(void)
+test_SendABlockOfFrames(void)
 {
-    ruint len;
-    GPS_STR *elem;
-    GStatus *to;
+    rbool_t res;
     ruint nFrames;
+    int n, len;
 
-    len = strlen(singleFrame);
-    nFrames = 2;
-    me->framesToSend = nFrames;
+    len = strlen(frameData);
 
-    StatQue_read_ExpectAndReturn(elem, 0);
-    StatQue_read_IgnoreArg_elem();
-    GStatus_fromGpsStr_ExpectAndReturn(elem, to, 0);
-    GStatus_fromGpsStr_IgnoreArg_from();
-    GStatus_fromGpsStr_IgnoreArg_to();
-    YFrame_data_ExpectAndReturn(to, 
-                                me->evSendObj.buf, 
-                                YFRAME_MGP_TYPE, len);
-    YFrame_data_IgnoreArg_from(); 
+    nFrames = MAX_NUM_FRAMES_PER_MSG;
+    n = setupForSendingABlockOfFrames(nFrames, len);
+    CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
+    CommMgr_SendingHistToC2Ext18(me, evt);
+    res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
+    TEST_ASSERT_EQUAL(n, me->nFramesPerMsg);
+    TEST_ASSERT_EQUAL(len * n, me->evSendObj.size);
+    TEST_ASSERT_EQUAL(nFrames - me->nFramesPerMsg, me->framesToSend);
+    TEST_ASSERT_TRUE(res == true);
 
-    CommMgr_C1ToSendingHistExt31(me, evt);
+    nFrames = MAX_NUM_FRAMES_PER_MSG - 1;
+    n = setupForSendingABlockOfFrames(nFrames, len);
+    CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
+    CommMgr_SendingHistToC2Ext18(me, evt);
+    res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
+    TEST_ASSERT_EQUAL(n, me->nFramesPerMsg);
+    TEST_ASSERT_EQUAL(len * n, me->evSendObj.size);
+    TEST_ASSERT_EQUAL(nFrames - me->nFramesPerMsg, me->framesToSend);
+    TEST_ASSERT_TRUE(res == true);
 
-    TEST_ASSERT_EQUAL(nFrames, me->framesToSend);
-    TEST_ASSERT_EQUAL(len, me->evSendObj.size);
+    nFrames = MAX_NUM_FRAMES_PER_MSG + 1;
+    n = setupForSendingABlockOfFrames(nFrames, len);
+    CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
+    CommMgr_SendingHistToC2Ext18(me, evt);
+    res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
+    TEST_ASSERT_EQUAL(n, me->nFramesPerMsg);
+    TEST_ASSERT_EQUAL(len * n, me->evSendObj.size);
+    TEST_ASSERT_EQUAL(nFrames - me->nFramesPerMsg, me->framesToSend);
+    TEST_ASSERT_TRUE(res == false);
+
+    n = setupForSendingABlockOfFrames(nFrames - n, len);
+    CommMgr_C2ToSendingHistExt31(me, evt);
+    CommMgr_SendingHistToC2Ext18(me, evt);
+    res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
+    TEST_ASSERT_EQUAL(n, me->nFramesPerMsg);
+    TEST_ASSERT_EQUAL(len * n, me->evSendObj.size);
+    TEST_ASSERT_EQUAL(n - me->nFramesPerMsg, me->framesToSend);
+    TEST_ASSERT_TRUE(res == true);
 }
 
 void
