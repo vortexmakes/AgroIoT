@@ -734,7 +734,7 @@ socketOpen(ConMgr *const me, RKH_EVT_T *pe)
     (void)me;
     (void)pe;
 
-    ModCmd_connect(CONNECTION_PROT, me->Domain, me->Port); 
+    ModCmd_connect(CONNECTION_PROT, me->Domain, me->Port);
 }
 
 static void
