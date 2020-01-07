@@ -57,6 +57,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/CommMgr</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/ConMgr</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/ConMgr</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/Config</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/Config</locationURI>
@@ -95,11 +100,6 @@
 			<name>Sources/src/bsp</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/bsp</locationURI>
-		</link>
-		<link>
-			<name>Sources/src/conmgr</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/src/conmgr</locationURI>
 		</link>
 		<link>
 			<name>Sources/src/date</name>

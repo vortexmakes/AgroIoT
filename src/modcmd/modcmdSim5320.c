@@ -19,7 +19,7 @@
 #include "rkhfwk_dynevt.h"
 #include "modcmd.h"
 #include "modmgr.h"
-#include "conmgr.h"
+#include "ConMgr.h"
 #include "sim5320parser.h"
 #include "signals.h"
 #include <string.h>

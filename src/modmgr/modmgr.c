@@ -22,7 +22,7 @@
 #include "signals.h"
 #include "topic.h"
 #include "modmgr.h"
-#include "conmgr.h"
+#include "ConMgr.h"
 #include "bsp.h"
 
 /* ----------------------------- Local macros ------------------------------ */
