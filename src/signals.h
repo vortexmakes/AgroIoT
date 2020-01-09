@@ -37,7 +37,7 @@ enum Signals
     evNoResponse,
     evURC,
     evTimeout,
-    evRegTimeout,
+    evRegStatusTout,
     evToutWaitResponse,
     evOk,
     evError,
@@ -91,7 +91,15 @@ enum Signals
     evDiskConnected,
     evDiskDisconnected,
     evTout0,
-	evTout1
+	evTout1,
+	evTout2,
+	evTout3,
+	evTout4,
+	evTout5,
+	evTout6,
+	evTout7,
+	evTout8,
+	evStopSMS
 };
 
 /* ------------------------------- Data types ------------------------------ */

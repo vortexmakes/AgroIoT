@@ -18,11 +18,11 @@ extern "C" {
 RKH_SMA_DCLR(conMgr);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE inactive, sync, init, pin, setPin, enableNetTime, getImei, cipShutdown, setManualGet, failure, unregistered, localTime, waitingServer, idle, receiving, getStatus, waitOk, waitPrompt, restarting, wReopen, waitRetryConfig, waitNetClockSync, setAPN, enableNetwork, checkIP, getOper, waitRetryConnect, disconnecting, SMS;
-RKH_DCLR_COMP_STATE Active, initialize, registered, connecting, connected, sending, configure;
+RKH_DCLR_BASIC_STATE ConMgr_Inactive, ConMgr_Sync, ConMgr_Init, ConMgr_Pin, ConMgr_SetPin, ConMgr_EnableNetTime, ConMgr_GetImei, ConMgr_CipShutdown, ConMgr_SetManualGet, ConFailure, Unregistered, ConMgr_LocalTime, ConMgr_WaitingServer, ConMgr_Idle, ConMgr_receiving, ConMgr_GetStatus, ConMgr_waitOk, ConMgr_WaitPrompt, ConMgr_Restarting, ConMgr_WaitReopen, ConMgr_WaitRetryConfig, ConMgr_WaitNetClockSync, ConMgr_SetAPN, ConMgr_EnableNetwork, ConMgr_CheckIP, ConMgr_GetOper, ConMgr_WaitRetryConnect, ConMgr_Disconnecting, ConMgr_SMS;
+RKH_DCLR_COMP_STATE ConMgr_Active, ConMgr_Initialize, ConMgr_Registered, ConMgr_Connecting, ConMgr_Connected, ConMgr_Sending, ConMgr_Configure;
 RKH_DCLR_CHOICE_STATE C0, C1, C2;
-RKH_DCLR_FINAL_STATE initialize_Final, sending_Final, configure_Final, registered_Final, registered_Final, Active_Final;
-RKH_DCLR_SHIST_STATE HConfigure;
+RKH_DCLR_FINAL_STATE ConMgr_Initialize_Final, ConMgr_Sending_Final, ConMgr_Configure_Final, ConMgr_Registered_Final, ConMgr_Registered_Final, ConMgr_Active_Final;
+RKH_DCLR_SHIST_STATE ConMgr_HConfigure;
 
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */
@@ -38,7 +38,7 @@ struct ConMgr
     RKHTmEvt tmEvtObj5;
     RKHTmEvt tmEvtObj6;
     RKHTmEvt tmEvtObj7;
-    rInt FAILURE_TRY_DELAY;
+    rInt retryCount;
 };
 
 /* -------------------------- External variables --------------------------- */

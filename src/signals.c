@@ -36,7 +36,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evNoResponse);
     RKH_TR_FWK_SIG(evURC);
     RKH_TR_FWK_SIG(evTimeout);
-    RKH_TR_FWK_SIG(evRegTimeout);
+    RKH_TR_FWK_SIG(evRegStatusTout);
     RKH_TR_FWK_SIG(evToutWaitResponse);
     RKH_TR_FWK_SIG(evOk);
     RKH_TR_FWK_SIG(evError);
