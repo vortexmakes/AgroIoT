@@ -30,12 +30,10 @@
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void init(void);
+void init(ConMgr *const me);
 void open(void);
 void close(void);
-void initializeInit(void);
 void recvFail(void);
-void sendFail(void);
 void sendSync(void);
 void setSigLevel(void);
 void sendInit(void);
@@ -50,7 +48,6 @@ void startRegStatusTimer(void);
 void rtimeSync(void);
 void configureInit(void);
 void storeOper(void);
-void setupAPN(void);
 void configTry(void);
 void connectTry(void);
 void ConnectInit(void);
@@ -60,10 +57,8 @@ void ModCmd_getConnStatus(void);
 void socketConnected(void);
 void socketDisconnected(void);
 void resetParser(void);
-void ConMgr_defer(void);
 void ConMgr_recall(void);
 void sendOk(void);
-void flushData(void);
 void sendRequest(void);
 void readData(void);
 void recvOk(void);

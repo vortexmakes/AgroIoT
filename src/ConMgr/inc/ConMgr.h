@@ -6,6 +6,8 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhsma.h"
 #include "rkhtmr.h"
+#include "Config.h"
+#include "events.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -14,6 +16,34 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+/**
+ * Specifies sizeof send / receive buffers.
+ */
+#define SEND_BUFF_SIZE      2048
+#define RECV_BUFF_SIZE      1024
+
+/**
+ *  ImeiEvt process definitions
+ */
+#define IMEI_LENGTH         15
+#define IMEI_BUF_SIZE       IMEI_LENGTH + 1
+
+/**
+ *  ImeiEvt process definitions
+ */
+#define OPER_LENGTH         10
+#define OPER_BUF_SIZE       OPER_LENGTH + 1
+
+/**
+ *  Domain process definitions
+ */
+#define DOMAIN_BUF_SIZE     IP_LENGTH + 1
+
+/**
+ *  Port process definitions
+ */
+#define PORT_BUF_SIZE       PORT_LENGTH + 1
+
 /* ........................ Declares active object ......................... */
 RKH_SMA_DCLR(conMgr);
 
@@ -39,6 +69,13 @@ struct ConMgr
     RKHTmEvt tmEvtObj6;
     RKHTmEvt tmEvtObj7;
     rInt retryCount;
+
+    SendEvt *psend;
+    int sigLevel;
+    char Imei[IMEI_BUF_SIZE];
+    char Oper[OPER_BUF_SIZE];
+    char Domain[DOMAIN_BUF_SIZE];
+    char Port[PORT_BUF_SIZE];
 };
 
 /* -------------------------- External variables --------------------------- */

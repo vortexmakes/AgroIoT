@@ -186,7 +186,8 @@ ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(ConMgr_isCondC2ToConMgr_WaitRetryConfig66, "isCondC2ToConMgr_WaitRetryConfig66");
 	#endif
 	
-	init();
+	init(me);
+	me->retryCount = 0;
 }
 
 void 
@@ -204,7 +205,7 @@ ConMgr_ConMgr_ActiveToConMgr_InactiveExt2(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ToConMgr_InitializeExt4(ConMgr *const me, RKH_EVT_T *pe)
 {
-	initializeInit();
+    me->retryCount = 0;
 }
 
 void 
@@ -295,7 +296,7 @@ ConMgr_ConMgr_GetStatusToConMgr_IdleExt46(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_SendingToConMgr_IdleExt47(ConMgr *const me, RKH_EVT_T *pe)
 {
-	sendFail();
+	sendFail(me);
 }
 
 void 
@@ -307,7 +308,7 @@ ConMgr_ConMgr_waitOkToConMgr_Sending_FinalExt50(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_WaitPromptToConMgr_waitOkExt51(ConMgr *const me, RKH_EVT_T *pe)
 {
-	flushData();
+	flushData(me);
 }
 
 void 
@@ -368,13 +369,13 @@ ConMgr_ConMgr_InactiveToConMgr_InactiveLoc0(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_InactiveToConMgr_InactiveLoc1(ConMgr *const me, RKH_EVT_T *pe)
 {
-	sendFail();
+	sendFail(me);
 }
 
 void 
 ConMgr_ConMgr_ActiveToConMgr_ActiveLoc2(ConMgr *const me, RKH_EVT_T *pe)
 {
-	sendFail();
+	sendFail(me);
 }
 
 void 
@@ -404,13 +405,13 @@ ConMgr_UnregisteredToUnregisteredLoc17(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_GetStatusToConMgr_GetStatusLoc23(ConMgr *const me, RKH_EVT_T *pe)
 {
-	ConMgr_defer();
+	ConMgr_defer(pe);
 }
 
 void 
 ConMgr_ConMgr_GetStatusToConMgr_GetStatusLoc24(ConMgr *const me, RKH_EVT_T *pe)
 {
-	ConMgr_defer();
+	ConMgr_defer(pe);
 }
 
 /* ............................. Entry actions ............................. */
@@ -535,7 +536,7 @@ ConMgr_enConMgr_WaitNetClockSync(ConMgr *const me)
 void 
 ConMgr_enConMgr_SetAPN(ConMgr *const me)
 {
-	setupAPN();
+    setupAPN(me);
 }
 
 void 

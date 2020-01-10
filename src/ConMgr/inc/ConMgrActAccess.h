@@ -22,6 +22,7 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "Config.h"
+#include "ConMgr.h"
 #include "modcmd.h"
 
 /* ---------------------- External C language linkage ---------------------- */
@@ -32,42 +33,33 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /**
- * Specifies sizeof send / receive buffers.
+ * GSM Network Provider and Connection specific configurations.
  */
-#define SEND_BUFF_SIZE      2048
-#define RECV_BUFF_SIZE      1024
+/* .................................. APN .................................. */
+#define MOVISTAR_OPERATOR       "72207"
+#define MOVISTAR_APN_ADDR       "INTERNET.GPRS.UNIFON.COM.AR"
+#define MOVISTAR_APN_USER       "WAP"
+#define MOVISTAR_APN_PASS       "WAP"
 
-/**
- *  ImeiEvt process definitions
- */
-#define IMEI_LENGTH         15
-#define IMEI_BUF_SIZE       IMEI_LENGTH + 1
+#define CLARO_OPERATOR          "722310"
+#define CLARO_APN_ADDR          "internet.ctimovil.com.ar"
+#define CLARO_APN_USER          "clarogprs"
+#define CLARO_APN_PASS          "clarogprs999"
 
-/**
- *  ImeiEvt process definitions
- */
-#define OPER_LENGTH         10
-#define OPER_BUF_SIZE       OPER_LENGTH + 1
-
-/**
- *  Domain process definitions
- */
-#define DOMAIN_BUF_SIZE     IP_LENGTH + 1
-
-/**
- *  Port process definitions
- */
-#define PORT_BUF_SIZE       PORT_LENGTH + 1
-
-/**
- * Specifies the maximum tries for setting APN configuration.
- */
-#define MAX_CONFIG_RETRY    5
-
+#define PERSONAL_OPERATOR       "72234"
+#define PERSONAL_APN_ADDR       "datos.personal.com"
+#define PERSONAL_APN_USER       "datos"
+#define PERSONAL_APN_PASS       "datos"
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void init(ConMgr *const me);
+void setupAPN(ConMgr *const me);
+void sendFail(ConMgr *const me);
+void flushData(ConMgr *const me);
+void ConMgr_defer(RKH_EVT_T *pe);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }
