@@ -36,6 +36,7 @@ void ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe);
 void ConMgr_ConMgr_InactiveToConMgr_ActiveExt1(ConMgr *const me, RKH_EVT_T *pe);
 void ConMgr_ConMgr_ActiveToConMgr_InactiveExt2(ConMgr *const me, RKH_EVT_T *pe);
 void ConMgr_ToConMgr_InitializeExt4(ConMgr *const me, RKH_EVT_T *pe);
+void ConMgr_ConMgr_GetImeiToConMgr_CipShutdownExt18(ConMgr *const me, RKH_EVT_T *pe);
 void ConMgr_ConMgr_RegisteredToConMgr_Registered_FinalExt25(ConMgr *const me, RKH_EVT_T *pe);
 void ConMgr_C1ToConMgr_Registered_FinalExt28(ConMgr *const me, RKH_EVT_T *pe);
 void ConMgr_ConMgr_LocalTimeToConMgr_ConfigureExt29(ConMgr *const me, RKH_EVT_T *pe);

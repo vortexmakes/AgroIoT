@@ -23,6 +23,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "Config.h"
 #include "ConMgr.h"
+#include "ModMgr.h"
 #include "modcmd.h"
 
 /* ---------------------- External C language linkage ---------------------- */
@@ -32,6 +33,46 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+#define CONNECTION_PROT         "TCP"
+
+/**
+ * Specifies sizeof send / receive buffers.
+ */
+#define SEND_BUFF_SIZE      2048
+#define RECV_BUFF_SIZE      1024
+
+/**
+ *  ImeiEvt process definitions
+ */
+#define IMEI_LENGTH         15
+#define IMEI_BUF_SIZE       IMEI_LENGTH + 1
+
+/**
+ *  ImeiEvt process definitions
+ */
+#define OPER_LENGTH         10
+#define OPER_BUF_SIZE       OPER_LENGTH + 1
+
+/**
+ *  Domain process definitions
+ */
+#define DOMAIN_BUF_SIZE     IP_LENGTH + 1
+
+/**
+ *  Port process definitions
+ */
+#define PORT_BUF_SIZE       PORT_LENGTH + 1
+
+/**
+ * Size of defer events queue
+ */
+#define SIZEOF_QDEFER   1
+
+/**
+ * Period for checking reg status on unregistered state
+ */ 
+#define CHECK_REG_STATUS_PERIOD     RKH_TIME_MS(2000)
+
 /**
  * GSM Network Provider and Connection specific configurations.
  */
@@ -55,10 +96,28 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void init(ConMgr *const me);
+void modemFound(void);
 void setupAPN(ConMgr *const me);
+void rtimeSync(RKH_EVT_T *pe);
+void flushData(void);
+void storeOper(ConMgr *const me, RKH_EVT_T *pe);
+void storeImei(ConMgr *const me, RKH_EVT_T *pe);
+void reqDefer(RKH_EVT_T *pe);
+void reqRecall(ConMgr *const me);
+void socketConnected(ConMgr *const me);
+void socketDisconnected(ConMgr *const me);
+void sendRequest(RKH_EVT_T *pe);
+void sendOk(ConMgr *const me);
 void sendFail(ConMgr *const me);
-void flushData(ConMgr *const me);
-void ConMgr_defer(RKH_EVT_T *pe);
+void recvOk(ConMgr *const me);
+void recvFail(ConMgr *const me);
+void setSigLevel(ConMgr *const me, RKH_EVT_T *pe);
+void registered(void);
+void unregistered(void);
+void startRegStatusTimer(ConMgr *const me);
+
+ReceivedEvt * ConMgr_ReceiveDataGetRef(void);
+char * ConMgr_Imei(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

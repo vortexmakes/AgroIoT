@@ -120,6 +120,8 @@ RKH_SMA_DEF_PTR(modMgr);
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static RKH_ROM_STATIC_EVENT(e_Open, evOpen);
+static RKH_ROM_STATIC_EVENT(e_Close, evClose);
 static RKH_STATIC_EVENT(e_tout, evToutWaitResponse);
 static RKH_STATIC_EVENT(e_noResp, evNoResponse);
 static RKH_QUEUE_T qDefer;
@@ -279,4 +281,16 @@ isDataCmd(ModMgr *const me, RKH_EVT_T *pe)
 }
 
 /* ---------------------------- Global functions --------------------------- */
+void
+ModMgr_open(void)
+{
+    RKH_SMA_POST_FIFO(modMgr, &e_Open, conMgr);
+}
+
+void
+ModMgr_close(void)
+{
+    RKH_SMA_POST_FIFO(modMgr, &e_Close, conMgr);
+}
+
 /* ------------------------------ End of file ------------------------------ */

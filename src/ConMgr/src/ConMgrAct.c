@@ -42,7 +42,13 @@
 void 
 ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 {
-	me->retryCount = 0;
+    me->sigLevel = 0;
+    me->imei = "";
+    me->oper = "";
+    me->protocol = "";
+    me->domain = "";
+    me->port = "";
+    me->retryCount = 0;
 		
 	RKH_TR_FWK_AO(me);
 	RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
@@ -125,6 +131,7 @@ ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_InactiveToConMgr_ActiveExt1, "ConMgr_InactiveToConMgr_ActiveExt1");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_ActiveToConMgr_InactiveExt2, "ConMgr_ActiveToConMgr_InactiveExt2");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ToConMgr_InitializeExt4, "ToConMgr_InitializeExt4");
+        RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_GetImeiToConMgr_CipShutdownExt18, "ConMgr_GetImeiToConMgr_CipShutdownExt18");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_RegisteredToConMgr_Registered_FinalExt25, "ConMgr_RegisteredToConMgr_Registered_FinalExt25");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_C1ToConMgr_Registered_FinalExt28, "C1ToConMgr_Registered_FinalExt28");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_LocalTimeToConMgr_ConfigureExt29, "ConMgr_LocalTimeToConMgr_ConfigureExt29");
@@ -188,24 +195,34 @@ ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 	
 	init(me);
 	me->retryCount = 0;
+    Config_getConnectionDomain(me->domain);
+    Config_getConnectionPort(me->port);
 }
 
 void 
 ConMgr_ConMgr_InactiveToConMgr_ActiveExt1(ConMgr *const me, RKH_EVT_T *pe)
 {
+	ModMgr_open();
 	powerOn();
 }
 
 void 
 ConMgr_ConMgr_ActiveToConMgr_InactiveExt2(ConMgr *const me, RKH_EVT_T *pe)
 {
-	close();
+	ModMgr_close();
+	powerOff();
 }
 
 void 
 ConMgr_ToConMgr_InitializeExt4(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount = 0;
+}
+
+void 
+ConMgr_ConMgr_GetImeiToConMgr_CipShutdownExt18(ConMgr *const me, RKH_EVT_T *pe)
+{
+    storeImei(me, pe);
 }
 
 void 
@@ -223,7 +240,7 @@ ConMgr_C1ToConMgr_Registered_FinalExt28(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_LocalTimeToConMgr_ConfigureExt29(ConMgr *const me, RKH_EVT_T *pe)
 {
-	rtimeSync();
+	rtimeSync(pe);
 }
 
 void 
@@ -235,7 +252,7 @@ ConMgr_ConMgr_ConnectingToConMgr_DisconnectingExt33(ConMgr *const me, RKH_EVT_T 
 void 
 ConMgr_ToConMgr_WaitingServerExt34(ConMgr *const me, RKH_EVT_T *pe)
 {
-	socketOpen();
+    ModCmd_connect(me->protocol, me->domain, me->port);
 }
 
 void 
@@ -259,7 +276,7 @@ ConMgr_ConMgr_IdleToConMgr_GetStatusExt40(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_IdleToConMgr_SendingExt41(ConMgr *const me, RKH_EVT_T *pe)
 {
-	sendRequest();
+	sendRequest(pe);
 }
 
 void 
@@ -271,13 +288,13 @@ ConMgr_ConMgr_IdleToConMgr_receivingExt42(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_receivingToConMgr_IdleExt43(ConMgr *const me, RKH_EVT_T *pe)
 {
-	recvFail();
+	recvFail(me);
 }
 
 void 
 ConMgr_ConMgr_receivingToConMgr_IdleExt44(ConMgr *const me, RKH_EVT_T *pe)
 {
-	recvOk();
+	recvOk(me);
 }
 
 void 
@@ -302,13 +319,14 @@ ConMgr_ConMgr_SendingToConMgr_IdleExt47(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_waitOkToConMgr_Sending_FinalExt50(ConMgr *const me, RKH_EVT_T *pe)
 {
-	sendOk();
+    me->retryCount = 0;
+    sendOk(me);
 }
 
 void 
 ConMgr_ConMgr_WaitPromptToConMgr_waitOkExt51(ConMgr *const me, RKH_EVT_T *pe)
 {
-	flushData(me);
+	flushData();
 }
 
 void 
@@ -345,7 +363,7 @@ ConMgr_ConMgr_CheckIPToConMgr_CheckIPExt64(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_GetOperToConMgr_SetAPNExt65(ConMgr *const me, RKH_EVT_T *pe)
 {
-	storeOper();
+	storeOper(me, pe);
 }
 
 void 
@@ -363,7 +381,7 @@ ConMgr_ConMgr_WaitRetryConnectToConMgr_ConnectingExt68(ConMgr *const me, RKH_EVT
 void 
 ConMgr_ConMgr_InactiveToConMgr_InactiveLoc0(ConMgr *const me, RKH_EVT_T *pe)
 {
-	recvFail();
+	recvFail(me);
 }
 
 void 
@@ -381,13 +399,13 @@ ConMgr_ConMgr_ActiveToConMgr_ActiveLoc2(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_ConMgr_ActiveToConMgr_ActiveLoc3(ConMgr *const me, RKH_EVT_T *pe)
 {
-	recvFail();
+	recvFail(me);
 }
 
 void 
 ConMgr_ConMgr_ActiveToConMgr_ActiveLoc4(ConMgr *const me, RKH_EVT_T *pe)
 {
-	setSigLevel();
+	setSigLevel(me, pe);
 }
 
 void 
@@ -399,32 +417,34 @@ ConMgr_UnregisteredToUnregisteredLoc16(ConMgr *const me, RKH_EVT_T *pe)
 void 
 ConMgr_UnregisteredToUnregisteredLoc17(ConMgr *const me, RKH_EVT_T *pe)
 {
-	startRegStatusTimer();
+	startRegStatusTimer(me);
 }
 
 void 
 ConMgr_ConMgr_GetStatusToConMgr_GetStatusLoc23(ConMgr *const me, RKH_EVT_T *pe)
 {
-	ConMgr_defer(pe);
+	reqDefer(pe);
 }
 
 void 
 ConMgr_ConMgr_GetStatusToConMgr_GetStatusLoc24(ConMgr *const me, RKH_EVT_T *pe)
 {
-	ConMgr_defer(pe);
+	reqDefer(pe);
 }
 
 /* ............................. Entry actions ............................. */
 void 
 ConMgr_enConMgr_Sync(ConMgr *const me)
 {
-	sendSync();
+    me->retryCount += 1;
+    ModCmd_sync();
 }
 
 void 
 ConMgr_enConMgr_Init(ConMgr *const me)
 {
-	sendInit();
+    modemFound();
+    ModCmd_initStr();
 }
 
 void 
@@ -436,7 +456,7 @@ ConMgr_enConMgr_Pin(ConMgr *const me)
 void 
 ConMgr_enConMgr_SetPin(ConMgr *const me)
 {
-	setPin();
+    ModCmd_setPin(Config_getSIMPinNumber());
 }
 
 void 
@@ -498,7 +518,7 @@ ConMgr_enConMgr_WaitingServer(ConMgr *const me)
 void 
 ConMgr_enConMgr_Connected(ConMgr *const me)
 {
-	socketConnected();
+	socketConnected(me);
 }
 
 void 
@@ -594,7 +614,7 @@ ConMgr_exConMgr_WaitingServer(ConMgr *const me)
 void 
 ConMgr_exConMgr_Connected(ConMgr *const me)
 {
-	socketDisconnected();
+	socketDisconnected(me);
 }
 
 void 
@@ -606,7 +626,7 @@ ConMgr_exConMgr_Idle(ConMgr *const me)
 void 
 ConMgr_exConMgr_GetStatus(ConMgr *const me)
 {
-	ConMgr_recall();
+	reqRecall(me);
 }
 
 void 

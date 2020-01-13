@@ -36,6 +36,9 @@ RKH_SMA_DCLR(modMgr);
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void ModMgr_open(void);
+void ModMgr_close(void);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

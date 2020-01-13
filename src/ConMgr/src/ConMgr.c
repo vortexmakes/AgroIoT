@@ -104,7 +104,7 @@ RKH_CREATE_TRANS_TABLE(ConMgr_EnableNetTime)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_GetImei)
-	RKH_TRREG(evImei, NULL, NULL, &ConMgr_CipShutdown),
+	RKH_TRREG(evImei, NULL, ConMgr_ConMgr_GetImeiToConMgr_CipShutdownExt18, &ConMgr_CipShutdown),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_CipShutdown)
