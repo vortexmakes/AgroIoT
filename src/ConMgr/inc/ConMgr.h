@@ -18,11 +18,11 @@ extern "C" {
 RKH_SMA_DCLR(conMgr);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE ConMgr_Inactive, ConMgr_Sync, ConMgr_Init, ConMgr_Pin, ConMgr_SetPin, ConMgr_EnableNetTime, ConMgr_GetImei, ConMgr_CipShutdown, ConMgr_SetManualGet, ConFailure, Unregistered, ConMgr_LocalTime, ConMgr_WaitingServer, ConMgr_Idle, ConMgr_receiving, ConMgr_GetStatus, ConMgr_waitOk, ConMgr_WaitPrompt, ConMgr_Restarting, ConMgr_WaitReopen, ConMgr_WaitRetryConfig, ConMgr_WaitNetClockSync, ConMgr_SetAPN, ConMgr_EnableNetwork, ConMgr_CheckIP, ConMgr_GetOper, ConMgr_WaitRetryConnect, ConMgr_Disconnecting, ConMgr_SMS;
+RKH_DCLR_BASIC_STATE ConMgr_Inactive, ConMgr_Sync, ConMgr_Init, ConMgr_Pin, ConMgr_SetPin, ConMgr_EnableNetTime, ConMgr_GetImei, ConMgr_SetManualGet, ConMgr_CipShutdown, ConFailure, Unregistered, ConMgr_LocalTime, ConMgr_WaitingServer, ConMgr_Idle, ConMgr_receiving, ConMgr_GetStatus, ConMgr_waitOk, ConMgr_WaitPrompt, ConMgr_Restarting, ConMgr_WaitReopen, ConMgr_WaitRetryConfig, ConMgr_WaitNetClockSync, ConMgr_SetAPN, ConMgr_EnableNetwork, ConMgr_CheckIP, ConMgr_GetOper, ConMgr_WaitRetryConnect, ConMgr_Disconnecting, ConMgr_SMS;
 RKH_DCLR_COMP_STATE ConMgr_Active, ConMgr_Initialize, ConMgr_Registered, ConMgr_Connecting, ConMgr_Connected, ConMgr_Sending, ConMgr_Configure;
-RKH_DCLR_CHOICE_STATE C0, C1, C2;
-RKH_DCLR_FINAL_STATE ConMgr_Initialize_Final, ConMgr_Sending_Final, ConMgr_Configure_Final, ConMgr_Registered_Final, ConMgr_Registered_Final, ConMgr_Active_Final;
-RKH_DCLR_SHIST_STATE ConMgr_HConfigure;
+RKH_DCLR_CHOICE_STATE ConMgr_C0, ConMgr_C1, ConMgr_C2;
+RKH_DCLR_FINAL_STATE ConMgr_InitializeFinal, ConMgr_SendingFinal, ConMgr_ConfigureFinal, ConMgr_RegisteredFinal, ConMgr_RegisteredFinal, ConMgr_ActiveFinal;
+RKH_DCLR_SHIST_STATE ConMgr_ConfigureHist;
 
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */

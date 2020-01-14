@@ -19,7 +19,7 @@
 #include "ConMgr.h"
 #include "ConMgrAct.h"
 #include "bsp.h"
-#include "ConMgrActRequired.h"
+#include "ConMgrActAccess.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WaitTime0	RKH_TIME_SEC(5)
@@ -61,8 +61,8 @@ ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &ConMgr_SetPin);
 	RKH_TR_FWK_STATE(me, &ConMgr_EnableNetTime);
 	RKH_TR_FWK_STATE(me, &ConMgr_GetImei);
-	RKH_TR_FWK_STATE(me, &ConMgr_CipShutdown);
 	RKH_TR_FWK_STATE(me, &ConMgr_SetManualGet);
+	RKH_TR_FWK_STATE(me, &ConMgr_CipShutdown);
 	RKH_TR_FWK_STATE(me, &ConFailure);
 	RKH_TR_FWK_STATE(me, &Unregistered);
 	RKH_TR_FWK_STATE(me, &ConMgr_Registered);
@@ -132,7 +132,7 @@ ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_ActiveToConMgr_InactiveExt2, "ConMgr_ActiveToConMgr_InactiveExt2");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ToConMgr_InitializeExt4, "ToConMgr_InitializeExt4");
         RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_GetImeiToConMgr_CipShutdownExt18, "ConMgr_GetImeiToConMgr_CipShutdownExt18");
-		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_RegisteredToConMgr_Registered_FinalExt25, "ConMgr_RegisteredToConMgr_Registered_FinalExt25");
+        RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_RegisteredToConMgr_Registered_FinalExt25, "ConMgr_RegisteredToConMgr_Registered_FinalExt25");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_C1ToConMgr_Registered_FinalExt28, "C1ToConMgr_Registered_FinalExt28");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_LocalTimeToConMgr_ConfigureExt29, "ConMgr_LocalTimeToConMgr_ConfigureExt29");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_ConnectingToConMgr_DisconnectingExt33, "ConMgr_ConnectingToConMgr_DisconnectingExt33");
@@ -149,7 +149,7 @@ ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_SendingToConMgr_IdleExt47, "ConMgr_SendingToConMgr_IdleExt47");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_waitOkToConMgr_Sending_FinalExt50, "ConMgr_waitOkToConMgr_Sending_FinalExt50");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_WaitPromptToConMgr_waitOkExt51, "ConMgr_WaitPromptToConMgr_waitOkExt51");
-		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_WaitRetryConfigToConMgr_HConfigureExt54, "ConMgr_WaitRetryConfigToConMgr_HConfigureExt54");
+        RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_WaitRetryConfigToConMgr_ConfigureHistExt54, "ConMgr_WaitRetryConfigToConMgr_ConfigureHistExt54");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_WaitNetClockSyncToConMgr_LocalTimeExt55, "ConMgr_WaitNetClockSyncToConMgr_LocalTimeExt55");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ConMgr_ConfigureToConMgr_ConnectingExt58, "ConMgr_ConfigureToConMgr_ConnectingExt58");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_ToConMgr_GetOperExt59, "ToConMgr_GetOperExt59");
@@ -172,8 +172,8 @@ ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(ConMgr_enConMgr_SetPin, "enConMgr_SetPin");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_enConMgr_EnableNetTime, "enConMgr_EnableNetTime");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_enConMgr_GetImei, "enConMgr_GetImei");
-		RKH_TR_FWK_OBJ_NAME(ConMgr_enConMgr_CipShutdown, "enConMgr_CipShutdown");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_enConMgr_SetManualGet, "enConMgr_SetManualGet");
+		RKH_TR_FWK_OBJ_NAME(ConMgr_enConMgr_CipShutdown, "enConMgr_CipShutdown");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_enConFailure, "enConFailure");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_enUnregistered, "enUnregistered");
 		RKH_TR_FWK_OBJ_NAME(ConMgr_enConMgr_Registered, "enConMgr_Registered");
@@ -330,7 +330,7 @@ ConMgr_ConMgr_WaitPromptToConMgr_waitOkExt51(ConMgr *const me, RKH_EVT_T *pe)
 }
 
 void 
-ConMgr_ConMgr_WaitRetryConfigToConMgr_HConfigureExt54(ConMgr *const me, RKH_EVT_T *pe)
+ConMgr_ConMgr_WaitRetryConfigToConMgr_ConfigureHistExt54(ConMgr *const me, RKH_EVT_T *pe)
 {
 	me->retryCount += 1;
 	ModCmd_init();
@@ -472,15 +472,15 @@ ConMgr_enConMgr_GetImei(ConMgr *const me)
 }
 
 void 
-ConMgr_enConMgr_CipShutdown(ConMgr *const me)
-{
-	ModCmd_cipShutdown();
-}
-
-void 
 ConMgr_enConMgr_SetManualGet(ConMgr *const me)
 {
 	ModCmd_setManualGet();
+}
+
+void 
+ConMgr_enConMgr_CipShutdown(ConMgr *const me)
+{
+	ModCmd_cipShutdown();
 }
 
 void 

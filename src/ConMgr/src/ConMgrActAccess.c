@@ -21,7 +21,7 @@
 #include "ConMgr.h"
 #include "ConMgrAct.h"
 #include "bsp.h"
-#include "ConMgrActRequired.h"
+#include "ConMgrActAccess.h"
 #include "ModMgr.h"
 #include "ModCmd.h"
 #include "signals.h"

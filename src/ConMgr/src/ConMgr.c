@@ -27,8 +27,8 @@ RKH_CREATE_BASIC_STATE(ConMgr_Pin, ConMgr_enConMgr_Pin, NULL, &ConMgr_Initialize
 RKH_CREATE_BASIC_STATE(ConMgr_SetPin, ConMgr_enConMgr_SetPin, NULL, &ConMgr_Initialize, NULL);
 RKH_CREATE_BASIC_STATE(ConMgr_EnableNetTime, ConMgr_enConMgr_EnableNetTime, NULL, &ConMgr_Initialize, NULL);
 RKH_CREATE_BASIC_STATE(ConMgr_GetImei, ConMgr_enConMgr_GetImei, NULL, &ConMgr_Initialize, NULL);
-RKH_CREATE_BASIC_STATE(ConMgr_CipShutdown, ConMgr_enConMgr_CipShutdown, NULL, &ConMgr_Initialize, NULL);
 RKH_CREATE_BASIC_STATE(ConMgr_SetManualGet, ConMgr_enConMgr_SetManualGet, NULL, &ConMgr_Initialize, NULL);
+RKH_CREATE_BASIC_STATE(ConMgr_CipShutdown, ConMgr_enConMgr_CipShutdown, NULL, &ConMgr_Initialize, NULL);
 RKH_CREATE_BASIC_STATE(ConFailure, ConMgr_enConFailure, ConMgr_exConFailure, &ConMgr_Active, NULL);
 RKH_CREATE_BASIC_STATE(Unregistered, ConMgr_enUnregistered, ConMgr_exUnregistered, &ConMgr_Active, NULL);
 RKH_CREATE_BASIC_STATE(ConMgr_LocalTime, NULL, NULL, &ConMgr_Registered, NULL);
@@ -80,8 +80,8 @@ RKH_CREATE_TRANS_TABLE(ConMgr_Initialize)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_Sync)
-	RKH_TRREG(evNoResponse, NULL, NULL, &C0),
-	RKH_TRREG(evError, NULL, NULL, &C0),
+	RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_C0),
+	RKH_TRREG(evError, NULL, NULL, &ConMgr_C0),
 	RKH_TRREG(evOk, NULL, NULL, &ConMgr_Init),
 RKH_END_TRANS_TABLE
 
@@ -90,7 +90,7 @@ RKH_CREATE_TRANS_TABLE(ConMgr_Init)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_Pin)
-	RKH_TRREG(evSimError, NULL, NULL, &ConMgr_Initialize_Final),
+	RKH_TRREG(evSimError, NULL, NULL, &ConMgr_InitializeFinal),
 	RKH_TRREG(evSimPin, NULL, NULL, &ConMgr_SetPin),
 	RKH_TRREG(evSimReady, NULL, NULL, &ConMgr_EnableNetTime),
 RKH_END_TRANS_TABLE
@@ -107,12 +107,12 @@ RKH_CREATE_TRANS_TABLE(ConMgr_GetImei)
 	RKH_TRREG(evImei, NULL, ConMgr_ConMgr_GetImeiToConMgr_CipShutdownExt18, &ConMgr_CipShutdown),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(ConMgr_CipShutdown)
-	RKH_TRREG(evOk, NULL, NULL, &ConMgr_SetManualGet),
-RKH_END_TRANS_TABLE
-
 RKH_CREATE_TRANS_TABLE(ConMgr_SetManualGet)
 	RKH_TRREG(evOk, NULL, NULL, &Unregistered),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(ConMgr_CipShutdown)
+	RKH_TRREG(evOk, NULL, NULL, &ConMgr_SetManualGet),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConFailure)
@@ -128,7 +128,7 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_Registered)
 	RKH_TRREG(evNoReg, NULL, NULL, &Unregistered),
-	RKH_TRREG(evError, NULL, ConMgr_ConMgr_RegisteredToConMgr_Registered_FinalExt25, &ConMgr_Registered_Final),
+	RKH_TRREG(evError, NULL, ConMgr_ConMgr_RegisteredToConMgr_Registered_FinalExt25, &ConMgr_RegisteredFinal),
 	RKH_TRCOMPLETION(NULL, NULL, &ConFailure),
 RKH_END_TRANS_TABLE
 
@@ -138,10 +138,10 @@ RKH_CREATE_TRANS_TABLE(ConMgr_LocalTime)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_Connecting)
-	RKH_TRREG(evNoResponse, NULL, NULL, &C1),
-	RKH_TRREG(evClosed, NULL, NULL, &C1),
-	RKH_TRREG(evIPStatus, NULL, NULL, &C1),
-	RKH_TRREG(evError, NULL, NULL, &C1),
+	RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_C1),
+	RKH_TRREG(evClosed, NULL, NULL, &ConMgr_C1),
+	RKH_TRREG(evIPStatus, NULL, NULL, &ConMgr_C1),
+	RKH_TRREG(evError, NULL, NULL, &ConMgr_C1),
 	RKH_TRREG(evIPStart, NULL, NULL, &ConMgr_Configure),
 	RKH_TRREG(evIPInitial, NULL, NULL, &ConMgr_Configure),
 	RKH_TRREG(evIPGprsAct, NULL, NULL, &ConMgr_Configure),
@@ -184,7 +184,7 @@ RKH_CREATE_TRANS_TABLE(ConMgr_Sending)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_waitOk)
-	RKH_TRREG(evOk, NULL, ConMgr_ConMgr_waitOkToConMgr_Sending_FinalExt50, &ConMgr_Sending_Final),
+	RKH_TRREG(evOk, NULL, ConMgr_ConMgr_waitOkToConMgr_Sending_FinalExt50, &ConMgr_SendingFinal),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_WaitPrompt)
@@ -201,7 +201,7 @@ RKH_CREATE_TRANS_TABLE(ConMgr_WaitReopen)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_WaitRetryConfig)
-	RKH_TRREG(evTout5, NULL, ConMgr_ConMgr_WaitRetryConfigToConMgr_HConfigureExt54, &ConMgr_HConfigure),
+    RKH_TRREG(evTout5, NULL, ConMgr_ConMgr_WaitRetryConfigToConMgr_ConfigureHistExt54, &ConMgr_ConfigureHist),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_WaitNetClockSync)
@@ -210,7 +210,7 @@ RKH_CREATE_TRANS_TABLE(ConMgr_WaitNetClockSync)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_Configure)
-	RKH_TRREG(evNoResponse, NULL, NULL, &C2),
+	RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_C2),
 	RKH_TRCOMPLETION(NULL, ConMgr_ConMgr_ConfigureToConMgr_ConnectingExt58, &ConMgr_Connecting),
 RKH_END_TRANS_TABLE
 
@@ -223,7 +223,7 @@ RKH_CREATE_TRANS_TABLE(ConMgr_EnableNetwork)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_CheckIP)
-	RKH_TRREG(evIPStatus, NULL, NULL, &ConMgr_Configure_Final),
+	RKH_TRREG(evIPStatus, NULL, NULL, &ConMgr_ConfigureFinal),
 	RKH_TRREG(evIP, NULL, NULL, &ConMgr_CheckIP),
 	RKH_TRREG(evIPInitial, NULL, NULL, &ConMgr_CheckIP),
 	RKH_TRREG(evIPStart, NULL, NULL, &ConMgr_CheckIP),
@@ -239,31 +239,31 @@ RKH_CREATE_TRANS_TABLE(ConMgr_WaitRetryConnect)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_Disconnecting)
-	RKH_TRREG(evDisconnected, NULL, NULL, &ConMgr_Active_Final),
-	RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_Active_Final),
+	RKH_TRREG(evDisconnected, NULL, NULL, &ConMgr_ActiveFinal),
+	RKH_TRREG(evNoResponse, NULL, NULL, &ConMgr_ActiveFinal),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_SMS)
-	RKH_TRREG(evStopSMS, NULL, NULL, &ConMgr_Registered_Final),
+	RKH_TRREG(evStopSMS, NULL, NULL, &ConMgr_RegisteredFinal),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_CHOICE_STATE(C0);
-RKH_CREATE_CHOICE_STATE(C1);
-RKH_CREATE_CHOICE_STATE(C2);
+RKH_CREATE_CHOICE_STATE(ConMgr_C0);
+RKH_CREATE_CHOICE_STATE(ConMgr_C1);
+RKH_CREATE_CHOICE_STATE(ConMgr_C2);
 
-RKH_CREATE_BRANCH_TABLE(C0)
+RKH_CREATE_BRANCH_TABLE(ConMgr_C0)
 	RKH_BRANCH(ConMgr_isCondC0ToConMgr_Sync10, NULL, &ConMgr_Sync),
-	RKH_BRANCH(ELSE, NULL, &ConMgr_Initialize_Final),
+	RKH_BRANCH(ELSE, NULL, &ConMgr_InitializeFinal),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_BRANCH_TABLE(C1)
+RKH_CREATE_BRANCH_TABLE(ConMgr_C1)
 	RKH_BRANCH(ConMgr_isCondC1ToConMgr_WaitRetryConnect27, NULL, &ConMgr_WaitRetryConnect),
-	RKH_BRANCH(ELSE, ConMgr_C1ToConMgr_Registered_FinalExt28, &ConMgr_Registered_Final),
+	RKH_BRANCH(ELSE, ConMgr_C1ToConMgr_Registered_FinalExt28, &ConMgr_RegisteredFinal),
 RKH_END_BRANCH_TABLE
 
-RKH_CREATE_BRANCH_TABLE(C2)
+RKH_CREATE_BRANCH_TABLE(ConMgr_C2)
 	RKH_BRANCH(ConMgr_isCondC2ToConMgr_WaitRetryConfig66, NULL, &ConMgr_WaitRetryConfig),
-	RKH_BRANCH(ELSE, ConMgr_C2ToConMgr_Registered_FinalExt67, &ConMgr_Registered_Final),
+	RKH_BRANCH(ELSE, ConMgr_C2ToConMgr_Registered_FinalExt67, &ConMgr_RegisteredFinal),
 RKH_END_BRANCH_TABLE
 
 

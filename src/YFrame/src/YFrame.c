@@ -18,7 +18,8 @@
 #include <string.h>
 #include <stdio.h>
 #include "YFrame.h"
-#include "conmgr.h"
+#include "ConMgr.h"
+#include "ConMgrActAccess.h"
 #include "BatChr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
