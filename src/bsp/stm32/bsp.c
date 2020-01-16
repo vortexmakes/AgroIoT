@@ -249,7 +249,7 @@ bsp_SIMSelect(SIMSelect_t sim)
                               SIM_SELECT_Pin, 
                               sim == MainSIM ? 0 : 1);
 
-    set_led(LED_SIM, simSelect ? SEQ_LSTAGE2 : SEQ_LSTAGE1);
+//    set_led(LED_SIM, simSelect ? SEQ_LSTAGE2 : SEQ_LSTAGE1);
 }
 
 void
