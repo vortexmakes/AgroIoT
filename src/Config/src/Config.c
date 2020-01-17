@@ -102,7 +102,7 @@ Config_init(void)
     int res;
     Config *cfg;
 
-    ffile_seek(FFD1, 0);
+/*    ffile_seek(FFD1, 0);
     res = ffile_random_access(FFD1, READ_ACCESS, &cfgObj, 1);
     if (res > 0)
     {
@@ -117,10 +117,10 @@ Config_init(void)
         }
     }
     else
-    {
+    {*/
         cfg = (Config *)&cfgDft;
         Config_set(cfg);
-    }
+    //}
     return cfg;
 }
 
