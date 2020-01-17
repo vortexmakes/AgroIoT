@@ -74,23 +74,33 @@ GStatus_fromGpsStr(GPS_STR *from, GStatus *to)
     rInt res;
     Geo *pos;
     char temp[32];
+    char deg[32];
+    char min[32];
+
+    memset(to, '\0', sizeof(GStatus));
 
     res = 0;
     if ((to != (GStatus *)0) && (from != (GPS_STR *)0))
     {
         /* Convert GStatus::position */
         pos = &(to->position);
-        strcpy(pos->utc, from->utc);
-        strcpy(pos->status, from->status);
-        sprintf(temp, "%s.%s", from->latdeg, from->latmin);
+        strncpy(pos->utc, from->utc, UTC_LENGTH);
+        strncpy(pos->status, from->status, STATUS_LENGTH);
+        //sprintf(temp, "%s.%s", from->latdeg, from->latmin);
+        strncpy(deg, from->latdeg, LATDEG_LENGTH);
+        strncpy(min, from->latmin, LATMIN_LENGTH);
+        sprintf(temp, "%s.%s", deg, min);
         strcpy(pos->latitude, temp);
-        strcpy(pos->latInd, from->lat_ind);
-        sprintf(temp, "%s.%s", from->longdeg, from->longmin);
+        strncpy(pos->latInd, from->lat_ind, LAT_IND_LENGTH);
+        //sprintf(temp, "%s.%s", from->longdeg, from->longmin);
+        strncpy(deg, from->longdeg, LONGDEG_LENGTH);
+        strncpy(min, from->longmin, LONGMIN_LENGTH);
+        sprintf(temp, "%s.%s", deg, min);
         strcpy(pos->longitude, temp);
-        strcpy(pos->longInd, from->long_ind);
-        strcpy(pos->speed, from->speed);
-        strcpy(pos->course, from->course);
-        strcpy(pos->date, from->date);
+        strncpy(pos->longInd, from->long_ind, LONG_IND_LENGTH);
+        strncpy(pos->speed, from->speed, SPEED_LENGTH);
+        strncpy(pos->course, from->course, COURSE_LENGTH);
+        strncpy(pos->date, from->date, DATE_LENGTH);
 
         /* Convert GStatus::devData */
         to->devData = from->cbox;
