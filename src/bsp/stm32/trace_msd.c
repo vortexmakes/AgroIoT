@@ -35,6 +35,37 @@ char fileName[25];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+#include "ff.h"
+#include "StatQue.h"
+#include "GStatus.h"
+
+
+
+void
+dumpStatQueueToMsd(void)
+{
+	FIL dumpFile;
+	GPS_STR from;
+    uint32_t byteswritten;
+
+    while(bsp_usbDeviceStatus() != UsbHostClassReady);
+
+    if(f_open(&dumpFile, "StatQueue.dump", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+    {
+        //Error_Handler();
+        return;
+    }
+
+    while( StatQue_read(&from) == 0)
+    {
+        f_write(&dumpFile, &from, sizeof(GPS_STR), (void *)&byteswritten);
+    }
+
+    f_sync(&dumpFile);
+
+    f_close(&dumpFile);
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 trace_msd_init(void)
@@ -64,6 +95,8 @@ trace_msd_write(uint8_t *pData, uint16_t Size)
             return;
         }
     }
+
+    //dumpStatQueueToMsd();
 
     if(File.obj.fs == NULL)
     {
