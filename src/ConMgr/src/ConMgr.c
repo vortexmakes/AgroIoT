@@ -52,7 +52,7 @@ RKH_CREATE_BASIC_STATE(ConMgr_SMS, NULL, NULL, &ConMgr_Registered, NULL);
 
 RKH_CREATE_COMP_REGION_STATE(ConMgr_Active, NULL, NULL, RKH_ROOT, &ConMgr_Initialize, ConMgr_ToConMgr_InitializeExt4, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(ConMgr_Initialize, NULL, NULL, &ConMgr_Active, &ConMgr_Sync, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_COMP_REGION_STATE(ConMgr_Registered, ConMgr_enConMgr_Registered, ConMgr_exConMgr_Registered, &ConMgr_Active, &ConMgr_WaitNetClockSync, ConMgr_ToConMgr_WaitingServerExt34, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(ConMgr_Registered, ConMgr_enConMgr_Registered, ConMgr_exConMgr_Registered, &ConMgr_Active, &ConMgr_WaitNetClockSync, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(ConMgr_Connecting, NULL, NULL, &ConMgr_Registered, &ConMgr_WaitingServer, ConMgr_ToConMgr_WaitingServerExt34, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(ConMgr_Connected, ConMgr_enConMgr_Connected, ConMgr_exConMgr_Connected, &ConMgr_Connecting, &ConMgr_Idle, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(ConMgr_Sending, NULL, NULL, &ConMgr_Connected, &ConMgr_WaitPrompt, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);

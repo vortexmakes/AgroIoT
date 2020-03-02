@@ -88,6 +88,18 @@ ConMgr_ToConMgr_InactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &ConMgr_WaitRetryConnect);
 	RKH_TR_FWK_STATE(me, &ConMgr_Disconnecting);
 	RKH_TR_FWK_STATE(me, &ConMgr_SMS);
+
+	RKH_TR_FWK_STATE(me, &ConMgr_InitializeFinal);
+	RKH_TR_FWK_STATE(me, &ConMgr_RegisteredFinal);
+	RKH_TR_FWK_STATE(me, &ConMgr_RegisteredFinal);
+	RKH_TR_FWK_STATE(me, &ConMgr_SendingFinal);
+	RKH_TR_FWK_STATE(me, &ConMgr_ConfigureFinal);
+	RKH_TR_FWK_STATE(me, &ConMgr_ActiveFinal);
+
+	RKH_TR_FWK_STATE(me, &ConMgr_C0);
+	RKH_TR_FWK_STATE(me, &ConMgr_C1);
+	RKH_TR_FWK_STATE(me, &ConMgr_C2);
+
 	RKH_TR_FWK_SIG(evOpen);
 	RKH_TR_FWK_SIG(evClose);
 	RKH_TR_FWK_SIG(evSend);
