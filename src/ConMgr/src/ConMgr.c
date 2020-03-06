@@ -46,8 +46,6 @@ void InactiveToActiveExt1(ConMgr *const me, RKH_EVT_T *pe);
 void ActiveToInactiveExt2(ConMgr *const me, RKH_EVT_T *pe);
 void ToInitializeExt4(ConMgr *const me, RKH_EVT_T *pe);
 void GetImeiToCipShutdownExt18(ConMgr *const me, RKH_EVT_T *pe);
-void RegisteredToRegisteredFinalExt25(ConMgr *const me, RKH_EVT_T *pe);
-void C1ToRegisteredFinalExt28(ConMgr *const me, RKH_EVT_T *pe);
 void LocalTimeToConfigureExt29(ConMgr *const me, RKH_EVT_T *pe);
 void ConnectingToDisconnectingExt33(ConMgr *const me, RKH_EVT_T *pe);
 void ToWaitingServerExt34(ConMgr *const me, RKH_EVT_T *pe);
@@ -69,7 +67,6 @@ void ConfigureToConnectingExt58(ConMgr *const me, RKH_EVT_T *pe);
 void ToGetOperExt59(ConMgr *const me, RKH_EVT_T *pe);
 void CheckIPToCheckIPExt64(ConMgr *const me, RKH_EVT_T *pe);
 void GetOperToSetAPNExt65(ConMgr *const me, RKH_EVT_T *pe);
-void C2ToRegisteredFinalExt67(ConMgr *const me, RKH_EVT_T *pe);
 void WaitRetryConnectToConnectingExt68(ConMgr *const me, RKH_EVT_T *pe);
 void InactiveToInactiveLoc0(ConMgr *const me, RKH_EVT_T *pe);
 void InactiveToInactiveLoc1(ConMgr *const me, RKH_EVT_T *pe);
@@ -232,7 +229,7 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ConMgr_Registered)
     RKH_TRREG(evNoReg, NULL, NULL, &ConMgr_Unregistered),
-    RKH_TRREG(evError, NULL, RegisteredToRegisteredFinalExt25, &ConMgr_RegisteredFinal),
+    RKH_TRREG(evError, NULL, NULL, &ConMgr_RegisteredFinal),
     RKH_TRCOMPLETION(NULL, NULL, &ConMgr_ConFailure),
 RKH_END_TRANS_TABLE
 
@@ -358,12 +355,12 @@ RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(ConMgr_C1)
     RKH_BRANCH(isCondC1ToWaitRetryConnect27, NULL, &ConMgr_WaitRetryConnect),
-    RKH_BRANCH(ELSE, C1ToRegisteredFinalExt28, &ConMgr_RegisteredFinal),
+    RKH_BRANCH(ELSE, NULL, &ConMgr_RegisteredFinal),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(ConMgr_C2)
     RKH_BRANCH(isCondC2ToWaitRetryConfig66, NULL, &ConMgr_WaitRetryConfig),
-    RKH_BRANCH(ELSE, C2ToRegisteredFinalExt67, &ConMgr_RegisteredFinal),
+    RKH_BRANCH(ELSE, NULL, &ConMgr_RegisteredFinal),
 RKH_END_BRANCH_TABLE
 
 
@@ -706,7 +703,6 @@ ToInactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_SIG(evRestart);
     RKH_TR_FWK_SIG(evClosed);
     RKH_TR_FWK_SIG(evError);
-    RKH_TR_FWK_SIG(evStopSMS);
     RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
     RKH_TR_FWK_TIMER(&me->tmEvtObj1.tmr);
     RKH_TR_FWK_TIMER(&me->tmEvtObj2.tmr);
@@ -721,8 +717,6 @@ ToInactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
         RKH_TR_FWK_OBJ_NAME(ActiveToInactiveExt2, "ActiveToInactiveExt2");
         RKH_TR_FWK_OBJ_NAME(ToInitializeExt4, "ToInitializeExt4");
         RKH_TR_FWK_OBJ_NAME(GetImeiToCipShutdownExt18, "GetImeiToCipShutdownExt18");
-        RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredFinalExt25, "RegisteredToRegisteredFinalExt25");
-        RKH_TR_FWK_OBJ_NAME(C1ToRegisteredFinalExt28, "C1ToRegisteredFinalExt28");
         RKH_TR_FWK_OBJ_NAME(LocalTimeToConfigureExt29, "LocalTimeToConfigureExt29");
         RKH_TR_FWK_OBJ_NAME(ConnectingToDisconnectingExt33, "ConnectingToDisconnectingExt33");
         RKH_TR_FWK_OBJ_NAME(ToWaitingServerExt34, "ToWaitingServerExt34");
@@ -744,7 +738,6 @@ ToInactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
         RKH_TR_FWK_OBJ_NAME(ToGetOperExt59, "ToGetOperExt59");
         RKH_TR_FWK_OBJ_NAME(CheckIPToCheckIPExt64, "CheckIPToCheckIPExt64");
         RKH_TR_FWK_OBJ_NAME(GetOperToSetAPNExt65, "GetOperToSetAPNExt65");
-        RKH_TR_FWK_OBJ_NAME(C2ToRegisteredFinalExt67, "C2ToRegisteredFinalExt67");
         RKH_TR_FWK_OBJ_NAME(WaitRetryConnectToConnectingExt68, "WaitRetryConnectToConnectingExt68");
         RKH_TR_FWK_OBJ_NAME(InactiveToInactiveLoc0, "InactiveToInactiveLoc0");
         RKH_TR_FWK_OBJ_NAME(InactiveToInactiveLoc1, "InactiveToInactiveLoc1");
@@ -812,18 +805,6 @@ void
 GetImeiToCipShutdownExt18(ConMgr *const me, RKH_EVT_T *pe)
 {
     storeImei(me, pe);
-}
-
-void 
-RegisteredToRegisteredFinalExt25(ConMgr *const me, RKH_EVT_T *pe)
-{
-    stopSMS();
-}
-
-void 
-C1ToRegisteredFinalExt28(ConMgr *const me, RKH_EVT_T *pe)
-{
-    stopSMS();
 }
 
 void 
@@ -953,12 +934,6 @@ void
 GetOperToSetAPNExt65(ConMgr *const me, RKH_EVT_T *pe)
 {
     storeOper(me, pe);
-}
-
-void 
-C2ToRegisteredFinalExt67(ConMgr *const me, RKH_EVT_T *pe)
-{
-    stopSMS();
 }
 
 void 

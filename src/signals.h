@@ -99,7 +99,8 @@ enum Signals
 	evTout6,
 	evTout7,
 	evTout8,
-	evStopSMS
+    evGsmError,
+	evGsmReady
 };
 
 /* ------------------------------- Data types ------------------------------ */
