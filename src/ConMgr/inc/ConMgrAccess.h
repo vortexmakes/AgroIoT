@@ -25,6 +25,7 @@
 #include "ConMgr.h"
 #include "ModMgr.h"
 #include "modcmd.h"
+#include "topic.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -33,7 +34,7 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define CONNECTION_PROT         "TCP"
+#define CONNECTION_PROT     "TCP"
 
 /**
  * Specifies sizeof send / receive buffers.
@@ -66,7 +67,7 @@ extern "C" {
 /**
  * Size of defer events queue
  */
-#define SIZEOF_QDEFER   1
+#define SIZEOF_QDEFER       1
 
 /**
  * Period for checking reg status on unregistered state
@@ -95,33 +96,12 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void init(ConMgr *const me);
-void storeImei(ConMgr *const me, RKH_EVT_T *pe);
-void storeOper(ConMgr *const me, RKH_EVT_T *pe);
 void powerOn(void);
 void powerOff(void);
 void modemFound(void);
-void setupAPN(ConMgr *const me);
-void startRegStatusTimer(ConMgr *const me);
-void sendRequest(RKH_EVT_T *pe);
-void sendOk(ConMgr *const me);
-void sendFail(ConMgr *const me);
-void flushData(void);
-void readData(void);
-void recvOk(ConMgr *const me);
-void recvFail(ConMgr *const me);
-void setSigLevel(ConMgr *const me, RKH_EVT_T *pe);
 void registered(void);
 void unregistered(void);
-void rtimeSync(RKH_EVT_T *pe);
-void reqDefer(RKH_EVT_T *pe);
-void reqRecall(ConMgr *const me);
-void socketConnected(ConMgr *const me);
-void socketDisconnected(ConMgr *const me);
 void stopSMS(void);
-
-ReceivedEvt * ConMgr_ReceiveDataGetRef(void);
-char * ConMgr_Imei(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

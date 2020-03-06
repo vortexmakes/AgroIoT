@@ -99,7 +99,8 @@ struct SendEvt
 typedef struct ReceivedEvt ReceivedEvt;
 struct ReceivedEvt
 {
-    RKH_EVT_T evt;
+//    RKH_EVT_T evt;
+    ModMgrResp resp;
     unsigned char buf[RECV_BUFF_SIZE];
     ruint size;
 };

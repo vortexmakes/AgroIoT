@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="internal:&#xA;&#xA;interface:&#xA;var sigLevel: integer&#xA;var imei: string&#xA;var oper: string&#xA;var protocol: string&#xA;var domain : string&#xA;var port : string&#xA;var retryCount : integer = 0&#xA;&#xA;in event evOpen&#xA;in event evClose&#xA;in event evSend&#xA;in event evRecv&#xA;in event evSendFail&#xA;in event evRecvFail&#xA;in event evSigLevel&#xA;in event evOk&#xA;in event evNoResponse&#xA;in event evSimReady&#xA;in event evSimPin&#xA;in event evSimError&#xA;in event evImei&#xA;in event evReg&#xA;in event evRegStatusTout&#xA;in event evNoReg&#xA;in event evNetClockSync&#xA;in event evLocalTime&#xA;in event evOper&#xA;in event evIPStatus&#xA;in event evIPInitial&#xA;in event evIPStart&#xA;in event evIPGprsAct&#xA;in event evIP&#xA;in event evConnected&#xA;in event evDisconnected&#xA;in event evRestart&#xA;in event evClosed&#xA;in event evError&#xA;in event evStopSMS&#xA;&#xA;operation init()&#xA;operation open()&#xA;operation close()&#xA;operation initializeInit()&#xA;operation recvFail()&#xA;operation sendFail()&#xA;operation ModCmd_sync()&#xA;operation ModCmd_initStr()&#xA;operation setSigLevel()&#xA;&#xA;operation registered() &#xA;operation unregistered() &#xA;operation ModCmd_getPinStatus() &#xA;operation ModCmd_setPin(pin:integer) &#xA;operation powerOn() &#xA;operation powerOff() &#xA;operation modemFound() &#xA;operation ModCmd_sendInit() &#xA;operation ModMgr_close() &#xA;operation ModMgr_open() &#xA;operation ModCmd_init() &#xA;operation ModCmd_enableNetTime() &#xA;operation ModCmd_getImei() &#xA;operation ModCmd_cipShutdown() &#xA;operation ModCmd_setManualGet() &#xA;operation checkReg() &#xA;operation ModCmd_getRegStatus() &#xA;operation startRegStatusTimer() &#xA;operation ModCmd_getLocalTime() &#xA;operation rtimeSync() &#xA;operation configureInit()&#xA;operation ModCmd_getOper() &#xA;operation storeImei() &#xA;operation storeOper() &#xA;operation setupAPN() &#xA;operation ModCmd_requestIP()&#xA;operation ModCmd_startNetwork()&#xA;operation ModCmd_getIpStatus()&#xA;operation configTry()&#xA;operation connectTry()&#xA;operation ConnectInit()&#xA;operation ModCmd_connect(prot: string, dom: string, port: string)&#xA;operation ModCmd_disconnect()&#xA;operation ModCmd_getConnStatus()&#xA;operation socketConnected()&#xA;operation socketDisconnected()&#xA;operation resetParser()&#xA;operation reqDefer()&#xA;operation reqRecall()&#xA;operation sendOk()&#xA;operation flushData()&#xA;operation sendRequest()&#xA;operation readData()&#xA;operation recvOk()&#xA;operation stopSMS()&#xA;&#xA;operation Config_getMaxNumConnectRetries():integer&#xA;operation Config_getSIMPinNumber():integer&#xA;operation Config_getConnectionDomain(domain:string)&#xA;operation Config_getConnectionPort(port:string)&#xA;&#xA;&#xA;" name="ConMgr">
+  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="internal:&#xA;&#xA;interface:&#xA;var sigLevel: integer&#xA;var imei: string&#xA;var oper: string&#xA;var protocol: string&#xA;var domain : string&#xA;var port : string&#xA;var retryCount : integer = 0&#xA;&#xA;in event evOpen&#xA;in event evClose&#xA;in event evSend&#xA;in event evRecv&#xA;in event evSendFail&#xA;in event evRecvFail&#xA;in event evReceived&#xA;in event evSigLevel&#xA;in event evOk&#xA;in event evNoResponse&#xA;in event evSimReady&#xA;in event evSimPin&#xA;in event evSimError&#xA;in event evImei&#xA;in event evReg&#xA;in event evRegStatusTout&#xA;in event evNoReg&#xA;in event evNetClockSync&#xA;in event evLocalTime&#xA;in event evOper&#xA;in event evIPStatus&#xA;in event evIPInitial&#xA;in event evIPStart&#xA;in event evIPGprsAct&#xA;in event evIP&#xA;in event evConnected&#xA;in event evDisconnected&#xA;in event evRestart&#xA;in event evClosed&#xA;in event evError&#xA;in event evStopSMS&#xA;&#xA;operation init()&#xA;operation open()&#xA;operation close()&#xA;operation initializeInit()&#xA;operation recvFail()&#xA;operation sendFail()&#xA;operation ModCmd_sync()&#xA;operation ModCmd_initStr()&#xA;operation setSigLevel()&#xA;&#xA;operation registered() &#xA;operation unregistered() &#xA;operation ModCmd_getPinStatus() &#xA;operation ModCmd_setPin(pin:integer) &#xA;operation powerOn() &#xA;operation powerOff() &#xA;operation modemFound() &#xA;operation ModCmd_sendInit() &#xA;operation ModMgr_close() &#xA;operation ModMgr_open() &#xA;operation ModCmd_init() &#xA;operation ModCmd_enableNetTime() &#xA;operation ModCmd_getImei() &#xA;operation ModCmd_cipShutdown() &#xA;operation ModCmd_setManualGet() &#xA;operation checkReg() &#xA;operation ModCmd_getRegStatus() &#xA;operation startRegStatusTimer() &#xA;operation ModCmd_getLocalTime() &#xA;operation rtimeSync() &#xA;operation configureInit()&#xA;operation ModCmd_getOper() &#xA;operation storeImei() &#xA;operation storeOper() &#xA;operation setupAPN() &#xA;operation ModCmd_requestIP()&#xA;operation ModCmd_startNetwork()&#xA;operation ModCmd_getIpStatus()&#xA;operation configTry()&#xA;operation connectTry()&#xA;operation ConnectInit()&#xA;operation ModCmd_connect(prot: string, dom: string, port: string)&#xA;operation ModCmd_disconnect()&#xA;operation ModCmd_getConnStatus()&#xA;operation socketConnected()&#xA;operation socketDisconnected()&#xA;operation resetParser()&#xA;operation reqDefer()&#xA;operation reqRecall()&#xA;operation sendOk()&#xA;operation flushData()&#xA;operation sendRequest()&#xA;operation readData()&#xA;operation recvOk()&#xA;operation stopSMS()&#xA;&#xA;operation Config_getMaxNumConnectRetries():integer&#xA;operation Config_getSIMPinNumber():integer&#xA;operation Config_getConnectionDomain(domain:string)&#xA;operation Config_getConnectionPort(port:string)&#xA;&#xA;&#xA;" name="ConMgr">
     <regions xmi:id="_yt2m0zjpEemSZunftq3MwQ" name="main region">
       <vertices xsi:type="sgraph:Entry" xmi:id="_yt7fUDjpEemSZunftq3MwQ">
         <outgoingTransitions xmi:id="_yt97kzjpEemSZunftq3MwQ" specification="/ init();&#xD;&#xA;retryCount = 0;&#xD;&#xA;Config_getConnectionDomain(domain);&#xD;&#xA;Config_getConnectionPort(port)&#xD;&#xA;" target="_yt8GZzjpEemSZunftq3MwQ"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_yt8GZzjpEemSZunftq3MwQ" specification="evRecv/recvFail()&#xD;&#xA;evSend/sendFail()" name="ConMgr_Inactive" incomingTransitions="_yt97kzjpEemSZunftq3MwQ _OVWMgFfREemGKbF7wB8Eyw _bFjooBaMEeqrVYsqYiTIyw">
+      <vertices xsi:type="sgraph:State" xmi:id="_yt8GZzjpEemSZunftq3MwQ" specification="evRecv/recvFail()&#xD;&#xA;evSend/sendFail()" name="Inactive" incomingTransitions="_yt97kzjpEemSZunftq3MwQ _OVWMgFfREemGKbF7wB8Eyw _bFjooBaMEeqrVYsqYiTIyw">
         <outgoingTransitions xmi:id="_jLEjsFZcEemoSZsNy-dO8w" specification="evOpen/&#xD;&#xA;ModMgr_open();&#xD;&#xA;powerOn()" target="_nM6qYFfOEemGKbF7wB8Eyw"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_nM6qYFfOEemGKbF7wB8Eyw" specification="evSend/sendFail()&#xD;&#xA;evRecv/recvFail()&#xD;&#xA;evSigLevel/setSigLevel()" name="ConMgr_Active" incomingTransitions="_jLEjsFZcEemoSZsNy-dO8w _-DKJEBaOEeqrVYsqYiTIyw">
+      <vertices xsi:type="sgraph:State" xmi:id="_nM6qYFfOEemGKbF7wB8Eyw" specification="evSend/sendFail()&#xD;&#xA;evRecv/recvFail()&#xD;&#xA;evSigLevel/setSigLevel()" name="Active" incomingTransitions="_jLEjsFZcEemoSZsNy-dO8w _-DKJEBaOEeqrVYsqYiTIyw">
         <outgoingTransitions xmi:id="_bFjooBaMEeqrVYsqYiTIyw" specification="evClose/&#xD;&#xA;ModMgr_close();&#xD;&#xA;powerOff()" target="_yt8GZzjpEemSZunftq3MwQ"/>
         <outgoingTransitions xmi:id="_OVWMgFfREemGKbF7wB8Eyw" specification="always" target="_yt8GZzjpEemSZunftq3MwQ"/>
         <regions xmi:id="_nM6qY1fOEemGKbF7wB8Eyw" name="r1">
           <vertices xsi:type="sgraph:Entry" xmi:id="_-UtsYFfOEemGKbF7wB8Eyw">
             <outgoingTransitions xmi:id="_Pfz4EBaNEeqrVYsqYiTIyw" specification="/retryCount = 0" target="_M0HG0BaNEeqrVYsqYiTIyw"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_M0HG0BaNEeqrVYsqYiTIyw" name="ConMgr_Initialize" incomingTransitions="_Pfz4EBaNEeqrVYsqYiTIyw">
+          <vertices xsi:type="sgraph:State" xmi:id="_M0HG0BaNEeqrVYsqYiTIyw" name="Initialize" incomingTransitions="_Pfz4EBaNEeqrVYsqYiTIyw">
             <outgoingTransitions xmi:id="_zKaL8BaQEeqrVYsqYiTIyw" specification="evNoResponse,&#xD;&#xA;evError" target="_vN-dgBaOEeqrVYsqYiTIyw"/>
             <outgoingTransitions xmi:id="_yLYbEBaUEeqrVYsqYiTIyw" specification="always" target="_vN-dgBaOEeqrVYsqYiTIyw"/>
             <regions xmi:id="_M0Ht4haNEeqrVYsqYiTIyw" name="r1">
               <vertices xsi:type="sgraph:Entry" xmi:id="_T9AcKxaNEeqrVYsqYiTIyw">
                 <outgoingTransitions xmi:id="_YIOfYBaNEeqrVYsqYiTIyw" specification="" target="_VDxP4BaNEeqrVYsqYiTIyw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_VDxP4BaNEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;retryCount += 1;&#xD;&#xA;ModCmd_sync()" name="ConMgr_Sync" incomingTransitions="_YIOfYBaNEeqrVYsqYiTIyw _64gncBaNEeqrVYsqYiTIyw">
+              <vertices xsi:type="sgraph:State" xmi:id="_VDxP4BaNEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;retryCount += 1;&#xD;&#xA;ModCmd_sync()" name="Sync" incomingTransitions="_YIOfYBaNEeqrVYsqYiTIyw _64gncBaNEeqrVYsqYiTIyw">
                 <outgoingTransitions xmi:id="_2BsCcBaNEeqrVYsqYiTIyw" specification="evNoResponse,&#xD;&#xA;evError" target="_p0fs0BaNEeqrVYsqYiTIyw"/>
                 <outgoingTransitions xmi:id="_boFxIBaQEeqrVYsqYiTIyw" specification="evOk" target="_Tine0BaQEeqrVYsqYiTIyw"/>
               </vertices>
@@ -30,28 +30,28 @@
                 <outgoingTransitions xmi:id="_64gncBaNEeqrVYsqYiTIyw" specification="[retryCount &lt; 5]" target="_VDxP4BaNEeqrVYsqYiTIyw"/>
                 <outgoingTransitions xmi:id="_1kJVYBaOEeqrVYsqYiTIyw" specification="else" target="_VEYsMBaTEeqrVYsqYiTIyw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_Tine0BaQEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;modemFound();&#xD;&#xA;ModCmd_initStr()" name="ConMgr_Init" incomingTransitions="_boFxIBaQEeqrVYsqYiTIyw">
+              <vertices xsi:type="sgraph:State" xmi:id="_Tine0BaQEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;modemFound();&#xD;&#xA;ModCmd_initStr()" name="Init" incomingTransitions="_boFxIBaQEeqrVYsqYiTIyw">
                 <outgoingTransitions xmi:id="_n_Dt0BaQEeqrVYsqYiTIyw" specification="evOk" target="_lgsN8BaQEeqrVYsqYiTIyw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_lgsN8BaQEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_getPinStatus()" name="ConMgr_Pin" incomingTransitions="_n_Dt0BaQEeqrVYsqYiTIyw _PFXlgBaSEeqrVYsqYiTIyw">
+              <vertices xsi:type="sgraph:State" xmi:id="_lgsN8BaQEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_getPinStatus()" name="Pin" incomingTransitions="_n_Dt0BaQEeqrVYsqYiTIyw _PFXlgBaSEeqrVYsqYiTIyw">
                 <outgoingTransitions xmi:id="_vsrg0BaQEeqrVYsqYiTIyw" specification="evSimError" target="_VEYsMBaTEeqrVYsqYiTIyw"/>
                 <outgoingTransitions xmi:id="_Oll5QBaSEeqrVYsqYiTIyw" specification="evSimPin" target="_MOI5sBaSEeqrVYsqYiTIyw"/>
                 <outgoingTransitions xmi:id="_06R8MBaSEeqrVYsqYiTIyw" specification="evSimReady" target="_umrQIBaSEeqrVYsqYiTIyw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_MOI5sBaSEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_setPin(Config_getSIMPinNumber())" name="ConMgr_SetPin" incomingTransitions="_Oll5QBaSEeqrVYsqYiTIyw">
+              <vertices xsi:type="sgraph:State" xmi:id="_MOI5sBaSEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_setPin(Config_getSIMPinNumber())" name="SetPin" incomingTransitions="_Oll5QBaSEeqrVYsqYiTIyw">
                 <outgoingTransitions xmi:id="_PFXlgBaSEeqrVYsqYiTIyw" specification="evOk" target="_lgsN8BaQEeqrVYsqYiTIyw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_umrQIBaSEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_enableNetTime()" name="ConMgr_EnableNetTime" incomingTransitions="_06R8MBaSEeqrVYsqYiTIyw">
+              <vertices xsi:type="sgraph:State" xmi:id="_umrQIBaSEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_enableNetTime()" name="EnableNetTime" incomingTransitions="_06R8MBaSEeqrVYsqYiTIyw">
                 <outgoingTransitions xmi:id="_FYLSABaTEeqrVYsqYiTIyw" specification="evOk" target="__h6CMBaSEeqrVYsqYiTIyw"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="__h6CMBaSEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_getImei()" name="ConMgr_GetImei" incomingTransitions="_FYLSABaTEeqrVYsqYiTIyw">
+              <vertices xsi:type="sgraph:State" xmi:id="__h6CMBaSEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_getImei()" name="GetImei" incomingTransitions="_FYLSABaTEeqrVYsqYiTIyw">
                 <outgoingTransitions xmi:id="_sFjTkDbFEeq0k9aFZ3QrpQ" specification="evImei/storeImei()" target="_lIbJYDbFEeq0k9aFZ3QrpQ"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_PMMw0BaTEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_setManualGet()" name="ConMgr_SetManualGet" incomingTransitions="_RUtVcBaTEeqrVYsqYiTIyw">
+              <vertices xsi:type="sgraph:State" xmi:id="_PMMw0BaTEeqrVYsqYiTIyw" specification="entry/&#xD;&#xA;ModCmd_setManualGet()" name="SetManualGet" incomingTransitions="_RUtVcBaTEeqrVYsqYiTIyw">
                 <outgoingTransitions xmi:id="_dQqxIBaTEeqrVYsqYiTIyw" specification="evOk" target="_WOxmQBaUEeqrVYsqYiTIyw"/>
               </vertices>
               <vertices xsi:type="sgraph:FinalState" xmi:id="_VEYsMBaTEeqrVYsqYiTIyw" incomingTransitions="_vsrg0BaQEeqrVYsqYiTIyw _1kJVYBaOEeqrVYsqYiTIyw"/>
-              <vertices xsi:type="sgraph:State" xmi:id="_lIbJYDbFEeq0k9aFZ3QrpQ" specification="entry/&#xD;&#xA;ModCmd_cipShutdown()" name="ConMgr_CipShutdown" incomingTransitions="_sFjTkDbFEeq0k9aFZ3QrpQ">
+              <vertices xsi:type="sgraph:State" xmi:id="_lIbJYDbFEeq0k9aFZ3QrpQ" specification="entry/&#xD;&#xA;ModCmd_cipShutdown()" name="CipShutdown" incomingTransitions="_sFjTkDbFEeq0k9aFZ3QrpQ">
                 <outgoingTransitions xmi:id="_RUtVcBaTEeqrVYsqYiTIyw" specification="evOk" target="_PMMw0BaTEeqrVYsqYiTIyw"/>
               </vertices>
             </regions>
@@ -63,7 +63,7 @@
             <outgoingTransitions xmi:id="_uxE3YBaUEeqrVYsqYiTIyw" specification="after 60s //REGISTRATION_TIME" target="_vN-dgBaOEeqrVYsqYiTIyw"/>
             <outgoingTransitions xmi:id="_SStEFjCEEeqnJcfbx735Yg" specification="evReg" target="_SSuSOTCEEeqnJcfbx735Yg"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_SSuSOTCEEeqnJcfbx735Yg" specification="entry/registered()&#xD;&#xA;exit/unregistered()" name="ConMgr_Registered" incomingTransitions="_SStEFjCEEeqnJcfbx735Yg">
+          <vertices xsi:type="sgraph:State" xmi:id="_SSuSOTCEEeqnJcfbx735Yg" specification="entry/registered()&#xD;&#xA;exit/unregistered()" name="Registered" incomingTransitions="_SStEFjCEEeqnJcfbx735Yg">
             <outgoingTransitions xmi:id="_STSS5jCEEeqnJcfbx735Yg" specification="evNoReg" target="_WOxmQBaUEeqrVYsqYiTIyw"/>
             <outgoingTransitions xmi:id="_zfg_sDCvEeqOO_CMiukOtQ" specification="evError/stopSMS()" target="_3_CM4DCMEeqnJcfbx735Yg"/>
             <outgoingTransitions xmi:id="_STS5-jCEEeqnJcfbx735Yg" specification="always" target="_vN-dgBaOEeqrVYsqYiTIyw"/>
@@ -72,11 +72,11 @@
                 <outgoingTransitions xmi:id="_STRr0DCEEeqnJcfbx735Yg" specification="[retryCount &lt; Config_getMaxNumConnectRetries()]" target="_SSwHcDCEEeqnJcfbx735Yg"/>
                 <outgoingTransitions xmi:id="_STQduTCEEeqnJcfbx735Yg" specification="else/stopSMS()" target="_3_CM4DCMEeqnJcfbx735Yg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_STMzUDCEEeqnJcfbx735Yg" name="ConMgr_LocalTime" incomingTransitions="_STLlMjCEEeqnJcfbx735Yg">
+              <vertices xsi:type="sgraph:State" xmi:id="_STMzUDCEEeqnJcfbx735Yg" name="LocalTime" incomingTransitions="_STLlMjCEEeqnJcfbx735Yg">
                 <outgoingTransitions xmi:id="_STOBdjCEEeqnJcfbx735Yg" specification="evLocalTime/&#xD;&#xA;rtimeSync()" target="_SSx8nDCEEeqnJcfbx735Yg"/>
                 <outgoingTransitions xmi:id="_STNaYDCEEeqnJcfbx735Yg" specification="evNoResponse" target="_SSx8nDCEEeqnJcfbx735Yg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_STGFoTCEEeqnJcfbx735Yg" name="ConMgr_Connecting" incomingTransitions="_STE3ijCEEeqnJcfbx735Yg _STE3gTCEEeqnJcfbx735Yg _QRT3QDCIEeqnJcfbx735Yg _bR3AQDFcEeqOO_CMiukOtQ">
+              <vertices xsi:type="sgraph:State" xmi:id="_STGFoTCEEeqnJcfbx735Yg" name="Connecting" incomingTransitions="_STE3ijCEEeqnJcfbx735Yg _STE3gTCEEeqnJcfbx735Yg _QRT3QDCIEeqnJcfbx735Yg _bR3AQDFcEeqOO_CMiukOtQ">
                 <outgoingTransitions xmi:id="_STPPnDCEEeqnJcfbx735Yg" specification="evNoResponse,&#xD;&#xA;evClosed,&#xD;&#xA;evIPStatus,&#xD;&#xA;evError" target="_STQdsDCEEeqnJcfbx735Yg"/>
                 <outgoingTransitions xmi:id="_STHTyTCEEeqnJcfbx735Yg" specification="evIPStart, &#xD;&#xA;evIPInitial,&#xD;&#xA;evIPGprsAct" target="_SSx8nDCEEeqnJcfbx735Yg"/>
                 <outgoingTransitions xmi:id="_d_tZkDCLEeqnJcfbx735Yg" specification="evClose/ModCmd_disconnect()" target="_XhYEMDCLEeqnJcfbx735Yg"/>
@@ -84,111 +84,102 @@
                   <vertices xsi:type="sgraph:Entry" xmi:id="_STGsuzCEEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_t-5W8DCHEeqnJcfbx735Yg" specification="/ModCmd_connect(protocol, domain, port)" target="_rjRpEDCHEeqnJcfbx735Yg"/>
                   </vertices>
-                  <vertices xsi:type="sgraph:State" xmi:id="_rjRpEDCHEeqnJcfbx735Yg" name="ConMgr_WaitingServer" incomingTransitions="_t-5W8DCHEeqnJcfbx735Yg _xxp24DCHEeqnJcfbx735Yg">
+                  <vertices xsi:type="sgraph:State" xmi:id="_rjRpEDCHEeqnJcfbx735Yg" name="WaitingServer" incomingTransitions="_t-5W8DCHEeqnJcfbx735Yg _xxp24DCHEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_xxp24DCHEeqnJcfbx735Yg" specification="after 2 s / // CONSTATUS_PERIOD&#xD;&#xA;ModCmd_getConnStatus()" target="_rjRpEDCHEeqnJcfbx735Yg"/>
                     <outgoingTransitions xmi:id="_EF5DQDCIEeqnJcfbx735Yg" specification="evConnected" target="_7xY2cDCHEeqnJcfbx735Yg"/>
                   </vertices>
-                  <vertices xsi:type="sgraph:State" xmi:id="_7xY2cDCHEeqnJcfbx735Yg" specification="entry/socketConnected()&#xD;&#xA;exit/socketDisconnected()" name="ConMgr_Connected" incomingTransitions="_EF5DQDCIEeqnJcfbx735Yg">
+                  <vertices xsi:type="sgraph:State" xmi:id="_7xY2cDCHEeqnJcfbx735Yg" specification="entry/socketConnected()&#xD;&#xA;exit/socketDisconnected()" name="Connected" incomingTransitions="_EF5DQDCIEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_JLz0MDCIEeqnJcfbx735Yg" specification="evRestart/ModCmd_disconnect()" target="_Fk2UkDCIEeqnJcfbx735Yg"/>
                     <outgoingTransitions xmi:id="_bR3AQDFcEeqOO_CMiukOtQ" specification="evClosed" target="_STGFoTCEEeqnJcfbx735Yg"/>
                     <regions xmi:id="_7xZdgjCHEeqnJcfbx735Yg" name="r1">
                       <vertices xsi:type="sgraph:Entry" xmi:id="_clZNIDCKEeqnJcfbx735Yg">
                         <outgoingTransitions xmi:id="_iZOM8DCKEeqnJcfbx735Yg" specification="" target="_h8GMEDCKEeqnJcfbx735Yg"/>
                       </vertices>
-                      <vertices xsi:type="sgraph:State" xmi:id="_h8GMEDCKEeqnJcfbx735Yg" specification="" name="ConMgr_Idle" incomingTransitions="_iZOM8DCKEeqnJcfbx735Yg _oRsxUDCMEeqnJcfbx735Yg _OPGVoDCNEeqnJcfbx735Yg _nmL5sDCNEeqnJcfbx735Yg _s8ZJYDCNEeqnJcfbx735Yg _0dOdkDCNEeqnJcfbx735Yg _1CyBsDCNEeqnJcfbx735Yg">
+                      <vertices xsi:type="sgraph:State" xmi:id="_h8GMEDCKEeqnJcfbx735Yg" specification="" name="Idle" incomingTransitions="_iZOM8DCKEeqnJcfbx735Yg _oRsxUDCMEeqnJcfbx735Yg _OPGVoDCNEeqnJcfbx735Yg _nmL5sDCNEeqnJcfbx735Yg _s8ZJYDCNEeqnJcfbx735Yg _0dOdkDCNEeqnJcfbx735Yg _1CyBsDCNEeqnJcfbx735Yg">
                         <outgoingTransitions xmi:id="_U0-dcDCNEeqnJcfbx735Yg" specification="after 2s / // CONSTATUS_PERIOD&#xD;&#xA;ModCmd_getConnStatus()" target="_HYAM4DCLEeqnJcfbx735Yg"/>
                         <outgoingTransitions xmi:id="_fEPt0DCNEeqnJcfbx735Yg" specification="evSend/sendRequest()" target="_JXDTgDCLEeqnJcfbx735Yg"/>
                         <outgoingTransitions xmi:id="_zS6mkDCNEeqnJcfbx735Yg" specification="evRecv/readData()" target="_Gbao0DCLEeqnJcfbx735Yg"/>
                       </vertices>
-                      <vertices xsi:type="sgraph:State" xmi:id="_Gbao0DCLEeqnJcfbx735Yg" name="ConMgr_receiving" incomingTransitions="_zS6mkDCNEeqnJcfbx735Yg">
+                      <vertices xsi:type="sgraph:State" xmi:id="_Gbao0DCLEeqnJcfbx735Yg" name="receiving" incomingTransitions="_zS6mkDCNEeqnJcfbx735Yg">
                         <outgoingTransitions xmi:id="_0dOdkDCNEeqnJcfbx735Yg" specification="evNoResponse,&#xD;&#xA;evError/&#xD;&#xA;recvFail()" target="_h8GMEDCKEeqnJcfbx735Yg"/>
-                        <outgoingTransitions xmi:id="_1CyBsDCNEeqnJcfbx735Yg" specification="evOk/recvOk()" target="_h8GMEDCKEeqnJcfbx735Yg"/>
+                        <outgoingTransitions xmi:id="_1CyBsDCNEeqnJcfbx735Yg" specification="evReceived/recvOk()" target="_h8GMEDCKEeqnJcfbx735Yg"/>
                       </vertices>
-                      <vertices xsi:type="sgraph:State" xmi:id="_HYAM4DCLEeqnJcfbx735Yg" specification="exit / reqRecall()&#xD;&#xA;evSend/reqDefer()&#xD;&#xA;evRecv/reqDefer()" name="ConMgr_GetStatus" incomingTransitions="_U0-dcDCNEeqnJcfbx735Yg">
+                      <vertices xsi:type="sgraph:State" xmi:id="_HYAM4DCLEeqnJcfbx735Yg" specification="exit / reqRecall()&#xD;&#xA;evSend/reqDefer()&#xD;&#xA;evRecv/reqDefer()" name="GetStatus" incomingTransitions="_U0-dcDCNEeqnJcfbx735Yg">
                         <outgoingTransitions xmi:id="_oRsxUDCMEeqnJcfbx735Yg" specification="evNoResponse[retryCount &lt; 5] /&#xD;&#xA;retryCount += 1;&#xD;&#xA;ModCmd_init()" target="_h8GMEDCKEeqnJcfbx735Yg"/>
                         <outgoingTransitions xmi:id="_OPGVoDCNEeqnJcfbx735Yg" specification="evConnected/ retryCount = 0" target="_h8GMEDCKEeqnJcfbx735Yg"/>
                       </vertices>
-                      <vertices xsi:type="sgraph:State" xmi:id="_JXDTgDCLEeqnJcfbx735Yg" name="ConMgr_Sending" incomingTransitions="_fEPt0DCNEeqnJcfbx735Yg">
+                      <vertices xsi:type="sgraph:State" xmi:id="_JXDTgDCLEeqnJcfbx735Yg" name="Sending" incomingTransitions="_fEPt0DCNEeqnJcfbx735Yg">
                         <outgoingTransitions xmi:id="_nmL5sDCNEeqnJcfbx735Yg" specification="evNoResponse, &#xD;&#xA;evError/sendFail()" target="_h8GMEDCKEeqnJcfbx735Yg"/>
                         <outgoingTransitions xmi:id="_s8ZJYDCNEeqnJcfbx735Yg" specification="always" target="_h8GMEDCKEeqnJcfbx735Yg"/>
                         <regions xmi:id="_JXDTgzCLEeqnJcfbx735Yg" name="r1">
                           <vertices xsi:type="sgraph:Entry" xmi:id="_Pg_GMDCLEeqnJcfbx735Yg">
                             <outgoingTransitions xmi:id="_KyWXYDCMEeqnJcfbx735Yg" specification="" target="_Et7W0DCMEeqnJcfbx735Yg"/>
                           </vertices>
-                          <vertices xsi:type="sgraph:State" xmi:id="_QBDtYDCLEeqnJcfbx735Yg" name="ConMgr_waitOk" incomingTransitions="_NJRLcDCMEeqnJcfbx735Yg">
+                          <vertices xsi:type="sgraph:State" xmi:id="_QBDtYDCLEeqnJcfbx735Yg" name="waitOk" incomingTransitions="_NJRLcDCMEeqnJcfbx735Yg">
                             <outgoingTransitions xmi:id="_P31DcDCMEeqnJcfbx735Yg" specification="evOk/&#xD;&#xA;retryCount = 0;&#xD;&#xA;sendOk()" target="_QyzTYDCLEeqnJcfbx735Yg"/>
                           </vertices>
                           <vertices xsi:type="sgraph:FinalState" xmi:id="_QyzTYDCLEeqnJcfbx735Yg" incomingTransitions="_P31DcDCMEeqnJcfbx735Yg"/>
-                          <vertices xsi:type="sgraph:State" xmi:id="_Et7W0DCMEeqnJcfbx735Yg" name="ConMgr_WaitPrompt" incomingTransitions="_KyWXYDCMEeqnJcfbx735Yg">
+                          <vertices xsi:type="sgraph:State" xmi:id="_Et7W0DCMEeqnJcfbx735Yg" name="WaitPrompt" incomingTransitions="_KyWXYDCMEeqnJcfbx735Yg">
                             <outgoingTransitions xmi:id="_NJRLcDCMEeqnJcfbx735Yg" specification="evOk/flushData()" target="_QBDtYDCLEeqnJcfbx735Yg"/>
                           </vertices>
                         </regions>
                       </vertices>
                     </regions>
                   </vertices>
-                  <vertices xsi:type="sgraph:State" xmi:id="_Fk2UkDCIEeqnJcfbx735Yg" name="ConMgr_Restarting" incomingTransitions="_JLz0MDCIEeqnJcfbx735Yg">
+                  <vertices xsi:type="sgraph:State" xmi:id="_Fk2UkDCIEeqnJcfbx735Yg" name="Restarting" incomingTransitions="_JLz0MDCIEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_Nl29oDCIEeqnJcfbx735Yg" specification="evDisconnected, evNoResponse" target="_GnoAMDCIEeqnJcfbx735Yg"/>
                   </vertices>
-                  <vertices xsi:type="sgraph:State" xmi:id="_GnoAMDCIEeqnJcfbx735Yg" name="ConMgr_WaitReopen" incomingTransitions="_Nl29oDCIEeqnJcfbx735Yg">
+                  <vertices xsi:type="sgraph:State" xmi:id="_GnoAMDCIEeqnJcfbx735Yg" name="WaitReopen" incomingTransitions="_Nl29oDCIEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_QRT3QDCIEeqnJcfbx735Yg" specification="after 2 s //REOPEN_DELAY" target="_STGFoTCEEeqnJcfbx735Yg"/>
                   </vertices>
                 </regions>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_STDCZDCEEeqnJcfbx735Yg" name="ConMgr_WaitRetryConfig" incomingTransitions="_STCbRDCEEeqnJcfbx735Yg">
+              <vertices xsi:type="sgraph:State" xmi:id="_STDCZDCEEeqnJcfbx735Yg" name="WaitRetryConfig" incomingTransitions="_STCbRDCEEeqnJcfbx735Yg">
                 <outgoingTransitions xmi:id="_STDpaTCEEeqnJcfbx735Yg" specification="after 2s/ // CONFIG_TRY_DELAY&#xD;&#xA;retryCount += 1; &#xD;&#xA;ModCmd_init()" target="_SSzKujCEEeqnJcfbx735Yg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_STBNKTCEEeqnJcfbx735Yg" name="ConMgr_WaitNetClockSync" incomingTransitions="_STAmEjCEEeqnJcfbx735Yg">
+              <vertices xsi:type="sgraph:State" xmi:id="_STBNKTCEEeqnJcfbx735Yg" name="WaitNetClockSync" incomingTransitions="_STAmEjCEEeqnJcfbx735Yg">
                 <outgoingTransitions xmi:id="_STLlMjCEEeqnJcfbx735Yg" specification="evNetClockSync/&#xD;&#xA;ModCmd_getLocalTime()" target="_STMzUDCEEeqnJcfbx735Yg"/>
                 <outgoingTransitions xmi:id="_STB0NjCEEeqnJcfbx735Yg" specification="after 5s &#xD;&#xA;//WAIT_NETCLOCK_TIME" target="_SSx8nDCEEeqnJcfbx735Yg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_SSx8nDCEEeqnJcfbx735Yg" name="ConMgr_Configure" incomingTransitions="_STB0NjCEEeqnJcfbx735Yg _STOBdjCEEeqnJcfbx735Yg _STNaYDCEEeqnJcfbx735Yg _STHTyTCEEeqnJcfbx735Yg">
+              <vertices xsi:type="sgraph:State" xmi:id="_SSx8nDCEEeqnJcfbx735Yg" name="Configure" incomingTransitions="_STB0NjCEEeqnJcfbx735Yg _STOBdjCEEeqnJcfbx735Yg _STNaYDCEEeqnJcfbx735Yg _STHTyTCEEeqnJcfbx735Yg">
                 <outgoingTransitions xmi:id="_SS__ATCEEeqnJcfbx735Yg" specification="evNoResponse" target="_SSxVhjCEEeqnJcfbx735Yg"/>
                 <outgoingTransitions xmi:id="_STE3gTCEEeqnJcfbx735Yg" specification="always /&#xD;&#xA;retryCount = 0" target="_STGFoTCEEeqnJcfbx735Yg"/>
                 <regions xmi:id="_SSyjpzCEEeqnJcfbx735Yg" name="r1">
                   <vertices xsi:type="sgraph:Entry" xmi:id="_SS-J1jCEEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_SS-w5DCEEeqnJcfbx735Yg" specification="/retryCount = 0" target="_SSzKxzCEEeqnJcfbx735Yg"/>
                   </vertices>
-                  <vertices xsi:type="sgraph:State" xmi:id="_SS7tpTCEEeqnJcfbx735Yg" specification="entry/setupAPN()" name="ConMgr_SetAPN" incomingTransitions="_SS7GhzCEEeqnJcfbx735Yg">
+                  <vertices xsi:type="sgraph:State" xmi:id="_SS7tpTCEEeqnJcfbx735Yg" specification="entry/setupAPN()" name="SetAPN" incomingTransitions="_SS7GhzCEEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_SS87szCEEeqnJcfbx735Yg" specification="evOk" target="_SS54YDCEEeqnJcfbx735Yg"/>
                   </vertices>
-                  <vertices xsi:type="sgraph:State" xmi:id="_SS54YDCEEeqnJcfbx735Yg" specification="entry/ModCmd_startNetwork()" name="ConMgr_EnableNetwork" incomingTransitions="_SS87szCEEeqnJcfbx735Yg">
+                  <vertices xsi:type="sgraph:State" xmi:id="_SS54YDCEEeqnJcfbx735Yg" specification="entry/ModCmd_startNetwork()" name="EnableNetwork" incomingTransitions="_SS87szCEEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_SS6fdDCEEeqnJcfbx735Yg" specification="evOk" target="_SS0_4DCEEeqnJcfbx735Yg"/>
                   </vertices>
-                  <vertices xsi:type="sgraph:State" xmi:id="_SS0_4DCEEeqnJcfbx735Yg" specification="entry/ModCmd_getIpStatus()" name="ConMgr_CheckIP" incomingTransitions="_SS3cIDCEEeqnJcfbx735Yg _SS1m-DCEEeqnJcfbx735Yg _SS6fdDCEEeqnJcfbx735Yg">
+                  <vertices xsi:type="sgraph:State" xmi:id="_SS0_4DCEEeqnJcfbx735Yg" specification="entry/ModCmd_getIpStatus()" name="CheckIP" incomingTransitions="_SS3cIDCEEeqnJcfbx735Yg _SS1m-DCEEeqnJcfbx735Yg _SS6fdDCEEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_SS4qQjCEEeqnJcfbx735Yg" specification="evIPStatus" target="_SS0Y1DCEEeqnJcfbx735Yg"/>
                     <outgoingTransitions xmi:id="_SS3cIDCEEeqnJcfbx735Yg" specification="evIP, evIPInitial, evIPStart" target="_SS0_4DCEEeqnJcfbx735Yg"/>
                     <outgoingTransitions xmi:id="_SS1m-DCEEeqnJcfbx735Yg" specification="evIPGprsAct/ModCmd_requestIP()" target="_SS0_4DCEEeqnJcfbx735Yg"/>
                   </vertices>
                   <vertices xsi:type="sgraph:FinalState" xmi:id="_SS0Y1DCEEeqnJcfbx735Yg" incomingTransitions="_SS4qQjCEEeqnJcfbx735Yg"/>
-                  <vertices xsi:type="sgraph:State" xmi:id="_SSzKxzCEEeqnJcfbx735Yg" specification="entry/ModCmd_getOper()" name="ConMgr_GetOper" incomingTransitions="_SS-w5DCEEeqnJcfbx735Yg">
+                  <vertices xsi:type="sgraph:State" xmi:id="_SSzKxzCEEeqnJcfbx735Yg" specification="entry/ModCmd_getOper()" name="GetOper" incomingTransitions="_SS-w5DCEEeqnJcfbx735Yg">
                     <outgoingTransitions xmi:id="_SS7GhzCEEeqnJcfbx735Yg" specification="evOper/storeOper()" target="_SS7tpTCEEeqnJcfbx735Yg"/>
                   </vertices>
-                  <vertices xsi:type="sgraph:Entry" xmi:id="_SSzKujCEEeqnJcfbx735Yg" name="ConMgr_ConfigureHist" incomingTransitions="_STDpaTCEEeqnJcfbx735Yg" kind="SHALLOW_HISTORY"/>
+                  <vertices xsi:type="sgraph:Entry" xmi:id="_SSzKujCEEeqnJcfbx735Yg" name="ConfigureHist" incomingTransitions="_STDpaTCEEeqnJcfbx735Yg" kind="SHALLOW_HISTORY"/>
                 </regions>
               </vertices>
               <vertices xsi:type="sgraph:Choice" xmi:id="_SSxVhjCEEeqnJcfbx735Yg" incomingTransitions="_SS__ATCEEeqnJcfbx735Yg">
                 <outgoingTransitions xmi:id="_STCbRDCEEeqnJcfbx735Yg" specification="[retryCount &lt; 5]" target="_STDCZDCEEeqnJcfbx735Yg"/>
                 <outgoingTransitions xmi:id="_STOohjCEEeqnJcfbx735Yg" specification="else/stopSMS()" target="_3_CM4DCMEeqnJcfbx735Yg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_SSwHcDCEEeqnJcfbx735Yg" specification="exit/ModCmd_init()" name="ConMgr_WaitRetryConnect" incomingTransitions="_STRr0DCEEeqnJcfbx735Yg">
+              <vertices xsi:type="sgraph:State" xmi:id="_SSwHcDCEEeqnJcfbx735Yg" specification="exit/ModCmd_init()" name="WaitRetryConnect" incomingTransitions="_STRr0DCEEeqnJcfbx735Yg">
                 <outgoingTransitions xmi:id="_STE3ijCEEeqnJcfbx735Yg" specification="after 2s  / // CONNECT_TRY_DELAY&#xD;&#xA;retryCount +=1" target="_STGFoTCEEeqnJcfbx735Yg"/>
               </vertices>
               <vertices xsi:type="sgraph:Entry" xmi:id="_SSwHYzCEEeqnJcfbx735Yg">
                 <outgoingTransitions xmi:id="_STAmEjCEEeqnJcfbx735Yg" specification="" target="_STBNKTCEEeqnJcfbx735Yg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_XhYEMDCLEeqnJcfbx735Yg" name="ConMgr_Disconnecting" incomingTransitions="_d_tZkDCLEeqnJcfbx735Yg">
+              <vertices xsi:type="sgraph:State" xmi:id="_XhYEMDCLEeqnJcfbx735Yg" name="Disconnecting" incomingTransitions="_d_tZkDCLEeqnJcfbx735Yg">
                 <outgoingTransitions xmi:id="_hDxngDCLEeqnJcfbx735Yg" specification="evDisconnected, evNoResponse" target="_1xeyYDCbEeqOO_CMiukOtQ"/>
               </vertices>
               <vertices xsi:type="sgraph:FinalState" xmi:id="_3_CM4DCMEeqnJcfbx735Yg" incomingTransitions="_STOohjCEEeqnJcfbx735Yg _STQduTCEEeqnJcfbx735Yg _zfg_sDCvEeqOO_CMiukOtQ"/>
-            </regions>
-            <regions xmi:id="_SSu5RDCEEeqnJcfbx735Yg" name="r2">
-              <vertices xsi:type="sgraph:Entry" xmi:id="_JWG7gDCPEeqnJcfbx735Yg">
-                <outgoingTransitions xmi:id="_OmWtIDCPEeqnJcfbx735Yg" specification="" target="_NTNqQDCPEeqnJcfbx735Yg"/>
-              </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_NTNqQDCPEeqnJcfbx735Yg" name="ConMgr_SMS" incomingTransitions="_OmWtIDCPEeqnJcfbx735Yg">
-                <outgoingTransitions xmi:id="_Ve5J0DFhEeqOO_CMiukOtQ" specification="evStopSMS" target="_VBHosDFhEeqOO_CMiukOtQ"/>
-              </vertices>
-              <vertices xsi:type="sgraph:FinalState" xmi:id="_VBHosDFhEeqOO_CMiukOtQ" incomingTransitions="_Ve5J0DFhEeqOO_CMiukOtQ"/>
             </regions>
           </vertices>
           <vertices xsi:type="sgraph:FinalState" xmi:id="_1xeyYDCbEeqOO_CMiukOtQ" incomingTransitions="_hDxngDCLEeqnJcfbx735Yg"/>
@@ -260,7 +251,7 @@
                   </children>
                   <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkYefDbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="0" lineColor="16777215"/>
                   <styles xsi:type="notation:NamedStyle" xmi:id="_ZkYefTbFEeq0k9aFZ3QrpQ" name="allowColors"/>
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkYefjbFEeq0k9aFZ3QrpQ" x="15" width="15" height="15"/>
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkYefjbFEeq0k9aFZ3QrpQ" x="15" y="7" width="15" height="15"/>
                 </children>
                 <children xmi:id="_ZkYefzbFEeq0k9aFZ3QrpQ" type="State" element="_M0HG0BaNEeqrVYsqYiTIyw">
                   <children xsi:type="notation:DecorationNode" xmi:id="_ZkYegDbFEeq0k9aFZ3QrpQ" type="StateName">
@@ -435,7 +426,7 @@
                   <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkYfBTbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="15981773" lineColor="12632256"/>
                   <styles xsi:type="notation:FontStyle" xmi:id="_ZkYfBjbFEeq0k9aFZ3QrpQ"/>
                   <styles xsi:type="notation:BooleanValueStyle" xmi:id="_ZkYfBzbFEeq0k9aFZ3QrpQ" name="isHorizontal" booleanValue="true"/>
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkYfCDbFEeq0k9aFZ3QrpQ" x="25" y="45" width="416" height="948"/>
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkYfCDbFEeq0k9aFZ3QrpQ" x="25" y="52" width="416" height="948"/>
                 </children>
                 <children xmi:id="_ZkYfCTbFEeq0k9aFZ3QrpQ" type="State" element="_vN-dgBaOEeqrVYsqYiTIyw">
                   <children xsi:type="notation:DecorationNode" xmi:id="_ZkYfCjbFEeq0k9aFZ3QrpQ" type="StateName">
@@ -451,7 +442,7 @@
                   <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkYfETbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="15981773" lineColor="12632256"/>
                   <styles xsi:type="notation:FontStyle" xmi:id="_ZkYfEjbFEeq0k9aFZ3QrpQ"/>
                   <styles xsi:type="notation:BooleanValueStyle" xmi:id="_ZkYfEzbFEeq0k9aFZ3QrpQ" name="isHorizontal" booleanValue="true"/>
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkYfFDbFEeq0k9aFZ3QrpQ" x="512" y="341" width="139" height="65"/>
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkYfFDbFEeq0k9aFZ3QrpQ" x="512" y="348" width="139" height="65"/>
                 </children>
                 <children xmi:id="_ZkYfFTbFEeq0k9aFZ3QrpQ" type="State" element="_WOxmQBaUEeqrVYsqYiTIyw">
                   <children xsi:type="notation:DecorationNode" xmi:id="_ZkYfFjbFEeq0k9aFZ3QrpQ" type="StateName">
@@ -467,7 +458,7 @@
                   <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkYfHTbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="15981773" lineColor="12632256"/>
                   <styles xsi:type="notation:FontStyle" xmi:id="_ZkYfHjbFEeq0k9aFZ3QrpQ"/>
                   <styles xsi:type="notation:BooleanValueStyle" xmi:id="_ZkYfHzbFEeq0k9aFZ3QrpQ" name="isHorizontal" booleanValue="true"/>
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkYfIDbFEeq0k9aFZ3QrpQ" x="480" y="692" width="234" height="161"/>
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkYfIDbFEeq0k9aFZ3QrpQ" x="480" y="699" width="234" height="161"/>
                 </children>
                 <children xmi:id="_ZkYfITbFEeq0k9aFZ3QrpQ" type="State" element="_SSuSOTCEEeqnJcfbx735Yg">
                   <children xsi:type="notation:DecorationNode" xmi:id="_ZkYfIjbFEeq0k9aFZ3QrpQ" type="StateName">
@@ -968,57 +959,14 @@
                       <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZG7jbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="15790320" lineColor="12632256"/>
                       <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZG7zbFEeq0k9aFZ3QrpQ"/>
                     </children>
-                    <children xmi:id="_ZkZG8DbFEeq0k9aFZ3QrpQ" type="Region" element="_SSu5RDCEEeqnJcfbx735Yg">
-                      <children xsi:type="notation:DecorationNode" xmi:id="_ZkZG8TbFEeq0k9aFZ3QrpQ" type="RegionName">
-                        <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZG8jbFEeq0k9aFZ3QrpQ"/>
-                        <layoutConstraint xsi:type="notation:Location" xmi:id="_ZkZG8zbFEeq0k9aFZ3QrpQ"/>
-                      </children>
-                      <children xsi:type="notation:Shape" xmi:id="_ZkZG9DbFEeq0k9aFZ3QrpQ" type="RegionCompartment" fontName="Verdana" lineColor="4210752">
-                        <children xmi:id="_ZkZG9TbFEeq0k9aFZ3QrpQ" type="Entry" element="_JWG7gDCPEeqnJcfbx735Yg">
-                          <children xmi:id="_ZkZG9jbFEeq0k9aFZ3QrpQ" type="BorderItemLabelContainer">
-                            <children xsi:type="notation:DecorationNode" xmi:id="_ZkZG9zbFEeq0k9aFZ3QrpQ" type="BorderItemLabel">
-                              <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZG-DbFEeq0k9aFZ3QrpQ"/>
-                              <layoutConstraint xsi:type="notation:Location" xmi:id="_ZkZG-TbFEeq0k9aFZ3QrpQ"/>
-                            </children>
-                            <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZG-jbFEeq0k9aFZ3QrpQ" fontName="Verdana" lineColor="4210752"/>
-                            <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZG-zbFEeq0k9aFZ3QrpQ"/>
-                          </children>
-                          <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZG_DbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="0" lineColor="16777215"/>
-                          <styles xsi:type="notation:NamedStyle" xmi:id="_ZkZG_TbFEeq0k9aFZ3QrpQ" name="allowColors"/>
-                          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZG_jbFEeq0k9aFZ3QrpQ" x="54" y="52"/>
-                        </children>
-                        <children xmi:id="_ZkZG_zbFEeq0k9aFZ3QrpQ" type="State" element="_NTNqQDCPEeqnJcfbx735Yg">
-                          <children xsi:type="notation:DecorationNode" xmi:id="_ZkZHADbFEeq0k9aFZ3QrpQ" type="StateName">
-                            <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZHATbFEeq0k9aFZ3QrpQ"/>
-                            <layoutConstraint xsi:type="notation:Location" xmi:id="_ZkZHAjbFEeq0k9aFZ3QrpQ"/>
-                          </children>
-                          <children xsi:type="notation:Compartment" xmi:id="_ZkZHAzbFEeq0k9aFZ3QrpQ" type="StateTextCompartment">
-                            <children xsi:type="notation:Shape" xmi:id="_ZkZHBDbFEeq0k9aFZ3QrpQ" type="StateTextCompartmentExpression" fontName="Verdana" lineColor="4210752">
-                              <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHBTbFEeq0k9aFZ3QrpQ"/>
-                            </children>
-                          </children>
-                          <children xsi:type="notation:Compartment" xmi:id="_ZkZHBjbFEeq0k9aFZ3QrpQ" type="StateFigureCompartment"/>
-                          <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZHBzbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="15981773" lineColor="12632256"/>
-                          <styles xsi:type="notation:FontStyle" xmi:id="_ZkZHCDbFEeq0k9aFZ3QrpQ"/>
-                          <styles xsi:type="notation:BooleanValueStyle" xmi:id="_ZkZHCTbFEeq0k9aFZ3QrpQ" name="isHorizontal" booleanValue="true"/>
-                          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHCjbFEeq0k9aFZ3QrpQ" x="59" y="126"/>
-                        </children>
-                        <children xsi:type="notation:Shape" xmi:id="_ZkZHCzbFEeq0k9aFZ3QrpQ" type="FinalState" element="_VBHosDFhEeqOO_CMiukOtQ" fontName="Verdana" lineColor="4210752">
-                          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHDDbFEeq0k9aFZ3QrpQ" x="71" y="252"/>
-                        </children>
-                        <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHDTbFEeq0k9aFZ3QrpQ"/>
-                      </children>
-                      <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZHDjbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="15790320" lineColor="12632256"/>
-                      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHDzbFEeq0k9aFZ3QrpQ"/>
-                    </children>
                   </children>
                   <styles xsi:type="notation:ShapeStyle" xmi:id="_ZkZHEDbFEeq0k9aFZ3QrpQ" fontName="Verdana" fillColor="15981773" lineColor="12632256"/>
                   <styles xsi:type="notation:FontStyle" xmi:id="_ZkZHETbFEeq0k9aFZ3QrpQ"/>
                   <styles xsi:type="notation:BooleanValueStyle" xmi:id="_ZkZHEjbFEeq0k9aFZ3QrpQ" name="isHorizontal" booleanValue="true"/>
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHEzbFEeq0k9aFZ3QrpQ" x="730" y="-6" width="1472" height="1084"/>
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHEzbFEeq0k9aFZ3QrpQ" x="727" width="1476" height="1098"/>
                 </children>
                 <children xsi:type="notation:Shape" xmi:id="_ZkZHFDbFEeq0k9aFZ3QrpQ" type="FinalState" element="_1xeyYDCbEeqOO_CMiukOtQ" fontName="Verdana" lineColor="4210752">
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHFTbFEeq0k9aFZ3QrpQ" x="645" y="74" width="26" height="34"/>
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHFTbFEeq0k9aFZ3QrpQ" x="645" y="81" width="26" height="34"/>
                 </children>
                 <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ZkZHFjbFEeq0k9aFZ3QrpQ"/>
               </children>
@@ -1029,12 +977,12 @@
           <styles xsi:type="notation:ShapeStyle" xmi:id="_nM6qZVfOEemGKbF7wB8Eyw" fontName="Verdana" fillColor="15981773" lineColor="12632256"/>
           <styles xsi:type="notation:FontStyle" xmi:id="_nM6qZlfOEemGKbF7wB8Eyw"/>
           <styles xsi:type="notation:BooleanValueStyle" xmi:id="_nM6qb1fOEemGKbF7wB8Eyw" name="isHorizontal" booleanValue="true"/>
-          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_nM6qZ1fOEemGKbF7wB8Eyw" x="33" y="152" width="2242" height="1201"/>
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_nM6qZ1fOEemGKbF7wB8Eyw" x="32" y="152" width="2244" height="1214"/>
         </children>
         <layoutConstraint xsi:type="notation:Bounds" xmi:id="_yt6RNDjpEemSZunftq3MwQ"/>
       </children>
       <styles xsi:type="notation:ShapeStyle" xmi:id="_yt308TjpEemSZunftq3MwQ" fontName="Verdana" fillColor="15790320" lineColor="12632256"/>
-      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_yt64QDjpEemSZunftq3MwQ" x="24" y="8" width="2298" height="1394"/>
+      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_yt64QDjpEemSZunftq3MwQ" x="24" y="8" width="2300" height="1405"/>
     </children>
     <children xsi:type="notation:Shape" xmi:id="_yuA-4DjpEemSZunftq3MwQ" type="StatechartText" fontName="Verdana" lineColor="4210752">
       <children xsi:type="notation:DecorationNode" xmi:id="_yuA-4jjpEemSZunftq3MwQ" type="StatechartName">
@@ -1625,7 +1573,7 @@
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_QRUeUTCIEeqnJcfbx735Yg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_QRUeUzCIEeqnJcfbx735Yg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_QRUeUjCIEeqnJcfbx735Yg" points="[-2, -23, -249, -17]$[-2, -111, -249, -105]$[-48, -111, -295, -105]$[-48, -90, -295, -84]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_QRUeUjCIEeqnJcfbx735Yg" points="[18, -23, -229, -17]$[18, -110, -229, -104]$[-48, -110, -295, -104]$[-48, -90, -295, -84]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_QRVscDCIEeqnJcfbx735Yg" id="(0.5969156850709745,0.47730749617542073)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_QRVscTCIEeqnJcfbx735Yg" id="(1.2155871100167595,0.11714335467850921)"/>
     </edges>
@@ -1794,17 +1742,6 @@
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_1CyBuDCNEeqnJcfbx735Yg" id="(0.7311000452693526,0.018679950186799504)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_1CyBuTCNEeqnJcfbx735Yg" id="(0.35585585585585583,0.8225806451612904)"/>
     </edges>
-    <edges xmi:id="_OmXUMDCPEeqnJcfbx735Yg" type="Transition" element="_OmWtIDCPEeqnJcfbx735Yg" source="_ZkZG9TbFEeq0k9aFZ3QrpQ" target="_ZkZG_zbFEeq0k9aFZ3QrpQ">
-      <children xsi:type="notation:DecorationNode" xmi:id="_OmXUNDCPEeqnJcfbx735Yg" type="TransitionExpression">
-        <styles xsi:type="notation:ShapeStyle" xmi:id="_OmXUNTCPEeqnJcfbx735Yg"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_OmXUNjCPEeqnJcfbx735Yg" y="10"/>
-      </children>
-      <styles xsi:type="notation:ConnectorStyle" xmi:id="_OmXUMTCPEeqnJcfbx735Yg" lineColor="4210752"/>
-      <styles xsi:type="notation:FontStyle" xmi:id="_OmXUMzCPEeqnJcfbx735Yg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_OmXUMjCPEeqnJcfbx735Yg" points="[3, 5, -22, -37]$[24, 54, -1, 12]"/>
-      <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_OmX7QDCPEeqnJcfbx735Yg" id="(0.3333333333333333,0.13333333333333333)"/>
-      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_YVp7kDFhEeqOO_CMiukOtQ" id="(0.5,0.5)"/>
-    </edges>
     <edges xmi:id="_zfkDADCvEeqOO_CMiukOtQ" type="Transition" element="_zfg_sDCvEeqOO_CMiukOtQ" source="_ZkYfITbFEeq0k9aFZ3QrpQ" target="_ZkZG6zbFEeq0k9aFZ3QrpQ">
       <children xsi:type="notation:DecorationNode" xmi:id="_zflRIDCvEeqOO_CMiukOtQ" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_zflRITCvEeqOO_CMiukOtQ"/>
@@ -1826,16 +1763,6 @@
       <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_bR6DkjFcEeqOO_CMiukOtQ" points="[-3, 8, 26, 72]$[-68, 8, -39, 72]$[-68, -70, -39, -6]$[-31, -70, -2, -6]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_bR8f0DFcEeqOO_CMiukOtQ" id="(0.0060330635223747025,0.04533931604431262)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_bR8f0TFcEeqOO_CMiukOtQ" id="(0.00429604358634927,0.25451534035411133)"/>
-    </edges>
-    <edges xmi:id="_Ve5J0TFhEeqOO_CMiukOtQ" type="Transition" element="_Ve5J0DFhEeqOO_CMiukOtQ" source="_ZkZG_zbFEeq0k9aFZ3QrpQ" target="_ZkZHCzbFEeq0k9aFZ3QrpQ">
-      <children xsi:type="notation:DecorationNode" xmi:id="_Ve5w4TFhEeqOO_CMiukOtQ" type="TransitionExpression">
-        <styles xsi:type="notation:ShapeStyle" xmi:id="_Ve5w4jFhEeqOO_CMiukOtQ"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_Ve5w4zFhEeqOO_CMiukOtQ" y="10"/>
-      </children>
-      <styles xsi:type="notation:ConnectorStyle" xmi:id="_Ve5J0jFhEeqOO_CMiukOtQ" routing="Rectilinear" lineColor="4210752"/>
-      <styles xsi:type="notation:FontStyle" xmi:id="_Ve5w4DFhEeqOO_CMiukOtQ" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_Ve5J0zFhEeqOO_CMiukOtQ" points="[-2, 12, 11, -97]$[-13, 115, 0, 6]"/>
-      <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_Ve6_ADFhEeqOO_CMiukOtQ" id="(0.37777777777777777,0.7547169811320756)"/>
     </edges>
     <edges xmi:id="_sFkhsDbFEeq0k9aFZ3QrpQ" type="Transition" element="_sFjTkDbFEeq0k9aFZ3QrpQ" source="_ZkYe1DbFEeq0k9aFZ3QrpQ" target="_lIbwcDbFEeq0k9aFZ3QrpQ">
       <children xsi:type="notation:DecorationNode" xmi:id="_sFlIwTbFEeq0k9aFZ3QrpQ" type="TransitionExpression">

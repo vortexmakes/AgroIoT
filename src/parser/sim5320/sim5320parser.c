@@ -52,8 +52,9 @@ SSP_DCLR_TRN_NODE at_plus_ciprxget_data, cclk_year, cclk_month, cclk_day,
 
 static rui8_t isURC;
 
-static unsigned char *prx;
+static ReceivedEvt evtReceived;
 static ReceivedEvt *precv;
+static unsigned char *prx;
 
 static LocalTimeEvt localTimeEvt;
 static Time *lTime;
@@ -492,6 +493,14 @@ sendModResp_noArgs(RKH_SIG_T sig)
 }
 
 static void
+sendModResp_Received(ReceivedEvt *p)
+{
+    RKH_SET_STATIC_EVENT(RKH_UPCAST(RKH_EVT_T, p), evResponse);
+    p->resp.fwdEvt = evReceived;
+    RKH_SMA_POST_FIFO(modMgr, RKH_UPCAST(RKH_EVT_T, p), &sim5320parser);
+}
+
+static void
 isURC_set(unsigned char pos)
 {
     (void)pos;
@@ -632,7 +641,7 @@ data_init(unsigned char c)
 {
     (void)c;
 
-    precv = ConMgr_ReceiveDataGetRef();
+    precv = &evtReceived;
     precv->size = 0;
     prx = precv->buf;
 }
@@ -654,7 +663,7 @@ data_ready(unsigned char pos)
     prx = precv->buf + precv->size;
     *prx = '\0';
 
-    sendModResp_noArgs(evOk);
+    sendModResp_Received(&evtReceived);
 }
 
 static void
@@ -662,12 +671,12 @@ data_empty(unsigned char pos)
 {
     (void)pos;
 
-    precv = ConMgr_ReceiveDataGetRef();
+    precv = &evtReceived;
     precv->size = 0;
     prx = precv->buf;
     *prx = '\0';
 
-    sendModResp_noArgs(evOk);
+    sendModResp_Received(&evtReceived);
 }
 
 static void

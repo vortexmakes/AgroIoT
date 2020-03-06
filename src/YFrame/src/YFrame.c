@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include "YFrame.h"
 #include "ConMgr.h"
-#include "ConMgrActAccess.h"
 #include "BatChr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -86,14 +85,14 @@ YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type)
             sprintf(temp, "%04x", nFrames);
             strcat(frame, temp);
             strcat(frame, YFRAME_MARK);
-            strcat(frame, ConMgr_Imei());
+            strcat(frame, ConMgr_getImei());
         }
         else
         {
             (rInt)YFrame_getFlags(from, &flags, YFRAME_SGP_TYPE);
             sprintf(temp, "%02x", flags);
             strcat(frame, temp);
-            strcat(frame, ConMgr_Imei());
+            strcat(frame, ConMgr_getImei());
             strcat(frame, YFRAME_SEPARATOR);
         }
         size = strlen(frame);

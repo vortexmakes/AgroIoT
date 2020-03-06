@@ -1,26 +1,35 @@
+/**
+ *  \file       ConMgrActRequired.h
+ *  \brief
+ */
+
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ */
+
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __CONMGR_H__
-#define __CONMGR_H__
+#ifndef __CONMGRREQUIRED_H__
+#define __CONMGRREQUIRED_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkhsma.h"
+#include "rkhtype.h"
+#include "ConMgrAccess.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
-extern "C" {
+	extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-/* ........................ Declares active object ......................... */
-RKH_SMA_DCLR(conMgr);
-
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-char * ConMgr_getImei(void);
-
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }
