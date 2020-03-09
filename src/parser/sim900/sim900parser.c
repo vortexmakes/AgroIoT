@@ -19,7 +19,6 @@
 #include "sim900parser.h"
 #include "signals.h"
 #include "modmgr.h"
-#include "conmgr.h"
 #include <stdlib.h>
 
 /* ----------------------------- Local macros ------------------------------ */

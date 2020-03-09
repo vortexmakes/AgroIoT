@@ -19,6 +19,9 @@ RKH_SMA_DCLR(gsmMgr);
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void GsmMgr_ctor(void);
+char * GsmMgr_getImei(void);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

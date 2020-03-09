@@ -41,85 +41,85 @@ RKH_DCLR_FINAL_STATE ConMgr_InitializeFinal, ConMgr_SendingFinal, ConMgr_Configu
 RKH_DCLR_SHIST_STATE ConMgr_ConfigureHist;
 
 /* ........................ Declares effect actions ........................ */
-void ToInactiveExt0(ConMgr *const me, RKH_EVT_T *pe);
-void InactiveToActiveExt1(ConMgr *const me, RKH_EVT_T *pe);
-void ActiveToInactiveExt2(ConMgr *const me, RKH_EVT_T *pe);
-void ToInitializeExt4(ConMgr *const me, RKH_EVT_T *pe);
-void GetImeiToCipShutdownExt18(ConMgr *const me, RKH_EVT_T *pe);
-void LocalTimeToConfigureExt29(ConMgr *const me, RKH_EVT_T *pe);
-void ConnectingToDisconnectingExt33(ConMgr *const me, RKH_EVT_T *pe);
-void ToWaitingServerExt34(ConMgr *const me, RKH_EVT_T *pe);
-void WaitingServerToWaitingServerExt35(ConMgr *const me, RKH_EVT_T *pe);
-void ConnectedToRestartingExt37(ConMgr *const me, RKH_EVT_T *pe);
-void IdleToGetStatusExt40(ConMgr *const me, RKH_EVT_T *pe);
-void IdleToSendingExt41(ConMgr *const me, RKH_EVT_T *pe);
-void IdleToreceivingExt42(ConMgr *const me, RKH_EVT_T *pe);
-void receivingToIdleExt43(ConMgr *const me, RKH_EVT_T *pe);
-void receivingToIdleExt44(ConMgr *const me, RKH_EVT_T *pe);
-void GetStatusToIdleExt45(ConMgr *const me, RKH_EVT_T *pe);
-void GetStatusToIdleExt46(ConMgr *const me, RKH_EVT_T *pe);
-void SendingToIdleExt47(ConMgr *const me, RKH_EVT_T *pe);
-void waitOkToSendingFinalExt50(ConMgr *const me, RKH_EVT_T *pe);
-void WaitPromptTowaitOkExt51(ConMgr *const me, RKH_EVT_T *pe);
-void WaitRetryConfigToConfigureHistExt54(ConMgr *const me, RKH_EVT_T *pe);
-void WaitNetClockSyncToLocalTimeExt55(ConMgr *const me, RKH_EVT_T *pe);
-void ConfigureToConnectingExt58(ConMgr *const me, RKH_EVT_T *pe);
-void ToGetOperExt59(ConMgr *const me, RKH_EVT_T *pe);
-void CheckIPToCheckIPExt64(ConMgr *const me, RKH_EVT_T *pe);
-void GetOperToSetAPNExt65(ConMgr *const me, RKH_EVT_T *pe);
-void WaitRetryConnectToConnectingExt68(ConMgr *const me, RKH_EVT_T *pe);
-void InactiveToInactiveLoc0(ConMgr *const me, RKH_EVT_T *pe);
-void InactiveToInactiveLoc1(ConMgr *const me, RKH_EVT_T *pe);
-void ActiveToActiveLoc2(ConMgr *const me, RKH_EVT_T *pe);
-void ActiveToActiveLoc3(ConMgr *const me, RKH_EVT_T *pe);
-void ActiveToActiveLoc4(ConMgr *const me, RKH_EVT_T *pe);
-void UnregisteredToUnregisteredLoc16(ConMgr *const me, RKH_EVT_T *pe);
-void UnregisteredToUnregisteredLoc17(ConMgr *const me, RKH_EVT_T *pe);
-void GetStatusToGetStatusLoc23(ConMgr *const me, RKH_EVT_T *pe);
-void GetStatusToGetStatusLoc24(ConMgr *const me, RKH_EVT_T *pe);
+static void ToInactiveExt0(ConMgr *const me, RKH_EVT_T *pe);
+static void InactiveToActiveExt1(ConMgr *const me, RKH_EVT_T *pe);
+static void ActiveToInactiveExt2(ConMgr *const me, RKH_EVT_T *pe);
+static void ToInitializeExt4(ConMgr *const me, RKH_EVT_T *pe);
+static void GetImeiToCipShutdownExt18(ConMgr *const me, RKH_EVT_T *pe);
+static void LocalTimeToConfigureExt29(ConMgr *const me, RKH_EVT_T *pe);
+static void ConnectingToDisconnectingExt33(ConMgr *const me, RKH_EVT_T *pe);
+static void ToWaitingServerExt34(ConMgr *const me, RKH_EVT_T *pe);
+static void WaitingServerToWaitingServerExt35(ConMgr *const me, RKH_EVT_T *pe);
+static void ConnectedToRestartingExt37(ConMgr *const me, RKH_EVT_T *pe);
+static void IdleToGetStatusExt40(ConMgr *const me, RKH_EVT_T *pe);
+static void IdleToSendingExt41(ConMgr *const me, RKH_EVT_T *pe);
+static void IdleToreceivingExt42(ConMgr *const me, RKH_EVT_T *pe);
+static void receivingToIdleExt43(ConMgr *const me, RKH_EVT_T *pe);
+static void receivingToIdleExt44(ConMgr *const me, RKH_EVT_T *pe);
+static void GetStatusToIdleExt45(ConMgr *const me, RKH_EVT_T *pe);
+static void GetStatusToIdleExt46(ConMgr *const me, RKH_EVT_T *pe);
+static void SendingToIdleExt47(ConMgr *const me, RKH_EVT_T *pe);
+static void waitOkToSendingFinalExt50(ConMgr *const me, RKH_EVT_T *pe);
+static void WaitPromptTowaitOkExt51(ConMgr *const me, RKH_EVT_T *pe);
+static void WaitRetryConfigToConfigureHistExt54(ConMgr *const me, RKH_EVT_T *pe);
+static void WaitNetClockSyncToLocalTimeExt55(ConMgr *const me, RKH_EVT_T *pe);
+static void ConfigureToConnectingExt58(ConMgr *const me, RKH_EVT_T *pe);
+static void ToGetOperExt59(ConMgr *const me, RKH_EVT_T *pe);
+static void CheckIPToCheckIPExt64(ConMgr *const me, RKH_EVT_T *pe);
+static void GetOperToSetAPNExt65(ConMgr *const me, RKH_EVT_T *pe);
+static void WaitRetryConnectToConnectingExt68(ConMgr *const me, RKH_EVT_T *pe);
+static void InactiveToInactiveLoc0(ConMgr *const me, RKH_EVT_T *pe);
+static void InactiveToInactiveLoc1(ConMgr *const me, RKH_EVT_T *pe);
+static void ActiveToActiveLoc2(ConMgr *const me, RKH_EVT_T *pe);
+static void ActiveToActiveLoc3(ConMgr *const me, RKH_EVT_T *pe);
+static void ActiveToActiveLoc4(ConMgr *const me, RKH_EVT_T *pe);
+static void UnregisteredToUnregisteredLoc16(ConMgr *const me, RKH_EVT_T *pe);
+static void UnregisteredToUnregisteredLoc17(ConMgr *const me, RKH_EVT_T *pe);
+static void GetStatusToGetStatusLoc23(ConMgr *const me, RKH_EVT_T *pe);
+static void GetStatusToGetStatusLoc24(ConMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
-void enSync(ConMgr *const me);
-void enInit(ConMgr *const me);
-void enPin(ConMgr *const me);
-void enSetPin(ConMgr *const me);
-void enEnableNetTime(ConMgr *const me);
-void enGetImei(ConMgr *const me);
-void enSetManualGet(ConMgr *const me);
-void enCipShutdown(ConMgr *const me);
-void enConFailure(ConMgr *const me);
-void enUnregistered(ConMgr *const me);
-void enRegistered(ConMgr *const me);
-void enWaitingServer(ConMgr *const me);
-void enConnected(ConMgr *const me);
-void enIdle(ConMgr *const me);
-void enWaitReopen(ConMgr *const me);
-void enWaitRetryConfig(ConMgr *const me);
-void enWaitNetClockSync(ConMgr *const me);
-void enSetAPN(ConMgr *const me);
-void enEnableNetwork(ConMgr *const me);
-void enCheckIP(ConMgr *const me);
-void enGetOper(ConMgr *const me);
-void enWaitRetryConnect(ConMgr *const me);
+static void enSync(ConMgr *const me);
+static void enInit(ConMgr *const me);
+static void enPin(ConMgr *const me);
+static void enSetPin(ConMgr *const me);
+static void enEnableNetTime(ConMgr *const me);
+static void enGetImei(ConMgr *const me);
+static void enSetManualGet(ConMgr *const me);
+static void enCipShutdown(ConMgr *const me);
+static void enConFailure(ConMgr *const me);
+static void enUnregistered(ConMgr *const me);
+static void enRegistered(ConMgr *const me);
+static void enWaitingServer(ConMgr *const me);
+static void enConnected(ConMgr *const me);
+static void enIdle(ConMgr *const me);
+static void enWaitReopen(ConMgr *const me);
+static void enWaitRetryConfig(ConMgr *const me);
+static void enWaitNetClockSync(ConMgr *const me);
+static void enSetAPN(ConMgr *const me);
+static void enEnableNetwork(ConMgr *const me);
+static void enCheckIP(ConMgr *const me);
+static void enGetOper(ConMgr *const me);
+static void enWaitRetryConnect(ConMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
-void exConFailure(ConMgr *const me);
-void exUnregistered(ConMgr *const me);
-void exRegistered(ConMgr *const me);
-void exWaitingServer(ConMgr *const me);
-void exConnected(ConMgr *const me);
-void exIdle(ConMgr *const me);
-void exGetStatus(ConMgr *const me);
-void exWaitReopen(ConMgr *const me);
-void exWaitRetryConfig(ConMgr *const me);
-void exWaitNetClockSync(ConMgr *const me);
-void exWaitRetryConnect(ConMgr *const me);
+static void exConFailure(ConMgr *const me);
+static void exUnregistered(ConMgr *const me);
+static void exRegistered(ConMgr *const me);
+static void exWaitingServer(ConMgr *const me);
+static void exConnected(ConMgr *const me);
+static void exIdle(ConMgr *const me);
+static void exGetStatus(ConMgr *const me);
+static void exWaitReopen(ConMgr *const me);
+static void exWaitRetryConfig(ConMgr *const me);
+static void exWaitNetClockSync(ConMgr *const me);
+static void exWaitRetryConnect(ConMgr *const me);
 
 /* ............................ Declares guards ............................ */
-rbool_t isCondGetStatusToIdle45(ConMgr *const me, RKH_EVT_T *pe);
-rbool_t isCondC0ToSync10(ConMgr *const me, RKH_EVT_T *pe);
-rbool_t isCondC1ToWaitRetryConnect27(ConMgr *const me, RKH_EVT_T *pe);
-rbool_t isCondC2ToWaitRetryConfig66(ConMgr *const me, RKH_EVT_T *pe);
+static rbool_t isCondGetStatusToIdle45(ConMgr *const me, RKH_EVT_T *pe);
+static rbool_t isCondC0ToSync10(ConMgr *const me, RKH_EVT_T *pe);
+static rbool_t isCondC1ToWaitRetryConnect27(ConMgr *const me, RKH_EVT_T *pe);
+static rbool_t isCondC2ToWaitRetryConfig66(ConMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(ConMgr_Inactive, NULL, NULL, RKH_ROOT, NULL);
@@ -617,7 +617,7 @@ socketDisconnected(ConMgr *const me)
 }
 
 /* ............................ Effect actions ............................. */
-void 
+static void 
 ToInactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->sigLevel = 0;
@@ -781,273 +781,273 @@ ToInactiveExt0(ConMgr *const me, RKH_EVT_T *pe)
 	Config_getConnectionPort(me->port);
 }
 
-void 
+static void 
 InactiveToActiveExt1(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModMgr_open();
     powerOn();
 }
 
-void 
+static void 
 ActiveToInactiveExt2(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModMgr_close();
     powerOff();
 }
 
-void 
+static void 
 ToInitializeExt4(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount = 0;
 }
 
-void 
+static void 
 GetImeiToCipShutdownExt18(ConMgr *const me, RKH_EVT_T *pe)
 {
     storeImei(me, pe);
 }
 
-void 
+static void 
 LocalTimeToConfigureExt29(ConMgr *const me, RKH_EVT_T *pe)
 {
     rtimeSync(pe);
 }
 
-void 
+static void 
 ConnectingToDisconnectingExt33(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModCmd_disconnect();
 }
 
-void 
+static void 
 ToWaitingServerExt34(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModCmd_connect(me->protocol, me->domain, me->port);
 }
 
-void 
+static void 
 WaitingServerToWaitingServerExt35(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModCmd_getConnStatus();
 }
 
-void 
+static void 
 ConnectedToRestartingExt37(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModCmd_disconnect();
 }
 
-void 
+static void 
 IdleToGetStatusExt40(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModCmd_getConnStatus();
 }
 
-void 
+static void 
 IdleToSendingExt41(ConMgr *const me, RKH_EVT_T *pe)
 {
     sendRequest(pe);
 }
 
-void 
+static void 
 IdleToreceivingExt42(ConMgr *const me, RKH_EVT_T *pe)
 {
     readData();
 }
 
-void 
+static void 
 receivingToIdleExt43(ConMgr *const me, RKH_EVT_T *pe)
 {
     recvFail(me);
 }
 
-void 
+static void 
 receivingToIdleExt44(ConMgr *const me, RKH_EVT_T *pe)
 {
     recvOk(me, pe);
 }
 
-void 
+static void 
 GetStatusToIdleExt45(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount += 1;
     ModCmd_init();
 }
 
-void 
+static void 
 GetStatusToIdleExt46(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount = 0;
 }
 
-void 
+static void 
 SendingToIdleExt47(ConMgr *const me, RKH_EVT_T *pe)
 {
     sendFail(me);
 }
 
-void 
+static void 
 waitOkToSendingFinalExt50(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount = 0;
     sendOk(me);
 }
 
-void 
+static void 
 WaitPromptTowaitOkExt51(ConMgr *const me, RKH_EVT_T *pe)
 {
     flushData();
 }
 
-void 
+static void 
 WaitRetryConfigToConfigureHistExt54(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount += 1;
     ModCmd_init();
 }
 
-void 
+static void 
 WaitNetClockSyncToLocalTimeExt55(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModCmd_getLocalTime();
 }
 
-void 
+static void 
 ConfigureToConnectingExt58(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount = 0;
 }
 
-void 
+static void 
 ToGetOperExt59(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount = 0;
 }
 
-void 
+static void 
 CheckIPToCheckIPExt64(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModCmd_requestIP();
 }
 
-void 
+static void 
 GetOperToSetAPNExt65(ConMgr *const me, RKH_EVT_T *pe)
 {
     storeOper(me, pe);
 }
 
-void 
+static void 
 WaitRetryConnectToConnectingExt68(ConMgr *const me, RKH_EVT_T *pe)
 {
     me->retryCount += 1;
 }
 
-void 
+static void 
 InactiveToInactiveLoc0(ConMgr *const me, RKH_EVT_T *pe)
 {
     recvFail(me);
 }
 
-void 
+static void 
 InactiveToInactiveLoc1(ConMgr *const me, RKH_EVT_T *pe)
 {
     sendFail(me);
 }
 
-void 
+static void 
 ActiveToActiveLoc2(ConMgr *const me, RKH_EVT_T *pe)
 {
     sendFail(me);
 }
 
-void 
+static void 
 ActiveToActiveLoc3(ConMgr *const me, RKH_EVT_T *pe)
 {
     recvFail(me);
 }
 
-void 
+static void 
 ActiveToActiveLoc4(ConMgr *const me, RKH_EVT_T *pe)
 {
     setSigLevel(me, pe);
 }
 
-void 
+static void 
 UnregisteredToUnregisteredLoc16(ConMgr *const me, RKH_EVT_T *pe)
 {
     ModCmd_getRegStatus();
 }
 
-void 
+static void 
 UnregisteredToUnregisteredLoc17(ConMgr *const me, RKH_EVT_T *pe)
 {
     startRegStatusTimer(me);
 }
 
-void 
+static void 
 GetStatusToGetStatusLoc23(ConMgr *const me, RKH_EVT_T *pe)
 {
     reqDefer(pe);
 }
 
-void 
+static void 
 GetStatusToGetStatusLoc24(ConMgr *const me, RKH_EVT_T *pe)
 {
     reqDefer(pe);
 }
 
 /* ............................. Entry actions ............................. */
-void 
+static void 
 enSync(ConMgr *const me)
 {
     me->retryCount += 1;
     ModCmd_sync();
 }
 
-void 
+static void 
 enInit(ConMgr *const me)
 {
     modemFound();
     ModCmd_initStr();
 }
 
-void 
+static void 
 enPin(ConMgr *const me)
 {
     ModCmd_getPinStatus();
 }
 
-void 
+static void 
 enSetPin(ConMgr *const me)
 {
     ModCmd_setPin(Config_getSIMPinNumber());
 }
 
-void 
+static void 
 enEnableNetTime(ConMgr *const me)
 {
     ModCmd_enableNetTime();
 }
 
-void 
+static void 
 enGetImei(ConMgr *const me)
 {
     ModCmd_getImei();
 }
 
-void 
+static void 
 enSetManualGet(ConMgr *const me)
 {
     ModCmd_setManualGet();
 }
 
-void 
+static void 
 enCipShutdown(ConMgr *const me)
 {
     ModCmd_cipShutdown();
 }
 
-void 
+static void 
 enConFailure(ConMgr *const me)
 {
     powerOff();
@@ -1056,7 +1056,7 @@ enConFailure(ConMgr *const me)
     RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
 }
 
-void 
+static void 
 enUnregistered(ConMgr *const me)
 {
     ModCmd_getRegStatus();
@@ -1065,13 +1065,13 @@ enUnregistered(ConMgr *const me)
     RKH_TMR_ONESHOT(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime1);
 }
 
-void 
+static void 
 enRegistered(ConMgr *const me)
 {
     registered();
 }
 
-void 
+static void 
 enWaitingServer(ConMgr *const me)
 {
     RKH_SET_STATIC_EVENT(&me->tmEvtObj2, evTout2);
@@ -1079,13 +1079,13 @@ enWaitingServer(ConMgr *const me)
     RKH_TMR_ONESHOT(&me->tmEvtObj2.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime2);
 }
 
-void 
+static void 
 enConnected(ConMgr *const me)
 {
     socketConnected(me);
 }
 
-void 
+static void 
 enIdle(ConMgr *const me)
 {
     RKH_SET_STATIC_EVENT(&me->tmEvtObj3, evTout3);
@@ -1093,7 +1093,7 @@ enIdle(ConMgr *const me)
     RKH_TMR_ONESHOT(&me->tmEvtObj3.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime3);
 }
 
-void 
+static void 
 enWaitReopen(ConMgr *const me)
 {
     RKH_SET_STATIC_EVENT(&me->tmEvtObj4, evTout4);
@@ -1101,7 +1101,7 @@ enWaitReopen(ConMgr *const me)
     RKH_TMR_ONESHOT(&me->tmEvtObj4.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime4);
 }
 
-void 
+static void 
 enWaitRetryConfig(ConMgr *const me)
 {
     RKH_SET_STATIC_EVENT(&me->tmEvtObj5, evTout5);
@@ -1109,7 +1109,7 @@ enWaitRetryConfig(ConMgr *const me)
     RKH_TMR_ONESHOT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime5);
 }
 
-void 
+static void 
 enWaitNetClockSync(ConMgr *const me)
 {
     RKH_SET_STATIC_EVENT(&me->tmEvtObj6, evTout6);
@@ -1117,31 +1117,31 @@ enWaitNetClockSync(ConMgr *const me)
     RKH_TMR_ONESHOT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime6);
 }
 
-void 
+static void 
 enSetAPN(ConMgr *const me)
 {
     setupAPN(me);
 }
 
-void 
+static void 
 enEnableNetwork(ConMgr *const me)
 {
     ModCmd_startNetwork();
 }
 
-void 
+static void 
 enCheckIP(ConMgr *const me)
 {
     ModCmd_getIpStatus();
 }
 
-void 
+static void 
 enGetOper(ConMgr *const me)
 {
     ModCmd_getOper();
 }
 
-void 
+static void 
 enWaitRetryConnect(ConMgr *const me)
 {
     RKH_SET_STATIC_EVENT(&me->tmEvtObj7, evTout7);
@@ -1150,68 +1150,68 @@ enWaitRetryConnect(ConMgr *const me)
 }
 
 /* ............................. Exit actions .............................. */
-void 
+static void 
 exConFailure(ConMgr *const me)
 {
     powerOn();
     rkh_tmr_stop(&me->tmEvtObj0.tmr);
 }
 
-void 
+static void 
 exUnregistered(ConMgr *const me)
 {
     rkh_tmr_stop(&me->tmEvtObj1.tmr);
 }
 
-void 
+static void 
 exRegistered(ConMgr *const me)
 {
     unregistered();
 }
 
-void 
+static void 
 exWaitingServer(ConMgr *const me)
 {
     rkh_tmr_stop(&me->tmEvtObj2.tmr);
 }
 
-void 
+static void 
 exConnected(ConMgr *const me)
 {
     socketDisconnected(me);
 }
 
-void 
+static void 
 exIdle(ConMgr *const me)
 {
     rkh_tmr_stop(&me->tmEvtObj3.tmr);
 }
 
-void 
+static void 
 exGetStatus(ConMgr *const me)
 {
     reqRecall(me);
 }
 
-void 
+static void 
 exWaitReopen(ConMgr *const me)
 {
     rkh_tmr_stop(&me->tmEvtObj4.tmr);
 }
 
-void 
+static void 
 exWaitRetryConfig(ConMgr *const me)
 {
     rkh_tmr_stop(&me->tmEvtObj5.tmr);
 }
 
-void 
+static void 
 exWaitNetClockSync(ConMgr *const me)
 {
     rkh_tmr_stop(&me->tmEvtObj6.tmr);
 }
 
-void 
+static void 
 exWaitRetryConnect(ConMgr *const me)
 {
     ModCmd_init();
@@ -1219,25 +1219,25 @@ exWaitRetryConnect(ConMgr *const me)
 }
 
 /* ................................ Guards ................................. */
-rbool_t 
+static rbool_t 
 isCondGetStatusToIdle45(ConMgr *const me, RKH_EVT_T *pe)
 {
     return ((me->retryCount < 5)) ? true : false;
 }
 
-rbool_t 
+static rbool_t 
 isCondC0ToSync10(ConMgr *const me, RKH_EVT_T *pe)
 {
     return ((me->retryCount < 5)) ? true : false;
 }
 
-rbool_t 
+static rbool_t 
 isCondC1ToWaitRetryConnect27(ConMgr *const me, RKH_EVT_T *pe)
 {
     return ((me->retryCount < Config_getMaxNumConnectRetries())) ? true : false;
 }
 
-rbool_t 
+static rbool_t 
 isCondC2ToWaitRetryConfig66(ConMgr *const me, RKH_EVT_T *pe)
 {
     return ((me->retryCount < 5)) ? true : false;

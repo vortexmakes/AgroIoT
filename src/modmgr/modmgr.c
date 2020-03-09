@@ -22,7 +22,7 @@
 #include "signals.h"
 #include "topic.h"
 #include "modmgr.h"
-#include "ConMgr.h"
+#include "GsmMgr.h"
 #include "bsp.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -284,13 +284,13 @@ isDataCmd(ModMgr *const me, RKH_EVT_T *pe)
 void
 ModMgr_open(void)
 {
-    RKH_SMA_POST_FIFO(modMgr, &e_Open, conMgr);
+    RKH_SMA_POST_FIFO(modMgr, &e_Open, gsmMgr);
 }
 
 void
 ModMgr_close(void)
 {
-    RKH_SMA_POST_FIFO(modMgr, &e_Close, conMgr);
+    RKH_SMA_POST_FIFO(modMgr, &e_Close, gsmMgr);
 }
 
 /* ------------------------------ End of file ------------------------------ */

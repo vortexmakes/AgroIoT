@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="internal:&#xA;&#xA;interface:&#xA;var sigLevel: integer&#xA;var imei: string&#xA;var oper: string&#xA;var protocol: string&#xA;var domain : string&#xA;var port : string&#xA;var retryCount : integer = 0&#xA;&#xA;in event evOpen&#xA;in event evClose&#xA;in event evSend&#xA;in event evRecv&#xA;in event evSendFail&#xA;in event evRecvFail&#xA;in event evReceived&#xA;in event evSigLevel&#xA;in event evOk&#xA;in event evNoResponse&#xA;in event evSimReady&#xA;in event evSimPin&#xA;in event evSimError&#xA;in event evImei&#xA;in event evReg&#xA;in event evRegStatusTout&#xA;in event evNoReg&#xA;in event evNetClockSync&#xA;in event evLocalTime&#xA;in event evOper&#xA;in event evIPStatus&#xA;in event evIPInitial&#xA;in event evIPStart&#xA;in event evIPGprsAct&#xA;in event evIP&#xA;in event evConnected&#xA;in event evDisconnected&#xA;in event evRestart&#xA;in event evClosed&#xA;in event evError&#xA;in event evGsmError&#xA;in event evGsmReady&#xA;&#xA;operation init()&#xA;operation open()&#xA;operation close()&#xA;operation initializeInit()&#xA;operation recvFail()&#xA;operation sendFail()&#xA;operation ModCmd_sync()&#xA;operation ModCmd_initStr()&#xA;operation setSigLevel()&#xA;&#xA;operation registered() &#xA;operation unregistered() &#xA;operation ModCmd_getPinStatus() &#xA;operation ModCmd_setPin(pin:integer) &#xA;operation powerOn() &#xA;operation powerOff() &#xA;operation modemFound() &#xA;operation ModCmd_sendInit() &#xA;operation ModMgr_close() &#xA;operation ModMgr_open() &#xA;operation ModCmd_init() &#xA;operation ModCmd_enableNetTime() &#xA;operation ModCmd_getImei() &#xA;operation ModCmd_cipShutdown() &#xA;operation ModCmd_setManualGet() &#xA;operation checkReg() &#xA;operation ModCmd_getRegStatus() &#xA;operation startRegStatusTimer() &#xA;operation ModCmd_getLocalTime() &#xA;operation rtimeSync() &#xA;operation configureInit()&#xA;operation ModCmd_getOper() &#xA;operation storeImei() &#xA;operation storeOper() &#xA;operation setupAPN() &#xA;operation ModCmd_requestIP()&#xA;operation ModCmd_startNetwork()&#xA;operation ModCmd_getIpStatus()&#xA;operation configTry()&#xA;operation connectTry()&#xA;operation ConnectInit()&#xA;operation ModCmd_connect(prot: string, dom: string, port: string)&#xA;operation ModCmd_disconnect()&#xA;operation ModCmd_getConnStatus()&#xA;operation socketConnected()&#xA;operation socketDisconnected()&#xA;operation resetParser()&#xA;operation reqDefer()&#xA;operation reqRecall()&#xA;operation sendOk()&#xA;operation flushData()&#xA;operation sendRequest()&#xA;operation readData()&#xA;operation recvOk()&#xA;operation stopSMS()&#xA;operation gsmIsReady() // send publish evGsmReady to SMS and SOCKET regions&#xA;operation gsmInError() // send publish evGsmError to GSM region&#xA;&#xA;operation Config_getMaxNumConnectRetries():integer&#xA;operation Config_getSIMPinNumber():integer&#xA;operation Config_getConnectionDomain(domain:string)&#xA;operation Config_getConnectionPort(port:string)&#xA;&#xA;&#xA;" name="GsmMgr">
+  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="internal:&#xA;&#xA;interface:&#xA;var sigLevel: integer&#xA;var imei: string&#xA;var oper: string&#xA;var protocol: string&#xA;var domain : string&#xA;var port : string&#xA;var retryCount : integer = 0&#xA;&#xA;in event evOpen&#xA;in event evClose&#xA;in event evSend&#xA;in event evRecv&#xA;in event evSendFail&#xA;in event evRecvFail&#xA;in event evReceived&#xA;in event evSigLevel&#xA;in event evOk&#xA;in event evNoResponse&#xA;in event evSimReady&#xA;in event evSimPin&#xA;in event evSimError&#xA;in event evImei&#xA;in event evReg&#xA;in event evRegStatusTout&#xA;in event evNoReg&#xA;in event evNetClockSync&#xA;in event evLocalTime&#xA;in event evOper&#xA;in event evIPStatus&#xA;in event evIPInitial&#xA;in event evIPStart&#xA;in event evIPGprsAct&#xA;in event evIP&#xA;in event evConnected&#xA;in event evDisconnected&#xA;in event evRestart&#xA;in event evClosed&#xA;in event evError&#xA;in event evGsmError&#xA;in event evGsmReady&#xA;&#xA;operation init()&#xA;operation open()&#xA;operation close()&#xA;operation initializeInit()&#xA;operation recvFail()&#xA;operation sendFail()&#xA;operation ModCmd_sync()&#xA;operation ModCmd_initStr()&#xA;operation setSigLevel()&#xA;&#xA;operation registered() &#xA;operation unregistered() &#xA;operation ModCmd_getPinStatus() &#xA;operation ModCmd_setPin(pin:integer) &#xA;operation powerOn() &#xA;operation powerOff() &#xA;operation modemFound() &#xA;operation ModCmd_sendInit() &#xA;operation ModMgr_close() &#xA;operation ModMgr_open() &#xA;operation ModCmd_init() &#xA;operation ModCmd_enableNetTime() &#xA;operation ModCmd_getImei() &#xA;operation ModCmd_cipShutdown() &#xA;operation ModCmd_setManualGet() &#xA;operation checkReg() &#xA;operation ModCmd_getRegStatus() &#xA;operation startRegStatusTimer() &#xA;operation ModCmd_getLocalTime() &#xA;operation rtimeSync() &#xA;operation configureInit()&#xA;operation ModCmd_getOper() &#xA;operation storeImei() &#xA;operation storeOper() &#xA;operation setupAPN() &#xA;operation ModCmd_requestIP()&#xA;operation ModCmd_startNetwork()&#xA;operation ModCmd_getIpStatus()&#xA;operation configTry()&#xA;operation connectTry()&#xA;operation ConnectInit()&#xA;operation ModCmd_connect(prot: string, dom: string, port: string)&#xA;operation ModCmd_disconnect()&#xA;operation ModCmd_getConnStatus()&#xA;operation socketConnected()&#xA;operation socketDisconnected()&#xA;operation resetParser()&#xA;operation reqDefer()&#xA;operation reqRecall()&#xA;operation sendOk()&#xA;operation flushData()&#xA;operation sendRequest()&#xA;operation readData()&#xA;operation recvOk()&#xA;operation stopSMS()&#xA;operation gsmIsReady() // send publish evGsmReady to SMS and SOCKET regions&#xA;operation gsmInError() // send publish evGsmError to GSM region&#xA;operation initGsmServices() &#xA;&#xA;operation Config_getMaxNumConnectRetries():integer&#xA;operation Config_getSIMPinNumber():integer&#xA;operation Config_getConnectionDomain(domain:string)&#xA;operation Config_getConnectionPort(port:string)&#xA;&#xA;&#xA;" name="GsmMgr">
     <regions xmi:id="_yt2m0zjpEemSZunftq3MwQ" name="main region">
       <vertices xsi:type="sgraph:Entry" xmi:id="_yt7fUDjpEemSZunftq3MwQ">
         <outgoingTransitions xmi:id="_yt97kzjpEemSZunftq3MwQ" specification="/ init();&#xD;&#xA;retryCount = 0;&#xD;&#xA;Config_getConnectionDomain(domain);&#xD;&#xA;Config_getConnectionPort(port)&#xD;&#xA;" target="_yt8GZzjpEemSZunftq3MwQ"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_yt8GZzjpEemSZunftq3MwQ" specification="evRecv/recvFail()&#xD;&#xA;evSend/sendFail()" name="Inactive" incomingTransitions="_yt97kzjpEemSZunftq3MwQ _OVWMgFfREemGKbF7wB8Eyw _bFjooBaMEeqrVYsqYiTIyw">
-        <outgoingTransitions xmi:id="_jLEjsFZcEemoSZsNy-dO8w" specification="evOpen/&#xD;&#xA;ModMgr_open();&#xD;&#xA;powerOn()" target="_nM6qYFfOEemGKbF7wB8Eyw"/>
+        <outgoingTransitions xmi:id="_jLEjsFZcEemoSZsNy-dO8w" specification="evOpen/&#xD;&#xA;ModMgr_open();&#xD;&#xA;powerOn();&#xD;&#xA;initGsmServices()" target="_nM6qYFfOEemGKbF7wB8Eyw"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_nM6qYFfOEemGKbF7wB8Eyw" specification="evSend/sendFail()&#xD;&#xA;evRecv/recvFail()&#xD;&#xA;evSigLevel/setSigLevel()" name="Active" incomingTransitions="_jLEjsFZcEemoSZsNy-dO8w">
         <outgoingTransitions xmi:id="_bFjooBaMEeqrVYsqYiTIyw" specification="evClose/&#xD;&#xA;ModMgr_close();&#xD;&#xA;powerOff()" target="_yt8GZzjpEemSZunftq3MwQ"/>
@@ -178,12 +178,12 @@
             <outgoingTransitions xmi:id="_nG_sSV5AEequQ_CX_ZIIdA" specification="" target="_nG8B815AEequQ_CX_ZIIdA"/>
           </vertices>
           <vertices xsi:type="sgraph:State" xmi:id="_nG93IF5AEequQ_CX_ZIIdA" name="Disconnecting" incomingTransitions="_nHh3zl5AEequQ_CX_ZIIdA">
-            <outgoingTransitions xmi:id="_nG-eJl5AEequQ_CX_ZIIdA" specification="evDisconnected,&#xD;&#xA;evNoResponse" target="_nG8o_15AEequQ_CX_ZIIdA"/>
+            <outgoingTransitions xmi:id="_CxbewGItEeqTqodxRjEKQA" specification="evDisconnected,&#xD;&#xA;evNoResponse" target="_CJ5ksGItEeqTqodxRjEKQA"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_nG8o_15AEequQ_CX_ZIIdA" name="Disconnected" incomingTransitions="_nG-eJl5AEequQ_CX_ZIIdA"/>
           <vertices xsi:type="sgraph:State" xmi:id="_nG8B815AEequQ_CX_ZIIdA" name="Socket_WaitGsmReady" incomingTransitions="_nG_sSV5AEequQ_CX_ZIIdA _nHA6bV5AEequQ_CX_ZIIdA _GRN6EF7lEeq82sDvl4gCow _ygvywF5AEequQ_CX_ZIIdA _nHkUBl5AEequQ_CX_ZIIdA">
             <outgoingTransitions xmi:id="_nHBheV5AEequQ_CX_ZIIdA" specification="evGsmReady" target="_nHCIlV5AEequQ_CX_ZIIdA"/>
           </vertices>
+          <vertices xsi:type="sgraph:FinalState" xmi:id="_CJ5ksGItEeqTqodxRjEKQA" incomingTransitions="_CxbewGItEeqTqodxRjEKQA"/>
         </regions>
         <regions xmi:id="_roVtUF48EequQ_CX_ZIIdA" name="SMS">
           <vertices xsi:type="sgraph:Entry" xmi:id="_x6avYl48EequQ_CX_ZIIdA">
@@ -192,7 +192,10 @@
           <vertices xsi:type="sgraph:State" xmi:id="_BDeuUF4_EequQ_CX_ZIIdA" name="SMS_WaitGsmReady" incomingTransitions="_x6avY148EequQ_CX_ZIIdA">
             <outgoingTransitions xmi:id="_MtVtYF4_EequQ_CX_ZIIdA" specification="evGsmReady" target="_KD_FgF4_EequQ_CX_ZIIdA"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_KD_FgF4_EequQ_CX_ZIIdA" name="SMSReady" incomingTransitions="_MtVtYF4_EequQ_CX_ZIIdA"/>
+          <vertices xsi:type="sgraph:State" xmi:id="_KD_FgF4_EequQ_CX_ZIIdA" name="SMSReady" incomingTransitions="_MtVtYF4_EequQ_CX_ZIIdA">
+            <outgoingTransitions xmi:id="_Tkkr0GItEeqTqodxRjEKQA" specification="evClose" target="_TFs-gGItEeqTqodxRjEKQA"/>
+          </vertices>
+          <vertices xsi:type="sgraph:FinalState" xmi:id="_TFs-gGItEeqTqodxRjEKQA" incomingTransitions="_Tkkr0GItEeqTqodxRjEKQA"/>
         </regions>
       </vertices>
     </regions>
@@ -958,22 +961,6 @@
                   <styles xsi:type="notation:BooleanValueStyle" xmi:id="_zSn4e17mEeq82sDvl4gCow" name="isHorizontal" booleanValue="true"/>
                   <layoutConstraint xsi:type="notation:Bounds" xmi:id="_zSn4fF7mEeq82sDvl4gCow" x="327" y="960" width="106" height="54"/>
                 </children>
-                <children xmi:id="_zSn4fV7mEeq82sDvl4gCow" type="State" element="_nG8o_15AEequQ_CX_ZIIdA">
-                  <children xsi:type="notation:DecorationNode" xmi:id="_zSn4fl7mEeq82sDvl4gCow" type="StateName">
-                    <styles xsi:type="notation:ShapeStyle" xmi:id="_zSn4f17mEeq82sDvl4gCow"/>
-                    <layoutConstraint xsi:type="notation:Location" xmi:id="_zSn4gF7mEeq82sDvl4gCow"/>
-                  </children>
-                  <children xsi:type="notation:Compartment" xmi:id="_zSn4gV7mEeq82sDvl4gCow" type="StateTextCompartment">
-                    <children xsi:type="notation:Shape" xmi:id="_zSn4gl7mEeq82sDvl4gCow" type="StateTextCompartmentExpression" fontName="Verdana" lineColor="4210752">
-                      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_zSn4g17mEeq82sDvl4gCow"/>
-                    </children>
-                  </children>
-                  <children xsi:type="notation:Compartment" xmi:id="_zSn4hF7mEeq82sDvl4gCow" type="StateFigureCompartment"/>
-                  <styles xsi:type="notation:ShapeStyle" xmi:id="_zSn4hV7mEeq82sDvl4gCow" fontName="Verdana" fillColor="15981773" lineColor="12632256"/>
-                  <styles xsi:type="notation:FontStyle" xmi:id="_zSn4hl7mEeq82sDvl4gCow"/>
-                  <styles xsi:type="notation:BooleanValueStyle" xmi:id="_zSn4h17mEeq82sDvl4gCow" name="isHorizontal" booleanValue="true"/>
-                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_zSn4iF7mEeq82sDvl4gCow" x="126" y="1035" width="103" height="54"/>
-                </children>
                 <children xmi:id="_zSn4iV7mEeq82sDvl4gCow" type="State" element="_nG8B815AEequQ_CX_ZIIdA">
                   <children xsi:type="notation:DecorationNode" xmi:id="_zSn4il7mEeq82sDvl4gCow" type="StateName">
                     <styles xsi:type="notation:ShapeStyle" xmi:id="_zSn4i17mEeq82sDvl4gCow"/>
@@ -989,6 +976,9 @@
                   <styles xsi:type="notation:FontStyle" xmi:id="_zSn4kl7mEeq82sDvl4gCow"/>
                   <styles xsi:type="notation:BooleanValueStyle" xmi:id="_zSn4k17mEeq82sDvl4gCow" name="isHorizontal" booleanValue="true"/>
                   <layoutConstraint xsi:type="notation:Bounds" xmi:id="_zSn4lF7mEeq82sDvl4gCow" x="43" y="20" width="166" height="160"/>
+                </children>
+                <children xsi:type="notation:Shape" xmi:id="_CKpLkGItEeqTqodxRjEKQA" type="FinalState" element="_CJ5ksGItEeqTqodxRjEKQA" fontName="Verdana" lineColor="4210752">
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_CKpLkWItEeqTqodxRjEKQA" x="131" y="1050"/>
                 </children>
                 <layoutConstraint xsi:type="notation:Bounds" xmi:id="_zSn4lV7mEeq82sDvl4gCow"/>
               </children>
@@ -1045,6 +1035,9 @@
                   <styles xsi:type="notation:FontStyle" xmi:id="_KD_skl4_EequQ_CX_ZIIdA"/>
                   <styles xsi:type="notation:BooleanValueStyle" xmi:id="_KEATpF4_EequQ_CX_ZIIdA" name="isHorizontal" booleanValue="true"/>
                   <layoutConstraint xsi:type="notation:Bounds" xmi:id="_KD_sk14_EequQ_CX_ZIIdA" x="78" y="315" width="108" height="54"/>
+                </children>
+                <children xsi:type="notation:Shape" xmi:id="_TFs-gWItEeqTqodxRjEKQA" type="FinalState" element="_TFs-gGItEeqTqodxRjEKQA" fontName="Verdana" lineColor="4210752">
+                  <layoutConstraint xsi:type="notation:Bounds" xmi:id="_TFs-gmItEeqTqodxRjEKQA" x="103" y="475"/>
                 </children>
                 <layoutConstraint xsi:type="notation:Bounds" xmi:id="_rodCFF48EequQ_CX_ZIIdA"/>
               </children>
@@ -1564,7 +1557,7 @@
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_nHO84F5AEequQ_CX_ZIIdA" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_nHO84V5AEequQ_CX_ZIIdA" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_nHO84l5AEequQ_CX_ZIIdA" points="[0, 46, 579, -497]$[0, 134, 579, -409]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_nHO84l5AEequQ_CX_ZIIdA" points="[10, 46, 589, -497]$[10, 134, 589, -409]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_nHO8415AEequQ_CX_ZIIdA" id="(0.4609842463781263,0.07516483516483517)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_nHO85F5AEequQ_CX_ZIIdA" id="(0.0053844410987922715,0.558175364038131)"/>
     </edges>
@@ -1689,16 +1682,16 @@
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_nHh3x15AEequQ_CX_ZIIdA" id="(1.074048813870638,1.271657327723465)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_nHh3xl5AEequQ_CX_ZIIdA" id="(0.8340329350984823,0.16802928615009152)"/>
     </edges>
-    <edges xmi:id="_nG93I15AEequQ_CX_ZIIdA" type="Transition" element="_nG-eJl5AEequQ_CX_ZIIdA" source="_zSn4cV7mEeq82sDvl4gCow" target="_zSn4fV7mEeq82sDvl4gCow">
-      <children xsi:type="notation:DecorationNode" xmi:id="_nG-eI15AEequQ_CX_ZIIdA" type="TransitionExpression">
-        <styles xsi:type="notation:ShapeStyle" xmi:id="_nG-eJV5AEequQ_CX_ZIIdA"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_nG-eJF5AEequQ_CX_ZIIdA" x="-37" y="23"/>
+    <edges xmi:id="_Cxbe12ItEeqTqodxRjEKQA" type="Transition" element="_CxbewGItEeqTqodxRjEKQA" source="_zSn4cV7mEeq82sDvl4gCow" target="_CKpLkGItEeqTqodxRjEKQA">
+      <children xsi:type="notation:DecorationNode" xmi:id="_Cxbe2GItEeqTqodxRjEKQA" type="TransitionExpression">
+        <styles xsi:type="notation:ShapeStyle" xmi:id="_Cxbe2WItEeqTqodxRjEKQA"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_Cxbe2mItEeqTqodxRjEKQA" x="-37" y="23"/>
       </children>
-      <styles xsi:type="notation:ConnectorStyle" xmi:id="_nG-eIl5AEequQ_CX_ZIIdA" routing="Rectilinear" lineColor="4210752"/>
-      <styles xsi:type="notation:FontStyle" xmi:id="_nG-eIV5AEequQ_CX_ZIIdA" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_nG-eIF5AEequQ_CX_ZIIdA" points="[-11, 11, 48, -67]$[-149, 11, -90, -67]$[-149, 51, -90, -27]"/>
-      <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_nG93JV5AEequQ_CX_ZIIdA" id="(0.10921859864384888,0.5040878584502746)"/>
-      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_nG93JF5AEequQ_CX_ZIIdA" id="(1.3265306122448979,0.5510204081632653)"/>
+      <styles xsi:type="notation:ConnectorStyle" xmi:id="_Cxbe22ItEeqTqodxRjEKQA" routing="Rectilinear" lineColor="4210752"/>
+      <styles xsi:type="notation:FontStyle" xmi:id="_Cxbe3GItEeqTqodxRjEKQA" fontName="Verdana"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_Cxbe3WItEeqTqodxRjEKQA" points="[-11, 11, 48, -67]$[-149, 11, -90, -67]$[-149, 51, -90, -27]"/>
+      <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_Cxbe3mItEeqTqodxRjEKQA" id="(0.10921859864384888,0.5040878584502746)"/>
+      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_Cxbe32ItEeqTqodxRjEKQA" id="(0.4666666666666667,0.2)"/>
     </edges>
     <edges xmi:id="_nHVDcF5AEequQ_CX_ZIIdA" type="Transition" element="_nHVDeV5AEequQ_CX_ZIIdA" source="_zSn3ol7mEeq82sDvl4gCow" target="_zSn3ul7mEeq82sDvl4gCow">
       <children xsi:type="notation:DecorationNode" xmi:id="_nHVDdl5AEequQ_CX_ZIIdA" type="TransitionExpression">
@@ -1885,6 +1878,16 @@
       <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_GRQWUl7lEeq82sDvl4gCow" points="[13, -125, 16, 210]$[13, -230, 16, 105]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_GRUAsF7lEeq82sDvl4gCow" id="(0.00625,0.2414448669201521)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_GRUnwF7lEeq82sDvl4gCow" id="(0.09032722314800788,0.3246929640817587)"/>
+    </edges>
+    <edges xmi:id="_Tkkr0WItEeqTqodxRjEKQA" type="Transition" element="_Tkkr0GItEeqTqodxRjEKQA" source="_KD_skF4_EequQ_CX_ZIIdA" target="_TFs-gWItEeqTqodxRjEKQA">
+      <children xsi:type="notation:DecorationNode" xmi:id="_Tkkr1WItEeqTqodxRjEKQA" type="TransitionExpression">
+        <styles xsi:type="notation:ShapeStyle" xmi:id="_Tkkr1mItEeqTqodxRjEKQA"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_Tkkr12ItEeqTqodxRjEKQA" y="10"/>
+      </children>
+      <styles xsi:type="notation:ConnectorStyle" xmi:id="_Tkkr0mItEeqTqodxRjEKQA" routing="Rectilinear" lineColor="4210752"/>
+      <styles xsi:type="notation:FontStyle" xmi:id="_Tkkr1GItEeqTqodxRjEKQA" fontName="Verdana"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_Tkkr02ItEeqTqodxRjEKQA" points="[0, 7, -2, -89]$[0, 100, -2, 4]"/>
+      <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_Tkkr2GItEeqTqodxRjEKQA" id="(0.2962962962962963,0.8148148148148148)"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>

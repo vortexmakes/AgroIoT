@@ -121,6 +121,7 @@ void bsp_usbDeviceEnable(void);
 void bsp_usbDeviceDisable(void);
 UsbHostStatus_t bsp_usbDeviceStatus(void);
 void bsp_usbHostProcess(void);
+UsbHostStatus_t bsp_usbHostStatus(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

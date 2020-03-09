@@ -23,7 +23,8 @@
 #include "bsp.h"
 #include "signals.h"
 #include "CommMgr.h"
-#include "conmgr.h"
+//#include "conmgr.h"
+#include "GsmMgr.h"
 #include "modmgr.h"
 #include "geoMgr.h"
 #include "ioChg.h"
@@ -44,7 +45,7 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 #define COMMMGR_QSTO_SIZE       16
-#define CONMGR_QSTO_SIZE        8
+#define GSMMGR_QSTO_SIZE        8
 #define MODMGR_QSTO_SIZE        4
 #define GEOMGR_QSTO_SIZE        4
 #define DEVSRV_QSTO_SIZE        4
@@ -65,7 +66,7 @@
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 static RKH_EVT_T *CommMgr_qsto[COMMMGR_QSTO_SIZE];
-static RKH_EVT_T *ConMgr_qsto[CONMGR_QSTO_SIZE];
+static RKH_EVT_T *GsmMgr_qsto[GSMMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
 static RKH_EVT_T *GeoMgr_qsto[GEOMGR_QSTO_SIZE];
 static RKH_EVT_T *DeviceMgr_qsto[DEVSRV_QSTO_SIZE];
@@ -94,7 +95,7 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     /*RKH_FILTER_OFF_SMA(modMgr); */
-    RKH_FILTER_OFF_SMA(conMgr);
+    RKH_FILTER_OFF_SMA(gsmMgr);
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);
@@ -128,6 +129,7 @@ main(int argc, char *argv[])
 
     RKH_TRC_OPEN();
 
+    GsmMgr_ctor();
     sprayer = sprayer_ctor(0);
     Collector_ctor();
     signals_publishSymbols();
@@ -141,7 +143,7 @@ main(int argc, char *argv[])
     rkh_fwk_registerEvtPool(evPool1Sto, SIZEOF_EP1STO, SIZEOF_EP1_BLOCK);
     rkh_fwk_registerEvtPool(evPool2Sto, SIZEOF_EP2STO, SIZEOF_EP2_BLOCK);
 
-    RKH_SMA_ACTIVATE(conMgr, ConMgr_qsto, CONMGR_QSTO_SIZE, 0, 0);
+    RKH_SMA_ACTIVATE(gsmMgr, GsmMgr_qsto, GSMMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(modMgr, ModMgr_qsto, MODMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(geoMgr, GeoMgr_qsto, GEOMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(deviceMgr, DeviceMgr_qsto, DEVSRV_QSTO_SIZE, 0, 0);
@@ -149,7 +151,7 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(collector, Collector_qsto, COLLECTOR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(usbMgr, UsbMgt_qsto, USBMGR_QSTO_SIZE, 0, 0);
 
-    RKH_SMA_POST_FIFO(conMgr, &evOpenObj, 0);
+    RKH_SMA_POST_FIFO(gsmMgr, &evOpenObj, 0);
     RKH_SMA_POST_FIFO(deviceMgr, &evOpenObj, 0);
     RKH_SMA_POST_FIFO(usbMgr, &evOpenObj, 0);
 

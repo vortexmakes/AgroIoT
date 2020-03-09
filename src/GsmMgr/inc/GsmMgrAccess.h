@@ -25,7 +25,10 @@
 #include "ConMgr.h"
 #include "ModMgr.h"
 #include "modcmd.h"
+#include "rtime.h"
 #include "topic.h"
+
+#include <string.h>
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus

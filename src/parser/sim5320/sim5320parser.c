@@ -18,7 +18,6 @@
 #include "sim5320parser.h"
 #include "signals.h"
 #include "modmgr.h"
-#include "ConMgr.h"
 #include <stdlib.h>
 
 /* ----------------------------- Local macros ------------------------------ */

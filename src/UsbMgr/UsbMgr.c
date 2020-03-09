@@ -90,7 +90,7 @@ struct UsbMgr
     RKHTmEvt tmEvtObj1;
 };
 
-RKH_SMA_CREATE(UsbMgr, usbMgr, 7, HCAL, &UsbMgr_Inactive, init, NULL);
+RKH_SMA_CREATE(UsbMgr, usbMgr, 9, HCAL, &UsbMgr_Inactive, init, NULL);
 RKH_SMA_DEF_PTR(usbMgr);
 
 /* ------------------------------- Constants ------------------------------- */
