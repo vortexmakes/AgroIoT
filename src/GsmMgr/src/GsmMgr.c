@@ -36,10 +36,10 @@ typedef struct Socket Socket;
 typedef struct SMS SMS;
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE GsmMgr_Inactive, GsmMgr_Sync, GsmMgr_Init, GsmMgr_Pin, GsmMgr_SetPin, GsmMgr_EnableNetTime, GsmMgr_GetImei, GsmMgr_SetManualGet, GsmMgr_CipShutdown, GsmMgr_ConFailure, GsmMgr_Unregistered, GsmMgr_Registered, GsmMgr_WaitingClose, GsmMgr_WaitingServer, GsmMgr_Idle, GsmMgr_Receiving, GsmMgr_GetStatus, GsmMgr_WaitOk, GsmMgr_WaitPrompt, GsmMgr_Restarting, GsmMgr_WaitReopen, GsmMgr_WaitRetryConfig, GsmMgr_SetAPN, GsmMgr_EnableNetwork, GsmMgr_CheckIP, GsmMgr_GetOper, GsmMgr_WaitRetryConnect, GsmMgr_Disconnecting, GsmMgr_Socket_WaitGsmReady, GsmMgr_SMS_WaitGsmReady, GsmMgr_SMSReady;
-RKH_DCLR_COMP_STATE GsmMgr_Active, GsmMgr_Initialize, GsmMgr_Connecting, GsmMgr_Connected, GsmMgr_Sending, GsmMgr_Configure, GsmMgr_Socket, GsmMgr_SMS;
+RKH_DCLR_BASIC_STATE GsmMgr_Inactive, GsmMgr_Sync, GsmMgr_Init, GsmMgr_Pin, GsmMgr_SetPin, GsmMgr_EnableNetTime, GsmMgr_GetImei, GsmMgr_SetManualGet, GsmMgr_CipShutdown, GsmMgr_ConFailure, GsmMgr_Unregistered, GsmMgr_Registered, GsmMgr_WaitingClose, GsmMgr_WaitRetryConfig, GsmMgr_WaitRetryConnect, GsmMgr_SetAPN, GsmMgr_EnableNetwork, GsmMgr_CheckIP, GsmMgr_GetOper, GsmMgr_Disconnecting, GsmMgr_WaitingServer, GsmMgr_Idle, GsmMgr_Receiving, GsmMgr_GetStatus, GsmMgr_WaitOk, GsmMgr_WaitPrompt, GsmMgr_Restarting, GsmMgr_WaitReopen, GsmMgr_Socket_WaitGsmReady, GsmMgr_SMSReady, GsmMgr_SMS_WaitGsmReady;
+RKH_DCLR_COMP_STATE GsmMgr_Active, GsmMgr_Initialize, GsmMgr_Socket_GsmReady, GsmMgr_Configure, GsmMgr_Connecting, GsmMgr_Connected, GsmMgr_Sending, GsmMgr_Socket, GsmMgr_SMS;
 RKH_DCLR_CHOICE_STATE GsmMgr_C0, GsmMgr_C1, GsmMgr_C2;
-RKH_DCLR_FINAL_STATE GsmMgr_InitializeFinal, GsmMgr_ActiveFinal, GsmMgr_SendingFinal, GsmMgr_ConfigureFinal, GsmMgr_SocketFinal, GsmMgr_SMSFinal;
+RKH_DCLR_FINAL_STATE GsmMgr_InitializeFinal, GsmMgr_ActiveFinal, GsmMgr_ConfigureFinal, GsmMgr_SendingFinal, GsmMgr_Socket_GsmReadyFinal;
 RKH_DCLR_SHIST_STATE GsmMgr_ConfigureHist;
 
 /* ........................ Declares effect actions ........................ */
@@ -50,30 +50,30 @@ static void ToInitializeExt4(GsmMgr *const me, RKH_EVT_T *pe);
 static void GetImeiToCipShutdownExt18(GsmMgr *const me, RKH_EVT_T *pe);
 static void UnregisteredToRegisteredExt23(GsmMgr *const me, RKH_EVT_T *pe);
 static void RegisteredToRegisteredExt25(GsmMgr *const me, RKH_EVT_T *pe);
-static void C1ToSocket_WaitGsmReadyExt30(Socket *const me, RKH_EVT_T *pe);
-static void ConnectingToDisconnectingExt33(Socket *const me, RKH_EVT_T *pe);
-static void ConnectingToSocket_WaitGsmReadyExt34(Socket *const me, RKH_EVT_T *pe);
-static void ToWaitingServerExt35(Socket *const me, RKH_EVT_T *pe);
-static void WaitingServerToWaitingServerExt36(Socket *const me, RKH_EVT_T *pe);
-static void ConnectedToRestartingExt38(Socket *const me, RKH_EVT_T *pe);
-static void IdleToGetStatusExt41(Socket *const me, RKH_EVT_T *pe);
-static void IdleToSendingExt42(Socket *const me, RKH_EVT_T *pe);
-static void IdleToReceivingExt43(Socket *const me, RKH_EVT_T *pe);
-static void ReceivingToIdleExt44(Socket *const me, RKH_EVT_T *pe);
-static void ReceivingToIdleExt45(Socket *const me, RKH_EVT_T *pe);
-static void GetStatusToIdleExt46(Socket *const me, RKH_EVT_T *pe);
-static void GetStatusToIdleExt47(Socket *const me, RKH_EVT_T *pe);
-static void SendingToIdleExt48(Socket *const me, RKH_EVT_T *pe);
-static void WaitOkToSendingFinalExt51(Socket *const me, RKH_EVT_T *pe);
-static void WaitPromptToWaitOkExt52(Socket *const me, RKH_EVT_T *pe);
-static void WaitRetryConfigToConfigureHistExt55(Socket *const me, RKH_EVT_T *pe);
-static void ConfigureToSocket_WaitGsmReadyExt57(Socket *const me, RKH_EVT_T *pe);
-static void ConfigureToConnectingExt58(Socket *const me, RKH_EVT_T *pe);
-static void ToGetOperExt59(Socket *const me, RKH_EVT_T *pe);
-static void CheckIPToCheckIPExt64(Socket *const me, RKH_EVT_T *pe);
-static void GetOperToSetAPNExt65(Socket *const me, RKH_EVT_T *pe);
-static void C2ToSocket_WaitGsmReadyExt67(Socket *const me, RKH_EVT_T *pe);
-static void WaitRetryConnectToConnectingExt68(Socket *const me, RKH_EVT_T *pe);
+static void C1ToSocket_GsmReadyFinalExt31(Socket *const me, RKH_EVT_T *pe);
+static void C2ToSocket_GsmReadyFinalExt33(Socket *const me, RKH_EVT_T *pe);
+static void WaitRetryConfigToConfigureHistExt34(Socket *const me, RKH_EVT_T *pe);
+static void WaitRetryConnectToConnectingExt35(Socket *const me, RKH_EVT_T *pe);
+static void ConfigureToSocket_GsmReadyFinalExt38(Socket *const me, RKH_EVT_T *pe);
+static void ConfigureToConnectingExt39(Socket *const me, RKH_EVT_T *pe);
+static void ToGetOperExt40(Socket *const me, RKH_EVT_T *pe);
+static void CheckIPToCheckIPExt45(Socket *const me, RKH_EVT_T *pe);
+static void GetOperToSetAPNExt46(Socket *const me, RKH_EVT_T *pe);
+static void ConnectingToDisconnectingExt50(Socket *const me, RKH_EVT_T *pe);
+static void ToWaitingServerExt51(Socket *const me, RKH_EVT_T *pe);
+static void WaitingServerToWaitingServerExt52(Socket *const me, RKH_EVT_T *pe);
+static void ConnectedToRestartingExt54(Socket *const me, RKH_EVT_T *pe);
+static void IdleToGetStatusExt57(Socket *const me, RKH_EVT_T *pe);
+static void IdleToSendingExt58(Socket *const me, RKH_EVT_T *pe);
+static void IdleToReceivingExt59(Socket *const me, RKH_EVT_T *pe);
+static void ReceivingToIdleExt60(Socket *const me, RKH_EVT_T *pe);
+static void ReceivingToIdleExt61(Socket *const me, RKH_EVT_T *pe);
+static void GetStatusToIdleExt62(Socket *const me, RKH_EVT_T *pe);
+static void GetStatusToIdleExt63(Socket *const me, RKH_EVT_T *pe);
+static void SendingToIdleExt64(Socket *const me, RKH_EVT_T *pe);
+static void WaitOkToSendingFinalExt67(Socket *const me, RKH_EVT_T *pe);
+static void WaitPromptToWaitOkExt68(Socket *const me, RKH_EVT_T *pe);
+static void ToSocket_WaitGsmReadyExt72(Socket *const me, RKH_EVT_T *pe);
 static void InactiveToInactiveLoc0(GsmMgr *const me, RKH_EVT_T *pe);
 static void InactiveToInactiveLoc1(GsmMgr *const me, RKH_EVT_T *pe);
 static void ActiveToActiveLoc2(GsmMgr *const me, RKH_EVT_T *pe);
@@ -83,8 +83,8 @@ static void UnregisteredToUnregisteredLoc16(GsmMgr *const me, RKH_EVT_T *pe);
 static void UnregisteredToUnregisteredLoc17(GsmMgr *const me, RKH_EVT_T *pe);
 static void RegisteredToRegisteredLoc20(GsmMgr *const me, RKH_EVT_T *pe);
 static void RegisteredToRegisteredLoc21(GsmMgr *const me, RKH_EVT_T *pe);
-static void GetStatusToGetStatusLoc25(GsmMgr *const me, RKH_EVT_T *pe);
-static void GetStatusToGetStatusLoc26(GsmMgr *const me, RKH_EVT_T *pe);
+static void GetStatusToGetStatusLoc30(GsmMgr *const me, RKH_EVT_T *pe);
+static void GetStatusToGetStatusLoc31(GsmMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void enSync(GsmMgr *const me);
@@ -98,34 +98,34 @@ static void enCipShutdown(GsmMgr *const me);
 static void enConFailure(GsmMgr *const me);
 static void enUnregistered(GsmMgr *const me);
 static void enRegistered(GsmMgr *const me);
-static void enWaitingServer(Socket *const me);
-static void enConnected(Socket *const me);
-static void enIdle(Socket *const me);
-static void enWaitReopen(Socket *const me);
 static void enWaitRetryConfig(Socket *const me);
+static void enWaitRetryConnect(Socket *const me);
 static void enSetAPN(Socket *const me);
 static void enEnableNetwork(Socket *const me);
 static void enCheckIP(Socket *const me);
 static void enGetOper(Socket *const me);
-static void enWaitRetryConnect(Socket *const me);
+static void enWaitingServer(Socket *const me);
+static void enConnected(Socket *const me);
+static void enIdle(Socket *const me);
+static void enWaitReopen(Socket *const me);
 
 /* ......................... Declares exit actions ......................... */
 static void exConFailure(GsmMgr *const me);
 static void exUnregistered(GsmMgr *const me);
 static void exRegistered(GsmMgr *const me);
+static void exWaitRetryConfig(Socket *const me);
+static void exWaitRetryConnect(Socket *const me);
 static void exWaitingServer(Socket *const me);
 static void exConnected(Socket *const me);
 static void exIdle(Socket *const me);
 static void exGetStatus(Socket *const me);
 static void exWaitReopen(Socket *const me);
-static void exWaitRetryConfig(Socket *const me);
-static void exWaitRetryConnect(Socket *const me);
 
 /* ............................ Declares guards ............................ */
-static rbool_t isCondGetStatusToIdle46(Socket *const me, RKH_EVT_T *pe);
+static rbool_t isCondGetStatusToIdle62(Socket *const me, RKH_EVT_T *pe);
 static rbool_t isCondC0ToSync10(GsmMgr *const me, RKH_EVT_T *pe);
-static rbool_t isCondC1ToWaitRetryConnect29(Socket *const me, RKH_EVT_T *pe);
-static rbool_t isCondC2ToWaitRetryConfig66(Socket *const me, RKH_EVT_T *pe);
+static rbool_t isCondC1ToWaitRetryConfig30(Socket *const me, RKH_EVT_T *pe);
+static rbool_t isCondC2ToWaitRetryConnect32(Socket *const me, RKH_EVT_T *pe);
 
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(GsmMgr_Inactive, NULL, NULL, RKH_ROOT, NULL);
@@ -141,6 +141,13 @@ RKH_CREATE_BASIC_STATE(GsmMgr_ConFailure, enConFailure, exConFailure, &GsmMgr_Ac
 RKH_CREATE_BASIC_STATE(GsmMgr_Unregistered, enUnregistered, exUnregistered, &GsmMgr_Active, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_Registered, enRegistered, exRegistered, &GsmMgr_Active, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_WaitingClose, NULL, NULL, &GsmMgr_Active, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_WaitRetryConfig, enWaitRetryConfig, exWaitRetryConfig, &GsmMgr_Socket_GsmReady, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_WaitRetryConnect, enWaitRetryConnect, exWaitRetryConnect, &GsmMgr_Socket_GsmReady, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_SetAPN, enSetAPN, NULL, &GsmMgr_Configure, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_EnableNetwork, enEnableNetwork, NULL, &GsmMgr_Configure, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_CheckIP, enCheckIP, NULL, &GsmMgr_Configure, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_GetOper, enGetOper, NULL, &GsmMgr_Configure, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_Disconnecting, NULL, NULL, &GsmMgr_Socket_GsmReady, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_WaitingServer, enWaitingServer, exWaitingServer, &GsmMgr_Connecting, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_Idle, enIdle, exIdle, &GsmMgr_Connected, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_Receiving, NULL, NULL, &GsmMgr_Connected, NULL);
@@ -149,26 +156,21 @@ RKH_CREATE_BASIC_STATE(GsmMgr_WaitOk, NULL, NULL, &GsmMgr_Sending, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_WaitPrompt, NULL, NULL, &GsmMgr_Sending, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_Restarting, NULL, NULL, &GsmMgr_Connecting, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_WaitReopen, enWaitReopen, exWaitReopen, &GsmMgr_Connecting, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_WaitRetryConfig, enWaitRetryConfig, exWaitRetryConfig, &GsmMgr_Active, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_SetAPN, enSetAPN, NULL, &GsmMgr_Configure, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_EnableNetwork, enEnableNetwork, NULL, &GsmMgr_Configure, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_CheckIP, enCheckIP, NULL, &GsmMgr_Configure, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_GetOper, enGetOper, NULL, &GsmMgr_Configure, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_WaitRetryConnect, enWaitRetryConnect, exWaitRetryConnect, &GsmMgr_Active, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_Disconnecting, NULL, NULL, &GsmMgr_Active, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_Socket_WaitGsmReady, NULL, NULL, &GsmMgr_Active, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_SMS_WaitGsmReady, NULL, NULL, &GsmMgr_Active, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_SMSReady, NULL, NULL, &GsmMgr_Active, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_Socket_WaitGsmReady, NULL, NULL, &GsmMgr_Socket, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_SMSReady, NULL, NULL, &GsmMgr_SMS, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_SMS_WaitGsmReady, NULL, NULL, &GsmMgr_SMS, NULL);
 
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Active, NULL, NULL, RKH_ROOT, &GsmMgr_Initialize, ToInitializeExt4, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_COMP_REGION_STATE(GsmMgr_Socket, NULL, NULL, &GsmMgr_Active, &GsmMgr_Socket_WaitGsmReady, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_COMP_REGION_STATE(GsmMgr_SMS, NULL, NULL, &GsmMgr_Active, &GsmMgr_SMS_WaitGsmReady, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Initialize, NULL, NULL, &GsmMgr_Active, &GsmMgr_Sync, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_COMP_REGION_STATE(GsmMgr_Connecting, NULL, NULL, &GsmMgr_Active, &GsmMgr_WaitingServer, ToWaitingServerExt35, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(GsmMgr_Socket_GsmReady, NULL, NULL, &GsmMgr_Socket, &GsmMgr_Configure, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_HISTORY_STORAGE(GsmMgr_Configure);
+RKH_CREATE_COMP_REGION_STATE(GsmMgr_Configure, NULL, NULL, &GsmMgr_Socket_GsmReady, &GsmMgr_GetOper, ToGetOperExt40, RKH_SHISTORY, NULL, NULL, NULL, RKH_GET_HISTORY_STORAGE(GsmMgr_Configure));
+RKH_CREATE_COMP_REGION_STATE(GsmMgr_Connecting, NULL, NULL, &GsmMgr_Socket_GsmReady, &GsmMgr_WaitingServer, ToWaitingServerExt51, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Connected, enConnected, exConnected, &GsmMgr_Connecting, &GsmMgr_Idle, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Sending, NULL, NULL, &GsmMgr_Connected, &GsmMgr_WaitPrompt, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_HISTORY_STORAGE(GsmMgr_Configure);
-RKH_CREATE_COMP_REGION_STATE(GsmMgr_Configure, NULL, NULL, &GsmMgr_Active, &GsmMgr_GetOper, ToGetOperExt59, RKH_SHISTORY, NULL, NULL, NULL, RKH_GET_HISTORY_STORAGE(GsmMgr_Configure));
+
+RKH_CREATE_COMP_REGION_STATE(GsmMgr_Socket, NULL, NULL, RKH_ROOT, &GsmMgr_Socket_WaitGsmReady, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(GsmMgr_SMS, NULL, NULL, RKH_ROOT, &GsmMgr_SMS_WaitGsmReady, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Inactive)
 	RKH_TRREG(evOpen, NULL, InactiveToActiveExt1, &GsmMgr_Active),
@@ -258,119 +260,122 @@ RKH_CREATE_TRANS_TABLE(GsmMgr_WaitingClose)
 	RKH_TRREG(evGsmError, NULL, NULL, &GsmMgr_ActiveFinal),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(GsmMgr_Connecting)
-	RKH_TRREG(evNoResponse, NULL, NULL, &GsmMgr_C1),
-	RKH_TRREG(evClosed, NULL, NULL, &GsmMgr_C1),
-	RKH_TRREG(evIPStatus, NULL, NULL, &GsmMgr_C1),
-	RKH_TRREG(evError, NULL, NULL, &GsmMgr_C1),
-	RKH_TRREG(evIPStart, NULL, NULL, &GsmMgr_Configure),
-	RKH_TRREG(evIPInitial, NULL, NULL, &GsmMgr_Configure),
-	RKH_TRREG(evIPGprsAct, NULL, NULL, &GsmMgr_Configure),
-	RKH_TRREG(evClose, NULL, ConnectingToDisconnectingExt33, &GsmMgr_Disconnecting),
-	RKH_TRREG(evError, NULL, ConnectingToSocket_WaitGsmReadyExt34, &GsmMgr_Socket_WaitGsmReady),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_WaitingServer)
-	RKH_TRREG(evTout3, NULL, WaitingServerToWaitingServerExt36, &GsmMgr_WaitingServer),
-	RKH_TRREG(evConnected, NULL, NULL, &GsmMgr_Connected),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_Connected)
-	RKH_TRREG(evRestart, NULL, ConnectedToRestartingExt38, &GsmMgr_Restarting),
-	RKH_TRREG(evClosed, NULL, NULL, &GsmMgr_Connecting),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_Idle)
-	RKH_TRREG(evTout4, NULL, IdleToGetStatusExt41, &GsmMgr_GetStatus),
-	RKH_TRREG(evSend, NULL, IdleToSendingExt42, &GsmMgr_Sending),
-	RKH_TRREG(evRecv, NULL, IdleToReceivingExt43, &GsmMgr_Receiving),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_Receiving)
-	RKH_TRREG(evNoResponse, NULL, ReceivingToIdleExt44, &GsmMgr_Idle),
-	RKH_TRREG(evError, NULL, ReceivingToIdleExt44, &GsmMgr_Idle),
-	RKH_TRREG(evReceived, NULL, ReceivingToIdleExt45, &GsmMgr_Idle),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_GetStatus)
-	RKH_TRREG(evNoResponse, isCondGetStatusToIdle46, GetStatusToIdleExt46, &GsmMgr_Idle),
-	RKH_TRREG(evConnected, NULL, GetStatusToIdleExt47, &GsmMgr_Idle),
-	RKH_TRINT(evSend, NULL, GetStatusToGetStatusLoc25),
-	RKH_TRINT(evRecv, NULL, GetStatusToGetStatusLoc26),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_Sending)
-	RKH_TRREG(evNoResponse, NULL, SendingToIdleExt48, &GsmMgr_Idle),
-	RKH_TRREG(evError, NULL, SendingToIdleExt48, &GsmMgr_Idle),
-	RKH_TRCOMPLETION(NULL, NULL, &GsmMgr_Idle),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_WaitOk)
-	RKH_TRREG(evOk, NULL, WaitOkToSendingFinalExt51, &GsmMgr_SendingFinal),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_WaitPrompt)
-	RKH_TRREG(evOk, NULL, WaitPromptToWaitOkExt52, &GsmMgr_WaitOk),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_Restarting)
-	RKH_TRREG(evDisconnected, NULL, NULL, &GsmMgr_WaitReopen),
-	RKH_TRREG(evNoResponse, NULL, NULL, &GsmMgr_WaitReopen),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_WaitReopen)
-	RKH_TRREG(evTout5, NULL, NULL, &GsmMgr_Connecting),
+RKH_CREATE_TRANS_TABLE(GsmMgr_Socket_GsmReady)
+    RKH_TRCOMPLETION(NULL, NULL, &GsmMgr_Socket_WaitGsmReady),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_WaitRetryConfig)
-	RKH_TRREG(evTout6, NULL, WaitRetryConfigToConfigureHistExt55, &GsmMgr_ConfigureHist),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_Configure)
-	RKH_TRREG(evNoResponse, NULL, NULL, &GsmMgr_C2),
-	RKH_TRREG(evError, NULL, ConfigureToSocket_WaitGsmReadyExt57, &GsmMgr_Socket_WaitGsmReady),
-	RKH_TRCOMPLETION(NULL, ConfigureToConnectingExt58, &GsmMgr_Connecting),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_SetAPN)
-	RKH_TRREG(evOk, NULL, NULL, &GsmMgr_EnableNetwork),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_EnableNetwork)
-	RKH_TRREG(evOk, NULL, NULL, &GsmMgr_CheckIP),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_CheckIP)
-	RKH_TRREG(evIPStatus, NULL, NULL, &GsmMgr_ConfigureFinal),
-	RKH_TRREG(evIP, NULL, NULL, &GsmMgr_CheckIP),
-	RKH_TRREG(evIPInitial, NULL, NULL, &GsmMgr_CheckIP),
-	RKH_TRREG(evIPStart, NULL, NULL, &GsmMgr_CheckIP),
-	RKH_TRREG(evIPGprsAct, NULL, CheckIPToCheckIPExt64, &GsmMgr_CheckIP),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_GetOper)
-	RKH_TRREG(evOper, NULL, GetOperToSetAPNExt65, &GsmMgr_SetAPN),
+    RKH_TRREG(evTout3, NULL, WaitRetryConfigToConfigureHistExt34, &GsmMgr_ConfigureHist),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_WaitRetryConnect)
-	RKH_TRREG(evTout7, NULL, WaitRetryConnectToConnectingExt68, &GsmMgr_Connecting),
+    RKH_TRREG(evTout4, NULL, WaitRetryConnectToConnectingExt35, &GsmMgr_Connecting),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_Configure)
+    RKH_TRREG(evNoResponse, NULL, NULL, &GsmMgr_C1),
+    RKH_TRREG(evError, NULL, ConfigureToSocket_GsmReadyFinalExt38, &GsmMgr_Socket_GsmReadyFinal),
+    RKH_TRCOMPLETION(NULL, ConfigureToConnectingExt39, &GsmMgr_Connecting),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_SetAPN)
+    RKH_TRREG(evOk, NULL, NULL, &GsmMgr_EnableNetwork),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_EnableNetwork)
+    RKH_TRREG(evOk, NULL, NULL, &GsmMgr_CheckIP),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_CheckIP)
+    RKH_TRREG(evIPStatus, NULL, NULL, &GsmMgr_ConfigureFinal),
+    RKH_TRREG(evIP, NULL, NULL, &GsmMgr_CheckIP),
+    RKH_TRREG(evIPInitial, NULL, NULL, &GsmMgr_CheckIP),
+    RKH_TRREG(evIPStart, NULL, NULL, &GsmMgr_CheckIP),
+    RKH_TRREG(evIPGprsAct, NULL, CheckIPToCheckIPExt45, &GsmMgr_CheckIP),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_GetOper)
+    RKH_TRREG(evOper, NULL, GetOperToSetAPNExt46, &GsmMgr_SetAPN),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Disconnecting)
-	RKH_TRREG(evDisconnected, NULL, NULL, &GsmMgr_SocketFinal),
-	RKH_TRREG(evNoResponse, NULL, NULL, &GsmMgr_SocketFinal),
+    RKH_TRREG(evDisconnected, NULL, NULL, &GsmMgr_Socket_GsmReadyFinal),
+    RKH_TRREG(evNoResponse, NULL, NULL, &GsmMgr_Socket_GsmReadyFinal),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_Connecting)
+    RKH_TRREG(evNoResponse, NULL, NULL, &GsmMgr_C2),
+    RKH_TRREG(evClosed, NULL, NULL, &GsmMgr_C2),
+    RKH_TRREG(evIPStatus, NULL, NULL, &GsmMgr_C2),
+    RKH_TRREG(evError, NULL, NULL, &GsmMgr_C2),
+    RKH_TRREG(evIPStart, NULL, NULL, &GsmMgr_Configure),
+    RKH_TRREG(evIPInitial, NULL, NULL, &GsmMgr_Configure),
+    RKH_TRREG(evIPGprsAct, NULL, NULL, &GsmMgr_Configure),
+    RKH_TRREG(evClose, NULL, ConnectingToDisconnectingExt50, &GsmMgr_Disconnecting),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_WaitingServer)
+    RKH_TRREG(evTout5, NULL, WaitingServerToWaitingServerExt52, &GsmMgr_WaitingServer),
+    RKH_TRREG(evConnected, NULL, NULL, &GsmMgr_Connected),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_Connected)
+    RKH_TRREG(evRestart, NULL, ConnectedToRestartingExt54, &GsmMgr_Restarting),
+    RKH_TRREG(evClosed, NULL, NULL, &GsmMgr_Connecting),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_Idle)
+    RKH_TRREG(evTout6, NULL, IdleToGetStatusExt57, &GsmMgr_GetStatus),
+    RKH_TRREG(evSend, NULL, IdleToSendingExt58, &GsmMgr_Sending),
+    RKH_TRREG(evRecv, NULL, IdleToReceivingExt59, &GsmMgr_Receiving),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_Receiving)
+    RKH_TRREG(evNoResponse, NULL, ReceivingToIdleExt60, &GsmMgr_Idle),
+    RKH_TRREG(evError, NULL, ReceivingToIdleExt60, &GsmMgr_Idle),
+    RKH_TRREG(evReceived, NULL, ReceivingToIdleExt61, &GsmMgr_Idle),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_GetStatus)
+    RKH_TRREG(evNoResponse, isCondGetStatusToIdle62, GetStatusToIdleExt62, &GsmMgr_Idle),
+    RKH_TRREG(evConnected, NULL, GetStatusToIdleExt63, &GsmMgr_Idle),
+    RKH_TRINT(evSend, NULL, GetStatusToGetStatusLoc30),
+    RKH_TRINT(evRecv, NULL, GetStatusToGetStatusLoc31),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_Sending)
+    RKH_TRREG(evNoResponse, NULL, SendingToIdleExt64, &GsmMgr_Idle),
+    RKH_TRREG(evError, NULL, SendingToIdleExt64, &GsmMgr_Idle),
+    RKH_TRCOMPLETION(NULL, NULL, &GsmMgr_Idle),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_WaitOk)
+    RKH_TRREG(evOk, NULL, WaitOkToSendingFinalExt67, &GsmMgr_SendingFinal),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_WaitPrompt)
+    RKH_TRREG(evOk, NULL, WaitPromptToWaitOkExt68, &GsmMgr_WaitOk),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_Restarting)
+    RKH_TRREG(evDisconnected, NULL, NULL, &GsmMgr_WaitReopen),
+    RKH_TRREG(evNoResponse, NULL, NULL, &GsmMgr_WaitReopen),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_WaitReopen)
+    RKH_TRREG(evTout7, NULL, NULL, &GsmMgr_Connecting),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Socket_WaitGsmReady)
-	RKH_TRREG(evGsmReady, NULL, NULL, &GsmMgr_Configure),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_SMS_WaitGsmReady)
-	RKH_TRREG(evGsmReady, NULL, NULL, &GsmMgr_SMSReady),
+    RKH_TRREG(evGsmReady, NULL, NULL, &GsmMgr_Socket_GsmReady),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_SMSReady)
-    RKH_TRREG(evClose, NULL, NULL, &GsmMgr_SMSFinal),
+    RKH_TRREG(evClose, NULL, NULL, &GsmMgr_SMS_WaitGsmReady),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(GsmMgr_SMS_WaitGsmReady)
+    RKH_TRREG(evGsmReady, NULL, NULL, &GsmMgr_SMSReady),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(GsmMgr_C0);
@@ -383,13 +388,13 @@ RKH_CREATE_BRANCH_TABLE(GsmMgr_C0)
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(GsmMgr_C1)
-	RKH_BRANCH(isCondC1ToWaitRetryConnect29, NULL, &GsmMgr_WaitRetryConnect),
-	RKH_BRANCH(ELSE, C1ToSocket_WaitGsmReadyExt30, &GsmMgr_Socket_WaitGsmReady),
+    RKH_BRANCH(isCondC1ToWaitRetryConfig30, NULL, &GsmMgr_WaitRetryConfig),
+    RKH_BRANCH(ELSE, C1ToSocket_GsmReadyFinalExt31, &GsmMgr_Socket_GsmReadyFinal),
 RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BRANCH_TABLE(GsmMgr_C2)
-	RKH_BRANCH(isCondC2ToWaitRetryConfig66, NULL, &GsmMgr_WaitRetryConfig),
-	RKH_BRANCH(ELSE, C2ToSocket_WaitGsmReadyExt67, &GsmMgr_Socket_WaitGsmReady),
+    RKH_BRANCH(isCondC2ToWaitRetryConnect32, NULL, &GsmMgr_WaitRetryConnect),
+    RKH_BRANCH(ELSE, C2ToSocket_GsmReadyFinalExt33, &GsmMgr_Socket_GsmReadyFinal),
 RKH_END_BRANCH_TABLE
 
 
@@ -605,7 +610,7 @@ startRegStatusTimer(GsmMgr *const me)
     RKH_SET_STATIC_EVENT(&GsmMgrInt.tmEvtRegStatus, evRegStatusTout);
     RKH_TMR_INIT(&GsmMgrInt.tmEvtRegStatus.tmr, 
                     RKH_UPCAST(RKH_EVT_T, &GsmMgrInt.tmEvtRegStatus), NULL);
-    RKH_TMR_ONESHOT(&GsmMgrInt.tmEvtRegStatus.tmr, RKH_UPCAST(RKH_SMA_T, me), 
+    RKH_TMR_ONESHOT(&GsmMgrInt.tmEvtRegStatus.tmr, RKH_UPCAST(RKH_SMA_T, me),
                         CHECK_REG_STATUS_PERIOD);
 }
 
@@ -723,7 +728,6 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
 {
 	me->sigLevel = 0;
 	me->imei = "";
-	me->retryCount = 0;
 
 	me->itsSocket.oper = "";
 	me->itsSocket.protocol = "";
@@ -750,6 +754,15 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &GsmMgr_Unregistered);
 	RKH_TR_FWK_STATE(me, &GsmMgr_Registered);
 	RKH_TR_FWK_STATE(me, &GsmMgr_WaitingClose);
+    RKH_TR_FWK_STATE(me, &GsmMgr_Socket_GsmReady);
+    RKH_TR_FWK_STATE(me, &GsmMgr_WaitRetryConfig);
+    RKH_TR_FWK_STATE(me, &GsmMgr_WaitRetryConnect);
+    RKH_TR_FWK_STATE(me, &GsmMgr_Configure);
+    RKH_TR_FWK_STATE(me, &GsmMgr_SetAPN);
+    RKH_TR_FWK_STATE(me, &GsmMgr_EnableNetwork);
+    RKH_TR_FWK_STATE(me, &GsmMgr_CheckIP);
+    RKH_TR_FWK_STATE(me, &GsmMgr_GetOper);
+    RKH_TR_FWK_STATE(me, &GsmMgr_Disconnecting);
 	RKH_TR_FWK_STATE(me, &GsmMgr_Connecting);
 	RKH_TR_FWK_STATE(me, &GsmMgr_WaitingServer);
 	RKH_TR_FWK_STATE(me, &GsmMgr_Connected);
@@ -761,27 +774,18 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &GsmMgr_WaitPrompt);
 	RKH_TR_FWK_STATE(me, &GsmMgr_Restarting);
 	RKH_TR_FWK_STATE(me, &GsmMgr_WaitReopen);
-	RKH_TR_FWK_STATE(me, &GsmMgr_WaitRetryConfig);
-	RKH_TR_FWK_STATE(me, &GsmMgr_Configure);
-	RKH_TR_FWK_STATE(me, &GsmMgr_SetAPN);
-	RKH_TR_FWK_STATE(me, &GsmMgr_EnableNetwork);
-	RKH_TR_FWK_STATE(me, &GsmMgr_CheckIP);
-	RKH_TR_FWK_STATE(me, &GsmMgr_GetOper);
-	RKH_TR_FWK_STATE(me, &GsmMgr_WaitRetryConnect);
-	RKH_TR_FWK_STATE(me, &GsmMgr_Disconnecting);
 	RKH_TR_FWK_STATE(me, &GsmMgr_Socket_WaitGsmReady);
-	RKH_TR_FWK_STATE(me, &GsmMgr_SMS_WaitGsmReady);
 	RKH_TR_FWK_STATE(me, &GsmMgr_SMSReady);
+	RKH_TR_FWK_STATE(me, &GsmMgr_SMS_WaitGsmReady);
 	RKH_TR_FWK_PSTATE(me, &GsmMgr_ConfigureHist);
 	RKH_TR_FWK_PSTATE(me, &GsmMgr_C0);
 	RKH_TR_FWK_PSTATE(me, &GsmMgr_C1);
 	RKH_TR_FWK_PSTATE(me, &GsmMgr_C2);
 	RKH_TR_FWK_STATE(me, &GsmMgr_InitializeFinal);
 	RKH_TR_FWK_STATE(me, &GsmMgr_ActiveFinal);
-	RKH_TR_FWK_STATE(me, &GsmMgr_SendingFinal);
 	RKH_TR_FWK_STATE(me, &GsmMgr_ConfigureFinal);
-	RKH_TR_FWK_STATE(me, &GsmMgr_SocketFinal);
-	RKH_TR_FWK_STATE(me, &GsmMgr_SMSFinal);
+	RKH_TR_FWK_STATE(me, &GsmMgr_SendingFinal);
+    RKH_TR_FWK_STATE(me, &GsmMgr_Socket_GsmReadyFinal);
 	RKH_TR_FWK_SIG(evOpen);
 	RKH_TR_FWK_SIG(evClose);
 	RKH_TR_FWK_SIG(evSend);
@@ -823,79 +827,77 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_TIMER(&me->itsSocket.tmEvtObj6.tmr);
 	RKH_TR_FWK_TIMER(&me->itsSocket.tmEvtObj7.tmr);
 	#if 0
-		RKH_TR_FWK_OBJ_NAME(ToInactiveExt0, "ToInactiveExt0");
-		RKH_TR_FWK_OBJ_NAME(InactiveToActiveExt1, "InactiveToActiveExt1");
-		RKH_TR_FWK_OBJ_NAME(ActiveToInactiveExt2, "ActiveToInactiveExt2");
-		RKH_TR_FWK_OBJ_NAME(ToInitializeExt4, "ToInitializeExt4");
-		RKH_TR_FWK_OBJ_NAME(GetImeiToCipShutdownExt18, "GetImeiToCipShutdownExt18");
-		RKH_TR_FWK_OBJ_NAME(UnregisteredToRegisteredExt23, "UnregisteredToRegisteredExt23");
-		RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredExt25, "RegisteredToRegisteredExt25");
-		RKH_TR_FWK_OBJ_NAME(C1ToSocket_WaitGsmReadyExt30, "C1ToSocket_WaitGsmReadyExt30");
-		RKH_TR_FWK_OBJ_NAME(ConnectingToDisconnectingExt33, "ConnectingToDisconnectingExt33");
-		RKH_TR_FWK_OBJ_NAME(ConnectingToSocket_WaitGsmReadyExt34, "ConnectingToSocket_WaitGsmReadyExt34");
-		RKH_TR_FWK_OBJ_NAME(ToWaitingServerExt35, "ToWaitingServerExt35");
-		RKH_TR_FWK_OBJ_NAME(WaitingServerToWaitingServerExt36, "WaitingServerToWaitingServerExt36");
-		RKH_TR_FWK_OBJ_NAME(ConnectedToRestartingExt38, "ConnectedToRestartingExt38");
-		RKH_TR_FWK_OBJ_NAME(IdleToGetStatusExt41, "IdleToGetStatusExt41");
-		RKH_TR_FWK_OBJ_NAME(IdleToSendingExt42, "IdleToSendingExt42");
-		RKH_TR_FWK_OBJ_NAME(IdleToReceivingExt43, "IdleToReceivingExt43");
-		RKH_TR_FWK_OBJ_NAME(ReceivingToIdleExt44, "ReceivingToIdleExt44");
-		RKH_TR_FWK_OBJ_NAME(ReceivingToIdleExt45, "ReceivingToIdleExt45");
-		RKH_TR_FWK_OBJ_NAME(GetStatusToIdleExt46, "GetStatusToIdleExt46");
-		RKH_TR_FWK_OBJ_NAME(GetStatusToIdleExt47, "GetStatusToIdleExt47");
-		RKH_TR_FWK_OBJ_NAME(SendingToIdleExt48, "SendingToIdleExt48");
-		RKH_TR_FWK_OBJ_NAME(WaitOkToSendingFinalExt51, "WaitOkToSendingFinalExt51");
-		RKH_TR_FWK_OBJ_NAME(WaitPromptToWaitOkExt52, "WaitPromptToWaitOkExt52");
-		RKH_TR_FWK_OBJ_NAME(WaitRetryConfigToConfigureHistExt55, "WaitRetryConfigToConfigureHistExt55");
-		RKH_TR_FWK_OBJ_NAME(ConfigureToSocket_WaitGsmReadyExt57, "ConfigureToSocket_WaitGsmReadyExt57");
-		RKH_TR_FWK_OBJ_NAME(ConfigureToConnectingExt58, "ConfigureToConnectingExt58");
-		RKH_TR_FWK_OBJ_NAME(ToGetOperExt59, "ToGetOperExt59");
-		RKH_TR_FWK_OBJ_NAME(CheckIPToCheckIPExt64, "CheckIPToCheckIPExt64");
-		RKH_TR_FWK_OBJ_NAME(GetOperToSetAPNExt65, "GetOperToSetAPNExt65");
-		RKH_TR_FWK_OBJ_NAME(C2ToSocket_WaitGsmReadyExt67, "C2ToSocket_WaitGsmReadyExt67");
-		RKH_TR_FWK_OBJ_NAME(WaitRetryConnectToConnectingExt68, "WaitRetryConnectToConnectingExt68");
-		RKH_TR_FWK_OBJ_NAME(InactiveToInactiveLoc0, "InactiveToInactiveLoc0");
-		RKH_TR_FWK_OBJ_NAME(InactiveToInactiveLoc1, "InactiveToInactiveLoc1");
-		RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc2, "ActiveToActiveLoc2");
-		RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc3, "ActiveToActiveLoc3");
-		RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc4, "ActiveToActiveLoc4");
-		RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc16, "UnregisteredToUnregisteredLoc16");
-		RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc17, "UnregisteredToUnregisteredLoc17");
-		RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredLoc20, "RegisteredToRegisteredLoc20");
-		RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredLoc21, "RegisteredToRegisteredLoc21");
-		RKH_TR_FWK_OBJ_NAME(GetStatusToGetStatusLoc25, "GetStatusToGetStatusLoc25");
-		RKH_TR_FWK_OBJ_NAME(GetStatusToGetStatusLoc26, "GetStatusToGetStatusLoc26");
-		RKH_TR_FWK_OBJ_NAME(enSync, "enSync");
-		RKH_TR_FWK_OBJ_NAME(enInit, "enInit");
-		RKH_TR_FWK_OBJ_NAME(enPin, "enPin");
-		RKH_TR_FWK_OBJ_NAME(enSetPin, "enSetPin");
-		RKH_TR_FWK_OBJ_NAME(enEnableNetTime, "enEnableNetTime");
-		RKH_TR_FWK_OBJ_NAME(enGetImei, "enGetImei");
-		RKH_TR_FWK_OBJ_NAME(enSetManualGet, "enSetManualGet");
-		RKH_TR_FWK_OBJ_NAME(enCipShutdown, "enCipShutdown");
-		RKH_TR_FWK_OBJ_NAME(enConFailure, "enConFailure");
-		RKH_TR_FWK_OBJ_NAME(enUnregistered, "enUnregistered");
-		RKH_TR_FWK_OBJ_NAME(enRegistered, "enRegistered");
-		RKH_TR_FWK_OBJ_NAME(enConnected, "enConnected");
-		RKH_TR_FWK_OBJ_NAME(enSetAPN, "enSetAPN");
-		RKH_TR_FWK_OBJ_NAME(enEnableNetwork, "enEnableNetwork");
-		RKH_TR_FWK_OBJ_NAME(enCheckIP, "enCheckIP");
-		RKH_TR_FWK_OBJ_NAME(enGetOper, "enGetOper");
-		RKH_TR_FWK_OBJ_NAME(exConFailure, "exConFailure");
-		RKH_TR_FWK_OBJ_NAME(exRegistered, "exRegistered");
-		RKH_TR_FWK_OBJ_NAME(exConnected, "exConnected");
-		RKH_TR_FWK_OBJ_NAME(exGetStatus, "exGetStatus");
-		RKH_TR_FWK_OBJ_NAME(exWaitRetryConnect, "exWaitRetryConnect");
-		RKH_TR_FWK_OBJ_NAME(isCondGetStatusToIdle46, "isCondGetStatusToIdle46");
-		RKH_TR_FWK_OBJ_NAME(isCondC0ToSync10, "isCondC0ToSync10");
-		RKH_TR_FWK_OBJ_NAME(isCondC1ToWaitRetryConnect29, "isCondC1ToWaitRetryConnect29");
-		RKH_TR_FWK_OBJ_NAME(isCondC2ToWaitRetryConfig66, "isCondC2ToWaitRetryConfig66");
+        RKH_TR_FWK_OBJ_NAME(ToInactiveExt0, "ToInactiveExt0");
+        RKH_TR_FWK_OBJ_NAME(InactiveToActiveExt1, "InactiveToActiveExt1");
+        RKH_TR_FWK_OBJ_NAME(ActiveToInactiveExt2, "ActiveToInactiveExt2");
+        RKH_TR_FWK_OBJ_NAME(ToInitializeExt4, "ToInitializeExt4");
+        RKH_TR_FWK_OBJ_NAME(GetImeiToCipShutdownExt18, "GetImeiToCipShutdownExt18");
+        RKH_TR_FWK_OBJ_NAME(UnregisteredToRegisteredExt23, "UnregisteredToRegisteredExt23");
+        RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredExt25, "RegisteredToRegisteredExt25");
+        RKH_TR_FWK_OBJ_NAME(C1ToSocket_GsmReadyFinalExt31, "C1ToSocket_GsmReadyFinalExt31");
+        RKH_TR_FWK_OBJ_NAME(C2ToSocket_GsmReadyFinalExt33, "C2ToSocket_GsmReadyFinalExt33");
+        RKH_TR_FWK_OBJ_NAME(WaitRetryConfigToConfigureHistExt34, "WaitRetryConfigToConfigureHistExt34");
+        RKH_TR_FWK_OBJ_NAME(WaitRetryConnectToConnectingExt35, "WaitRetryConnectToConnectingExt35");
+        RKH_TR_FWK_OBJ_NAME(ConfigureToSocket_GsmReadyFinalExt38, "ConfigureToSocket_GsmReadyFinalExt38");
+        RKH_TR_FWK_OBJ_NAME(ConfigureToConnectingExt39, "ConfigureToConnectingExt39");
+        RKH_TR_FWK_OBJ_NAME(ToGetOperExt40, "ToGetOperExt40");
+        RKH_TR_FWK_OBJ_NAME(CheckIPToCheckIPExt45, "CheckIPToCheckIPExt45");
+        RKH_TR_FWK_OBJ_NAME(GetOperToSetAPNExt46, "GetOperToSetAPNExt46");
+        RKH_TR_FWK_OBJ_NAME(ConnectingToDisconnectingExt50, "ConnectingToDisconnectingExt50");
+        RKH_TR_FWK_OBJ_NAME(ToWaitingServerExt51, "ToWaitingServerExt51");
+        RKH_TR_FWK_OBJ_NAME(WaitingServerToWaitingServerExt52, "WaitingServerToWaitingServerExt52");
+        RKH_TR_FWK_OBJ_NAME(ConnectedToRestartingExt54, "ConnectedToRestartingExt54");
+        RKH_TR_FWK_OBJ_NAME(IdleToGetStatusExt57, "IdleToGetStatusExt57");
+        RKH_TR_FWK_OBJ_NAME(IdleToSendingExt58, "IdleToSendingExt58");
+        RKH_TR_FWK_OBJ_NAME(IdleToReceivingExt59, "IdleToReceivingExt59");
+        RKH_TR_FWK_OBJ_NAME(ReceivingToIdleExt60, "ReceivingToIdleExt60");
+        RKH_TR_FWK_OBJ_NAME(ReceivingToIdleExt61, "ReceivingToIdleExt61");
+        RKH_TR_FWK_OBJ_NAME(GetStatusToIdleExt62, "GetStatusToIdleExt62");
+        RKH_TR_FWK_OBJ_NAME(GetStatusToIdleExt63, "GetStatusToIdleExt63");
+        RKH_TR_FWK_OBJ_NAME(SendingToIdleExt64, "SendingToIdleExt64");
+        RKH_TR_FWK_OBJ_NAME(WaitOkToSendingFinalExt67, "WaitOkToSendingFinalExt67");
+        RKH_TR_FWK_OBJ_NAME(WaitPromptToWaitOkExt68, "WaitPromptToWaitOkExt68");
+        RKH_TR_FWK_OBJ_NAME(ToSocket_WaitGsmReadyExt72, "ToSocket_WaitGsmReadyExt72");
+        RKH_TR_FWK_OBJ_NAME(InactiveToInactiveLoc0, "InactiveToInactiveLoc0");
+        RKH_TR_FWK_OBJ_NAME(InactiveToInactiveLoc1, "InactiveToInactiveLoc1");
+        RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc2, "ActiveToActiveLoc2");
+        RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc3, "ActiveToActiveLoc3");
+        RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc4, "ActiveToActiveLoc4");
+        RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc16, "UnregisteredToUnregisteredLoc16");
+        RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc17, "UnregisteredToUnregisteredLoc17");
+        RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredLoc20, "RegisteredToRegisteredLoc20");
+        RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredLoc21, "RegisteredToRegisteredLoc21");
+        RKH_TR_FWK_OBJ_NAME(GetStatusToGetStatusLoc30, "GetStatusToGetStatusLoc30");
+        RKH_TR_FWK_OBJ_NAME(GetStatusToGetStatusLoc31, "GetStatusToGetStatusLoc31");
+        RKH_TR_FWK_OBJ_NAME(enSync, "enSync");
+        RKH_TR_FWK_OBJ_NAME(enInit, "enInit");
+        RKH_TR_FWK_OBJ_NAME(enPin, "enPin");
+        RKH_TR_FWK_OBJ_NAME(enSetPin, "enSetPin");
+        RKH_TR_FWK_OBJ_NAME(enEnableNetTime, "enEnableNetTime");
+        RKH_TR_FWK_OBJ_NAME(enGetImei, "enGetImei");
+        RKH_TR_FWK_OBJ_NAME(enSetManualGet, "enSetManualGet");
+        RKH_TR_FWK_OBJ_NAME(enCipShutdown, "enCipShutdown");
+        RKH_TR_FWK_OBJ_NAME(enConFailure, "enConFailure");
+        RKH_TR_FWK_OBJ_NAME(enUnregistered, "enUnregistered");
+        RKH_TR_FWK_OBJ_NAME(enRegistered, "enRegistered");
+        RKH_TR_FWK_OBJ_NAME(enSetAPN, "enSetAPN");
+        RKH_TR_FWK_OBJ_NAME(enEnableNetwork, "enEnableNetwork");
+        RKH_TR_FWK_OBJ_NAME(enCheckIP, "enCheckIP");
+        RKH_TR_FWK_OBJ_NAME(enGetOper, "enGetOper");
+        RKH_TR_FWK_OBJ_NAME(enConnected, "enConnected");
+        RKH_TR_FWK_OBJ_NAME(exConFailure, "exConFailure");
+        RKH_TR_FWK_OBJ_NAME(exRegistered, "exRegistered");
+        RKH_TR_FWK_OBJ_NAME(exWaitRetryConnect, "exWaitRetryConnect");
+        RKH_TR_FWK_OBJ_NAME(exConnected, "exConnected");
+        RKH_TR_FWK_OBJ_NAME(exGetStatus, "exGetStatus");
+        RKH_TR_FWK_OBJ_NAME(isCondGetStatusToIdle62, "isCondGetStatusToIdle62");
+        RKH_TR_FWK_OBJ_NAME(isCondC0ToSync10, "isCondC0ToSync10");
+        RKH_TR_FWK_OBJ_NAME(isCondC1ToWaitRetryConfig30, "isCondC1ToWaitRetryConfig30");
+        RKH_TR_FWK_OBJ_NAME(isCondC2ToWaitRetryConnect32, "isCondC2ToWaitRetryConnect32");
 	#endif
 	
 	init(me);
 	me->retryCount = 0;
-	Config_getConnectionDomain(me->itsSocket.domain);
-	Config_getConnectionPort(me->itsSocket.port);
 }
 
 static void 
@@ -938,150 +940,151 @@ RegisteredToRegisteredExt25(GsmMgr *const me, RKH_EVT_T *pe)
 }
 
 static void 
-C1ToSocket_WaitGsmReadyExt30(Socket *const me, RKH_EVT_T *pe)
+C1ToSocket_GsmReadyFinalExt31(Socket *const me, RKH_EVT_T *pe)
 {
-	gsmInError(me);
+    gsmInError(me);
 }
 
 static void 
-ConnectingToDisconnectingExt33(Socket *const me, RKH_EVT_T *pe)
+C2ToSocket_GsmReadyFinalExt33(Socket *const me, RKH_EVT_T *pe)
 {
-	ModCmd_disconnect();
+    gsmInError(me);
 }
 
 static void 
-ConnectingToSocket_WaitGsmReadyExt34(Socket *const me, RKH_EVT_T *pe)
+WaitRetryConfigToConfigureHistExt34(Socket *const me, RKH_EVT_T *pe)
 {
-	gsmInError(me);
+    me->retryCount += 1;
+    ModCmd_init();
 }
 
 static void 
-ToWaitingServerExt35(Socket *const me, RKH_EVT_T *pe)
+WaitRetryConnectToConnectingExt35(Socket *const me, RKH_EVT_T *pe)
+{
+    me->retryCount += 1;
+}
+
+static void 
+ConfigureToSocket_GsmReadyFinalExt38(Socket *const me, RKH_EVT_T *pe)
+{
+    gsmInError(me);
+}
+
+static void 
+ConfigureToConnectingExt39(Socket *const me, RKH_EVT_T *pe)
+{
+    me->retryCount = 0;
+}
+
+static void 
+ToGetOperExt40(Socket *const me, RKH_EVT_T *pe)
+{
+    me->retryCount = 0;
+}
+
+static void 
+CheckIPToCheckIPExt45(Socket *const me, RKH_EVT_T *pe)
+{
+    ModCmd_requestIP();
+}
+
+static void 
+GetOperToSetAPNExt46(Socket *const me, RKH_EVT_T *pe)
+{
+    storeOper(me, pe);
+}
+
+static void 
+ConnectingToDisconnectingExt50(Socket *const me, RKH_EVT_T *pe)
+{
+    ModCmd_disconnect();
+}
+
+static void 
+ToWaitingServerExt51(Socket *const me, RKH_EVT_T *pe)
 {
 	ModCmd_connect(me->protocol, me->domain, me->port);
 }
 
 static void 
-WaitingServerToWaitingServerExt36(Socket *const me, RKH_EVT_T *pe)
+WaitingServerToWaitingServerExt52(Socket *const me, RKH_EVT_T *pe)
 {
 	ModCmd_getConnStatus();
 }
 
 static void 
-ConnectedToRestartingExt38(Socket *const me, RKH_EVT_T *pe)
+ConnectedToRestartingExt54(Socket *const me, RKH_EVT_T *pe)
 {
 	ModCmd_disconnect();
 }
 
 static void 
-IdleToGetStatusExt41(Socket *const me, RKH_EVT_T *pe)
+IdleToGetStatusExt57(Socket *const me, RKH_EVT_T *pe)
 {
 	ModCmd_getConnStatus();
 }
 
 static void 
-IdleToSendingExt42(Socket *const me, RKH_EVT_T *pe)
+IdleToSendingExt58(Socket *const me, RKH_EVT_T *pe)
 {
 	sendRequest(pe);
 }
 
 static void 
-IdleToReceivingExt43(Socket *const me, RKH_EVT_T *pe)
+IdleToReceivingExt59(Socket *const me, RKH_EVT_T *pe)
 {
 	readData();
 }
 
 static void 
-ReceivingToIdleExt44(Socket *const me, RKH_EVT_T *pe)
+ReceivingToIdleExt60(Socket *const me, RKH_EVT_T *pe)
 {
 	recvFail(me);
 }
 
 static void 
-ReceivingToIdleExt45(Socket *const me, RKH_EVT_T *pe)
+ReceivingToIdleExt61(Socket *const me, RKH_EVT_T *pe)
 {
 	recvOk(me, pe);
 }
 
 static void 
-GetStatusToIdleExt46(Socket *const me, RKH_EVT_T *pe)
+GetStatusToIdleExt62(Socket *const me, RKH_EVT_T *pe)
 {
 	me->retryCount += 1;
 	ModCmd_init();
 }
 
 static void 
-GetStatusToIdleExt47(Socket *const me, RKH_EVT_T *pe)
+GetStatusToIdleExt63(Socket *const me, RKH_EVT_T *pe)
 {
 	me->retryCount = 0;
 }
 
 static void 
-SendingToIdleExt48(Socket *const me, RKH_EVT_T *pe)
+SendingToIdleExt64(Socket *const me, RKH_EVT_T *pe)
 {
 	sendFail(me);
 }
 
 static void 
-WaitOkToSendingFinalExt51(Socket *const me, RKH_EVT_T *pe)
+WaitOkToSendingFinalExt67(Socket *const me, RKH_EVT_T *pe)
 {
 	me->retryCount = 0;
 	sendOk(me);
 }
 
 static void 
-WaitPromptToWaitOkExt52(Socket *const me, RKH_EVT_T *pe)
+WaitPromptToWaitOkExt68(Socket *const me, RKH_EVT_T *pe)
 {
 	flushData();
 }
 
 static void 
-WaitRetryConfigToConfigureHistExt55(Socket *const me, RKH_EVT_T *pe)
+ToSocket_WaitGsmReadyExt72(Socket *const me, RKH_EVT_T *pe)
 {
-	me->retryCount += 1;
-	ModCmd_init();
-}
-
-static void 
-ConfigureToSocket_WaitGsmReadyExt57(Socket *const me, RKH_EVT_T *pe)
-{
-	gsmInError(me);
-}
-
-static void 
-ConfigureToConnectingExt58(Socket *const me, RKH_EVT_T *pe)
-{
-	me->retryCount = 0;
-}
-
-static void 
-ToGetOperExt59(Socket *const me, RKH_EVT_T *pe)
-{
-	me->retryCount = 0;
-}
-
-static void 
-CheckIPToCheckIPExt64(Socket *const me, RKH_EVT_T *pe)
-{
-	ModCmd_requestIP();
-}
-
-static void 
-GetOperToSetAPNExt65(Socket *const me, RKH_EVT_T *pe)
-{
-	storeOper(me, pe);
-}
-
-static void 
-C2ToSocket_WaitGsmReadyExt67(Socket *const me, RKH_EVT_T *pe)
-{
-	gsmInError(me);
-}
-
-static void 
-WaitRetryConnectToConnectingExt68(Socket *const me, RKH_EVT_T *pe)
-{
-	me->retryCount += 1;
+    Config_getConnectionDomain(me->domain);
+    Config_getConnectionPort(me->port);
 }
 
 static void 
@@ -1139,13 +1142,13 @@ RegisteredToRegisteredLoc21(GsmMgr *const me, RKH_EVT_T *pe)
 }
 
 static void 
-GetStatusToGetStatusLoc25(GsmMgr *const me, RKH_EVT_T *pe)
+GetStatusToGetStatusLoc30(GsmMgr *const me, RKH_EVT_T *pe)
 {
 	reqDefer(pe);
 }
 
 static void 
-GetStatusToGetStatusLoc26(GsmMgr *const me, RKH_EVT_T *pe)
+GetStatusToGetStatusLoc31(GsmMgr *const me, RKH_EVT_T *pe)
 {
 	reqDefer(pe);
 }
@@ -1229,11 +1232,51 @@ enRegistered(GsmMgr *const me)
 }
 
 static void 
-enWaitingServer(Socket *const me)
+enWaitRetryConfig(Socket *const me)
 {
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj3, evTout3);
 	RKH_TMR_INIT(&me->tmEvtObj3.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj3), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj3.tmr, RKH_UPCAST(RKH_SMA_T, me->itsGsmMgr), WaitTime3);
+}
+
+static void 
+enWaitRetryConnect(Socket *const me)
+{
+    RKH_SET_STATIC_EVENT(&me->tmEvtObj4, evTout4);
+    RKH_TMR_INIT(&me->tmEvtObj4.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj4), NULL);
+    RKH_TMR_ONESHOT(&me->tmEvtObj4.tmr, RKH_UPCAST(RKH_SMA_T, me->itsGsmMgr), WaitTime4);
+}
+
+static void 
+enSetAPN(Socket *const me)
+{
+    setupAPN(me);
+}
+
+static void 
+enEnableNetwork(Socket *const me)
+{
+    ModCmd_startNetwork();
+}
+
+static void 
+enCheckIP(Socket *const me)
+{
+    ModCmd_getIpStatus();
+}
+
+static void 
+enGetOper(Socket *const me)
+{
+    ModCmd_getOper();
+}
+
+static void 
+enWaitingServer(Socket *const me)
+{
+    RKH_SET_STATIC_EVENT(&me->tmEvtObj5, evTout5);
+    RKH_TMR_INIT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj5), NULL);
+    RKH_TMR_ONESHOT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_SMA_T, me->itsGsmMgr), WaitTime5);
 }
 
 static void 
@@ -1245,53 +1288,13 @@ enConnected(Socket *const me)
 static void 
 enIdle(Socket *const me)
 {
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj4, evTout4);
-	RKH_TMR_INIT(&me->tmEvtObj4.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj4), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj4.tmr, RKH_UPCAST(RKH_SMA_T, me->itsGsmMgr), WaitTime4);
+    RKH_SET_STATIC_EVENT(&me->tmEvtObj6, evTout6);
+    RKH_TMR_INIT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj6), NULL);
+    RKH_TMR_ONESHOT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_SMA_T, me->itsGsmMgr), WaitTime6);
 }
 
 static void 
 enWaitReopen(Socket *const me)
-{
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj5, evTout5);
-	RKH_TMR_INIT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj5), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_SMA_T, me->itsGsmMgr), WaitTime5);
-}
-
-static void 
-enWaitRetryConfig(Socket *const me)
-{
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj6, evTout6);
-	RKH_TMR_INIT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj6), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_SMA_T, me->itsGsmMgr), WaitTime6);
-}
-
-static void 
-enSetAPN(Socket *const me)
-{
-	setupAPN(me);
-}
-
-static void 
-enEnableNetwork(Socket *const me)
-{
-	ModCmd_startNetwork();
-}
-
-static void 
-enCheckIP(Socket *const me)
-{
-	ModCmd_getIpStatus();
-}
-
-static void 
-enGetOper(Socket *const me)
-{
-	ModCmd_getOper();
-}
-
-static void 
-enWaitRetryConnect(Socket *const me)
 {
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj7, evTout7);
 	RKH_TMR_INIT(&me->tmEvtObj7.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj7), NULL);
@@ -1321,9 +1324,22 @@ exRegistered(GsmMgr *const me)
 }
 
 static void 
+exWaitRetryConfig(Socket *const me)
+{
+    rkh_tmr_stop(&me->tmEvtObj3.tmr);
+}
+
+static void 
+exWaitRetryConnect(Socket *const me)
+{
+    ModCmd_init();
+    rkh_tmr_stop(&me->tmEvtObj4.tmr);
+}
+
+static void 
 exWaitingServer(Socket *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj3.tmr);
+	rkh_tmr_stop(&me->tmEvtObj5.tmr);
 }
 
 static void 
@@ -1335,7 +1351,7 @@ exConnected(Socket *const me)
 static void 
 exIdle(Socket *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj4.tmr);
+	rkh_tmr_stop(&me->tmEvtObj6.tmr);
 }
 
 static void 
@@ -1347,25 +1363,12 @@ exGetStatus(Socket *const me)
 static void 
 exWaitReopen(Socket *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj5.tmr);
-}
-
-static void 
-exWaitRetryConfig(Socket *const me)
-{
-	rkh_tmr_stop(&me->tmEvtObj6.tmr);
-}
-
-static void 
-exWaitRetryConnect(Socket *const me)
-{
-	ModCmd_init();
 	rkh_tmr_stop(&me->tmEvtObj7.tmr);
 }
 
 /* ................................ Guards ................................. */
 static rbool_t 
-isCondGetStatusToIdle46(Socket *const me, RKH_EVT_T *pe)
+isCondGetStatusToIdle62(Socket *const me, RKH_EVT_T *pe)
 {
 	return ((me->retryCount < 5)) ? true : false;
 }
@@ -1377,15 +1380,15 @@ isCondC0ToSync10(GsmMgr *const me, RKH_EVT_T *pe)
 }
 
 static rbool_t 
-isCondC1ToWaitRetryConnect29(Socket *const me, RKH_EVT_T *pe)
+isCondC1ToWaitRetryConfig30(Socket *const me, RKH_EVT_T *pe)
 {
-	return ((me->retryCount < Config_getMaxNumConnectRetries())) ? true : false;
+	return ((me->retryCount < 5)) ? true : false;
 }
 
 static rbool_t 
-isCondC2ToWaitRetryConfig66(Socket *const me, RKH_EVT_T *pe)
+isCondC2ToWaitRetryConnect32(Socket *const me, RKH_EVT_T *pe)
 {
-	return ((me->retryCount < 5)) ? true : false;
+	return ((me->retryCount < Config_getMaxNumConnectRetries())) ? true : false;
 }
 
 /* ---------------------------- Global functions --------------------------- */
