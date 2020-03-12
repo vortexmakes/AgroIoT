@@ -156,7 +156,7 @@ static const CmdTbl cmdTbl =
 
     /* getConnStatus */
     {RKH_INIT_STATIC_EVT(evCmd),
-     "AT+CIPSTATUS=0;+CSQ\r\n",
+     "AT+CIPSTATUS=0\r\n",
      &gsmMgr,
      RKH_TIME_MS(100), RKH_TIME_MS(100)},
 

@@ -41,7 +41,7 @@ SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_cga,
                      at_plus_cipopen, at_plus_cipclose,
                      at_plus_cipsend, at_plus_cipsending, at_plus_cipsent,
                      at_plus_cpin, at_plus_creg, pinStatus, wpinSet, pinSet,
-                     plus_c, plus_creg, at_plus_cipstatus, at_plus_cifsr,
+                     plus_c, plus_creg, at_plus_cifsr,
                      netClockSync,
                      at_plus_cclk, w_netopen,netOpenError, at_plus_ipaddr,
                      at_plus_cops, cclk_end;
@@ -210,8 +210,8 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_cipsta);
 SSP_CREATE_BR_TABLE(at_plus_cipsta)
-SSPBR("TUS=0;+CSQ\r\n", NULL,  &at_plus_cipstatus),
-SSPBR("\r\n",           NULL,  &rootCmdParser),
+SSPBR("TUS=0\r\n",  NULL,  &at_plus_cipstatus),
+SSPBR("\r\n",       NULL,  &rootCmdParser),
 SSP_END_BR_TABLE
 
 /* --------------------------------------------------------------- */

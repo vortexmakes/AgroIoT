@@ -72,7 +72,6 @@ static void GetStatusToIdleExt62(Socket *const me, RKH_EVT_T *pe);
 static void GetStatusToIdleExt63(Socket *const me, RKH_EVT_T *pe);
 static void SendingToIdleExt64(Socket *const me, RKH_EVT_T *pe);
 static void WaitOkToSendingFinalExt67(Socket *const me, RKH_EVT_T *pe);
-static void WaitPromptToWaitOkExt68(Socket *const me, RKH_EVT_T *pe);
 static void ToSocket_WaitGsmReadyExt72(Socket *const me, RKH_EVT_T *pe);
 static void ActiveToActiveLoc0(GsmMgr *const me, RKH_EVT_T *pe);
 static void UnregisteredToUnregisteredLoc12(GsmMgr *const me, RKH_EVT_T *pe);
@@ -343,7 +342,7 @@ RKH_CREATE_TRANS_TABLE(GsmMgr_WaitOk)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_WaitPrompt)
-    RKH_TRREG(evOk, NULL, WaitPromptToWaitOkExt68, &GsmMgr_WaitOk),
+    RKH_TRREG(evOk, NULL, NULL, &GsmMgr_WaitOk),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Restarting)
@@ -600,11 +599,12 @@ startRegStatusTimer(GsmMgr *const me)
 }
 
 static void
-sendRequest(RKH_EVT_T *pe)
+sendData(RKH_EVT_T *pe)
 {
     GsmMgrInt.psend = RKH_UPCAST(SendEvt, pe);
 
     ModCmd_sendDataRequest((rui16_t)(GsmMgrInt.psend->size));
+    ModCmd_sendData(GsmMgrInt.psend->buf, GsmMgrInt.psend->size);
 }
 
 static void
@@ -619,12 +619,6 @@ sendFail(Socket *const me)
     topic_publish(TCPConnection, &e_SendFail, RKH_UPCAST(RKH_SMA_T, me));
 
     ModCmd_init();
-}
-
-static void
-flushData(void)
-{
-    ModCmd_sendData(GsmMgrInt.psend->buf, GsmMgrInt.psend->size);
 }
 
 static void
@@ -849,7 +843,6 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
         RKH_TR_FWK_OBJ_NAME(GetStatusToIdleExt63, "GetStatusToIdleExt63");
         RKH_TR_FWK_OBJ_NAME(SendingToIdleExt64, "SendingToIdleExt64");
         RKH_TR_FWK_OBJ_NAME(WaitOkToSendingFinalExt67, "WaitOkToSendingFinalExt67");
-        RKH_TR_FWK_OBJ_NAME(WaitPromptToWaitOkExt68, "WaitPromptToWaitOkExt68");
         RKH_TR_FWK_OBJ_NAME(ToSocket_WaitGsmReadyExt72, "ToSocket_WaitGsmReadyExt72");
         RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc0, "ActiveToActiveLoc0");
         RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc12, "UnregisteredToUnregisteredLoc12");
@@ -1020,7 +1013,7 @@ IdleToGetStatusExt57(Socket *const me, RKH_EVT_T *pe)
 static void 
 IdleToSendingExt58(Socket *const me, RKH_EVT_T *pe)
 {
-	sendRequest(pe);
+	sendData(pe);
 }
 
 static void 
@@ -1065,12 +1058,6 @@ WaitOkToSendingFinalExt67(Socket *const me, RKH_EVT_T *pe)
 {
 	me->retryCount = 0;
 	sendOk(me);
-}
-
-static void 
-WaitPromptToWaitOkExt68(Socket *const me, RKH_EVT_T *pe)
-{
-	flushData();
 }
 
 static void 
