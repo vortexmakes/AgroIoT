@@ -49,7 +49,7 @@ struct CmdTbl
     ModCmd getConnStatus;
     ModCmd connect;
     ModCmd disconnect;
-    ModCmd sendDataRequest;
+//    ModCmd sendDataRequest;
     ModCmd sendData;
     ModCmd readData;
 };
@@ -172,6 +172,7 @@ static const CmdTbl cmdTbl =
      &gsmMgr,
      RKH_TIME_MS(1000), RKH_TIME_MS(100)},
 
+#if 0
     /* sendDataRequest */
     {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CIPSEND=0,%d\r\n",
@@ -186,6 +187,18 @@ static const CmdTbl cmdTbl =
      RKH_TIME_MS(10000), RKH_TIME_MS(500)},
 #else
      RKH_TIME_MS(20000), RKH_TIME_MS(500)},
+#endif
+#else
+    /* sendData */
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CIPSEND=0,%d\r\n",
+     &gsmMgr,
+#ifdef GPRS_QUICK_SEND
+     RKH_TIME_MS(10000), RKH_TIME_MS(500)},
+#else
+     RKH_TIME_MS(20000), RKH_TIME_MS(500)},
+#endif
+
 #endif
 
     /* readData */
@@ -383,6 +396,7 @@ ModCmd_disconnect(void)
     sendModCmd_noArgs(&cmdTbl.disconnect);
 }
 
+#if 0
 void
 ModCmd_sendDataRequest(rui16_t len)
 {
@@ -404,7 +418,24 @@ ModCmd_sendData(unsigned char *buf, ruint size)
 
     postFIFOEvtCmd(evtCmd, p, buf, size);
 }
+#else
+void
+ModCmd_sendData(unsigned char *buf, ruint size)
+{
+    ModMgrEvt *evtCmd;
+    const ModCmd *p;
 
+    p = &cmdTbl.sendData;
+
+    evtCmd = RKH_ALLOC_EVT(ModMgrEvt, evCmd, *p->aoDest);
+
+    snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, &cmdTbl.sendData, size);
+    evtCmd->data = buf;
+    evtCmd->nData = size;
+
+    postFIFOEvtCmd(evtCmd, p, buf, size);
+}
+#endif
 void
 ModCmd_readData(void)
 {

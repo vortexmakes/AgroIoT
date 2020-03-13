@@ -70,6 +70,8 @@ char *pcsq;
 char csqBuf[CSQ_LENGTH];
 static SigLevelEvt sigLevelEvt;
 
+static RKH_ROM_STATIC_EVENT(e_DataModeReady, evDataModeReady);
+
 /* ----------------------- Local function prototypes ----------------------- */
 static void cmd_ok(unsigned char pos);
 static void cmd_error(unsigned char pos);
@@ -89,6 +91,7 @@ static void connecting(unsigned char pos);
 static void closed(unsigned char pos);
 static void connected(unsigned char pos);
 static void disconnected(unsigned char pos);
+static void dataModeReady(unsigned char pos);
 static void data_init(unsigned char pos);
 static void data_collect(unsigned char c);
 static void data_ready(unsigned char pos);
@@ -388,7 +391,7 @@ SSPBR("ERROR",  cmd_error, &rootCmdParser),
 #ifdef _SEND_WITH_TERMINATOR
 SSPBR(">", cmd_ok,  &at_plus_cipsending),
 #else
-SSPBR(">", cmd_ok,  &at_plus_cipsent),
+SSPBR(">", dataModeReady,  &at_plus_cipsent),
 #endif
 SSP_END_BR_TABLE
 
@@ -635,7 +638,14 @@ disconnected(unsigned char pos)
     sendModResp_noArgs(evDisconnected);
 }
 
-void
+static void
+dataModeReady(unsigned char pos)
+{
+    (void)pos;
+
+    RKH_SMA_POST_FIFO(modMgr, &e_DataModeReady,  &sim5320parser);
+}
+
 data_init(unsigned char c)
 {
     (void)c;

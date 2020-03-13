@@ -75,7 +75,8 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ModMgr_idle, NULL, NULL, &ModMgr_active, NULL);
 RKH_CREATE_TRANS_TABLE(ModMgr_idle)
-RKH_TRREG(evCmd, NULL, NULL, &ModMgr_chkDataCmd),
+//RKH_TRREG(evCmd, NULL, NULL, &ModMgr_chkDataCmd),
+RKH_TRREG(evCmd, NULL, sendCmd, &ModMgr_inProgress),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_COND_STATE(ModMgr_chkDataCmd);
@@ -87,6 +88,7 @@ RKH_END_BRANCH_TABLE
 RKH_CREATE_BASIC_STATE(ModMgr_inProgress, setupResponse, NULL,
                        &ModMgr_active, NULL);
 RKH_CREATE_TRANS_TABLE(ModMgr_inProgress)
+RKH_TRREG(evDataModeReady, NULL, sendData,     &ModMgr_chkInterCmdDelay),
 RKH_TRREG(evResponse, NULL, sendResponse, &ModMgr_chkInterCmdDelay),
 RKH_TRREG(evToutWaitResponse, NULL, noResponse, &ModMgr_idle),
 RKH_END_TRANS_TABLE
@@ -203,8 +205,8 @@ sendCmd(ModMgr *const me, RKH_EVT_T *pe)
 static void
 sendData(ModMgr *const me, RKH_EVT_T *pe)
 {
-    RKH_FWK_RSV(pe);
-    me->pCmd = RKH_UPCAST(ModMgrEvt, pe);
+/*    RKH_FWK_RSV(pe);
+    me->pCmd = RKH_UPCAST(ModMgrEvt, pe);*/
 
     bsp_serial_putnchar(GSM_PORT, me->pCmd->data, me->pCmd->nData);
 #ifdef _SEND_WITH_TERMINATOR

@@ -100,7 +100,8 @@ enum Signals
 	evTout7,
 	evTout8,
     evGsmError,
-	evGsmReady
+	evGsmReady,
+	evDataModeReady
 };
 
 /* ------------------------------- Data types ------------------------------ */

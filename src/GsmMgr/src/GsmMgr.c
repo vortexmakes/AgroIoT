@@ -166,7 +166,7 @@ RKH_CREATE_HISTORY_STORAGE(GsmMgr_Configure);
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Configure, NULL, NULL, &GsmMgr_Socket_GsmReady, &GsmMgr_GetOper, ToGetOperExt40, RKH_SHISTORY, NULL, NULL, NULL, RKH_GET_HISTORY_STORAGE(GsmMgr_Configure));
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Connecting, NULL, NULL, &GsmMgr_Socket_GsmReady, &GsmMgr_WaitingServer, ToWaitingServerExt51, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Connected, enConnected, exConnected, &GsmMgr_Connecting, &GsmMgr_Idle, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_COMP_REGION_STATE(GsmMgr_Sending, NULL, NULL, &GsmMgr_Connected, &GsmMgr_WaitPrompt, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(GsmMgr_Sending, NULL, NULL, &GsmMgr_Connected, &GsmMgr_WaitOk,/*&GsmMgr_WaitPrompt,*/ NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Inactive)
 	RKH_TRREG(evOpen, NULL, InactiveToActiveExt1, &GsmMgr_Active),
@@ -603,7 +603,7 @@ sendData(RKH_EVT_T *pe)
 {
     GsmMgrInt.psend = RKH_UPCAST(SendEvt, pe);
 
-    ModCmd_sendDataRequest((rui16_t)(GsmMgrInt.psend->size));
+//    ModCmd_sendDataRequest((rui16_t)(GsmMgrInt.psend->size));
     ModCmd_sendData(GsmMgrInt.psend->buf, GsmMgrInt.psend->size);
 }
 
