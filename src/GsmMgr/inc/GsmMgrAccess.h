@@ -22,7 +22,7 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "Config.h"
-#include "ConMgr.h"
+#include "GsmMgr.h"
 #include "ModMgr.h"
 #include "modcmd.h"
 #include "rtime.h"

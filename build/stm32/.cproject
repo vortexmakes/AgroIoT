@@ -91,7 +91,6 @@
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/CommMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/UsbMgr"/>
-									<listOptionValue builtIn="false" value="../../../src/ConMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
@@ -163,7 +162,6 @@
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/CommMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/UsbMgr"/>
-									<listOptionValue builtIn="false" value="../../../src/ConMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -232,7 +230,6 @@
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/CommMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/UsbMgr"/>
-									<listOptionValue builtIn="false" value="../../../src/ConMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.819050743" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
@@ -345,7 +342,6 @@
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/CommMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/UsbMgr"/>
-									<listOptionValue builtIn="false" value="../../../src/ConMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
@@ -417,7 +413,6 @@
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/CommMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/UsbMgr"/>
-									<listOptionValue builtIn="false" value="../../../src/ConMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>

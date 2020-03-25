@@ -31,7 +31,6 @@
 #include "modcmd.h"
 #include "tplhal.h"
 #include "tplfsm.h"
-#include "conmgr.h"
 #include "mTime.h"
 #include "epoch.h"
 #include "genled.h"

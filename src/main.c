@@ -23,7 +23,6 @@
 #include "bsp.h"
 #include "signals.h"
 #include "CommMgr.h"
-//#include "conmgr.h"
 #include "GsmMgr.h"
 #include "modmgr.h"
 #include "geoMgr.h"

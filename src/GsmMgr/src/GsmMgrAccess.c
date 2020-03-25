@@ -16,8 +16,8 @@
 #include <string.h>
 
 #include "rkh.h"
-#include "ConMgr.h"
-#include "ConMgrAccess.h"
+#include "GsmMgr.h"
+#include "GsMMgrAccess.h"
 #include "bsp.h"
 #include "ModCmd.h"
 #include "modpwr.h"
