@@ -35,7 +35,7 @@ typedef struct ModMgr ModMgr;
 RKH_DCLR_BASIC_STATE ModMgr_inactive, ModMgr_idle, ModMgr_inProgress,
                      ModMgr_waitInterCmdDelay;
 RKH_DCLR_COMP_STATE ModMgr_active;
-RKH_DCLR_COND_STATE ModMgr_chkInterCmdDelay, ModMgr_chkDataCmd;
+RKH_DCLR_COND_STATE ModMgr_chkInterCmdDelay;
 
 /* ........................ Declares initial action ........................ */
 static void initialization(ModMgr *const me, RKH_EVT_T *pe);
@@ -56,7 +56,6 @@ static void setupResponse(ModMgr *const me);
 /* ......................... Declares exit actions ......................... */
 /* ............................ Declares guards ............................ */
 rbool_t isInterCmdTime(ModMgr *const me, RKH_EVT_T *pe);
-rbool_t isDataCmd(ModMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(ModMgr_inactive, NULL, NULL, RKH_ROOT, NULL);
@@ -75,20 +74,13 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(ModMgr_idle, NULL, NULL, &ModMgr_active, NULL);
 RKH_CREATE_TRANS_TABLE(ModMgr_idle)
-//RKH_TRREG(evCmd, NULL, NULL, &ModMgr_chkDataCmd),
 RKH_TRREG(evCmd, NULL, sendCmd, &ModMgr_inProgress),
 RKH_END_TRANS_TABLE
-
-RKH_CREATE_COND_STATE(ModMgr_chkDataCmd);
-RKH_CREATE_BRANCH_TABLE(ModMgr_chkDataCmd)
-RKH_BRANCH(isDataCmd,   sendData,  &ModMgr_inProgress),
-RKH_BRANCH(ELSE,        sendCmd,   &ModMgr_inProgress),
-RKH_END_BRANCH_TABLE
 
 RKH_CREATE_BASIC_STATE(ModMgr_inProgress, setupResponse, NULL,
                        &ModMgr_active, NULL);
 RKH_CREATE_TRANS_TABLE(ModMgr_inProgress)
-RKH_TRREG(evDataModeReady, NULL, sendData,     &ModMgr_chkInterCmdDelay),
+RKH_TRINT(evDataModeReady, NULL, sendData),
 RKH_TRREG(evResponse, NULL, sendResponse, &ModMgr_chkInterCmdDelay),
 RKH_TRREG(evToutWaitResponse, NULL, noResponse, &ModMgr_idle),
 RKH_END_TRANS_TABLE
@@ -205,9 +197,6 @@ sendCmd(ModMgr *const me, RKH_EVT_T *pe)
 static void
 sendData(ModMgr *const me, RKH_EVT_T *pe)
 {
-/*    RKH_FWK_RSV(pe);
-    me->pCmd = RKH_UPCAST(ModMgrEvt, pe);*/
-
     bsp_serial_putnchar(GSM_PORT, me->pCmd->data, me->pCmd->nData);
 #ifdef _SEND_WITH_TERMINATOR
     bsp_serial_puts(GSM_PORT, ModCmd_endOfXmitStr());
@@ -272,14 +261,6 @@ isInterCmdTime(ModMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 
     return (me->pCmd->args.interCmdTime != 0) ? RKH_TRUE : RKH_FALSE;
-}
-
-rbool_t
-isDataCmd(ModMgr *const me, RKH_EVT_T *pe)
-{
-    (void)me;
-
-    return (RKH_UPCAST(ModMgrEvt, pe)->data != NULL) ? RKH_TRUE : RKH_FALSE;
 }
 
 /* ---------------------------- Global functions --------------------------- */

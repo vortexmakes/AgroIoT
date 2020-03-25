@@ -36,10 +36,10 @@ typedef struct Socket Socket;
 typedef struct SMS SMS;
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE GsmMgr_Inactive, GsmMgr_Sync, GsmMgr_Init, GsmMgr_Pin, GsmMgr_SetPin, GsmMgr_EnableNetTime, GsmMgr_GetImei, GsmMgr_SetManualGet, GsmMgr_CipShutdown, GsmMgr_ConFailure, GsmMgr_Unregistered, GsmMgr_Registered, GsmMgr_WaitingClose, GsmMgr_WaitRetryConfig, GsmMgr_WaitRetryConnect, GsmMgr_SetAPN, GsmMgr_EnableNetwork, GsmMgr_CheckIP, GsmMgr_GetOper, GsmMgr_Disconnecting, GsmMgr_WaitingServer, GsmMgr_Idle, GsmMgr_Receiving, GsmMgr_GetStatus, GsmMgr_WaitOk, GsmMgr_WaitPrompt, GsmMgr_Restarting, GsmMgr_WaitReopen, GsmMgr_Socket_WaitGsmReady, GsmMgr_SMSReady, GsmMgr_SMS_WaitGsmReady;
-RKH_DCLR_COMP_STATE GsmMgr_Active, GsmMgr_Initialize, GsmMgr_Socket_GsmReady, GsmMgr_Configure, GsmMgr_Connecting, GsmMgr_Connected, GsmMgr_Sending; //GsmMgr_Socket, GsmMgr_SMS;
+RKH_DCLR_BASIC_STATE GsmMgr_Inactive, GsmMgr_Sync, GsmMgr_Init, GsmMgr_Pin, GsmMgr_SetPin, GsmMgr_EnableNetTime, GsmMgr_GetImei, GsmMgr_SetManualGet, GsmMgr_CipShutdown, GsmMgr_ConFailure, GsmMgr_Unregistered, GsmMgr_Registered, GsmMgr_WaitingClose, GsmMgr_WaitRetryConfig, GsmMgr_WaitRetryConnect, GsmMgr_SetAPN, GsmMgr_EnableNetwork, GsmMgr_CheckIP, GsmMgr_GetOper, GsmMgr_Disconnecting, GsmMgr_WaitingServer, GsmMgr_Idle, GsmMgr_Receiving, GsmMgr_GetStatus, GsmMgr_Sending, GsmMgr_Restarting, GsmMgr_WaitReopen, GsmMgr_Socket_WaitGsmReady, GsmMgr_SMSReady, GsmMgr_SMS_WaitGsmReady;
+RKH_DCLR_COMP_STATE GsmMgr_Active, GsmMgr_Initialize, GsmMgr_Socket_GsmReady, GsmMgr_Configure, GsmMgr_Connecting, GsmMgr_Connected;
 RKH_DCLR_CHOICE_STATE GsmMgr_C0, GsmMgr_C1, GsmMgr_C2;
-RKH_DCLR_FINAL_STATE GsmMgr_InitializeFinal, GsmMgr_ActiveFinal, GsmMgr_ConfigureFinal, GsmMgr_SendingFinal, GsmMgr_Socket_GsmReadyFinal;
+RKH_DCLR_FINAL_STATE GsmMgr_InitializeFinal, GsmMgr_ActiveFinal, GsmMgr_ConfigureFinal, GsmMgr_Socket_GsmReadyFinal;
 RKH_DCLR_SHIST_STATE GsmMgr_ConfigureHist;
 
 /* ........................ Declares effect actions ........................ */
@@ -71,8 +71,8 @@ static void ReceivingToIdleExt61(Socket *const me, RKH_EVT_T *pe);
 static void GetStatusToIdleExt62(Socket *const me, RKH_EVT_T *pe);
 static void GetStatusToIdleExt63(Socket *const me, RKH_EVT_T *pe);
 static void SendingToIdleExt64(Socket *const me, RKH_EVT_T *pe);
-static void WaitOkToSendingFinalExt67(Socket *const me, RKH_EVT_T *pe);
-static void ToSocket_WaitGsmReadyExt72(Socket *const me, RKH_EVT_T *pe);
+static void SendingToIdleExt65(Socket *const me, RKH_EVT_T *pe);
+static void ToSocket_WaitGsmReadyExt69(Socket *const me, RKH_EVT_T *pe);
 static void ActiveToActiveLoc0(GsmMgr *const me, RKH_EVT_T *pe);
 static void UnregisteredToUnregisteredLoc12(GsmMgr *const me, RKH_EVT_T *pe);
 static void UnregisteredToUnregisteredLoc13(GsmMgr *const me, RKH_EVT_T *pe);
@@ -151,8 +151,7 @@ RKH_CREATE_BASIC_STATE(GsmMgr_WaitingServer, enWaitingServer, exWaitingServer, &
 RKH_CREATE_BASIC_STATE(GsmMgr_Idle, enIdle, exIdle, &GsmMgr_Connected, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_Receiving, NULL, NULL, &GsmMgr_Connected, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_GetStatus, NULL, exGetStatus, &GsmMgr_Connected, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_WaitOk, NULL, NULL, &GsmMgr_Sending, NULL);
-RKH_CREATE_BASIC_STATE(GsmMgr_WaitPrompt, NULL, NULL, &GsmMgr_Sending, NULL);
+RKH_CREATE_BASIC_STATE(GsmMgr_Sending, NULL, NULL, &GsmMgr_Connected, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_Restarting, NULL, NULL, &GsmMgr_Connecting, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_WaitReopen, enWaitReopen, exWaitReopen, &GsmMgr_Connecting, NULL);
 RKH_CREATE_BASIC_STATE(GsmMgr_Socket_WaitGsmReady, NULL, NULL, RKH_ROOT, NULL);
@@ -166,7 +165,6 @@ RKH_CREATE_HISTORY_STORAGE(GsmMgr_Configure);
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Configure, NULL, NULL, &GsmMgr_Socket_GsmReady, &GsmMgr_GetOper, ToGetOperExt40, RKH_SHISTORY, NULL, NULL, NULL, RKH_GET_HISTORY_STORAGE(GsmMgr_Configure));
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Connecting, NULL, NULL, &GsmMgr_Socket_GsmReady, &GsmMgr_WaitingServer, ToWaitingServerExt51, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(GsmMgr_Connected, enConnected, exConnected, &GsmMgr_Connecting, &GsmMgr_Idle, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_COMP_REGION_STATE(GsmMgr_Sending, NULL, NULL, &GsmMgr_Connected, &GsmMgr_WaitOk,/*&GsmMgr_WaitPrompt,*/ NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Inactive)
 	RKH_TRREG(evOpen, NULL, InactiveToActiveExt1, &GsmMgr_Active),
@@ -332,17 +330,9 @@ RKH_CREATE_TRANS_TABLE(GsmMgr_GetStatus)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Sending)
-    RKH_TRREG(evNoResponse, NULL, SendingToIdleExt64, &GsmMgr_Idle),
-    RKH_TRREG(evError, NULL, SendingToIdleExt64, &GsmMgr_Idle),
-    RKH_TRCOMPLETION(NULL, NULL, &GsmMgr_Idle),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_WaitOk)
-    RKH_TRREG(evOk, NULL, WaitOkToSendingFinalExt67, &GsmMgr_SendingFinal),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(GsmMgr_WaitPrompt)
-    RKH_TRREG(evOk, NULL, NULL, &GsmMgr_WaitOk),
+    RKH_TRREG(evOk, NULL, SendingToIdleExt64, &GsmMgr_Idle),
+    RKH_TRREG(evNoResponse, NULL, SendingToIdleExt65, &GsmMgr_Idle),
+    RKH_TRREG(evError, NULL, SendingToIdleExt65, &GsmMgr_Idle),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Restarting)
@@ -428,7 +418,7 @@ struct GsmMgr
 RKH_SMA_CREATE(GsmMgr, gsmMgr, 1, HCAL, &GsmMgr_Inactive, ToInactiveExt0, NULL);
 RKH_SMA_DEF_PTR(gsmMgr);
 
-RKH_SM_CONST_CREATE(socket, 2, HCAL, &GsmMgr_Socket_WaitGsmReady, ToSocket_WaitGsmReadyExt72, NULL);
+RKH_SM_CONST_CREATE(socket, 2, HCAL, &GsmMgr_Socket_WaitGsmReady, ToSocket_WaitGsmReadyExt69, NULL);
 RKH_SM_CONST_CREATE(sms, 3, HCAL, &GsmMgr_SMS_WaitGsmReady, NULL, NULL);
 
 /* ------------------------------- Constants ------------------------------- */
@@ -749,8 +739,6 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &GsmMgr_Receiving);
 	RKH_TR_FWK_STATE(me, &GsmMgr_GetStatus);
 	RKH_TR_FWK_STATE(me, &GsmMgr_Sending);
-	RKH_TR_FWK_STATE(me, &GsmMgr_WaitOk);
-	RKH_TR_FWK_STATE(me, &GsmMgr_WaitPrompt);
 	RKH_TR_FWK_STATE(me, &GsmMgr_Restarting);
 	RKH_TR_FWK_STATE(me, &GsmMgr_WaitReopen);
 	RKH_TR_FWK_STATE(me, &GsmMgr_Socket_WaitGsmReady);
@@ -763,7 +751,6 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &GsmMgr_InitializeFinal);
 	RKH_TR_FWK_STATE(me, &GsmMgr_ActiveFinal);
 	RKH_TR_FWK_STATE(me, &GsmMgr_ConfigureFinal);
-	RKH_TR_FWK_STATE(me, &GsmMgr_SendingFinal);
     RKH_TR_FWK_STATE(me, &GsmMgr_Socket_GsmReadyFinal);
 	RKH_TR_FWK_SIG(evOpen);
 	RKH_TR_FWK_SIG(evClose);
@@ -842,8 +829,8 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
         RKH_TR_FWK_OBJ_NAME(GetStatusToIdleExt62, "GetStatusToIdleExt62");
         RKH_TR_FWK_OBJ_NAME(GetStatusToIdleExt63, "GetStatusToIdleExt63");
         RKH_TR_FWK_OBJ_NAME(SendingToIdleExt64, "SendingToIdleExt64");
-        RKH_TR_FWK_OBJ_NAME(WaitOkToSendingFinalExt67, "WaitOkToSendingFinalExt67");
-        RKH_TR_FWK_OBJ_NAME(ToSocket_WaitGsmReadyExt72, "ToSocket_WaitGsmReadyExt72");
+        RKH_TR_FWK_OBJ_NAME(SendingToIdleExt65, "SendingToIdleExt65");
+        RKH_TR_FWK_OBJ_NAME(ToSocket_WaitGsmReadyExt69, "ToSocket_WaitGsmReadyExt69");
         RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc0, "ActiveToActiveLoc0");
         RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc12, "UnregisteredToUnregisteredLoc12");
         RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc13, "UnregisteredToUnregisteredLoc13");
@@ -1050,18 +1037,18 @@ GetStatusToIdleExt63(Socket *const me, RKH_EVT_T *pe)
 static void 
 SendingToIdleExt64(Socket *const me, RKH_EVT_T *pe)
 {
-	sendFail(me);
-}
-
-static void 
-WaitOkToSendingFinalExt67(Socket *const me, RKH_EVT_T *pe)
-{
 	me->retryCount = 0;
 	sendOk(me);
 }
 
 static void 
-ToSocket_WaitGsmReadyExt72(Socket *const me, RKH_EVT_T *pe)
+SendingToIdleExt65(Socket *const me, RKH_EVT_T *pe)
+{
+	sendFail(me);
+}
+
+static void 
+ToSocket_WaitGsmReadyExt69(Socket *const me, RKH_EVT_T *pe)
 {
     Config_getConnectionDomain(me->domain);
     Config_getConnectionPort(me->port);
