@@ -26,7 +26,7 @@
 #include "bsp.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define SIZEOF_QDEFER   4
+#define SIZEOF_QDEFER   10
 /* ......................... Declares ModMgr_active object
  * ........................ */
 typedef struct ModMgr ModMgr;
