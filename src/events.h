@@ -56,6 +56,13 @@ extern "C" {
 #define OPER_BUF_SIZE       OPER_LENGTH + 1
 
 /**
+ *  Oper process definitions
+ */
+#define SMS_MESSAGE_SIZE    160
+#define SMS_BUF_SIZE        SMS_MESSAGE_SIZE + 3 // includes \r\n
+#define SMS_FROM_BUF_SIZE   20
+
+/**
  * Specifies max modCmd length
  */
 #define MODMGR_MAX_SIZEOF_CMDSTR    70
@@ -131,6 +138,16 @@ struct SigLevelEvt
 {
     ModMgrResp e;
     int value;
+};
+
+typedef struct SMSEvt SMSEvt;
+struct SMSEvt
+{
+    ModMgrResp e;
+    int index;
+    char from[SMS_FROM_BUF_SIZE];
+    int size;
+    char data[SMS_BUF_SIZE];
 };
 
 typedef struct RmcEvt RmcEvt;

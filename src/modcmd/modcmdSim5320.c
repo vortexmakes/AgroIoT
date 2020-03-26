@@ -51,6 +51,8 @@ struct CmdTbl
     ModCmd disconnect;
     ModCmd sendData;
     ModCmd readData;
+    ModCmd checkSMS;
+    ModCmd deleteSMS;
 };
 
 /* ---------------------------- Global variables --------------------------- */
@@ -67,7 +69,7 @@ static const CmdTbl cmdTbl =
 
     /* initStr */
     {RKH_INIT_STATIC_EVT(evCmd),
-     "ATE1+CREG=1;V1;Q0;+STK=0;+IFC=0,0;+CIPSRIP=0;+CIPHEAD=0\r\n",
+     "ATE1+CREG=1;V1;Q0;+STK=0;+IFC=0,0;+CMGF=1;+CIPSRIP=0;+CIPHEAD=0\r\n",
      &gsmMgr,
      RKH_TIME_MS(5000), RKH_TIME_MS(5000)},
 
@@ -184,6 +186,18 @@ static const CmdTbl cmdTbl =
     /* readData */
     {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CIPRXGET=2,0,1024\r\n",
+     &gsmMgr,
+     RKH_TIME_MS(3000), RKH_TIME_MS(500)},
+
+    /* checkSMS */
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CMGL=\"ALL\"\r\n",
+     &gsmMgr,
+     RKH_TIME_MS(3000), RKH_TIME_MS(500)},
+
+    /* deleteSMS */
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CMGD=%d\r\n",
      &gsmMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(500)},
 };
@@ -403,4 +417,15 @@ ModCmd_endOfXmitStr(void)
     return (char *)cmdTbl.sendData.fmt;
 }
 
+void
+ModCmd_checkSMS(void)
+{
+    sendModCmd_noArgs(&cmdTbl.checkSMS);
+}
+
+void
+ModCmd_deleteSMS(unsigned char index)
+{
+    sendModCmd_rui16(&cmdTbl.deleteSMS, index);
+}
 /* ------------------------------ End of file ------------------------------ */
