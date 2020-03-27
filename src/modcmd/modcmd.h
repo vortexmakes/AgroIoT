@@ -60,6 +60,8 @@ void ModCmd_readData(void);
 char *ModCmd_endOfXmitStr(void);
 void ModCmd_checkSMS(void);
 void ModCmd_deleteSMS(unsigned char index);
+void ModCmd_sendSMS(char *dest, char *text, ruint size);
+
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

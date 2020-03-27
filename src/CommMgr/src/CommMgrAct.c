@@ -317,6 +317,22 @@ CommMgr_enWaitSync(CommMgr *const me)
                     RKH_TIME_SEC(Config_getConnTime()));
 }
 
+static SendSMSEvt SMSEvtobj;
+static smsCount;
+
+#include <string.h>
+void
+sendTestSMS(GStatus *p, RKH_SMA_T *ao)
+{
+    RKH_SET_STATIC_EVENT(&SMSEvtobj, evSendSMS);
+    strcpy(SMSEvtobj.dest, "2235493862");
+    sprintf(SMSEvtobj.buf, "Count: %d", smsCount);
+    SMSEvtobj.size = strlen(SMSEvtobj.buf);
+
+    topic_publish(TCPConnection,
+                  RKH_UPCAST(RKH_EVT_T, &SMSEvtobj), ao);
+}
+
 void
 CommMgr_enSendingStatus(CommMgr *const me)
 {
@@ -330,6 +346,8 @@ CommMgr_enSendingStatus(CommMgr *const me)
                   RKH_UPCAST(RKH_EVT_T, &me->evSendObj),
                   RKH_UPCAST(RKH_SMA_T, me));
     me->isPendingStatus = false;
+    
+    sendTestSMS(&me->status, (RKH_SMA_T *)me);
 }
 
 void

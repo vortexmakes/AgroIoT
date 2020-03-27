@@ -53,6 +53,7 @@ struct CmdTbl
     ModCmd readData;
     ModCmd checkSMS;
     ModCmd deleteSMS;
+    ModCmd sendSMS;
 };
 
 /* ---------------------------- Global variables --------------------------- */
@@ -198,6 +199,12 @@ static const CmdTbl cmdTbl =
     /* deleteSMS */
     {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CMGD=%d\r\n",
+     &gsmMgr,
+     RKH_TIME_MS(3000), RKH_TIME_MS(500)},
+
+    /* sendSMS */
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CMGS=\"%s\"\r",
      &gsmMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(500)},
 };
@@ -428,4 +435,27 @@ ModCmd_deleteSMS(unsigned char index)
 {
     sendModCmd_rui16(&cmdTbl.deleteSMS, index);
 }
+
+void
+ModCmd_sendSMS(char *dest, char *text, ruint size)
+{
+    ModMgrEvt *evtCmd;
+    const ModCmd *p;
+
+    if(size > SMS_MESSAGE_SIZE)
+        size = SMS_MESSAGE_SIZE + 1;
+
+    *(text + size) = 0x1B; // ESC char for end of Message
+
+    p = &cmdTbl.sendSMS;
+
+    evtCmd = RKH_ALLOC_EVT(ModMgrEvt, evCmd, *p->aoDest);
+
+    snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, p->fmt, dest);
+    evtCmd->data = text;
+    evtCmd->nData = size + 1;
+
+    postFIFOEvtCmd(evtCmd, p, text, size + 1);
+}
+
 /* ------------------------------ End of file ------------------------------ */

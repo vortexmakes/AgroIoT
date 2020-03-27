@@ -61,6 +61,7 @@ extern "C" {
 #define SMS_MESSAGE_SIZE    160
 #define SMS_BUF_SIZE        SMS_MESSAGE_SIZE + 3 // includes \r\n
 #define SMS_FROM_BUF_SIZE   20
+#define SMS_DEST_BUF_SIZE   20
 
 /**
  * Specifies max modCmd length
@@ -100,6 +101,15 @@ struct SendEvt
 {
     RKH_EVT_T evt;
     unsigned char buf[SEND_BUFF_SIZE];
+    ruint size;
+};
+
+typedef struct SendSMSEvt SendSMSEvt;
+struct SendSMSEvt
+{
+    RKH_EVT_T evt;
+    unsigned char dest[SMS_DEST_BUF_SIZE];
+    unsigned char buf[SMS_BUF_SIZE];
     ruint size;
 };
 

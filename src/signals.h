@@ -104,6 +104,9 @@ enum Signals
 	evDataModeReady,
     evNoSMS,
     evNewSMS,
+    evSendSMS,
+    evSendSMSOk,
+    evSendSMSFail,
     evDoneSMS
 };
 
