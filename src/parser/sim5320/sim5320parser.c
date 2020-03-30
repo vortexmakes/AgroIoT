@@ -496,7 +496,7 @@ SSP_CREATE_NORMAL_NODE(at_plus_cmg);
 SSP_CREATE_BR_TABLE(at_plus_cmg)
 SSPBR("L=\"ALL\"\r\n", NULL, &at_plus_cmgl),
 SSPBR("D", NULL,       &at_plus_cmgd),
-SSPBR("S=\"", NULL,    &at_plus_cmgs),
+SSPBR("SO=\"", NULL,    &at_plus_cmgs),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_cmgl);
@@ -537,12 +537,12 @@ SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_cmgs);
 SSP_CREATE_BR_TABLE(at_plus_cmgs)
-SSPBR("\"\r", NULL, &at_plus_cmgs_wt),
+SSPBR(",", NULL, &at_plus_cmgs_wt),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_cmgs_wt);
 SSP_CREATE_BR_TABLE(at_plus_cmgs_wt)
-SSPBR(">", dataModeReady,  &at_plus_cmgs_sent),
+SSPBR("\"", dataModeReady,  &at_plus_cmgs_sent),
 SSP_END_BR_TABLE
 
 SSP_CREATE_NORMAL_NODE(at_plus_cmgs_sent);

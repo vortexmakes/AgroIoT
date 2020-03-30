@@ -204,7 +204,7 @@ static const CmdTbl cmdTbl =
 
     /* sendSMS */
     {RKH_INIT_STATIC_EVT(evCmd),
-     "AT+CMGS=\"%s\"\r",
+     "AT+CMGSO=\"%s\",\"",
      &gsmMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(500)},
 };
@@ -445,7 +445,9 @@ ModCmd_sendSMS(char *dest, char *text, ruint size)
     if(size > SMS_MESSAGE_SIZE)
         size = SMS_MESSAGE_SIZE + 1;
 
-    *(text + size) = 0x1B; // ESC char for end of Message
+    *(text + size) = '"'; // ESC char for end of Message
+    *(text + size + 1) = '\r'; // ESC char for end of Message
+    *(text + size + 2) = '\n'; // ESC char for end of Message
 
     p = &cmdTbl.sendSMS;
 
@@ -453,9 +455,9 @@ ModCmd_sendSMS(char *dest, char *text, ruint size)
 
     snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, p->fmt, dest);
     evtCmd->data = text;
-    evtCmd->nData = size + 1;
+    evtCmd->nData = size + 3;
 
-    postFIFOEvtCmd(evtCmd, p, text, size + 1);
+    postFIFOEvtCmd(evtCmd, p, text, size + 3);
 }
 
 /* ------------------------------ End of file ------------------------------ */
