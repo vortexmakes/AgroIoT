@@ -1,5 +1,11 @@
 #!/bin/bash -e
 #
+# Usage:
+#   From ceedling container: 
+#   sudo docker run --rm -v local/path/to/AgroIoT/:/usr/project -ti leanfrancucci/ceedling
+#   cd tools/ceedling
+#   ./test-all.sh
+#
 
 source_dir="../../src"
 ceedling_dir="tools/ceedling"
