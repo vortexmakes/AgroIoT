@@ -39,7 +39,7 @@
     - ../gps
     - ../BatChr
     - ../GStatus/inc
-    - ../conmgr
+    - ../GsmMgr/inc
     - ../epoch/inc
     - ../
   :support:

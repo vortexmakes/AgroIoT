@@ -21,7 +21,7 @@
 #include "Mock_cbox.h"
 #include "Mock_Geo.h"
 #include "Mock_BatChr.h"
-#include "Mock_conmgr.h"
+#include "Mock_GsmMgr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -109,7 +109,7 @@ test_MakeSingleHeader(void)
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
     cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
-    ConMgr_Imei_ExpectAndReturn("355826018345180");
+    GsmMgr_getImei_ExpectAndReturn("355826018345180");
 
     size = YFrame_header(&status0, buf, 0, YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL_STRING("!0|19355826018345180,", buf);
@@ -124,7 +124,7 @@ test_MakeSingleFrame(void)
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
     cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
-    ConMgr_Imei_ExpectAndReturn("355826018345180");
+    GsmMgr_getImei_ExpectAndReturn("355826018345180");
 
     size = YFrame_header(&status0, buf, 0, YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL_STRING("!0|19355826018345180,", buf);
@@ -137,7 +137,7 @@ test_MakeSingleFrame(void)
 void
 test_MakeMultipleHeader(void)
 {
-    ConMgr_Imei_ExpectAndReturn("355826018345180");
+    GsmMgr_getImei_ExpectAndReturn("355826018345180");
 
     (ruint)YFrame_header(&status0, buf, 2, YFRAME_MGP_TYPE);
     TEST_ASSERT_EQUAL_STRING("!1|0002|355826018345180", buf);
@@ -149,7 +149,7 @@ test_MakeMultipleFrame(void)
     int expLen, i;
 
     expLen = strlen(multipleFrame);
-    ConMgr_Imei_ExpectAndReturn("355826018345180");
+    GsmMgr_getImei_ExpectAndReturn("355826018345180");
 
     size = YFrame_header(&status0, buf, 2, YFRAME_MGP_TYPE);
     TEST_ASSERT_EQUAL_STRING("!1|0002|355826018345180", buf);
