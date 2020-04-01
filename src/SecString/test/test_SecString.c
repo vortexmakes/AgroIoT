@@ -39,15 +39,12 @@ tearDown(void)
 void
 test_CheckNullTerminatedString(void)
 {
-    char *str = "123456789";
+    char str[16];
     char *pos = (char *)(0xdeadbeaf);
-    size_t len;
 
-    len = strlen(str);
-    pos = SecString_strchk(str, len + 1);
-
+    strcpy(str, "123456789");
+    pos = SecString_strchk(str, sizeof(str));
     TEST_ASSERT_NOT_NULL(pos);
-    TEST_ASSERT_EQUAL(pos - str, len);
 }
 
 void
@@ -74,6 +71,39 @@ test_CheckEmptyString(void)
     pos = SecString_strchk(str, 0);
 
     TEST_ASSERT_NULL(pos);
+}
+
+void
+test_GetLengthOfANullTerminatedString(void)
+{
+    char str[16];
+    size_t len;
+
+    strcpy(str, "123456789");
+    len = SecString_strnlen(str, sizeof(str));
+    TEST_ASSERT_EQUAL(len, 9);
+}
+
+void
+test_GetLengthOfANonNullTerminatedString(void)
+{
+    char str[16];
+    size_t len;
+
+    memset(str, '@', sizeof(str));
+    len = SecString_strnlen(str, sizeof(str));
+    TEST_ASSERT_EQUAL(len, sizeof(str));
+}
+
+void
+test_GetLengthOfAnEmptyString(void)
+{
+    char str[16];
+    size_t len;
+
+    str[0] = '\0';
+    len = SecString_strnlen(str, sizeof(str));
+    TEST_ASSERT_EQUAL(len, 0);
 }
 
 /* ------------------------------ End of file ------------------------------ */

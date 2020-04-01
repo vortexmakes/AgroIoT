@@ -34,4 +34,11 @@ SecString_strchk(char *s, size_t num)
     return pos;
 }
 
+size_t 
+SecString_strnlen(char *s, size_t maxlen)
+{
+    char *pos = memchr(s, '\0', maxlen);
+    return (pos != (char *)0) ? (pos - s) : maxlen;
+}
+
 /* ------------------------------ End of file ------------------------------ */

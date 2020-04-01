@@ -38,6 +38,16 @@ extern "C" {
  */
 char *SecString_strchk(char *s, size_t num);
 
+/**
+ *  Returns the number of bytes in the string pointed to by s, excluding the 
+ *  terminating null byte ('\0'), but at most maxlen.
+ *
+ *  \return
+ *  strlen(s), if that is less than maxlen, or maxlen if there is no null 
+ *  terminating ('\0') among the first maxlen characters pointed to by s.
+ */
+size_t SecString_strnlen(char *s, size_t maxlen);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }
