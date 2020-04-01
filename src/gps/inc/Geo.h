@@ -79,6 +79,9 @@ void Geo_init(GeoErrorHandler errHandler);
 char *Geo_getLatitude(Geo *const me);
 char *Geo_getUtc(Geo *const me);
 char *Geo_getLongitude(Geo *const me);
+char *Geo_getSpeed(Geo *const me);
+char *Geo_getCourse(Geo *const me);
+char *Geo_getDate(Geo *const me);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

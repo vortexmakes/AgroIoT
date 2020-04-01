@@ -86,7 +86,7 @@ Geo_init(GeoErrorHandler errHandler)
 char *
 Geo_getLatitude(Geo *const me)
 {
-    return getAttribute(me->utc, UTC_LENGTH + 1);
+    return getAttribute(me->latitude, LATITUDE_LENGTH + 1);
 }
 
 char *
@@ -99,6 +99,24 @@ char *
 Geo_getLongitude(Geo *const me)
 {
     return getAttribute(me->longitude, LONGITUDE_LENGTH + 1);
+}
+
+char *
+Geo_getSpeed(Geo *const me)
+{
+    return getAttribute(me->speed, SPEED_LENGTH + 1);
+}
+
+char *
+Geo_getCourse(Geo *const me)
+{
+    return getAttribute(me->course, COURSE_LENGTH + 1);
+}
+
+char *
+Geo_getDate(Geo *const me)
+{
+    return getAttribute(me->date, DATE_LENGTH + 1);
 }
 
 /* ------------------------------ End of file ------------------------------ */

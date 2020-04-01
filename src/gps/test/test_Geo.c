@@ -125,4 +125,44 @@ test_GetValidLongitude(void)
     TEST_ASSERT_NOT_NULL(str);
     TEST_ASSERT_EQUAL_STRING(value, str);
 }
+
+void
+test_GetValidSpeed(void)
+{
+    Geo position;
+    char *str, value[] = "0.078";
+
+    setPreconditions(position.speed, value, SPEED_LENGTH + 1);
+    str = Geo_getSpeed(&position);
+
+    TEST_ASSERT_NOT_NULL(str);
+    TEST_ASSERT_EQUAL_STRING(value, str);
+}
+
+void
+test_GetValidCourse(void)
+{
+    Geo position;
+    char *str, value[] = "";
+
+    setPreconditions(position.course, value, COURSE_LENGTH + 1);
+    str = Geo_getCourse(&position);
+
+    TEST_ASSERT_NOT_NULL(str);
+    TEST_ASSERT_EQUAL_STRING(value, str);
+}
+
+void
+test_GetValidDate(void)
+{
+    Geo position;
+    char *str, value[] = "310119";
+
+    setPreconditions(position.date, value, DATE_LENGTH + 1);
+    str = Geo_getDate(&position);
+
+    TEST_ASSERT_NOT_NULL(str);
+    TEST_ASSERT_EQUAL_STRING(value, str);
+}
+
 /* ------------------------------ End of file ------------------------------ */
