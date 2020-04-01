@@ -109,12 +109,14 @@ YFrame_data(GStatus *from, char *to, rInt type)
     IOStatus *io;
     CBOX_STR *dev;
     rui8_t flags;
+    char *value, empty[] = "";
 
     size = 0;
     frame = to;
     position = &from->position;
     io = &from->ioStatus;
     dev = &from->devData;
+
 
     if ((from != (GStatus *)0) && (to != (char *)0))
     {
@@ -126,25 +128,33 @@ YFrame_data(GStatus *from, char *to, rInt type)
             strcat(frame, temp);
             strcat(frame, YFRAME_SEPARATOR);
         }
-        strcat(frame, position->utc);
+        value = Geo_getUtc(position);
+        strcat(frame, (value == NULL) ? empty : value);
         strcat(frame, YFRAME_SEPARATOR);
-        strcat(frame, position->latInd);
-        strcat(frame, position->latitude);
+        value = Geo_getLatInd(position);
+        strcat(frame, (value == NULL) ? empty : value);
+        value = Geo_getLatitude(position);
+        strcat(frame, (value == NULL) ? empty : value);
         strcat(frame, YFRAME_SEPARATOR);
-        strcat(frame, position->longInd);
-        strcat(frame, position->longitude);
+        value = Geo_getLongInd(position);
+        strcat(frame, (value == NULL) ? empty : value);
+        value = Geo_getLongitude(position);
+        strcat(frame, (value == NULL) ? empty : value);
         strcat(frame, YFRAME_SEPARATOR);
-        strcat(frame, position->speed);
+        value = Geo_getSpeed(position);
+        strcat(frame, (value == NULL) ? empty : value);
         strcat(frame, YFRAME_SEPARATOR);
-        strcat(frame, position->course);
+        value = Geo_getCourse(position);
+        strcat(frame, (value == NULL) ? empty : value);
         strcat(frame, YFRAME_SEPARATOR);
-        strcat(frame, position->date);
+        value = Geo_getDate(position);
+        strcat(frame, (value == NULL) ? empty : value);
         strcat(frame, YFRAME_SEPARATOR);
         sprintf(temp, "%02X%02X,", io->digOut, io->digIn);
         strcat(frame, temp);
         sprintf(temp, "%04X,", dev->h.hoard);
         strcat(frame, temp);
-        sprintf(temp, "%02X,", dev->h.pqty);
+        sprintf(temp, "%02hhX,", dev->h.pqty);
         strcat(frame, temp);
         sprintf(temp, "%02X,", dev->hum);
         strcat(frame, temp);
@@ -154,7 +164,7 @@ YFrame_data(GStatus *from, char *to, rInt type)
         strcat(frame, temp);
         sprintf(temp, "%04X,", (rui16_t)(dev->a.z));
         strcat(frame, temp);
-        sprintf(temp, "%d", from->batChrStatus);
+        sprintf(temp, "%01hhX", from->batChrStatus);
         strcat(frame, temp);
         size = strlen(frame);
     }
