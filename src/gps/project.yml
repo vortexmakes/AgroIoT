@@ -1,4 +1,3 @@
----
 #
 # YAML for ceedling test in module level
 #
@@ -34,13 +33,15 @@
     - ../../third-party/rkh/source/tmr/inc
     - ../../third-party/rkh/source/trc/inc
     - ../../third-party/rkh/source/mempool/inc
+    - ../../third-party/ssp/src
+    - ../parser/ubxm8
     - ../tpsens/cbox
     - ../Collector/inc
-    - ../gps/inc
     - ../BatChr
     - ../GStatus/inc
     - ../GsmMgr/inc
     - ../epoch/inc
+    - ../SecString/inc
     - ../
   :support:
     - test/support
@@ -56,7 +57,7 @@
 
 :cmock:
   :when_no_prototypes: :warn
-  :plugins: [ignore_arg, ignore, callback]
+  :plugins: [ignore_arg, ignore, callback, return_thru_ptr]
   :mock_prefix: Mock_
   :callback_after_arg_check: TRUE
   :when_ptr: :compare_ptr
@@ -68,18 +69,12 @@
     int8:     INT8
     bool:     UINT8
 
-#:tools:
-# Ceedling defaults to using gcc for compiling, linking, etc.
-# As [:tools] is blank, gcc will be used (so long as it's in your system path)
-# See documentation to configure a given toolchain for use
-
 :tools_test_linker:
   :arguments:
     - -lm
 
 :tools_test_compiler:
   :arguments:
-    - -D__UNITRAZER_LIB__
     - -Wall
     - -Wno-pointer-sign
     - -Wno-missing-braces
@@ -99,4 +94,3 @@
     - stdout_pretty_tests_report
     - module_generator
     - gcov
-

@@ -9,7 +9,7 @@
     - src/Collector.c
   :include:
     - ../GStatus/inc
-    - ../gps
+    - ../gps/inc
     - ../tpsens/cbox
     - ../BatChr
     - ../bsp

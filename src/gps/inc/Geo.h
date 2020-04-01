@@ -61,12 +61,24 @@ struct Geo
     char date[DATE_LENGTH + 1];
 };
 
+typedef enum GeoErrorCode GeoErrorCode;
+enum GeoErrorCode
+{
+    NO_ERRORS,
+    INDEX_OUT_OF_RANGE
+};
+
 typedef void (*GpsRcvHandler)(unsigned char c);
+typedef void (*GeoErrorHandler)(GeoErrorCode errCode);
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 GpsRcvHandler gps_parserInit(void);
 rbool_t Geo_isValid(Geo *const me);
+void Geo_init(GeoErrorHandler errHandler);
+char *Geo_getLatitude(Geo *const me);
+char *Geo_getUtc(Geo *const me);
+char *Geo_getLongitude(Geo *const me);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

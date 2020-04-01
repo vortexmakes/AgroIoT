@@ -3,7 +3,7 @@
  *
  *	This module contains functions for manipulating RMC NMEA Frame,
  *	including functions for determining what the current time is convert
- *	geolocalization and check it´s reliability.
+ *	geolocalization and check it's reliability.
  */
 /* -------------------------- Development history -------------------------- */
 /*
@@ -12,7 +12,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario Balina db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */

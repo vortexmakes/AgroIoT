@@ -18,6 +18,8 @@
 #define __SECSTRING_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include <string.h>
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {

@@ -9,7 +9,7 @@
     - src/CommMgr.c
   :include:
     - ../GStatus/inc
-    - ../gps
+    - ../gps/inc
     - ../tpsens/cbox
     - ../BatChr
     - ../Collector/inc

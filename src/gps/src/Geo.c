@@ -17,11 +17,14 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
+#include "rkhtype.h"
+#include "rkhassert.h"
+#include "rkhitl.h"     /* It's needed to include platform files */
 #include "ssp.h"
 #include "Geo.h"
 #include "rmc.h"
 #include "ubxm8parser.h"
+#include "SecString.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -29,6 +32,7 @@
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 static SSP gpsParser;
+static GeoErrorHandler errorHandler = (GeoErrorHandler)0;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -36,6 +40,23 @@ static void
 doSearch(unsigned char c)
 {
     ssp_doSearch(&gpsParser, c);
+}
+
+static char *
+getAttribute(char *attribute, size_t bufSize)
+{
+    char *pos;
+
+    pos = SecString_strchk(attribute, bufSize);
+    if ((pos == (char *)0) && (errorHandler != (GeoErrorHandler)0))
+    {
+        errorHandler(INDEX_OUT_OF_RANGE);
+    }
+    else
+    {
+        pos = attribute;
+    }
+    return pos;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -54,6 +75,30 @@ rbool_t
 Geo_isValid(Geo *const me)
 {
     return me->status[0] == RMC_StatusValid;
+}
+
+void 
+Geo_init(GeoErrorHandler errHandler)
+{
+    errorHandler = errHandler;
+}
+
+char *
+Geo_getLatitude(Geo *const me)
+{
+    return getAttribute(me->utc, UTC_LENGTH + 1);
+}
+
+char *
+Geo_getUtc(Geo *const me)
+{
+    return getAttribute(me->utc, UTC_LENGTH + 1);
+}
+
+char *
+Geo_getLongitude(Geo *const me)
+{
+    return getAttribute(me->longitude, LONGITUDE_LENGTH + 1);
 }
 
 /* ------------------------------ End of file ------------------------------ */
