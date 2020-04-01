@@ -9,7 +9,7 @@
 
 source_dir="../../src"
 ceedling_dir="tools/ceedling"
-modules="Config epoch GStatus StatQue YFrame device topic"
+modules="Config epoch GStatus StatQue YFrame device topic SecString"
 stateMachines="Collector CommMgr"
 
 #echo $PATH
