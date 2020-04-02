@@ -23,6 +23,7 @@
 #include "seqchbak.h"
 #include "dIn.h"
 #include "dOut.h"
+#include "PwrCtrl.h"
 #include "mytypes.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -39,6 +40,7 @@ static void (*const actions_100[])(void) =
     (void (*)(void))sequence_interrupt,
     dIn_scan,
     dOut_process,
+    PwrCtrl_powerFailCheck,
     NULL
 };
 

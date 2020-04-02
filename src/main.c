@@ -21,6 +21,7 @@
 #include "rkhfwk_dynevt.h"
 #include "rkhfwk_pubsub.h"
 #include "bsp.h"
+#include "PwrCtrl.h"
 #include "signals.h"
 #include "CommMgr.h"
 #include "GsmMgr.h"
@@ -114,6 +115,7 @@ main(int argc, char *argv[])
 {
     bsp_init(argc, argv);
 
+    PwrCtrl_init(PowerON);
     epoch_init();
     init_seqs();
     mTime_init();

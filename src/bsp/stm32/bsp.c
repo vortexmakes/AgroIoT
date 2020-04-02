@@ -40,7 +40,9 @@ RKH_THIS_MODULE
 /* ----------------------------- Local macros ------------------------------ */
 #define BlinkLed(b)  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, b)
 #define ModemCTS(b)  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, b)
-#define RS485_DIR(b)  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, b)
+#define RS485_DIR(b) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, b)
+#define PowerOff(b)  HAL_GPIO_WritePin(PWROFF_GPIO_Port, PWROFF_Pin, b)
+#define ExtPower()   HAL_GPIO_ReadPin(EXTPOWER_GPIO_Port, EXTPOWER_Pin)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -231,6 +233,18 @@ void
 bsp_GSMModemFound(void)
 {
     set_led(LED_GSM, SEQ_LSTAGE1);
+}
+
+void
+bsp_set_PowerOff(PwrCtrl_t state)
+{
+    PowerOff(state);
+}
+
+ExtPwr_t
+bsp_get_ExtPower(void)
+{
+    return ExtPower();
 }
 
 void 

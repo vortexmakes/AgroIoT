@@ -107,7 +107,8 @@ enum Signals
     evSendSMS,
     evSendSMSOk,
     evSendSMSFail,
-    evDoneSMS
+    evDoneSMS,
+    evExtPowerFail
 };
 
 /* ------------------------------- Data types ------------------------------ */

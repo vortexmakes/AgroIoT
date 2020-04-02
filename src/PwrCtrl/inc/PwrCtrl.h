@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  DarÃ­o BaliÃ±a  db@vortexmakes.com
+ *  DaBa  Darío Baliña  db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -27,8 +27,21 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 /* ------------------------------- Data types ------------------------------ */
+/*
+ * Power Control states
+ */
+typedef enum
+{
+    PowerON,
+    PowerOFF,
+}PwrCtrl_t;
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void PwrCtrl_init(PwrCtrl_t state);
+void PwrCtrl_powerFailCheck(void);
+void PwrCtrl_toPowerOff(void);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }
