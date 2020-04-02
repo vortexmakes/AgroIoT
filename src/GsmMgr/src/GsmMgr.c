@@ -577,8 +577,8 @@ init(GsmMgr *const me)
 
     bsp_SIMSelect(MainSIM);
 
-    RKH_FILTER_OFF_SMA(gsmMgrSocket);
-    RKH_FILTER_OFF_SMA(gsmMgrSMS);
+    RKH_FILTER_ON_SMA(gsmMgrSocket);
+    RKH_FILTER_ON_SMA(gsmMgrSMS);
 
 }
 
