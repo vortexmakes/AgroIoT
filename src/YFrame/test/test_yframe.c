@@ -135,8 +135,10 @@ test_MakeSingleFrame(void)
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     GsmMgr_getImei_ExpectAndReturn("355826018345180");
     Geo_getUtc_ExpectAndReturn(&status0.position, status0.position.utc);
+    Geo_getLatInd_ExpectAndReturn(&status0.position, status0.position.latInd);
     Geo_getLatitude_ExpectAndReturn(&status0.position, 
                                     status0.position.latitude);
+    Geo_getLongInd_ExpectAndReturn(&status0.position, status0.position.longInd);
     Geo_getLongitude_ExpectAndReturn(&status0.position, 
                                      status0.position.longitude);
     Geo_getSpeed_ExpectAndReturn(&status0.position, status0.position.speed);
@@ -176,6 +178,20 @@ test_MakeMultipleFrame(void)
         Geo_isValid_ExpectAndReturn(&(status0.position), 1);
         cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
         BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
+        Geo_getUtc_ExpectAndReturn(&status0.position, status0.position.utc);
+        Geo_getLatInd_ExpectAndReturn(&status0.position, 
+                                      status0.position.latInd);
+        Geo_getLatitude_ExpectAndReturn(&status0.position, 
+                                        status0.position.latitude);
+        Geo_getLongInd_ExpectAndReturn(&status0.position, 
+                                       status0.position.longInd);
+        Geo_getLongitude_ExpectAndReturn(&status0.position, 
+                                         status0.position.longitude);
+        Geo_getSpeed_ExpectAndReturn(&status0.position, 
+                                     status0.position.speed);
+        Geo_getCourse_ExpectAndReturn(&status0.position, 
+                                      status0.position.course);
+        Geo_getDate_ExpectAndReturn(&status0.position, status0.position.date);
         size += YFrame_data(&status0, &buf[size], YFRAME_MGP_TYPE);
     }
     size += YFrame_multipleTail(&buf[size]);

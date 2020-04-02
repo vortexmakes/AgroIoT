@@ -36,6 +36,7 @@
 #define YFRAME_ACK_LEN          (sizeof(YFRAME_ACK) - 1)
 
 static const char *frameType[] = {"0", "1"};
+static const char empty[] = "";
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -109,7 +110,7 @@ YFrame_data(GStatus *from, char *to, rInt type)
     IOStatus *io;
     CBOX_STR *dev;
     rui8_t flags;
-    char *value, empty[] = "";
+    char *value;
 
     size = 0;
     frame = to;
