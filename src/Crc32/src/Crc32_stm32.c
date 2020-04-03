@@ -29,8 +29,8 @@ Crc32_init(void)
 {
 }
 
-uint32_t
-Crc32_calc(const uint8_t *message, size_t nBytes, uint32_t init)
+Crc32
+Crc32_calc(const uint8_t *message, size_t nBytes, Crc32 init)
 {
 }
 

@@ -23,6 +23,7 @@
 #include "cbox.h"
 #include "IOStatus.h"
 #include "BatChr.h"
+#include "Crc32.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -42,6 +43,13 @@ struct GStatus
     CBOX_STR devData;
     IOStatus ioStatus;
     BatChrStatus batChrStatus;
+};
+
+typedef struct GStatusSec GStatusSec;
+struct GStatusSec
+{
+    GStatus data;
+    Crc32 checksum;
 };
 
 /**

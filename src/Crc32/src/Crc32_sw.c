@@ -24,7 +24,7 @@
 #define REFLECT_DATA		    1
 #define REFLECT_REMAINDER	    1
 #define CHECK_VALUE			    0xCBF43926
-#define WIDTH                   (8 * sizeof(uint32_t))
+#define WIDTH                   (8 * sizeof(Crc32))
 #define TOPBIT                  (1 << (WIDTH - 1))
 
 #if (REFLECT_DATA == 1)
@@ -37,14 +37,14 @@
 
 #if (REFLECT_REMAINDER == 1)
 #undef  REFLECT_REMAINDER
-#define REFLECT_REMAINDER(X)	((uint32_t)reflect((X), WIDTH))
+#define REFLECT_REMAINDER(X)	((Crc32)reflect((X), WIDTH))
 #else
 #undef  REFLECT_REMAINDER
 #define REFLECT_REMAINDER(X)	(X)
 #endif
 
 /* ------------------------------- Constants ------------------------------- */
-static const uint32_t crcTable[] =
+static const Crc32 crcTable[] =
 {
     0x00000000, 0x04c11db7, 0x09823b6e, 0x0d4326d9,
     0x130476dc, 0x17c56b6b, 0x1a864db2, 0x1e475005,
@@ -117,10 +117,10 @@ static const uint32_t crcTable[] =
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static uint32_t
-reflect(uint32_t data, uint8_t nBits)
+static Crc32
+reflect(Crc32 data, uint8_t nBits)
 {
-	uint32_t reflection = 0;
+	Crc32 reflection = 0;
 	uint8_t bit;
 
 	for (bit = 0; bit < nBits; ++bit)
@@ -139,7 +139,7 @@ void
 Crc32_init(void)
 {
 #if 0
-    uint32_t remainder;
+    Crc32 remainder;
 
     /* Compute the remainder of each possible dividend */
     for (int dividend = 0; dividend < 256; ++dividend)
@@ -169,7 +169,7 @@ Crc32_init(void)
 
     if ((file = fopen("table", "w+")) != NULL)
     {
-        fprintf(file, "static const uint32_t crcTable[] = \n{\n");
+        fprintf(file, "static const Crc32 crcTable[] = \n{\n");
         for (int i = 0; i < 256/4; ++i)
         {
             fputs("    ", file);
@@ -188,12 +188,12 @@ Crc32_init(void)
 #endif
 }
 
-uint32_t
-Crc32_calc(const uint8_t *message, size_t nBytes, uint32_t init)
+Crc32
+Crc32_calc(const uint8_t *message, size_t nBytes, Crc32 init)
 {
     uint8_t data;
     int byte;
-    uint32_t remainder;
+    Crc32 remainder;
 
     for (remainder = init, byte = 0; byte < nBytes; ++byte)
     {
