@@ -46,7 +46,7 @@ StatQue_isEmpty(void)
 }
 
 rInt
-StatQue_remove(GPS_STR *elem)
+StatQue_remove(GStatusSec *elem)
 {
     rInt res;
 
@@ -64,7 +64,7 @@ StatQue_delete(rui16_t *nElem)
 }
 
 rInt
-StatQue_read(GPS_STR *elem)
+StatQue_read(GStatusSec *elem)
 {
     rInt res;
 
@@ -73,7 +73,7 @@ StatQue_read(GPS_STR *elem)
 }
 
 rInt
-StatQue_put(GPS_STR *elem)
+StatQue_put(GStatusSec *elem)
 {
     rInt res;
 

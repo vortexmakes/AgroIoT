@@ -15,5 +15,6 @@
     - ../Collector/inc
     - ../epoch/inc
     - ../YFrame/inc
+    - ../Crc32/inc
     - ../
   :support:

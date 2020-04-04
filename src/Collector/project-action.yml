@@ -22,6 +22,7 @@
     - ../ffile/portable/test
     - ../ffile/inc
     - ../geoMgr
+    - ../Crc32/inc
     - ../
   :support:
 

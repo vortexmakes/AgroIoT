@@ -82,8 +82,7 @@ MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 static int
 setupForSendingABlockOfFrames(ruint nFrames, int len)
 {
-    GPS_STR *elem;
-    GStatus *to;
+    GStatusSec elem;
     int n, i;
 
     me->framesToSend = nFrames;
@@ -92,12 +91,9 @@ setupForSendingABlockOfFrames(ruint nFrames, int len)
                                 me->framesToSend;
     for (i = 0; i < n; ++i)
     {
-        StatQue_read_ExpectAndReturn(elem, 0);
+        StatQue_read_ExpectAndReturn(&elem, 0);
         StatQue_read_IgnoreArg_elem();
-        GStatus_fromGpsStr_ExpectAndReturn(elem, to, 0);
-        GStatus_fromGpsStr_IgnoreArg_from();
-        GStatus_fromGpsStr_IgnoreArg_to();
-        YFrame_data_ExpectAndReturn(to, 
+        YFrame_data_ExpectAndReturn(&elem.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 
                                     YFRAME_MGP_TYPE, len);
         YFrame_data_IgnoreArg_from(); 

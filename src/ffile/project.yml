@@ -37,6 +37,7 @@
     - ../Collector/inc
     - ../BatChr
     - ../Config/inc
+    - ../Crc32/inc
   :support:
     - test/support
 

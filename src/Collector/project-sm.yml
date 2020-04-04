@@ -21,5 +21,6 @@
     - ../StatQue/inc
     - ../ffile/portable/test
     - ../ffile/inc
+    - ../Crc32/inc
     - ../
   :support:

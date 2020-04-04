@@ -69,7 +69,7 @@ test_RestoreDefaultDirectory(void)
     TEST_ASSERT_EQUAL(FRFILE_OK, result);
     TEST_ASSERT_EQUAL(FFD0, file->fd);
     TEST_ASSERT_EQUAL(QFILE_TYPE, file->type);
-    TEST_ASSERT_EQUAL(sizeof(GPS_STR), file->size_reg);
+    TEST_ASSERT_EQUAL(sizeof(GStatusSec), file->size_reg);
 
     file = ffile_get_file_info(FFD1);
     result = ffile_is_corrupted(FFD1);

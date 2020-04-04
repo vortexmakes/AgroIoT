@@ -18,6 +18,7 @@
     - ../topic/inc
     - ../StatQue/inc
     - ../Config/inc
+    - ../Crc32/inc
     - ../
   :support:
 

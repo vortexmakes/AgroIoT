@@ -38,6 +38,7 @@
     - ../BatChr
     - ../GStatus/inc
     - ../ffile/inc
+    - ../Crc32/inc
     - ../
   :support:
     - test/support

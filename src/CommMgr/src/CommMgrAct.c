@@ -75,8 +75,7 @@ static void
 sendFrames(CommMgr *const me)
 {
     rInt res;
-    GPS_STR from;
-    GStatus to;
+    GStatusSec to;
     int i;
 
     me->nFramesPerMsg = (me->framesToSend > MAX_NUM_FRAMES_PER_MSG) ? 
@@ -85,13 +84,10 @@ sendFrames(CommMgr *const me)
     me->evSendObj.size = 0;
     for (i = 0; i < me->nFramesPerMsg; ++i)
     {
-        res = StatQue_read(&from);
+        res = StatQue_read(&to);
         RKH_ENSURE(res == 0);
 
-        res = GStatus_fromGpsStr(&from, &to);
-        RKH_ENSURE(res == 0);
-
-        me->evSendObj.size += YFrame_data(&to, 
+        me->evSendObj.size += YFrame_data(&to.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 
                                     YFRAME_MGP_TYPE);
     }

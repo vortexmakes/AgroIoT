@@ -41,6 +41,7 @@
     - ../GStatus/inc
     - ../GsmMgr/inc
     - ../epoch/inc
+    - ../Crc32/inc
     - ../
   :support:
     - test/support

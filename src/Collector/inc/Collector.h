@@ -66,7 +66,7 @@ struct Collector
 {
     RKH_SMA_T base;
     RKHSmaVtbl vtbl;            /* Virtual table */
-    GStatus status;
+    GStatusSec status;
     Device *dev;
     Mapping itsMapping;         /* Mapping orthogonal region */
     RKHTmEvt updateStatusTmr;

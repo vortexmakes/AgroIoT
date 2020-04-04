@@ -110,12 +110,12 @@ test_Constructor(void)
     TEST_ASSERT_EQUAL(me, me->itsMapping.itsCollector);
     TEST_ASSERT_NULL(me->dev);
     TEST_ASSERT_EQUAL_MEMORY(&invalidPosition, 
-                             &me->status.position, 
+                             &me->status.data.position, 
                              sizeof(Geo));
-    TEST_ASSERT_EQUAL(MAPPING_STOP, me->status.devData.a.x);
-    TEST_ASSERT_EQUAL(0xff, me->status.ioStatus.digIn);
-    TEST_ASSERT_EQUAL(0, me->status.ioStatus.digOut);
-    TEST_ASSERT_EQUAL(LINE_BATT, me->status.batChrStatus);
+    TEST_ASSERT_EQUAL(MAPPING_STOP, me->status.data.devData.a.x);
+    TEST_ASSERT_EQUAL(0xff, me->status.data.ioStatus.digIn);
+    TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digOut);
+    TEST_ASSERT_EQUAL(LINE_BATT, me->status.data.batChrStatus);
     TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
 }
 
@@ -147,7 +147,7 @@ test_UpdatePosition(void)
     GeoEvt event;
 
     Collector_updatePosition(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL_MEMORY(&me->status.position, &event.position,
+    TEST_ASSERT_EQUAL_MEMORY(&me->status.data.position, &event.position,
                              sizeof(Geo));
 }
 
@@ -158,7 +158,7 @@ test_UpdateDigOut(void)
 
     event.status = 99;
     Collector_updateDigOut(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digOut);
+    TEST_ASSERT_EQUAL(event.status, me->status.data.ioStatus.digOut);
 }
 
 void
@@ -225,7 +225,7 @@ test_PublishCurrStatusWithDevConnected(void)
 void
 test_ActiveDigInOnEntryDevNotConnected(void)
 {
-    me->status.ioStatus.digIn = 0xfe;
+    me->status.data.ioStatus.digIn = 0xfe;
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();
 
@@ -236,7 +236,7 @@ test_ActiveDigInOnEntryDevNotConnected(void)
 void
 test_IdleDigInOnEntryDevNotConnected(void)
 {
-    me->status.ioStatus.digIn = 0xff;
+    me->status.data.ioStatus.digIn = 0xff;
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();
 
@@ -254,7 +254,7 @@ test_ActiveDigInInDevNotConnected(void)
     rkh_sma_post_lifo_IgnoreArg_e();
 
     Collector_updateDigInTestDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digIn);
+    TEST_ASSERT_EQUAL(event.status, me->status.data.ioStatus.digIn);
 }
 
 void
@@ -267,7 +267,7 @@ test_IdleDigInInDevNotConnected(void)
     rkh_sma_post_lifo_IgnoreArg_e();
 
     Collector_updateDigInTestDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digIn);
+    TEST_ASSERT_EQUAL(event.status, me->status.data.ioStatus.digIn);
 }
 
 void
@@ -277,7 +277,7 @@ test_UpdateDigInInDevConnected(void)
 
     event.status = 0xfc;
     Collector_updateDigIn(me, RKH_UPCAST(RKH_EVT_T, &event));
-    TEST_ASSERT_EQUAL(event.status, me->status.ioStatus.digIn);
+    TEST_ASSERT_EQUAL(event.status, me->status.data.ioStatus.digIn);
 }
 
 void
@@ -327,7 +327,7 @@ test_StartAndStopSyncStoppedTmr(void)
                          RKH_UPCAST(RKH_SMA_T, me),
                          RKH_TIME_SEC(60), RKH_TIME_SEC(60));
     Mapping_enStopped(region);
-    TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.devData.a.x);
+    TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.data.devData.a.x);
 
     rkh_tmr_stop_ExpectAndReturn(&region->syncStoppedTmr.tmr, 0);
     Mapping_exStopped(region);
@@ -341,8 +341,6 @@ test_StoreStatus(void)
 
     region = &me->itsMapping;
     region->nStoreLastSync = n = 20;
-    GStatus_toGpsStr_ExpectAndReturn(&me->status, 0, 0);
-    GStatus_toGpsStr_IgnoreArg_to();
     StatQue_put_ExpectAndReturn(0, 0);
     StatQue_put_IgnoreArg_elem();
 
@@ -377,7 +375,7 @@ test_StartAndStopSyncRunningTmr(void)
                          RKH_UPCAST(RKH_SMA_T, me),
                          RKH_TIME_SEC(3), RKH_TIME_SEC(3));
     Mapping_enRunning(region);
-    TEST_ASSERT_EQUAL_HEX32(MAPPING_RUNNING, me->status.devData.a.x);
+    TEST_ASSERT_EQUAL_HEX32(MAPPING_RUNNING, me->status.data.devData.a.x);
 
     rkh_tmr_stop_ExpectAndReturn(&region->syncRunningTmr.tmr, 0);
     Mapping_exRunning(region);

@@ -56,7 +56,6 @@ RKH_SM_T *collectorMapping;
 /* ---------------------------- Local variables ---------------------------- */
 static RKH_ROM_STATIC_EVENT(evMappingObj, evMapping);
 static RKH_ROM_STATIC_EVENT(evNoMappingObj, evNoMapping);
-static GPS_STR oldStatus; /* Should be deprecated in future releases */
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -73,7 +72,7 @@ dispatch(RKH_SMA_T *me, void *arg)
 static bool
 testDevNullJobCond(Collector *const me)
 {
-    return (me->status.ioStatus.digIn != 0xff) ? true : false;
+    return (me->status.data.ioStatus.digIn != 0xff) ? true : false;
 }
 
 static RKH_TNT_T
@@ -103,7 +102,7 @@ setMappingStatus(Mapping *const me, int status)
     if (me->itsCollector->base.sm.state == 
         RKH_CAST(RKH_ST_T, &DevStatus_DevNotConnected))
     {
-        me->itsCollector->status.devData.a.x = status;
+        me->itsCollector->status.data.devData.a.x = status;
     }
 }
 
@@ -116,10 +115,10 @@ Collector_ctor(void)
     me = RKH_DOWNCAST(Collector, collector);
     me->vtbl = rkhSmaVtbl;
     me->vtbl.task = dispatch;
-    me->status.position = invalidPosition;
-    me->status.devData.a.x = MAPPING_STOP;
-    me->status.ioStatus.digIn = 0xff;
-    me->status.ioStatus.digOut = 0;
+    me->status.data.position = invalidPosition;
+    me->status.data.devData.a.x = MAPPING_STOP;
+    me->status.data.ioStatus.digIn = 0xff;
+    me->status.data.ioStatus.digOut = 0;
     rkh_sma_ctor(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
 
     me->itsMapping.itsCollector = me;
@@ -157,13 +156,13 @@ Collector_init(Collector *const me, RKH_EVT_T *pe)
 void
 Collector_updatePosition(Collector *const me, RKH_EVT_T *pe)
 {
-    me->status.position = RKH_DOWNCAST(GeoEvt, pe)->position;
+    me->status.data.position = RKH_DOWNCAST(GeoEvt, pe)->position;
 }
 
 void
 Collector_updateDigOut(Collector *const me, RKH_EVT_T *pe)
 {
-    me->status.ioStatus.digOut = RKH_DOWNCAST(DigOutChangedEvt, pe)->status;
+    me->status.data.ioStatus.digOut = RKH_DOWNCAST(DigOutChangedEvt, pe)->status;
 }
 
 void
@@ -176,7 +175,7 @@ Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
         device_updateRaw(me->dev);
     }
     evt = RKH_ALLOC_EVT(GStatusEvt, evGStatus, me);
-    evt->status = me->status;
+    evt->status = me->status.data;
     topic_publish(Status,
                   RKH_UPCAST(RKH_EVT_T, evt),
                   RKH_UPCAST(RKH_SMA_T, me));
@@ -187,7 +186,7 @@ Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe)
 {
     int result;
 
-    me->status.ioStatus.digIn = RKH_DOWNCAST(DigInChangedEvt, pe)->status;
+    me->status.data.ioStatus.digIn = RKH_DOWNCAST(DigInChangedEvt, pe)->status;
     result = testDevNullJobCond(me);
     propagateMappingEvent(me, result);
 }
@@ -195,7 +194,7 @@ Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe)
 void
 Collector_updateDigIn(Collector *const me, RKH_EVT_T *pe)
 {
-    me->status.ioStatus.digIn = RKH_DOWNCAST(DigInChangedEvt, pe)->status;
+    me->status.data.ioStatus.digIn = RKH_DOWNCAST(DigInChangedEvt, pe)->status;
 }
 
 void
@@ -216,13 +215,10 @@ Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe)
 void
 Mapping_storeStatus(Mapping *const me, RKH_EVT_T *pe)
 {
-    rInt result;
     Collector *itsCollector;
 
     itsCollector = me->itsCollector;
-    result = GStatus_toGpsStr(&itsCollector->status, &oldStatus);
-    RKH_REQUIRE(result == 0);
-    StatQue_put(&oldStatus);
+    StatQue_put(&itsCollector->status);
     ++me->nStoreLastSync;
 }
 
