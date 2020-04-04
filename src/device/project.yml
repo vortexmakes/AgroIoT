@@ -36,6 +36,7 @@
     - ../Collector/inc
     - ../gps/inc
     - ../GStatus/inc
+    - ../Crc32/inc
     - ../BatChr
     - ../
   :support:

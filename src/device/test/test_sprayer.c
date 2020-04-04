@@ -105,8 +105,8 @@ test_MakeEventOperation(void)
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.devData.hum = nSectionExpect;
-    me->status.devData.h.pqty = doseExpect;
+    me->status.data.devData.hum = nSectionExpect;
+    me->status.data.devData.h.pqty = doseExpect;
 
     dev = sprayer_ctor(0);
 
@@ -118,7 +118,7 @@ test_MakeEventOperation(void)
 
     TEST_ASSERT_NOT_NULL(dev->vptr->makeEvt);
 
-    evt = (*dev->vptr->makeEvt)(dev, &me->status.devData);
+    evt = (*dev->vptr->makeEvt)(dev, &me->status.data.devData);
 
     TEST_ASSERT_NOT_NULL(evt);
     TEST_ASSERT_EQUAL(dev, ((EvtSprayerData *)evt)->base.dev);
@@ -143,8 +143,8 @@ test_UpdateRawOperation(void)
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.devData.hum = 0;
-    me->status.devData.h.pqty = 0;
+    me->status.data.devData.hum = 0;
+    me->status.data.devData.h.pqty = 0;
 
     dev = sprayer_ctor(0);
 
@@ -156,8 +156,8 @@ test_UpdateRawOperation(void)
 
     (*dev->vptr->updateRaw)(dev);
 
-    TEST_ASSERT_EQUAL(nSectionExpect, me->status.devData.hum);
-    TEST_ASSERT_EQUAL(doseExpect, me->status.devData.h.pqty);
+    TEST_ASSERT_EQUAL(nSectionExpect, me->status.data.devData.hum);
+    TEST_ASSERT_EQUAL(doseExpect, me->status.data.devData.h.pqty);
 }
 
 void
