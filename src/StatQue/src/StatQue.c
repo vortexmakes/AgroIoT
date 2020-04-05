@@ -46,7 +46,7 @@ StatQue_isEmpty(void)
 }
 
 rInt
-StatQue_remove(GStatusSec *elem)
+StatQue_remove(GStatus *elem)
 {
     rInt res;
 
@@ -64,7 +64,7 @@ StatQue_delete(rui16_t *nElem)
 }
 
 rInt
-StatQue_read(GStatusSec *elem)
+StatQue_read(GStatus *elem)
 {
     rInt res;
 
@@ -73,7 +73,7 @@ StatQue_read(GStatusSec *elem)
 }
 
 rInt
-StatQue_put(GStatusSec *elem)
+StatQue_put(GStatus *elem)
 {
     rInt res;
 

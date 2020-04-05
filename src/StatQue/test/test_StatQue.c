@@ -81,7 +81,7 @@ void
 test_RemoveOneElemSuccessfully(void)
 {
     rInt res;
-    GStatusSec *elem;
+    GStatus *elem;
 
     ffile_queue_remove_ExpectAndReturn(FFD0, elem, FQFILE_OK);
 
@@ -93,7 +93,7 @@ void
 test_RemoveOneElemWrongly(void)
 {
     rInt res;
-    GStatusSec *elem;
+    GStatus *elem;
 
     ffile_queue_remove_ExpectAndReturn(FFD0, elem, FQFILE_EMPTY);
 
@@ -118,7 +118,7 @@ void
 test_Read(void)
 {
     rInt res;
-    GStatusSec *elem;
+    GStatus *elem;
 
     ffile_queue_random_read_ExpectAndReturn(FFD0, READ_FORWARD,
                                             elem, FQFILE_OK);
@@ -131,7 +131,7 @@ void
 test_Put(void)
 {
     rInt res;
-    GStatusSec *elem;
+    GStatus *elem;
 
     ffile_queue_insert_ExpectAndReturn(FFD0, elem, FQFILE_OK);
 

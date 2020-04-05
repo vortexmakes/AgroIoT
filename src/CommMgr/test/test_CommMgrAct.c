@@ -56,7 +56,7 @@ const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
     rkh_sma_post_lifo
 };
 static ReceivedEvt evReceivedObj;
-static GStatus gStatus =
+static GStatusType gStatus =
 {
     {
         "185124", "A", "37.8402883", "-", "057.6884350", "-", "0.078",
@@ -82,7 +82,7 @@ MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 static int
 setupForSendingABlockOfFrames(ruint nFrames, int len)
 {
-    GStatusSec elem;
+    GStatus elem;
     int n, i;
 
     me->framesToSend = nFrames;
@@ -176,7 +176,7 @@ test_UpdateStatus(void)
 
     CommMgr_ActiveToActiveLoc0(me, RKH_UPCAST(RKH_EVT_T, &event));
 
-    TEST_ASSERT_EQUAL_MEMORY(&event.status, &me->status, sizeof(GStatus));
+    TEST_ASSERT_EQUAL_MEMORY(&event.status, &me->status, sizeof(GStatusType));
     TEST_ASSERT_TRUE(me->isPendingStatus == true);
 }
 

@@ -52,7 +52,7 @@ struct CommMgr
 {
     RKH_SMA_T sma;      /* base structure */
     RKHTmEvt tmEvtObj0;
-    GStatus status;
+    GStatusType status;
     rbool_t isPendingStatus;
     TypeOfResp lastRecvResponse;
     SendEvt evSendObj;

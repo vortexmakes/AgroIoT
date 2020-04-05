@@ -36,8 +36,8 @@ extern "C" {
 #define ACCELBR_LENGHT  4
 
 /* ------------------------------- Data types ------------------------------ */
-typedef struct GStatus GStatus;
-struct GStatus
+typedef struct GStatusType GStatusType;
+struct GStatusType
 {
     Geo position;
     CBOX_STR devData;
@@ -45,10 +45,10 @@ struct GStatus
     BatChrStatus batChrStatus;
 };
 
-typedef struct GStatusSec GStatusSec;
-struct GStatusSec
+typedef struct GStatus GStatus;
+struct GStatus
 {
-    GStatus data;
+    GStatusType data;
     Crc32 checksum;
 };
 

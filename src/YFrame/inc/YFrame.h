@@ -46,9 +46,9 @@ enum TypeOfResp
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-rInt YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type);
-ruint YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type);
-ruint YFrame_data(GStatus *from, char *to, rInt type);
+rInt YFrame_getFlags(GStatusType *from, rui8_t *flags, rInt type);
+ruint YFrame_header(GStatusType *from, char *to, rInt nFrames, rInt type);
+ruint YFrame_data(GStatusType *from, char *to, rInt type);
 ruint YFrame_multipleTail(char *to);
 TypeOfResp YFrame_parse(char *from);
 

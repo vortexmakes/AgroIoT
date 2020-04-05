@@ -45,14 +45,14 @@ static const char empty[] = "";
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 rInt
-YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type)
+YFrame_getFlags(GStatusType *from, rui8_t *flags, rInt type)
 {
     rInt res;
     rui8_t flag;
 
     res = 0;
     flag = 0;
-    if ((from != (GStatus *)0) && (flags != (rui8_t *)0))
+    if ((from != (GStatusType *)0) && (flags != (rui8_t *)0))
     {
         flag |= (Geo_isValid(&from->position) == 1) ? FLG_GPS_VALID : 0;
         flag |= (type == YFRAME_MGP_TYPE) ? FLG_HISTORY : 0;
@@ -68,7 +68,7 @@ YFrame_getFlags(GStatus *from, rui8_t *flags, rInt type)
 }
 
 ruint
-YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type)
+YFrame_header(GStatusType *from, char *to, rInt nFrames, rInt type)
 {
     ruint size;
     char *frame, temp[12];
@@ -76,7 +76,7 @@ YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type)
 
     size = 0;
     frame = to;
-    if ((from != (GStatus *)0) && (to != (char *)0))
+    if ((from != (GStatusType *)0) && (to != (char *)0))
     {
         strcpy(frame, YFRAME_ID);
         strcat(frame, frameType[type]);
@@ -102,7 +102,7 @@ YFrame_header(GStatus *from, char *to, rInt nFrames, rInt type)
 }
 
 ruint
-YFrame_data(GStatus *from, char *to, rInt type)
+YFrame_data(GStatusType *from, char *to, rInt type)
 {
     ruint size;
     char *frame, temp[12];
@@ -119,7 +119,7 @@ YFrame_data(GStatus *from, char *to, rInt type)
     dev = &from->devData;
 
 
-    if ((from != (GStatus *)0) && (to != (char *)0))
+    if ((from != (GStatusType *)0) && (to != (char *)0))
     {
         if (type == YFRAME_MGP_TYPE)
         {

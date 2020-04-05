@@ -75,7 +75,7 @@ static void
 sendFrames(CommMgr *const me)
 {
     rInt res;
-    GStatusSec to;
+    GStatus to;
     int i;
 
     me->nFramesPerMsg = (me->framesToSend > MAX_NUM_FRAMES_PER_MSG) ? 

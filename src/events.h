@@ -165,7 +165,7 @@ typedef struct GStatusEvt GStatusEvt;
 struct GStatusEvt
 {
     RKH_EVT_T evt;
-    GStatus status;
+    GStatusType status;
 };
 
 typedef struct SensorData SensorData;

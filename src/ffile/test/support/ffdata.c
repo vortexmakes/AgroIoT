@@ -63,7 +63,7 @@ CREATE_DIR =
                  QFILE_TYPE,
                  FF0_NUM_PAGES,   /* 8187 */
                  FF0_BEGIN_PAGE,   /* 2 */
-                 sizeof(GStatusSec)),
+                 sizeof(GStatus)),
     CREATE_FFILE(FFD1,
                  RFILE_TYPE,
                  FF1_NUM_PAGES,   /* 1 */

@@ -35,10 +35,10 @@ extern "C" {
 rui16_t StatQue_init(void);
 rui16_t StatQue_getNumElem(void);
 rbool_t StatQue_isEmpty(void);
-rInt StatQue_remove(GStatusSec *elem);
+rInt StatQue_remove(GStatus *elem);
 rInt StatQue_delete(rui16_t *nElem);
-rInt StatQue_read(GStatusSec *elem);
-rInt StatQue_put(GStatusSec *elem);
+rInt StatQue_read(GStatus *elem);
+rInt StatQue_put(GStatus *elem);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -25,7 +25,7 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-static GStatus status0 =
+static GStatusType status0 =
 {
     {
         "185124", "A", "37.8402883", "-", "057.6884350", "-", "0.078",
@@ -48,7 +48,7 @@ static const char corruptSingleFrame[] =
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static GStatus status;
+static GStatusType status;
 static char buf[256];
 static int size;
 
@@ -77,7 +77,7 @@ test_MakeInvalidArgs(void)
     size = YFrame_data(&status, (char *)0, YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL(0, size);
 
-    size = YFrame_data((GStatus *)0, buf, YFRAME_SGP_TYPE);
+    size = YFrame_data((GStatusType *)0, buf, YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL(0, size);
 }
 
@@ -88,7 +88,7 @@ test_GetFlagsInvalidArgs(void)
     rInt err;
 
     flags = 0xad;
-    err = YFrame_getFlags((GStatus *)0, &flags, 0);
+    err = YFrame_getFlags((GStatusType *)0, &flags, 0);
     TEST_ASSERT_EQUAL(1, err);
     TEST_ASSERT_EQUAL(0xad, flags);
 
@@ -107,7 +107,7 @@ test_ValidGetFlags(void)
     cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
     BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
 
-    err = YFrame_getFlags((GStatus *)&status0, &flags, YFRAME_SGP_TYPE);
+    err = YFrame_getFlags((GStatusType *)&status0, &flags, YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL(0, err);
     TEST_ASSERT_EQUAL_HEX(0x19, flags);
 }
@@ -258,9 +258,9 @@ void
 test_AttemptToMakeACorruptFrame(void)
 {
     int expLen;
-    GStatus status;
+    GStatusType status;
 
-    memset(&status, 0xff, sizeof(GStatus));
+    memset(&status, 0xff, sizeof(GStatusType));
 
     expLen = strlen(corruptSingleFrame);
     Geo_isValid_ExpectAndReturn(&(status.position), 1);
