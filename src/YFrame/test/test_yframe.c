@@ -22,6 +22,8 @@
 #include "Mock_Geo.h"
 #include "Mock_BatChr.h"
 #include "Mock_GsmMgr.h"
+#include "Mock_geoMgr.h"
+#include "Mock_rmc.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -30,6 +32,20 @@ static GStatusType status0 =
     {
         "185124", "A", "37.8402883", "-", "057.6884350", "-", "0.078",
         "", "310119"
+    },
+    {1, 1, {0, 0, 1}, {0xdddd, 0xffff, 0xffff}, 0},
+    {0xff, 0x3f},
+    3
+};
+
+static GStatusType invStatus =
+{
+    {
+        {GEO_INVALID_UTC}, {RMC_StatusInvalid},
+        {GEO_INVALID_LATITUDE}, {GEO_INVALID_LATITUDE_IND},
+        {GEO_INVALID_LONGITUDE}, {GEO_INVALID_LONGITUDE_IND},
+        {GEO_INVALID_SPEED}, {GEO_INVALID_COURSE},
+        {GEO_INVALID_DATE}
     },
     {1, 1, {0, 0, 1}, {0xdddd, 0xffff, 0xffff}, 0},
     {0xff, 0x3f},
@@ -45,6 +61,9 @@ static const char multipleFrame[] =
 static const char corruptSingleFrame[] =
     "!0|19355826018345180,,,,,,,FFFF,FFFF,FF,FF,FFFF,FFFF,FFFF,FF";
 
+static const char invFrame[] =
+    "!0|19355826018345180,120000,-38.0030396,-057.3266218,000.000,000,190918,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
@@ -54,12 +73,6 @@ static int size;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static void
-errorHandler(GeoErrorCode errCode)
-{
-    TEST_ASSERT_EQUAL(INDEX_OUT_OF_RANGE, errCode);
-}
-
 /* ---------------------------- Global functions --------------------------- */
 void
 setUp(void)
@@ -282,6 +295,36 @@ test_AttemptToMakeACorruptFrame(void)
 
     size += YFrame_data(&status, &buf[size], YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL_STRING(corruptSingleFrame, buf);
+    TEST_ASSERT_EQUAL(expLen, size);
+}
+
+void
+test_MakeSingleFrameWithAnInvalidPosition(void)
+{
+    int expLen;
+    Geo *position;
+
+    position = &invStatus.position;
+    expLen = strlen(invFrame);
+    Geo_isValid_ExpectAndReturn(position, 1);
+    cbox_isMoving_ExpectAndReturn(&(invStatus.devData), 0);
+    BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
+    GsmMgr_getImei_ExpectAndReturn("355826018345180");
+    Geo_getUtc_ExpectAndReturn(position, position->utc);
+    Geo_getLatInd_ExpectAndReturn(position, position->latInd);
+    Geo_getLatitude_ExpectAndReturn(position, position->latitude);
+    Geo_getLongInd_ExpectAndReturn(position, position->longInd);
+    Geo_getLongitude_ExpectAndReturn(position, position->longitude);
+    Geo_getSpeed_ExpectAndReturn(position, position->speed);
+    Geo_getCourse_ExpectAndReturn(position, position->course);
+    Geo_getDate_ExpectAndReturn(position, position->date);
+
+    size = YFrame_header(&invStatus, buf, 0, YFRAME_SGP_TYPE);
+    TEST_ASSERT_EQUAL_STRING("!0|19355826018345180,", buf);
+    TEST_ASSERT_TRUE(size != 0);
+
+    size += YFrame_data(&invStatus, &buf[size], YFRAME_SGP_TYPE);
+    TEST_ASSERT_EQUAL_STRING(invFrame, buf);
     TEST_ASSERT_EQUAL(expLen, size);
 }
 

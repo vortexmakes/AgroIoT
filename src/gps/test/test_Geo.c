@@ -23,6 +23,7 @@
 #include "Mock_rmc.h"
 #include "Mock_ubxm8parser.h"
 #include "Mock_SecString.h"
+#include "Mock_geoMgr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -73,7 +74,7 @@ void
 test_GetValidLatitude(void)
 {
     Geo position;
-    char *str, value[] = "37.8402883";
+    char *str, value[] = GEO_INVALID_LATITUDE;
 
     setPreconditions(position.latitude, value, LATITUDE_LENGTH + 1);
     str = Geo_getLatitude(&position);
@@ -104,7 +105,7 @@ void
 test_GetValidUtc(void)
 {
     Geo position;
-    char *str, value[] = "185124";
+    char *str, value[] = GEO_INVALID_UTC;
 
     setPreconditions(position.utc, value, UTC_LENGTH + 1);
     str = Geo_getUtc(&position);
@@ -117,7 +118,7 @@ void
 test_GetValidLongitude(void)
 {
     Geo position;
-    char *str, value[] = "057.6884350";
+    char *str, value[] = GEO_INVALID_LONGITUDE;
 
     setPreconditions(position.longitude, value, LONGITUDE_LENGTH + 1);
     str = Geo_getLongitude(&position);
@@ -130,7 +131,7 @@ void
 test_GetValidSpeed(void)
 {
     Geo position;
-    char *str, value[] = "0.078";
+    char *str, value[] = GEO_INVALID_SPEED;
 
     setPreconditions(position.speed, value, SPEED_LENGTH + 1);
     str = Geo_getSpeed(&position);
@@ -143,7 +144,7 @@ void
 test_GetValidCourse(void)
 {
     Geo position;
-    char *str, value[] = "";
+    char *str, value[] = GEO_INVALID_COURSE;
 
     setPreconditions(position.course, value, COURSE_LENGTH + 1);
     str = Geo_getCourse(&position);
@@ -156,7 +157,7 @@ void
 test_GetValidDate(void)
 {
     Geo position;
-    char *str, value[] = "310119";
+    char *str, value[] = GEO_INVALID_DATE;
 
     setPreconditions(position.date, value, DATE_LENGTH + 1);
     str = Geo_getDate(&position);

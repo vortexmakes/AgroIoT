@@ -42,6 +42,7 @@
     - ../GsmMgr/inc
     - ../epoch/inc
     - ../Crc32/inc
+    - ../geoMgr
     - ../
   :support:
     - test/support
