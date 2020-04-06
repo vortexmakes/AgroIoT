@@ -22,6 +22,12 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
+#ifdef DEBUG
+#define reset_now()		__asm volatile	("	bkpt 0x00FF\n" )
+#else
+#define reset_now()		NVIC_SystemReset()
+#endif
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
@@ -33,10 +39,18 @@ static RKH_ROM_STATIC_EVENT(e_PwrFail, evExtPowerFail);
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
-PwrCtrl_init(PwrCtrl_t state)
+PwrCtrl_init(void)
 {
-    bsp_set_PowerOff(state);
-    enable = 1;
+    if(bsp_get_ExtPower() == ExtPowerOk)
+    {
+    	bsp_set_PowerOff(PowerON);
+        enable = 1;
+    }
+    else
+    {
+    	bsp_set_PowerOff(PowerOFF);
+    	enable = 0;
+    }
 }
 
 void
@@ -54,8 +68,15 @@ PwrCtrl_powerFailCheck(void)
 void
 PwrCtrl_toPowerOff(void)
 {
-    bsp_set_PowerOff(PowerOFF);
-    while(1);   // while until shutdown
+	if(bsp_get_ExtPower() == ExtPowerOk)
+	{
+		reset_now();
+	}
+	else
+	{
+		bsp_set_PowerOff(PowerOFF);
+		while(1);   // while until shutdown
+	}
 }
 
 /* ------------------------------ End of file ------------------------------ */

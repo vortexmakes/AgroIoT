@@ -41,7 +41,6 @@ RKH_THIS_MODULE
 #define BlinkLed(b)  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, b)
 #define ModemCTS(b)  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, b)
 #define RS485_DIR(b) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, b)
-#define PowerOff(b)  HAL_GPIO_WritePin(PWROFF_GPIO_Port, PWROFF_Pin, b)
 #define ExtPower()   HAL_GPIO_ReadPin(EXTPOWER_GPIO_Port, EXTPOWER_Pin)
 
 /* ------------------------------- Constants ------------------------------- */
@@ -135,6 +134,7 @@ bsp_init(int argc, char *argv[])
     MX_USART6_UART_Init();
     MX_CAN1_Init();
     MX_ADC1_Init();
+    HAL_ADC_Start(&hadc1);
     MX_SPI3_Init();
     MX_FATFS_Init();
     MX_USB_HOST_Init();
@@ -238,13 +238,42 @@ bsp_GSMModemFound(void)
 void
 bsp_set_PowerOff(PwrCtrl_t state)
 {
-    PowerOff(state);
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+	GPIO_InitStruct.Pin = PWROFF_Pin;
+
+	if(state == PowerON)
+	{
+		HAL_GPIO_WritePin(PWROFF_GPIO_Port, PWROFF_Pin, 0);
+		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+		HAL_GPIO_Init(PWROFF_GPIO_Port, &GPIO_InitStruct);
+	}
+	else
+	{
+		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		HAL_GPIO_Init(PWROFF_GPIO_Port, &GPIO_InitStruct);
+	}
 }
 
 ExtPwr_t
 bsp_get_ExtPower(void)
 {
+#if 0
     return ExtPower();
+#else
+    uint32_t value;
+
+    value = HAL_ADC_GetValue(&hadc1);
+    HAL_ADC_Start(&hadc1);
+
+    if(value < 90)
+        return 0;
+    else
+        return 1;
+#endif
 }
 
 void 

@@ -38,6 +38,7 @@
 #include "CollectorAct.h"
 #include "StatQue.h"
 #include "ffile.h"
+#include "ffdata.h"
 #include "Config.h"
 #include "mTime.h"
 #include "sequence.h"
@@ -95,11 +96,11 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     /*RKH_FILTER_OFF_SMA(modMgr); */
-    RKH_FILTER_OFF_SMA(gsmMgr);
+    /*RKH_FILTER_OFF_SMA(gsmMgr);*/
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);
-    /*RKH_FILTER_OFF_SMA(collector); */
+    RKH_FILTER_OFF_SMA(collector);
     /*RKH_FILTER_OFF_SMA(usbMgr);*/
     /*RKH_FILTER_OFF_SMA(fsMgr); */
     RKH_FILTER_OFF_ALL_SIGNALS();
@@ -115,11 +116,14 @@ main(int argc, char *argv[])
 {
     bsp_init(argc, argv);
 
-    PwrCtrl_init(PowerON);
     epoch_init();
     init_seqs();
     mTime_init();
     ffile_init();
+
+//    ffile_file_format(FFD0);
+//    ffile_file_format(FFD1);
+
     StatQue_init();
     Config_init();
 
@@ -155,6 +159,8 @@ main(int argc, char *argv[])
     RKH_SMA_POST_FIFO(gsmMgr, &evOpenObj, 0);
     RKH_SMA_POST_FIFO(deviceMgr, &evOpenObj, 0);
     RKH_SMA_POST_FIFO(usbMgr, &evOpenObj, 0);
+
+    PwrCtrl_init();
 
     rkh_fwk_enter();
 

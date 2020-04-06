@@ -38,7 +38,7 @@ typedef enum
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void PwrCtrl_init(PwrCtrl_t state);
+void PwrCtrl_init(void);
 void PwrCtrl_powerFailCheck(void);
 void PwrCtrl_toPowerOff(void);
 
