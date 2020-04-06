@@ -19,6 +19,7 @@
     - ../StatQue/inc
     - ../Config/inc
     - ../Crc32/inc
+    - ../geoMgr
     - ../
   :support:
 

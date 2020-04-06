@@ -54,6 +54,9 @@ struct GStatus
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void GStatus_setChecksum(GStatus *const me);
+bool GStatus_checkValidity(GStatus *const me);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

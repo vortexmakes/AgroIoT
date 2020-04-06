@@ -341,6 +341,7 @@ test_StoreStatus(void)
 
     region = &me->itsMapping;
     region->nStoreLastSync = n = 20;
+    GStatus_setChecksum_Expect(&region->itsCollector->status);
     StatQue_put_ExpectAndReturn(0, 0);
     StatQue_put_IgnoreArg_elem();
 

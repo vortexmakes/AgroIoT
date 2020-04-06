@@ -26,15 +26,25 @@
 #include "settings.h"
 #include "rkhassert.h"
 #include "Config.h"
+#include "geoMgr.h"
 
 RKH_MODULE_NAME(CommMgrAct);
 
 /* ----------------------------- Local macros ------------------------------ */
 #define MAX_NUM_RECV_TRIES      16
+#define GEO_INVALID_GEOSTAMP    \
+    { \
+        {GEO_INVALID_UTC}, {RMC_StatusInvalid}, \
+        {GEO_INVALID_LATITUDE}, {GEO_INVALID_LATITUDE_IND}, \
+        {GEO_INVALID_LONGITUDE}, {GEO_INVALID_LONGITUDE_IND}, \
+        {GEO_INVALID_SPEED}, {GEO_INVALID_COURSE}, \
+        {GEO_INVALID_DATE} \
+    }
 
 /* ------------------------------- Constants ------------------------------- */
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static RKH_ROM_STATIC_EVENT(evRestartObj, evRestart);
+static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -86,7 +96,12 @@ sendFrames(CommMgr *const me)
     {
         res = StatQue_read(&to);
         RKH_ENSURE(res == 0);
-
+        res = (bool)GStatus_checkValidity(&to);
+        if (res == false)
+        {
+            to.data = me->status;
+            to.data.position = invalidPosition;
+        }
         me->evSendObj.size += YFrame_data(&to.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 
                                     YFRAME_MGP_TYPE);

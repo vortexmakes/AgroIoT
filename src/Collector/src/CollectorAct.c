@@ -215,10 +215,8 @@ Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe)
 void
 Mapping_storeStatus(Mapping *const me, RKH_EVT_T *pe)
 {
-    Collector *itsCollector;
-
-    itsCollector = me->itsCollector;
-    StatQue_put(&itsCollector->status);
+    GStatus_setChecksum(&me->itsCollector->status);
+    StatQue_put(&me->itsCollector->status);
     ++me->nStoreLastSync;
 }
 

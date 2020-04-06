@@ -31,8 +31,18 @@
 #include "Mock_StatQue.h"
 #include "Mock_rkhassert.h"
 #include "Mock_Config.h"
+#include "Mock_geoMgr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
+#define GEO_INVALID_GEOSTAMP    \
+    { \
+        {GEO_INVALID_UTC}, {RMC_StatusInvalid}, \
+        {GEO_INVALID_LATITUDE}, {GEO_INVALID_LATITUDE_IND}, \
+        {GEO_INVALID_LONGITUDE}, {GEO_INVALID_LONGITUDE_IND}, \
+        {GEO_INVALID_SPEED}, {GEO_INVALID_COURSE}, \
+        {GEO_INVALID_DATE} \
+    }
+
 /* ------------------------------- Constants ------------------------------- */
 RKHROM RKH_SBSC_T Idle, WaitSync, SendingStatus, ReceivingStatusAck, 
                      SendingEndOfHist, SendingHist, ReceivingMsgAck,
@@ -70,6 +80,9 @@ static const char singleFrame[] =
     "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 static const char frameData[] =
     "|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+static const char invalidFrameData[] =
+    "|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -79,8 +92,16 @@ MockAssertCallback(const char* const file, int line, int cmock_num_calls)
     TEST_PASS();
 }
 
+static ruint
+MockYFrameDataCallback(GStatusType *from, char *to, rInt type, 
+                       int cmock_num_calls)
+{
+    TEST_ASSERT_EQUAL_MEMORY(&from->position, &invalidPosition, sizeof(Geo));
+    return strlen(invalidFrameData);
+}
+
 static int
-setupForSendingABlockOfFrames(ruint nFrames, int len)
+setupForSendingABlockOfFrames(ruint nFrames, int len, bool validity)
 {
     GStatus elem;
     int n, i;
@@ -93,10 +114,16 @@ setupForSendingABlockOfFrames(ruint nFrames, int len)
     {
         StatQue_read_ExpectAndReturn(&elem, 0);
         StatQue_read_IgnoreArg_elem();
+        GStatus_checkValidity_ExpectAndReturn(0, validity);
+        GStatus_checkValidity_IgnoreArg_me();
         YFrame_data_ExpectAndReturn(&elem.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 
                                     YFRAME_MGP_TYPE, len);
         YFrame_data_IgnoreArg_from(); 
+        if (validity == false)
+        {
+            YFrame_data_StubWithCallback(MockYFrameDataCallback);
+        }
     }
     return n;
 }
@@ -495,11 +522,13 @@ test_SendABlockOfFrames(void)
     rbool_t res;
     ruint nFrames;
     int n, len;
+    bool validity;
 
     len = strlen(frameData);
+    validity = true;
 
     nFrames = MAX_NUM_FRAMES_PER_MSG;
-    n = setupForSendingABlockOfFrames(nFrames, len);
+    n = setupForSendingABlockOfFrames(nFrames, len, validity);
     CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
     CommMgr_SendingHistToC2Ext18(me, evt);
     res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
@@ -509,7 +538,7 @@ test_SendABlockOfFrames(void)
     TEST_ASSERT_TRUE(res == true);
 
     nFrames = MAX_NUM_FRAMES_PER_MSG - 1;
-    n = setupForSendingABlockOfFrames(nFrames, len);
+    n = setupForSendingABlockOfFrames(nFrames, len, validity);
     CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
     CommMgr_SendingHistToC2Ext18(me, evt);
     res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
@@ -519,7 +548,7 @@ test_SendABlockOfFrames(void)
     TEST_ASSERT_TRUE(res == true);
 
     nFrames = MAX_NUM_FRAMES_PER_MSG + 1;
-    n = setupForSendingABlockOfFrames(nFrames, len);
+    n = setupForSendingABlockOfFrames(nFrames, len, validity);
     CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
     CommMgr_SendingHistToC2Ext18(me, evt);
     res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
@@ -528,13 +557,25 @@ test_SendABlockOfFrames(void)
     TEST_ASSERT_EQUAL(nFrames - me->nFramesPerMsg, me->framesToSend);
     TEST_ASSERT_TRUE(res == false);
 
-    n = setupForSendingABlockOfFrames(nFrames - n, len);
+    n = setupForSendingABlockOfFrames(nFrames - n, len, validity);
     CommMgr_C2ToSendingHistExt31(me, evt);
     CommMgr_SendingHistToC2Ext18(me, evt);
     res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
     TEST_ASSERT_EQUAL(n, me->nFramesPerMsg);
     TEST_ASSERT_EQUAL(len * n, me->evSendObj.size);
     TEST_ASSERT_EQUAL(n - me->nFramesPerMsg, me->framesToSend);
+    TEST_ASSERT_TRUE(res == true);
+
+    validity = false;
+    len = strlen(invalidFrameData);
+    nFrames = MAX_NUM_FRAMES_PER_MSG;
+    n = setupForSendingABlockOfFrames(nFrames, len, validity);
+    CommMgr_SendingStartOfHistToSendingHistExt30(me, evt);
+    CommMgr_SendingHistToC2Ext18(me, evt);
+    res = CommMgr_isCondC2ToSendingEndOfHist23(me, evt);
+    TEST_ASSERT_EQUAL(n, me->nFramesPerMsg);
+    TEST_ASSERT_EQUAL(len * n, me->evSendObj.size);
+    TEST_ASSERT_EQUAL(nFrames - me->nFramesPerMsg, me->framesToSend);
     TEST_ASSERT_TRUE(res == true);
 }
 

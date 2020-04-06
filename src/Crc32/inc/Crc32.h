@@ -34,7 +34,7 @@ typedef uint32_t Crc32;
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void Crc32_init(void);
-Crc32 Crc32_calc(const uint8_t  *buf, size_t len, Crc32 init);
+Crc32 Crc32_calc(const uint8_t *buf, size_t len, Crc32 init);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
