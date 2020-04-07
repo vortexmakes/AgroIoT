@@ -82,11 +82,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/GsmMgr</locationURI>
 		</link>
 		<link>
-			<name>Sources/src/PwrCtrl</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/src/PwrCtrl</locationURI>
-		</link>
-		<link>
 			<name>Sources/src/StatQue</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/StatQue</locationURI>

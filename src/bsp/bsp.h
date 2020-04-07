@@ -24,7 +24,6 @@
 #include "rkh.h"
 #include "dOut.h"
 #include "dIn.h"
-#include "PwrCtrl.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -52,6 +51,15 @@ enum
 {
     MODCMD_USR_TRACE = RKH_TE_USER,
 };
+
+/*
+ * Battery Control States
+ */
+typedef enum
+{
+    Ready,
+    Release,
+}BatteryCtrl_t;
 
 /*
  * External Power states 
@@ -108,7 +116,7 @@ void bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata);
 void bsp_serial_putchar(int ch, unsigned char c);
 
 void bsp_GSMModemFound(void);
-void bsp_set_PowerOff(PwrCtrl_t state);
+void bsp_set_battery(BatteryCtrl_t state);
 ExtPwr_t bsp_get_ExtPower(void);
 void bsp_SIMReady(void);
 void bsp_SIMSelect(SIMSelect_t sim);

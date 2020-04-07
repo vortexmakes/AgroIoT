@@ -236,13 +236,13 @@ bsp_GSMModemFound(void)
 }
 
 void
-bsp_set_PowerOff(PwrCtrl_t state)
+bsp_set_battery(BatteryCtrl_t state)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 	GPIO_InitStruct.Pin = PWROFF_Pin;
 
-	if(state == PowerON)
+	if(state == Ready)
 	{
 		HAL_GPIO_WritePin(PWROFF_GPIO_Port, PWROFF_Pin, 0);
 		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;

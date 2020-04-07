@@ -50,6 +50,11 @@ struct BatChrEvt
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void BatChr_init(void);
+void BatChr_shutDown(void);
+
+void BatChr_powerFailCheck(void);
+
 BatChrStatus BatChr_getStatus(void);
 
 /* -------------------- External C language linkage end -------------------- */

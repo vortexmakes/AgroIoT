@@ -21,7 +21,7 @@
 #include "rkhfwk_dynevt.h"
 #include "rkhfwk_pubsub.h"
 #include "bsp.h"
-#include "PwrCtrl.h"
+#include "BatChr.h"
 #include "signals.h"
 #include "CommMgr.h"
 #include "GsmMgr.h"
@@ -160,7 +160,7 @@ main(int argc, char *argv[])
     RKH_SMA_POST_FIFO(deviceMgr, &evOpenObj, 0);
     RKH_SMA_POST_FIFO(usbMgr, &evOpenObj, 0);
 
-    PwrCtrl_init();
+    BatChr_init();
 
     rkh_fwk_enter();
 
