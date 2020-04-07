@@ -33,11 +33,8 @@ enum BatChrStatus
 {
     LINE_BATT,
     EXT_PWR_OK = LINE_BATT,
-    LINE_BATTCHG,
-    LINE_NOBATT,
-    NOLINE_BATT,
-    EXT_PWR_FAIL = NOLINE_BATT,
-    NOLINE_BATTDIS
+    NOLINE_BATT = 3,
+    EXT_PWR_FAIL = NOLINE_BATT
 };
 
 /* ------------------------------- Data types ------------------------------ */
