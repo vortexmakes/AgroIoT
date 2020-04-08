@@ -1,25 +1,26 @@
 /**
- *  \file       BatChr.h
- *  \brief      Specifies the interface of battery charger module
+ *  \file       GsmMgr_sendSMS.h
+ *  \brief      Example: Sending Test SMS using GsmMgr interface.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2019.29.01  LeFr  v1.0.00  Initial version
+ *  2019.25.01  DaBa  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ *  DaBa  Dario Baliña  db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __BATCHR_H__
-#define __BATCHR_H__
+#ifndef __GSMMGR_SENDSMS_H__
+#define __GSMMGR_SENDSMS_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkhevt.h"
+#include "rkh.h"
+#include "GsmMgr.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -28,31 +29,10 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-typedef enum BatChrStatus BatChrStatus;
-enum BatChrStatus
-{
-    LINE_BATT,
-    EXT_PWR_OK = LINE_BATT,
-    NOLINE_BATT = 3,
-    EXT_PWR_FAIL = NOLINE_BATT
-};
-
 /* ------------------------------- Data types ------------------------------ */
-typedef struct BatChrEvt BatChrEvt;
-struct BatChrEvt
-{
-    RKH_EVT_T base;
-    BatChrStatus status;
-};
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void BatChr_init(void);
-void BatChr_shutDown(void);
-
-void BatChr_powerFailCheck(void);
-
-BatChrStatus BatChr_getStatus(void);
+void GsmMgr_sendTestSMS(RKH_SMA_T *ao);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

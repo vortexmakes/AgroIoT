@@ -53,6 +53,24 @@ enum
 };
 
 /*
+ * Battery Control States
+ */
+typedef enum
+{
+    Ready,
+    Release,
+}BatteryCtrl_t;
+
+/*
+ * External Power states 
+ */
+typedef enum
+{
+    ExtPowerFail,
+    ExtPowerOk,
+}ExtPwr_t;
+
+/*
  * Sim Selection
  */
 typedef enum
@@ -98,6 +116,8 @@ void bsp_serial_putnchar(int ch, unsigned char *p, ruint ndata);
 void bsp_serial_putchar(int ch, unsigned char c);
 
 void bsp_GSMModemFound(void);
+void bsp_set_battery(BatteryCtrl_t state);
+ExtPwr_t bsp_get_ExtPower(void);
 void bsp_SIMReady(void);
 void bsp_SIMSelect(SIMSelect_t sim);
 void bsp_SIMChange();

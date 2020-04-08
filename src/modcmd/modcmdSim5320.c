@@ -51,6 +51,9 @@ struct CmdTbl
     ModCmd disconnect;
     ModCmd sendData;
     ModCmd readData;
+    ModCmd checkSMS;
+    ModCmd deleteSMS;
+    ModCmd sendSMS;
 };
 
 /* ---------------------------- Global variables --------------------------- */
@@ -67,7 +70,7 @@ static const CmdTbl cmdTbl =
 
     /* initStr */
     {RKH_INIT_STATIC_EVT(evCmd),
-     "ATE1+CREG=1;V1;Q0;+STK=0;+IFC=0,0;+CIPSRIP=0;+CIPHEAD=0\r\n",
+     "ATE1+CREG=1;V1;Q0;+STK=0;+IFC=0,0;+CMGF=1;+CIPSRIP=0;+CIPHEAD=0\r\n",
      &gsmMgr,
      RKH_TIME_MS(5000), RKH_TIME_MS(5000)},
 
@@ -184,6 +187,24 @@ static const CmdTbl cmdTbl =
     /* readData */
     {RKH_INIT_STATIC_EVT(evCmd),
      "AT+CIPRXGET=2,0,1024\r\n",
+     &gsmMgr,
+     RKH_TIME_MS(3000), RKH_TIME_MS(500)},
+
+    /* checkSMS */
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CMGL=\"ALL\"\r\n",
+     &gsmMgr,
+     RKH_TIME_MS(3000), RKH_TIME_MS(500)},
+
+    /* deleteSMS */
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CMGD=%d\r\n",
+     &gsmMgr,
+     RKH_TIME_MS(3000), RKH_TIME_MS(500)},
+
+    /* sendSMS */
+    {RKH_INIT_STATIC_EVT(evCmd),
+     "AT+CMGSO=\"%s\",\"",
      &gsmMgr,
      RKH_TIME_MS(3000), RKH_TIME_MS(500)},
 };
@@ -401,6 +422,42 @@ char *
 ModCmd_endOfXmitStr(void)
 {
     return (char *)cmdTbl.sendData.fmt;
+}
+
+void
+ModCmd_checkSMS(void)
+{
+    sendModCmd_noArgs(&cmdTbl.checkSMS);
+}
+
+void
+ModCmd_deleteSMS(unsigned char index)
+{
+    sendModCmd_rui16(&cmdTbl.deleteSMS, index);
+}
+
+void
+ModCmd_sendSMS(char *dest, char *text, ruint size)
+{
+    ModMgrEvt *evtCmd;
+    const ModCmd *p;
+
+    if(size > SMS_MESSAGE_SIZE)
+        size = SMS_MESSAGE_SIZE + 1;
+
+    *(text + size) = '"'; // ESC char for end of Message
+    *(text + size + 1) = '\r'; // ESC char for end of Message
+    *(text + size + 2) = '\n'; // ESC char for end of Message
+
+    p = &cmdTbl.sendSMS;
+
+    evtCmd = RKH_ALLOC_EVT(ModMgrEvt, evCmd, *p->aoDest);
+
+    snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, p->fmt, dest);
+    evtCmd->data = text;
+    evtCmd->nData = size + 3;
+
+    postFIFOEvtCmd(evtCmd, p, text, size + 3);
 }
 
 /* ------------------------------ End of file ------------------------------ */

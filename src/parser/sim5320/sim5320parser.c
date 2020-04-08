@@ -44,10 +44,14 @@ SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_cga,
                      plus_c, plus_creg, at_plus_cifsr,
                      netClockSync,
                      at_plus_cclk, w_netopen,netOpenError, at_plus_ipaddr,
-                     at_plus_cops, cclk_end;
+                     at_plus_cops, cclk_end, at_plus_cmg, 
+                     at_plus_cmgl, plus_cmgl_wfrom, plus_cmgl_wdata, 
+                     at_plus_cmgd, at_plus_cmgs, at_plus_cmgs_wt, 
+                     at_plus_cmgs_sent;
 
 SSP_DCLR_TRN_NODE at_plus_ciprxget_data, cclk_year, cclk_month, cclk_day,
-                  cclk_hour, cclk_min, plus_csq, at_plus_cgsn, cops_read;
+                  cclk_hour, cclk_min, plus_csq, at_plus_cgsn, cops_read,
+                  plus_cmgl, plus_cmgl_from, plus_cmgl_data;
 
 static rui8_t isURC;
 
@@ -65,6 +69,9 @@ static char *pImei;
 
 static OperEvt copsEvt;
 static char *pCops;
+
+static SMSEvt smsEvt;
+static char *psms;
 
 char *pcsq;
 char csqBuf[CSQ_LENGTH];
@@ -121,6 +128,14 @@ static void csqInit(unsigned char pos);
 static void csqCollect(unsigned char c);
 static void csqSet(unsigned char pos);
 
+static void smsInit(unsigned char pos);
+static void smsNone(unsigned char pos);
+static void smsDone(unsigned char pos);
+static void smsSetIndex(unsigned char pos);
+static void smsSetFrom(unsigned char pos);
+static void smsCollect(unsigned char c);
+static void smsNew(unsigned char pos);
+
 /* ---------------------------- Local functions ---------------------------- */
 
 static void
@@ -164,6 +179,7 @@ SSPBR("I",              NULL,   &at_plus_ci),
 SSPBR("TZR=1",          NULL,   &waitOK),
 SSPBR("CLK?",           NULL,   &at_plus_cclk),
 SSPBR("OPS?",           NULL,   &at_plus_cops),
+SSPBR("MG",             NULL,   &at_plus_cmg),
 SSPBR("\r\n",   NULL,  &rootCmdParser),
 SSP_END_BR_TABLE
 
@@ -475,6 +491,65 @@ SSP_CREATE_BR_TABLE(at_plus_cgsn)
 SSPBR("OK\r\n", imeiSet, &rootCmdParser),
 SSP_END_BR_TABLE
 
+/* ---------------------------- AT+CMG... ------------------------ */
+SSP_CREATE_NORMAL_NODE(at_plus_cmg);
+SSP_CREATE_BR_TABLE(at_plus_cmg)
+SSPBR("L=\"ALL\"\r\n", NULL, &at_plus_cmgl),
+SSPBR("D", NULL,       &at_plus_cmgd),
+SSPBR("SO=\"", NULL,    &at_plus_cmgs),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_cmgl);
+SSP_CREATE_BR_TABLE(at_plus_cmgl)
+SSPBR("+CMGL:", smsInit, &plus_cmgl),
+SSPBR("\r\n",  smsNone, &rootCmdParser),
+SSP_END_BR_TABLE
+
+SSP_CREATE_TRN_NODE(plus_cmgl, smsCollect);
+SSP_CREATE_BR_TABLE(plus_cmgl)
+SSPBR(",", smsSetIndex, &plus_cmgl_wfrom),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(plus_cmgl_wfrom);
+SSP_CREATE_BR_TABLE(plus_cmgl_wfrom)
+SSPBR(",\"", NULL, &plus_cmgl_from),
+SSP_END_BR_TABLE
+
+SSP_CREATE_TRN_NODE(plus_cmgl_from, smsCollect);
+SSP_CREATE_BR_TABLE(plus_cmgl_from)
+SSPBR("\"", smsSetFrom, &plus_cmgl_wdata),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(plus_cmgl_wdata);
+SSP_CREATE_BR_TABLE(plus_cmgl_wdata)
+SSPBR("\r\n", NULL, &plus_cmgl_data),
+SSP_END_BR_TABLE
+
+SSP_CREATE_TRN_NODE(plus_cmgl_data, smsCollect);
+SSP_CREATE_BR_TABLE(plus_cmgl_data)
+SSPBR("\r\n", smsNew, &rootCmdParser),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_cmgd);
+SSP_CREATE_BR_TABLE(at_plus_cmgd)
+SSPBR("OK\r\n", smsDone, &rootCmdParser),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_cmgs);
+SSP_CREATE_BR_TABLE(at_plus_cmgs)
+SSPBR(",", NULL, &at_plus_cmgs_wt),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_cmgs_wt);
+SSP_CREATE_BR_TABLE(at_plus_cmgs_wt)
+SSPBR("\"", dataModeReady,  &at_plus_cmgs_sent),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(at_plus_cmgs_sent);
+SSP_CREATE_BR_TABLE(at_plus_cmgs_sent)
+SSPBR("OK", smsDone,  &rootCmdParser),
+SSP_END_BR_TABLE
+
 /* --------------------------------------------------------------- */
 
 static void
@@ -646,6 +721,7 @@ dataModeReady(unsigned char pos)
     RKH_SMA_POST_FIFO(modMgr, &e_DataModeReady,  &sim5320parser);
 }
 
+static void
 data_init(unsigned char c)
 {
     (void)c;
@@ -897,6 +973,69 @@ csqSet(unsigned char pos)
     sigLevelEvt.e.fwdEvt = evSigLevel;
 
     RKH_SMA_POST_FIFO(modMgr, RKH_UPCAST(RKH_EVT_T, &sigLevelEvt),
+                      &sim5320parser);
+}
+
+static void
+smsInit(unsigned char pos)
+{
+    psms = smsEvt.data;
+}
+
+static void
+smsNone(unsigned char pos)
+{
+    sendModResp_noArgs(evNoSMS);
+}
+
+static void
+smsDone(unsigned char pos)
+{
+    sendModResp_noArgs(evDoneSMS);
+}
+
+static void 
+smsCollect(unsigned char c)
+{
+    if (psms >= (smsEvt.data + SMS_BUF_SIZE - 1))
+    {
+        return;
+    }
+    
+    *psms = c;
+    ++psms;
+}
+
+static void
+smsSetIndex(unsigned char pos)
+{
+    *psms = '\0';
+    smsEvt.index = atoi(smsEvt.data);
+
+    psms = smsEvt.data;
+}
+
+static void
+smsSetFrom(unsigned char pos)
+{
+    *(psms - 1) = '\0';
+    strncpy(smsEvt.from, smsEvt.data, SMS_FROM_BUF_SIZE);
+
+    psms = smsEvt.data;
+}
+
+static void smsNew(unsigned char pos)
+{
+    psms -= 2;
+    *psms = '\0';
+
+    smsEvt.size = psms - smsEvt.data;
+
+    RKH_SET_STATIC_EVENT(RKH_UPCAST(RKH_EVT_T, &smsEvt), evResponse);
+
+    smsEvt.e.fwdEvt = evNewSMS;
+
+    RKH_SMA_POST_FIFO(modMgr, RKH_UPCAST(RKH_EVT_T, &smsEvt),
                       &sim5320parser);
 }
 

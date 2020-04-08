@@ -21,6 +21,7 @@
 #include "rkhfwk_dynevt.h"
 #include "rkhfwk_pubsub.h"
 #include "bsp.h"
+#include "BatChr.h"
 #include "signals.h"
 #include "CommMgr.h"
 #include "GsmMgr.h"
@@ -37,6 +38,7 @@
 #include "CollectorAct.h"
 #include "StatQue.h"
 #include "ffile.h"
+#include "ffdata.h"
 #include "Config.h"
 #include "mTime.h"
 #include "sequence.h"
@@ -90,15 +92,16 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_TMR_TOUT);*/
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_STATE);
     RKH_FILTER_OFF_EVENT(RKH_TE_SMA_FIFO);
+    RKH_FILTER_OFF_EVENT(RKH_TE_SMA_GET);
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SMA_LIFO); */
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
-    /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
+    RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
     /*RKH_FILTER_OFF_SMA(modMgr); */
     RKH_FILTER_OFF_SMA(gsmMgr);
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);
-    /*RKH_FILTER_OFF_SMA(collector); */
+    RKH_FILTER_OFF_SMA(collector);
     /*RKH_FILTER_OFF_SMA(usbMgr);*/
     /*RKH_FILTER_OFF_SMA(fsMgr); */
     RKH_FILTER_OFF_ALL_SIGNALS();
@@ -118,6 +121,10 @@ main(int argc, char *argv[])
     init_seqs();
     mTime_init();
     ffile_init();
+
+//    ffile_file_format(FFD0);
+//    ffile_file_format(FFD1);
+
     StatQue_init();
     Config_init();
 
@@ -136,6 +143,7 @@ main(int argc, char *argv[])
     RKH_TR_FWK_ACTOR(&inChg, "inChg");
     RKH_TR_FWK_ACTOR(&sim5320parser, "sim5320parser");
     RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
+    RKH_TR_FWK_ACTOR(&main, "main");
 
     rkh_dynEvt_init();
     rkh_fwk_registerEvtPool(evPool0Sto, SIZEOF_EP0STO, SIZEOF_EP0_BLOCK);
@@ -150,9 +158,11 @@ main(int argc, char *argv[])
     RKH_SMA_ACTIVATE(collector, Collector_qsto, COLLECTOR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(usbMgr, UsbMgt_qsto, USBMGR_QSTO_SIZE, 0, 0);
 
-    RKH_SMA_POST_FIFO(gsmMgr, &evOpenObj, 0);
-    RKH_SMA_POST_FIFO(deviceMgr, &evOpenObj, 0);
-    RKH_SMA_POST_FIFO(usbMgr, &evOpenObj, 0);
+    RKH_SMA_POST_FIFO(gsmMgr, &evOpenObj, &main);
+    RKH_SMA_POST_FIFO(deviceMgr, &evOpenObj, &main);
+    RKH_SMA_POST_FIFO(usbMgr, &evOpenObj, &main);
+
+    BatChr_init();
 
     rkh_fwk_enter();
 

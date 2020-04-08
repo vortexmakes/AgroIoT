@@ -101,7 +101,14 @@ enum Signals
 	evTout8,
     evGsmError,
 	evGsmReady,
-	evDataModeReady
+	evDataModeReady,
+    evNoSMS,
+    evNewSMS,
+    evSendSMS,
+    evSendSMSOk,
+    evSendSMSFail,
+    evDoneSMS,
+    evBatChrStatus
 };
 
 /* ------------------------------- Data types ------------------------------ */
