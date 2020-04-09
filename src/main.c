@@ -99,6 +99,7 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SMA_LIFO); */
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
+    RKH_FILTER_OFF_SMA(powerMgr);
     /*RKH_FILTER_OFF_SMA(modMgr); */
     /*RKH_FILTER_OFF_SMA(gsmMgr);*/
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
@@ -134,13 +135,20 @@ clean_ffile(void)
 int
 main(int argc, char *argv[])
 {
+	ruint di1, di2;
+
     bsp_init(argc, argv);
 
     epoch_init();
     init_seqs();
     mTime_init();
 
-//    clean_ffile();
+    di1 = bsp_getDigIn(dIn1);
+    di2 = bsp_getDigIn(dIn2);
+
+    if(di1 == di2)
+    	clean_ffile();
+
     ffile_init();
     StatQue_init();
     Config_init();
