@@ -28,10 +28,11 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-FATFS USBDISKFatFs;    /* File system object for USB disk logical drive */
-FIL File;              /* File object */
-char USBDISKPath[4];   /* USB Host logical drive path */
-char fileName[25];
+static FATFS USBDISKFatFs;    /* File system object for USB disk logical drive */
+static FIL File;              /* File object */
+static char USBDISKPath[4];   /* USB Host logical drive path */
+static char fileName[25];
+static ruint isopen = 0;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -40,6 +41,19 @@ void
 trace_msd_init(void)
 {
     USBDISKFatFs.fs_type = 0;
+    isopen = 1;
+}
+
+void
+trace_msd_close(uint8_t *pData, uint16_t Size)
+{
+	isopen = 0;
+
+	if(File.obj.fs != NULL)
+	{
+		f_close(&File);
+		f_mount(NULL, (TCHAR const*)USBDISKPath, 0);
+	}
 }
 
 void
@@ -48,6 +62,9 @@ trace_msd_write(uint8_t *pData, uint16_t Size)
     FRESULT res;
     uint32_t byteswritten;
     FSIZE_t fileSize;
+
+    if(!isopen)
+    	return;
 
     if(bsp_usbDeviceStatus() != UsbHostClassReady)
     {
