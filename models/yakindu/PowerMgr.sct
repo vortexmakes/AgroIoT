@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="interface:&#xA;&#xA;in event evGStatus&#xA;in event evPowerFail&#xA;&#xA;operation updateStatus()&#xA;operation storeStatus()&#xA;operation ffile_sync()&#xA;operation trace_msd_close()&#xA;operation BatChr_shutDown()&#xA;" name="PowerMgr" documentation="- This model follows the logic states of both CLOCK_1S and CLOCK_3S digital signals.&#xD;&#xA;- While the relay validator works, the expected sequence of logic states is as follows: &quot;1,0,2,0,0,0&quot;. Each number is formed by CLOCK_1S | (CLOCK_3S &lt;&lt; 1)&#xD;&#xA;- The inputs of this model is provided by ClockSignal state machine on the falling edge of it.&#xD;&#xA;- The A/D converter is supposed to be in continuos mode.">
+  <sgraph:Statechart xmi:id="_yt0KkDjpEemSZunftq3MwQ" specification="interface:&#xA;&#xA;in event evGStatus&#xA;in event evBatChrStatus&#xA;&#xA;operation init()&#xA;operation updateStatus()&#xA;operation storeStatus()&#xA;operation ffile_sync()&#xA;operation trace_msd_close()&#xA;operation BatChr_shutDown()&#xA;&#xA;operation isPowerFail(): boolean" name="PowerMgr" documentation="- This model follows the logic states of both CLOCK_1S and CLOCK_3S digital signals.&#xD;&#xA;- While the relay validator works, the expected sequence of logic states is as follows: &quot;1,0,2,0,0,0&quot;. Each number is formed by CLOCK_1S | (CLOCK_3S &lt;&lt; 1)&#xD;&#xA;- The inputs of this model is provided by ClockSignal state machine on the falling edge of it.&#xD;&#xA;- The A/D converter is supposed to be in continuos mode.">
     <regions xmi:id="_yt2m0zjpEemSZunftq3MwQ" name="main region">
       <vertices xsi:type="sgraph:Entry" xmi:id="_yt7fUDjpEemSZunftq3MwQ">
-        <outgoingTransitions xmi:id="_yt97kzjpEemSZunftq3MwQ" specification="" target="_yt8GZzjpEemSZunftq3MwQ"/>
+        <outgoingTransitions xmi:id="_yt97kzjpEemSZunftq3MwQ" specification="/init()" target="_yt8GZzjpEemSZunftq3MwQ"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_yt8GZzjpEemSZunftq3MwQ" specification="evGStatus/updateStatus()" name="Ready" incomingTransitions="_yt97kzjpEemSZunftq3MwQ">
-        <outgoingTransitions xmi:id="_MCgkoOUSEemMB6bmaFt2TA" specification="evPowerFail/&#xD;&#xA;storeStatus();&#xD;&#xA;ffile_sync();&#xD;&#xA;trace_msd_close();&#xD;&#xA;BatChr_shutDown()" target="_60EiQHp4EeqnXJ7pLrXguA"/>
+        <outgoingTransitions xmi:id="_MCgkoOUSEemMB6bmaFt2TA" specification="evBatChrStatus[isPowerFail()]/&#xD;&#xA;storeStatus();&#xD;&#xA;ffile_sync();&#xD;&#xA;trace_msd_close();&#xD;&#xA;BatChr_shutDown()" target="_60EiQHp4EeqnXJ7pLrXguA"/>
       </vertices>
       <vertices xsi:type="sgraph:FinalState" xmi:id="_60EiQHp4EeqnXJ7pLrXguA" incomingTransitions="_MCgkoOUSEemMB6bmaFt2TA"/>
     </regions>
@@ -48,7 +48,7 @@
           <layoutConstraint xsi:type="notation:Bounds" xmi:id="_yt97kjjpEemSZunftq3MwQ" x="1" y="52" width="198" height="55"/>
         </children>
         <children xsi:type="notation:Shape" xmi:id="_60FJUHp4EeqnXJ7pLrXguA" type="FinalState" element="_60EiQHp4EeqnXJ7pLrXguA" fontName="Verdana" lineColor="4210752">
-          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_60FJUXp4EeqnXJ7pLrXguA" x="97" y="255"/>
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_60FJUXp4EeqnXJ7pLrXguA" x="37" y="243"/>
         </children>
         <layoutConstraint xsi:type="notation:Bounds" xmi:id="_yt6RNDjpEemSZunftq3MwQ"/>
       </children>
@@ -81,11 +81,11 @@
     <edges xmi:id="_MCgkoeUSEemMB6bmaFt2TA" type="Transition" element="_MCgkoOUSEemMB6bmaFt2TA" source="_yt8tcjjpEemSZunftq3MwQ" target="_60FJUHp4EeqnXJ7pLrXguA">
       <children xsi:type="notation:DecorationNode" xmi:id="_MCgkpeUSEemMB6bmaFt2TA" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_MCgkpuUSEemMB6bmaFt2TA"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_MCgkp-USEemMB6bmaFt2TA" x="4" y="-93"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_MCgkp-USEemMB6bmaFt2TA" x="-2" y="-108"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_MCgkouUSEemMB6bmaFt2TA" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_MCgkpOUSEemMB6bmaFt2TA" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_MCgko-USEemMB6bmaFt2TA" points="[18, 7, 3, -155]$[18, 160, 3, -2]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_MCgko-USEemMB6bmaFt2TA" points="[-45, 7, 0, -155]$[-45, 160, 0, -2]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_MChywOUSEemMB6bmaFt2TA" id="(0.4441862237122829,0.8727272727272727)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_MChyweUSEemMB6bmaFt2TA" id="(0.26666666666666666,0.13333333333333333)"/>
     </edges>
