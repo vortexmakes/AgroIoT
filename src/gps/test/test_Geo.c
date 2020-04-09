@@ -166,4 +166,30 @@ test_GetValidDate(void)
     TEST_ASSERT_EQUAL_STRING(value, str);
 }
 
+void
+test_GetValidLatitudeIndicator(void)
+{
+    Geo position;
+    char *str, value[] = GEO_INVALID_LATITUDE_IND;
+
+    setPreconditions(position.latInd, value, LAT_IND_LENGTH + 1);
+    str = Geo_getLatInd(&position);
+
+    TEST_ASSERT_NOT_NULL(str);
+    TEST_ASSERT_EQUAL_STRING(value, str);
+}
+
+void
+test_GetValidLongitudeIndicator(void)
+{
+    Geo position;
+    char *str, value[] = GEO_INVALID_LONGITUDE_IND;
+
+    setPreconditions(position.latInd, value, LONG_IND_LENGTH + 1);
+    str = Geo_getLatInd(&position);
+
+    TEST_ASSERT_NOT_NULL(str);
+    TEST_ASSERT_EQUAL_STRING(value, str);
+}
+
 /* ------------------------------ End of file ------------------------------ */

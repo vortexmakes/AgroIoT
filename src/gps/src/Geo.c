@@ -86,7 +86,7 @@ Geo_init(GeoErrorHandler errHandler)
 char *
 Geo_getLatInd(Geo *const me)
 {
-	return getAttribute(me->latInd, LAT_IND_LENGTH +1 );
+	return getAttribute(me->latInd, LAT_IND_LENGTH + 1);
 }
 
 char *
@@ -104,7 +104,7 @@ Geo_getUtc(Geo *const me)
 char *
 Geo_getLongInd(Geo *const me)
 {
-	return getAttribute(me->longInd, LONG_IND_LENGTH +1 );
+	return getAttribute(me->longInd, LONG_IND_LENGTH + 1);
 }
 
 char *
