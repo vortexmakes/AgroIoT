@@ -42,6 +42,7 @@
 #include "main.h"
 #include "adc.h"
 #include "can.h"
+#include "crc.h"
 #include "dma.h"
 #include "fatfs.h"
 #include "spi.h"
@@ -240,6 +241,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_FATFS_Init();
   MX_USB_HOST_Init();
+  MX_CRC_Init();
   /* USER CODE BEGIN 2 */
   BSP_PROC_STOP();
   BSP_MARK_STOP();

@@ -138,6 +138,7 @@ bsp_init(int argc, char *argv[])
     MX_SPI3_Init();
     MX_FATFS_Init();
     MX_USB_HOST_Init();
+    MX_CRC_Init();
 
     modPwr_init();
     dIn_init();

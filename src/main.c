@@ -97,7 +97,7 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
     /*RKH_FILTER_OFF_SMA(modMgr); */
-    RKH_FILTER_OFF_SMA(gsmMgr);
+    /*RKH_FILTER_OFF_SMA(gsmMgr);*/
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);
@@ -122,8 +122,8 @@ main(int argc, char *argv[])
     mTime_init();
     ffile_init();
 
-//    ffile_file_format(FFD0);
-//    ffile_file_format(FFD1);
+    ffile_file_format(FFD0);
+    ffile_file_format(FFD1);
 
     StatQue_init();
     Config_init();
