@@ -45,7 +45,7 @@ trace_msd_init(void)
 }
 
 void
-trace_msd_close(uint8_t *pData, uint16_t Size)
+trace_msd_close(void)
 {
 	isopen = 0;
 

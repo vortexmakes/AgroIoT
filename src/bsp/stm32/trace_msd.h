@@ -31,6 +31,7 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void trace_msd_init(void);
+void trace_msd_close(void);
 void trace_msd_write(uint8_t *pData, uint16_t Size);
 
 /* -------------------- External C language linkage end -------------------- */
