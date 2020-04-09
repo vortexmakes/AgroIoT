@@ -86,7 +86,7 @@ struct DeviceMgr
     RKHTmEvt tmr;
 };
 
-RKH_SMA_CREATE(DeviceMgr, deviceMgr, 5, HCAL, &DeviceMgr_Inactive, init, NULL);
+RKH_SMA_CREATE(DeviceMgr, deviceMgr, 6, HCAL, &DeviceMgr_Inactive, init, NULL);
 RKH_SMA_DEF_PTR(deviceMgr);
 
 /* ------------------------------- Constants ------------------------------- */

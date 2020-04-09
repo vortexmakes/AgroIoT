@@ -94,10 +94,10 @@ RKH_BRANCH(ELSE, NULL, &Mapping_Running),
 RKH_END_BRANCH_TABLE
 
 /* ............................. Active object ............................. */
-RKH_SMA_CREATE(Collector, collector, 7, HCAL, &DevStatus_Active,
+RKH_SMA_CREATE(Collector, collector, 8, HCAL, &DevStatus_Active,
                                                     Collector_init, NULL);
 RKH_SMA_DEF_PTR(collector);
-RKH_SM_CONST_CREATE(mapping, 8, HCAL, &Mapping_Active, NULL, NULL);
+RKH_SM_CONST_CREATE(mapping, 9, HCAL, &Mapping_Active, NULL, NULL);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */

@@ -23,6 +23,7 @@
 #include "bsp.h"
 #include "BatChr.h"
 #include "signals.h"
+#include "PowerMgr.h"
 #include "CommMgr.h"
 #include "GsmMgr.h"
 #include "modmgr.h"
@@ -45,6 +46,7 @@
 #include "epoch.h"
 
 /* ----------------------------- Local macros ------------------------------ */
+#define POWERMGR_QSTO_SIZE        4
 #define COMMMGR_QSTO_SIZE       16
 #define GSMMGR_QSTO_SIZE        8
 #define MODMGR_QSTO_SIZE        4
@@ -66,6 +68,7 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static RKH_EVT_T *PowerMgr_qsto[POWERMGR_QSTO_SIZE];
 static RKH_EVT_T *CommMgr_qsto[COMMMGR_QSTO_SIZE];
 static RKH_EVT_T *GsmMgr_qsto[GSMMGR_QSTO_SIZE];
 static RKH_EVT_T *ModMgr_qsto[MODMGR_QSTO_SIZE];
@@ -95,7 +98,7 @@ setupTraceFilters(void)
     RKH_FILTER_OFF_EVENT(RKH_TE_SMA_GET);
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SMA_LIFO); */
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
-    RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     /*RKH_FILTER_OFF_SMA(modMgr); */
     /*RKH_FILTER_OFF_SMA(gsmMgr);*/
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
@@ -111,6 +114,22 @@ setupTraceFilters(void)
     RKH_FILTER_ON_SIGNAL(evNoDev);
 }
 
+#include "ffdir.h"
+
+static void
+clean_ffile(void)
+{
+    ffui8_t status;
+
+    flash_init();
+    ffdir_getDirty(DirMainId);
+    ffdir_getDirty(DirBackupId);
+    ffdir_restore(&status);
+    ffile_file_format(FFD0);
+    ffile_file_format(FFD1);
+    ffile_init();
+}
+
 /* ---------------------------- Global functions --------------------------- */
 int
 main(int argc, char *argv[])
@@ -120,11 +139,9 @@ main(int argc, char *argv[])
     epoch_init();
     init_seqs();
     mTime_init();
+
+//    clean_ffile();
     ffile_init();
-
-    ffile_file_format(FFD0);
-    ffile_file_format(FFD1);
-
     StatQue_init();
     Config_init();
 
@@ -149,6 +166,8 @@ main(int argc, char *argv[])
     rkh_fwk_registerEvtPool(evPool0Sto, SIZEOF_EP0STO, SIZEOF_EP0_BLOCK);
     rkh_fwk_registerEvtPool(evPool1Sto, SIZEOF_EP1STO, SIZEOF_EP1_BLOCK);
     rkh_fwk_registerEvtPool(evPool2Sto, SIZEOF_EP2STO, SIZEOF_EP2_BLOCK);
+
+    RKH_SMA_ACTIVATE(powerMgr, PowerMgr_qsto, POWERMGR_QSTO_SIZE, 0, 0);
 
     RKH_SMA_ACTIVATE(gsmMgr, GsmMgr_qsto, GSMMGR_QSTO_SIZE, 0, 0);
     RKH_SMA_ACTIVATE(modMgr, ModMgr_qsto, MODMGR_QSTO_SIZE, 0, 0);

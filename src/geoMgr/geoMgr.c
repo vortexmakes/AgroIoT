@@ -133,7 +133,7 @@ struct GeoMgr
     int cog;
 };
 
-RKH_SMA_CREATE(GeoMgr, geoMgr, 4, HCAL, &GeoMgr_Configure, init, NULL);
+RKH_SMA_CREATE(GeoMgr, geoMgr, 5, HCAL, &GeoMgr_Configure, init, NULL);
 RKH_SMA_DEF_PTR(geoMgr);
 
 /* ------------------------------- Constants ------------------------------- */

@@ -449,11 +449,11 @@ struct GsmMgr
     rInt retryCount;
 };
 
-RKH_SMA_CREATE(GsmMgr, gsmMgr, 1, HCAL, &GsmMgr_Inactive, ToInactiveExt0, NULL);
+RKH_SMA_CREATE(GsmMgr, gsmMgr, 2, HCAL, &GsmMgr_Inactive, ToInactiveExt0, NULL);
 RKH_SMA_DEF_PTR(gsmMgr);
 
-RKH_SM_CONST_CREATE(socket, 2, HCAL, &GsmMgr_Socket_WaitGsmReady, ToSocket_WaitGsmReadyExt69, NULL);
-RKH_SM_CONST_CREATE(sms, 3, HCAL, &GsmMgr_SMS_WaitGsmReady, NULL, NULL);
+RKH_SM_CONST_CREATE(socket, 3, HCAL, &GsmMgr_Socket_WaitGsmReady, ToSocket_WaitGsmReadyExt69, NULL);
+RKH_SM_CONST_CREATE(sms, 4, HCAL, &GsmMgr_SMS_WaitGsmReady, NULL, NULL);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */

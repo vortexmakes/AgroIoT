@@ -94,6 +94,7 @@
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/SecString/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/PowerMgr/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.139996747" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1726576784" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -167,6 +168,7 @@
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/SecString/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/PowerMgr/inc"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1379635670" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -237,6 +239,7 @@
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/SecString/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/PowerMgr/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.819050743" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.950737101" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -252,7 +255,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/Crc32/src/Crc32.c|src/SecString/test|src/SecString/build|src/Crc32/src/Crc32_sw.c|src/Crc32/test|src/Crc32/build|src/gps/build|src/gps/test|src/CommMgr/build|src/CommMgr/test|src/Collector/test|src/Collector/build|third-party/rkh/source/trc/build|third-party/rkh/source/sm/build|third-party/rkh/source/portable/test|src/FsMgr|third-party/rkh/source/portable/ucos|third-party/ssp/tools|third-party/rkh/third-party|src/ffile/portable/80x86|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|src/topic/test|third-party/rkh/source/fwk/build|src/modcmd/modcmdSim900.c|third-party/rkh/source/queue/build|src/device/build|third-party/rkh/source/fwk/test|third-party/ssp/tests|src/ffile/portable/ceedling|third-party/rkh/source/trc/test|src/parser/sim900|third-party/rkh/source/sm/test|src/epoch/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/80x86|src/Config/test|third-party/rkh/source/mempool/build|third-party/rkh/doc|src/GStatus/test|third-party/rkh/tools|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/demo|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/sma/test|third-party/rkh/source/tmr/build|src/epoch/build|src/collector/test|src/bsp/stm32/stm32f4_tracking.c|src/Config/build|src/GStatus/build|third-party/rkh/source/portable/cfv1|src/StatQue/test|third-party/rkh/source/sma/build|src/ffile/test|src/collector/build|third-party/rkh/template|src/device/test|third-party/rkh/source/tmr/test|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|src/YFrame/build|src/StatQue/build|src/bsp/win|third-party/rkh/source/portable/arm-cortex/ksdk_os|src/ffile/portable/test|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|src/topic/build|src/YFrame/test|src/ffile/build" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
+						<entry excluding="src/FsMgr|src/Crc32/src/Crc32.c|src/SecString/test|src/SecString/build|src/Crc32/src/Crc32_sw.c|src/Crc32/test|src/Crc32/build|src/gps/build|src/gps/test|src/CommMgr/build|src/CommMgr/test|src/Collector/test|src/Collector/build|third-party/rkh/source/trc/build|third-party/rkh/source/sm/build|third-party/rkh/source/portable/test|third-party/rkh/source/portable/ucos|third-party/ssp/tools|third-party/rkh/third-party|src/ffile/portable/80x86|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|src/topic/test|third-party/rkh/source/fwk/build|src/modcmd/modcmdSim900.c|third-party/rkh/source/queue/build|src/device/build|third-party/rkh/source/fwk/test|third-party/ssp/tests|src/ffile/portable/ceedling|third-party/rkh/source/trc/test|src/parser/sim900|third-party/rkh/source/sm/test|src/epoch/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/80x86|src/Config/test|third-party/rkh/source/mempool/build|third-party/rkh/doc|src/GStatus/test|third-party/rkh/tools|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/demo|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/sma/test|third-party/rkh/source/tmr/build|src/epoch/build|src/collector/test|src/bsp/stm32/stm32f4_tracking.c|src/Config/build|src/GStatus/build|third-party/rkh/source/portable/cfv1|src/StatQue/test|third-party/rkh/source/sma/build|src/ffile/test|src/collector/build|third-party/rkh/template|src/device/test|third-party/rkh/source/tmr/test|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|src/YFrame/build|src/StatQue/build|src/bsp/win|third-party/rkh/source/portable/arm-cortex/ksdk_os|src/ffile/portable/test|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|src/topic/build|src/YFrame/test|src/ffile/build" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -351,6 +354,7 @@
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/SecString/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/PowerMgr/inc"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.822796192" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.618148146" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -424,6 +428,7 @@
 									<listOptionValue builtIn="false" value="../../../src/GsmMgr/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/SecString/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/PowerMgr/inc"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.803142745" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -431,7 +436,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/Crc32/src/Crc32.c|src/SecString/test|src/SecString/build|src/Crc32/src/Crc32_sw.c|src/Crc32/test|src/Crc32/build|src/gps/build|src/gps/test|src/CommMgr/build|src/CommMgr/test|src/Collector/test|src/Collector/build|third-party/rkh/source/trc/build|third-party/rkh/source/sm/build|third-party/rkh/source/portable/test|src/FsMgr|third-party/rkh/source/portable/ucos|third-party/ssp/tools|third-party/rkh/third-party|src/ffile/portable/80x86|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|src/topic/test|third-party/rkh/source/fwk/build|src/modcmd/modcmdSim900.c|third-party/rkh/source/queue/build|src/device/build|third-party/rkh/source/fwk/test|third-party/ssp/tests|src/ffile/portable/ceedling|third-party/rkh/source/trc/test|src/parser/sim900|third-party/rkh/source/sm/test|src/epoch/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/80x86|src/Config/test|third-party/rkh/source/mempool/build|third-party/rkh/doc|src/GStatus/test|third-party/rkh/tools|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/demo|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/sma/test|third-party/rkh/source/tmr/build|src/epoch/build|src/collector/test|src/Config/build|src/GStatus/build|third-party/rkh/source/portable/cfv1|src/StatQue/test|third-party/rkh/source/sma/build|src/ffile/test|src/collector/build|third-party/rkh/template|src/bsp|src/device/test|third-party/rkh/source/tmr/test|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|src/YFrame/build|src/StatQue/build|third-party/rkh/source/portable/arm-cortex/ksdk_os|src/ffile/portable/test|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|src/topic/build|src/YFrame/test|src/ffile/build" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
+						<entry excluding="src/FsMgr|src/Crc32/src/Crc32.c|src/SecString/test|src/SecString/build|src/Crc32/src/Crc32_sw.c|src/Crc32/test|src/Crc32/build|src/gps/build|src/gps/test|src/CommMgr/build|src/CommMgr/test|src/Collector/test|src/Collector/build|third-party/rkh/source/trc/build|third-party/rkh/source/sm/build|third-party/rkh/source/portable/test|third-party/rkh/source/portable/ucos|third-party/ssp/tools|third-party/rkh/third-party|src/ffile/portable/80x86|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|src/topic/test|third-party/rkh/source/fwk/build|src/modcmd/modcmdSim900.c|third-party/rkh/source/queue/build|src/device/build|third-party/rkh/source/fwk/test|third-party/ssp/tests|src/ffile/portable/ceedling|third-party/rkh/source/trc/test|src/parser/sim900|third-party/rkh/source/sm/test|src/epoch/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/80x86|src/Config/test|third-party/rkh/source/mempool/build|third-party/rkh/doc|src/GStatus/test|third-party/rkh/tools|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/demo|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/sma/test|third-party/rkh/source/tmr/build|src/epoch/build|src/collector/test|src/Config/build|src/GStatus/build|third-party/rkh/source/portable/cfv1|src/StatQue/test|third-party/rkh/source/sma/build|src/ffile/test|src/collector/build|third-party/rkh/template|src/bsp|src/device/test|third-party/rkh/source/tmr/test|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|src/YFrame/build|src/StatQue/build|third-party/rkh/source/portable/arm-cortex/ksdk_os|src/ffile/portable/test|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|src/topic/build|src/YFrame/test|src/ffile/build" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
