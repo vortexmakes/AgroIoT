@@ -22,6 +22,13 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "PowerMgr.h"
+#include "ffile.h"
+#include "trace_msd.h"
+#include "BatChr.h"
+#include "topic.h"
+#include "GStatus.h"
+#include "StatQue.h"
+#include "events.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
