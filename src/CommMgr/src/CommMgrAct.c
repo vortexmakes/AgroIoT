@@ -411,7 +411,7 @@ CommMgr_isCondC0ToC628(CommMgr *const me, RKH_EVT_T *pe)
 }
 
 rbool_t
-CommMgr_isCondC1ToSendingHist20(CommMgr *const me, RKH_EVT_T *pe)
+CommMgr_isCondC1ToSendingStartOfHist20(CommMgr *const me, RKH_EVT_T *pe)
 {
     /*return (isThereMsg()) ? true : false;*/
     return (me->nFramesToSend > MIN_NUM_STORED_FRAMES_TO_SEND) ? true : false;
