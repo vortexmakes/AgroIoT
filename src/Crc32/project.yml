@@ -25,11 +25,21 @@
     - src/Crc32.c
   :include:
     - inc
+    - ../../third-party/rkh/source/portable/test
+    - ../../third-party/rkh/source/fwk/inc
+    - ../tpsens/cbox
+    - ../Collector/inc
+    - ../BatChr
+    - ../GStatus/inc
+    - ../ffile/inc
+    - ../Config/inc
+    - ../gps/inc
+    - ../
   :support:
     - test/support
 
 :defines:
-  :common: &common_defines [__TEST__]
+  :common: &common_defines [__FFILETEST__, __TEST__]
   :test:
     - *common_defines
     - TEST
