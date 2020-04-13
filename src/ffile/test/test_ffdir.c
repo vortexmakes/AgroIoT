@@ -21,6 +21,7 @@
 #include "ffdir.h"
 #include "ffdata.h"
 #include "Mock_eeprom.h"
+#include "Mock_rkhassert.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -73,12 +74,7 @@ makeDirSector(DirSector *sector)
            (ffui8_t *)defdir,
            sizeof(FFILE_T) * NUM_FLASH_FILES);
     dir->checksum = calculate_checksum((ffui8_t *)dir->file);
-
-    dir = &sector->backup;
-    memcpy(dir->file,
-           (ffui8_t *)defdir,
-           sizeof(FFILE_T) * NUM_FLASH_FILES);
-    dir->checksum = calculate_checksum((ffui8_t *)dir->file);
+    sector->backup = sector->main;
 }
 
 static void
@@ -100,6 +96,40 @@ MockEepromWriteCallback(uint8_t *p, uint16_t addr, uint16_t qty,
                         int cmock_num_calls)
 {
     memcpy((uint8_t *)&dirSectorWrite + addr, p, qty);
+}
+
+static void
+restoreDir(void)
+{
+    ffui8_t status;
+    FFILE_T *dir;
+
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();
+
+    dir = ffdir_restore(&status);
+
+    TEST_ASSERT_NOT_NULL(dir);
+    TEST_ASSERT_EQUAL(DIR_OK, status);
+}
+
+static void
+MockAssertCallback(const char* const file, int line, int cmock_num_calls)
+{
+    TEST_PASS();
+}
+
+static void
+setDir(void)
+{
+    dirSectorRead.main.checksum = 
+                    calculate_checksum((ffui8_t *)dirSectorRead.main.file);
+    dirSectorRead.backup = dirSectorRead.main;
+    restoreDir();
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -331,6 +361,136 @@ test_StoreOneFileInMemory(void)
     TEST_ASSERT_EQUAL_MEMORY(&dirSectorRead,
                              &dirSectorWrite,
                              sizeof(DirSector));
+}
+
+void
+test_GetValidFile(void)
+{
+    FFD_T fd = FFD0;
+    FFILE_T *file = (FFILE_T *)0;
+
+    restoreDir();
+    file = ffdir_getFile(fd);
+    TEST_ASSERT_NOT_NULL(file);
+}
+
+void
+test_RequestAnInvalidFile(void)
+{
+    FFD_T fd = NUM_FLASH_FILES;
+
+    restoreDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    ffdir_getFile(fd);
+}
+
+void
+test_RequestAFileWithCurruptedFd(void)
+{
+    FFD_T fd = FFD0;
+
+    dirSectorRead.main.file[fd].fd = NUM_FLASH_FILES;
+    setDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    ffdir_getFile(fd);
+}
+
+void
+test_RequestAFileWithCurruptedType(void)
+{
+    FFD_T fd = FFD0;
+
+    dirSectorRead.main.file[fd].type = RFILE_TYPE + 1;
+    setDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    ffdir_getFile(fd);
+}
+
+void
+test_RequestAFileWithCurruptedNumPages(void)
+{
+    FFD_T fd = FFD0;
+
+    dirSectorRead.main.file[fd].num_pages = 0xffff;
+    setDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    ffdir_getFile(fd);
+}
+
+void
+test_RequestAFileWithCurruptedBeginPage(void)
+{
+    FFD_T fd = FFD0;
+
+    dirSectorRead.main.file[fd].begin_page = 0xffff;
+    setDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    ffdir_getFile(fd);
+}
+
+void
+test_RequestAFileWithCurruptedSizeReg(void)
+{
+    FFD_T fd = FFD0;
+
+    dirSectorRead.main.file[fd].size_reg = 0xffff;
+    setDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    ffdir_getFile(fd);
+}
+
+void
+test_RequestAFileWithCurruptedIn(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_RequestAFileWithCurruptedOut(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_RequestAFileWithCurruptedQty(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_RequestAFileWithCurruptedPos(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_RequestAFileWithCurruptedPosQty(void)
+{
+    TEST_IGNORE();
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -21,12 +21,19 @@
 #include "ffdir.h"
 #include "ffdata.h"
 #include "eeprom.h"
+#include "rkhplat.h"
+#include "rkhtype.h"
+#include "rkhassert.h"
+#include "rkhfwk_module.h"
+
+RKH_MODULE_NAME(ffdir);
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 #define EEPROM_DIRSECTOR_ADDR       0
 #define EEPROM_DIRSECTOR_ADDR_END   (EEPROM_DIRSECTOR_ADDR + \
                                      sizeof(DirSector))
+#define FFDIR_DEEP_CHECK            1
 
 /* ---------------------------- Local data types --------------------------- */
 typedef ffui8_t (*RecProc)(void);
@@ -220,7 +227,23 @@ ffdir_update(FFILE_T *pf)
 FFILE_T *
 ffdir_getFile(FFD_T fd)
 {
-    return &dir.file[fd];
+    FFILE_T *file;
+#if FFDIR_DEEP_CHECK == 1
+    const FFILE_T *defFile;
+#endif
+
+    RKH_REQUIRE(fd < NUM_FLASH_FILES);
+    file = &dir.file[fd];
+#if FFDIR_DEEP_CHECK == 1
+    defFile = &defdir[fd];
+    RKH_REQUIRE((file->fd < NUM_FLASH_FILES) &&
+                (file->type <= RFILE_TYPE) &&
+                (file->num_pages == defFile->num_pages) &&
+                (file->begin_page == defFile->begin_page) &&
+                (file->size_reg == defFile->size_reg)
+                );
+#endif
+    return file;
 }
 
 void 
