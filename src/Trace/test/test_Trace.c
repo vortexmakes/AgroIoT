@@ -102,9 +102,6 @@ tearDown(void)
 void
 test_Init(void)
 {
-    rkh_trc_obj_Expect(RKH_TE_FWK_OBJ, 0, "trace");
-    rkh_trc_obj_IgnoreArg_obj();
-
     Trace_init();
 }
 
@@ -118,6 +115,8 @@ test_SendATraceEventToBeStored(void)
     id = TraceId_PowerUp;
     arg0 = 0xdead;
     arg1 = 0xbeaf;
+    rkh_trc_obj_Expect(RKH_TE_FWK_OBJ, 0, "trace");
+    rkh_trc_obj_IgnoreArg_obj();
     rkh_fwk_ae_ExpectAndReturn(sizeof(TraceEvt), evTrace, 0,
                                (RKH_EVT_T *)&traceEvtObj);
     rkh_fwk_ae_IgnoreArg_sender();

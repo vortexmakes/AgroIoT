@@ -29,9 +29,9 @@
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
-static const int trace;
-
 /* ---------------------------- Local variables ---------------------------- */
+static const int trace;
+static bool firstTime = true;
 static GStatus traceGStatus = 
 {
     {
@@ -55,7 +55,6 @@ static GStatus traceGStatus =
 void
 Trace_init(void)
 {
-    RKH_TR_FWK_OBJ_NAME(&trace, "trace");
 }
 
 void 
@@ -65,6 +64,11 @@ Trace_send(TraceId id, TraceArg arg0, TraceArg arg1)
 
     if (RKH_GET_SMA(RKH_GET_PRIO(collector)) != (RKH_SMA_T*)0)
     {
+        if (firstTime == true)
+        {
+            RKH_TR_FWK_OBJ_NAME(&trace, "trace");
+            firstTime = false;
+        }
         evt = RKH_ALLOC_EVT(TraceEvt, evTrace, &trace);
         evt->id = id;
         evt->arg0 = arg0;
