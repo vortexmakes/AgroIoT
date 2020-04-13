@@ -28,8 +28,30 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+typedef enum TraceId TraceId;
+enum TraceId
+{
+    TraceId_PowerUp = 1,
+    TraceId_OdmFlw,         /*  2 */
+    TraceId_GpsReset,       /*  3 */
+    TraceId_ModUnsync,      /*  4 */
+    TraceId_CmdReset,       /*  5 */
+    TraceId_CmdFmt,         /*  6 */
+    TraceId_QfullServer,    /*  7 */
+    TraceId_SmsRcv,         /*  8 */
+    TraceId_Ffd0Format,     /*  9 */
+    TraceId_Ffd1Format,     /* 10 */
+    TraceId_DflshDirBad,    /* 11 */
+    TraceId_PageInError,    /* 12 */
+    TraceId_PageRecovery,   /* 13 */
+    TraceId_PageBackup,     /* 14 */
+    TraceId_PageCmp,        /* 15 */
+    TraceId_PowerFail,      /* 16 */
+
+    TraceId_NumOfEvents
+};
+
 /* ------------------------------- Data types ------------------------------ */
-typedef short TraceId;
 typedef short TraceArg;
 
 /* -------------------------- External variables --------------------------- */

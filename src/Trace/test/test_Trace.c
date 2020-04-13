@@ -74,7 +74,7 @@ MockStatQuePutCallback(GStatus *elem, int cmock_num_calls)
     TEST_ASSERT_EQUAL_MEMORY(&traceGStatus.data.devData.h, 
                              &elem->data.devData.h, 
                              sizeof(GRSENS_T));
-    TEST_ASSERT_EQUAL(2, elem->data.devData.a.x);
+    TEST_ASSERT_EQUAL(TraceId_PowerUp, elem->data.devData.a.x);
     TEST_ASSERT_EQUAL_HEX32(4, elem->data.devData.a.y);
     TEST_ASSERT_EQUAL_HEX32(6, elem->data.devData.a.z);
     TEST_ASSERT_EQUAL(0, elem->data.devData.hum);
@@ -115,7 +115,7 @@ test_SendATraceEventToBeStored(void)
     TraceId id;
     TraceArg arg0, arg1;
 
-    id = 2;
+    id = TraceId_PowerUp;
     arg0 = 0xdead;
     arg1 = 0xbeaf;
     rkh_fwk_ae_ExpectAndReturn(sizeof(TraceEvt), evTrace, 0,
@@ -137,7 +137,7 @@ test_PutATraceInMemory(void)
     TraceId id;
     TraceArg arg0, arg1;
 
-    id = 2;
+    id = TraceId_PowerUp;
     arg0 = 4;
     arg1 = 6;
     GStatus_setChecksum_Expect(0);
@@ -145,6 +145,7 @@ test_PutATraceInMemory(void)
     StatQue_put_ExpectAndReturn(0, 0);
     StatQue_put_IgnoreArg_elem();
     StatQue_put_StubWithCallback(MockStatQuePutCallback);
+    ffile_sync_Expect();
 
     Trace_put(id, arg0, arg1);
 }

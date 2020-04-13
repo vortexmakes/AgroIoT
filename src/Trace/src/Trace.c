@@ -23,6 +23,7 @@
 #include "rkhtrc_record.h"
 #include "StatQue.h"
 #include "geoMgr.h"
+#include "ffile.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -81,6 +82,7 @@ Trace_put(TraceId id, TraceArg arg0, TraceArg arg1)
 
     GStatus_setChecksum(&traceGStatus);
     StatQue_put(&traceGStatus);
+    ffile_sync();
 }
 
 /* ------------------------------ End of file ------------------------------ */
