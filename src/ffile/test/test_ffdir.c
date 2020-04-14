@@ -108,8 +108,8 @@ restoreDir(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
-    eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();
+    /*eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -157,8 +157,8 @@ test_RestoreDirWhenMainBackupAreEquals(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
-    eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();
+    /*eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -184,8 +184,8 @@ test_RestoreDirFromBackup(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
     eeprom_write_IgnoreArg_p();
-    eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();
+    /*eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -211,8 +211,8 @@ test_RestoreDirFromMain(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, 0, sizeof(Dir));
     eeprom_write_IgnoreArg_p();
-    eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();
+    /*eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -266,8 +266,8 @@ test_RestoreDirFromBackupChecksumNotEqual(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
     eeprom_write_IgnoreArg_p();
-    eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();
+    /*eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -317,8 +317,8 @@ test_StoreWholeDirectoryInMemory(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
-    eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();
+    /*eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();*/
 
     ffdir_restore(&status);
 
@@ -342,8 +342,8 @@ test_StoreOneFileInMemory(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
-    eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();
+    /*eeprom_read_Expect(0, 0, sizeof(Dir));
+    eeprom_read_IgnoreArg_p();*/
 
     ffdir_restore(&status);
 
@@ -393,7 +393,7 @@ test_RequestAFileWithCurruptedFd(void)
 {
     FFD_T fd = FFD0;
 
-    dirSectorRead.main.file[fd].fd = NUM_FLASH_FILES;
+    dirSectorRead.main.file[fd].fd = 0xf;
     setDir();
     rkh_assert_Expect("", 0);
     rkh_assert_IgnoreArg_file();
@@ -408,7 +408,7 @@ test_RequestAFileWithCurruptedType(void)
 {
     FFD_T fd = FFD0;
 
-    dirSectorRead.main.file[fd].type = RFILE_TYPE + 1;
+    dirSectorRead.main.file[fd].type = 0xf;
     setDir();
     rkh_assert_Expect("", 0);
     rkh_assert_IgnoreArg_file();
@@ -466,31 +466,46 @@ test_RequestAFileWithCurruptedSizeReg(void)
 void
 test_RequestAFileWithCurruptedIn(void)
 {
-    TEST_IGNORE();
+    FFD_T fd = FFD0;
+
+    dirSectorRead.main.file[fd].in = 0xffff;
+    setDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    ffdir_getFile(fd);
 }
 
 void
 test_RequestAFileWithCurruptedOut(void)
 {
-    TEST_IGNORE();
+    FFD_T fd = FFD0;
+
+    dirSectorRead.main.file[fd].out = 0xffff;
+    setDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
+
+    ffdir_getFile(fd);
 }
 
 void
 test_RequestAFileWithCurruptedQty(void)
 {
-    TEST_IGNORE();
-}
+    FFD_T fd = FFD0;
 
-void
-test_RequestAFileWithCurruptedPos(void)
-{
-    TEST_IGNORE();
-}
+    dirSectorRead.main.file[fd].qty = 0xffff;
+    setDir();
+    rkh_assert_Expect("", 0);
+    rkh_assert_IgnoreArg_file();
+    rkh_assert_IgnoreArg_line();
+    rkh_assert_StubWithCallback(MockAssertCallback);
 
-void
-test_RequestAFileWithCurruptedPosQty(void)
-{
-    TEST_IGNORE();
+    ffdir_getFile(fd);
 }
 
 /* ------------------------------ End of file ------------------------------ */

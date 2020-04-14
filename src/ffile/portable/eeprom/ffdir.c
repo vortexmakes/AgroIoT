@@ -189,7 +189,8 @@ ffdir_restore(ffui8_t *status)
 
     if (dirStatus != DIR_BAD)
     {
-        eeprom_read((uint8_t *)&dir, EEPROM_DIRSECTOR_ADDR, sizeof(Dir));
+        /*eeprom_read((uint8_t *)&dir, EEPROM_DIRSECTOR_ADDR, sizeof(Dir));*/
+        dir = sector.main;
     }
     else
     {
@@ -240,7 +241,10 @@ ffdir_getFile(FFD_T fd)
                 (file->type <= RFILE_TYPE) &&
                 (file->num_pages == defFile->num_pages) &&
                 (file->begin_page == defFile->begin_page) &&
-                (file->size_reg == defFile->size_reg)
+                (file->size_reg == defFile->size_reg) &&
+                (file->in <= defFile->num_regs) &&
+                (file->out <= defFile->num_regs) &&
+                (file->qty <= defFile->num_regs)
                 );
 #endif
     return file;
