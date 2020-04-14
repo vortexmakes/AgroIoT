@@ -108,8 +108,6 @@ restoreDir(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
-    /*eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -157,8 +155,6 @@ test_RestoreDirWhenMainBackupAreEquals(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
-    /*eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -184,8 +180,6 @@ test_RestoreDirFromBackup(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
     eeprom_write_IgnoreArg_p();
-    /*eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -211,8 +205,6 @@ test_RestoreDirFromMain(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, 0, sizeof(Dir));
     eeprom_write_IgnoreArg_p();
-    /*eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -266,8 +258,6 @@ test_RestoreDirFromBackupChecksumNotEqual(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
     eeprom_write_IgnoreArg_p();
-    /*eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();*/
 
     dir = ffdir_restore(&status);
 
@@ -317,8 +307,6 @@ test_StoreWholeDirectoryInMemory(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
-    /*eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();*/
 
     ffdir_restore(&status);
 
@@ -342,8 +330,6 @@ test_StoreOneFileInMemory(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
-    /*eeprom_read_Expect(0, 0, sizeof(Dir));
-    eeprom_read_IgnoreArg_p();*/
 
     ffdir_restore(&status);
 

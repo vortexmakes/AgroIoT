@@ -87,7 +87,6 @@ static DirSectorStatus mainDir, backupDir;
  *	NOT_MATCH	|	DIR_BACKUP
  *  MATCH		|	DIR_OK
  */
-#if FF_DIR_BACKUP == 1
 static ffui8_t proc_page_in_error(void);
 static ffui8_t proc_page_recovery(void);
 static ffui8_t proc_page_backup(void);
@@ -97,7 +96,6 @@ static const RecProc recovery[] =
 {
     proc_page_in_error, proc_page_recovery, proc_page_backup, proc_page_cmp
 };
-#endif
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -124,10 +122,10 @@ cmpDirSector(void)
     return 1;
 }
 
-#if FF_DIR_BACKUP == 1
 static ffui8_t
 proc_page_in_error(void)
 {
+    memcpy(dir.file, (ffui8_t *)defdir, sizeof(FFILE_T) * NUM_FLASH_FILES);
     return DIR_BAD;
 }
 
@@ -164,7 +162,6 @@ proc_page_cmp(void)
 
     return proc_page_backup();
 }
-#endif
 
 /* ---------------------------- Global functions --------------------------- */
 FFILE_T *
@@ -177,26 +174,15 @@ ffdir_restore(ffui8_t *status)
 
     mainDir.checksum = calculate_checksum((ffui8_t *)sector.main.file);
     mainDir.result = (sector.main.checksum == mainDir.checksum) ? 1 : 0;
-#if FF_DIR_BACKUP == 1
     backupDir.checksum = calculate_checksum((ffui8_t *)sector.backup.file);
     backupDir.result = (sector.backup.checksum == backupDir.checksum) ? 1 : 0;
     dirStatus = 0;
     dirStatus = (mainDir.result << 1) | backupDir.result;
     dirStatus = (*recovery[dirStatus])();
-#else
-    dirStatus = (mainDir.result == CHECK_OK) ? DIR_OK : DIR_BAD;
-#endif
 
     if (dirStatus != DIR_BAD)
     {
-        /*eeprom_read((uint8_t *)&dir, EEPROM_DIRSECTOR_ADDR, sizeof(Dir));*/
         dir = sector.main;
-    }
-    else
-    {
-        memcpy(dir.file,
-               (ffui8_t *)defdir,
-               sizeof(FFILE_T) * NUM_FLASH_FILES);
     }
 
     FFDBG_RESTORE_DIR(dirStatus);
