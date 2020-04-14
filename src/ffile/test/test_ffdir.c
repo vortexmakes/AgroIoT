@@ -229,6 +229,8 @@ test_RestoreDirFromDefault(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_write_Expect(0, 0, sizeof(DirSector));
+    eeprom_write_IgnoreArg_p();
 
     dir = ffdir_restore(&status);
 

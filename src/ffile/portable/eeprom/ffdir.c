@@ -60,7 +60,7 @@ struct DirSectorStatus
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static Dir dir;
+static Dir *dir;
 static DirSector sector;
 static DirSectorStatus mainDir, backupDir;
 
@@ -116,16 +116,13 @@ calculate_checksum(ffui8_t *address)
     return ~check;
 }
 
-static ffui8_t 
-cmpDirSector(void)
-{
-    return 1;
-}
-
 static ffui8_t
 proc_page_in_error(void)
 {
-    memcpy(dir.file, (ffui8_t *)defdir, sizeof(FFILE_T) * NUM_FLASH_FILES);
+    memcpy(sector.main.file, (ffui8_t *)defdir, sizeof(FFILE_T) * NUM_FLASH_FILES);
+    sector.main.checksum = calculate_checksum((ffui8_t *)sector.main.file);
+    sector.backup = sector.main;
+    eeprom_write((uint8_t *)&sector, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
     return DIR_BAD;
 }
 
@@ -150,17 +147,18 @@ proc_page_backup(void)
 static ffui8_t
 proc_page_cmp(void)
 {
+    ffui8_t result;
+
     if (mainDir.checksum != backupDir.checksum)
     {
-        return proc_page_backup();
+        result = proc_page_backup();
     }
-
-    if (cmpDirSector())
+    else
     {
-        return DIR_OK;
+        result = DIR_OK;
     }
 
-    return proc_page_backup();
+    return result;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -179,35 +177,25 @@ ffdir_restore(ffui8_t *status)
     dirStatus = 0;
     dirStatus = (mainDir.result << 1) | backupDir.result;
     dirStatus = (*recovery[dirStatus])();
+    dir = &sector.main;
 
-    if (dirStatus != DIR_BAD)
-    {
-        dir = sector.main;
-    }
-
-    FFDBG_RESTORE_DIR(dirStatus);
     if (status != (ffui8_t *)0)
     {
         *status = dirStatus;
     }
-     
-    return dir.file;
+    FFDBG_RESTORE_DIR(dirStatus);
+    return dir->file;
 }
 
 void
 ffdir_update(FFILE_T *pf)
 {
-    if (pf == (FFILE_T *)0)
+    if (pf != (FFILE_T *)0)
     {
-        dir.checksum = calculate_checksum((ffui8_t *)dir.file);
-        sector.backup = sector.main = dir;
+        dir->file[pf->fd] = *pf;
     }
-    else
-    {
-        dir.file[pf->fd] = *pf;
-        dir.checksum = calculate_checksum((ffui8_t *)dir.file);
-        sector.backup = sector.main = dir;
-    }
+    dir->checksum = calculate_checksum((ffui8_t *)dir->file);
+    sector.backup = *dir;
     eeprom_write((uint8_t *)&sector, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
 }
 
@@ -220,7 +208,7 @@ ffdir_getFile(FFD_T fd)
 #endif
 
     RKH_REQUIRE(fd < NUM_FLASH_FILES);
-    file = &dir.file[fd];
+    file = &dir->file[fd];
 #if FFDIR_DEEP_CHECK == 1
     defFile = &defdir[fd];
     RKH_REQUIRE((file->fd < NUM_FLASH_FILES) &&
