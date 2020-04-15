@@ -102,6 +102,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/StatQue</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/Trace</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/Trace</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/UsbMgr</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/UsbMgr</locationURI>
