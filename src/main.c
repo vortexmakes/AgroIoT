@@ -136,18 +136,13 @@ clean_ffile(void)
 int
 main(int argc, char *argv[])
 {
-	ruint di1, di2;
-
     bsp_init(argc, argv);
 
     epoch_init();
     init_seqs();
     mTime_init();
 
-    di1 = bsp_getDigIn(dIn1);
-    di2 = bsp_getDigIn(dIn2);
-
-    if(di1 == di2)
+    if(bsp_getDigIn(dIn1) == 0)
     	clean_ffile();
 
     Trace_init();
