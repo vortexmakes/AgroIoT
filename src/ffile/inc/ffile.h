@@ -68,6 +68,13 @@ enum
     READ_BACKWARD, READ_FORWARD
 };
 
+typedef enum InitMode InitMode;
+enum InitMode
+{
+    CleanAndRestoreMode, /* Force directory to default values */
+    RestoreMode          /* Normal process */
+};
+
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
@@ -76,8 +83,11 @@ enum
  *  Initializes internal data structures and restores directory from flash.
  *  Also, the entire flash partition is scanned for a failed sector. If
  *  found then the flash sector is formatted.
+ *
+ *  \param mode     indicates the type of ffile's initialization according to 
+ *                  InitMode.
  */
-void ffile_init(void);
+void ffile_init(InitMode mode);
 
 /**
  *  \brief

@@ -116,37 +116,21 @@ setupTraceFilters(void)
     RKH_FILTER_ON_SIGNAL(evNoDev);
 }
 
-#include "ffdir.h"
-
-static void
-clean_ffile(void)
-{
-    ffui8_t status;
-
-    flash_init();
-    ffdir_getDirty(DirMainId);
-    ffdir_getDirty(DirBackupId);
-    ffdir_restore(&status);
-    ffile_file_format(FFD0);
-    ffile_file_format(FFD1);
-    ffile_init();
-}
-
 /* ---------------------------- Global functions --------------------------- */
 int
 main(int argc, char *argv[])
 {
+    InitMode mode;
+
     bsp_init(argc, argv);
 
     epoch_init();
     init_seqs();
     mTime_init();
-
-    if(bsp_getDigIn(dIn1) == 0)
-    	clean_ffile();
-
     Trace_init();
-    ffile_init();
+
+    mode = (bsp_getDigIn(dIn1) == 0) ? CleanAndRestoreMode : RestoreMode;
+    ffile_init(mode);
     StatQue_init();
     Config_init();
 

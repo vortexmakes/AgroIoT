@@ -36,10 +36,10 @@ static RACC_T ra;
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
-ffile_init(void)
+ffile_init(InitMode mode)
 {
     flash_init();
-    rfile_init_directory();
+    rfile_init_directory((ffui8_t)mode);
 }
 
 void

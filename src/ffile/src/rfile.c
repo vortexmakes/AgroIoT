@@ -46,13 +46,21 @@ rfile_file_format(FFILE_T *pf)
 }
 
 void
-rfile_init_directory(void)
+rfile_init_directory(ffui8_t mode)
 {
     ffui8_t file, r;
     SPG_T page, page_error;
     FFILE_T *pf;
     PageRes res;
 
+    if (mode == CleanAndRestoreMode)
+    {
+        pf = ffdir_clean();
+        for (file = 0; file < NUM_FLASH_FILES; ++file)
+        {
+            rfile_file_format(pf);
+        }
+    }
     pf = ffdir_restore(&r);
     for (file = 0; file < NUM_FLASH_FILES; ++file, ++pf)
     {
