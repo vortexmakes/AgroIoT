@@ -692,7 +692,7 @@ reqDefer(RKH_EVT_T *pe)
 static void
 reqRecall(Socket *const me)
 {
-    rkh_sma_recall((RKH_SMA_T *)me, &GsmMgrInt.qDefer);
+    rkh_sma_recall(RKH_UPCAST(RKH_SMA_T, me->itsGsmMgr), &GsmMgrInt.qDefer);
 }
 
 static void
