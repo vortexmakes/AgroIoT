@@ -22,18 +22,28 @@
     - +:test
     - -:test/support
   :source:
-    - src/Crc32.c
+    - src
   :include:
     - inc
-    - ../../third-party/rkh/source/portable/test
     - ../../third-party/rkh/source/fwk/inc
-    - ../tpsens/cbox
-    - ../Collector/inc
-    - ../BatChr
+    - ../../third-party/rkh/source/mempool/inc
+    - ../../third-party/rkh/source/queue/inc
+    - ../../third-party/rkh/source/sm/inc
+    - ../../third-party/rkh/source/sma/inc
+    - ../../third-party/rkh/source/tmr/inc
+    - ../../third-party/rkh/source/trc/inc
+    - ../../third-party/rkh/source/portable/test
     - ../GStatus/inc
-    - ../ffile/inc
-    - ../Config/inc
     - ../gps/inc
+    - ../tpsens/cbox
+    - ../BatChr
+    - ../Collector/inc
+    - ../Crc32/inc
+    - ../geoMgr
+    - ../epoch/inc
+    - ../StatQue/inc
+    - ../ffile/portable/test
+    - ../ffile/inc
     - ../
   :support:
     - test/support

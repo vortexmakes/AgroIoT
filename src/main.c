@@ -44,6 +44,7 @@
 #include "mTime.h"
 #include "sequence.h"
 #include "epoch.h"
+#include "Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define POWERMGR_QSTO_SIZE        4
@@ -149,6 +150,7 @@ main(int argc, char *argv[])
     if(di1 == di2)
     	clean_ffile();
 
+    Trace_init();
     ffile_init();
     StatQue_init();
     Config_init();

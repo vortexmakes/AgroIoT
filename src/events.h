@@ -11,7 +11,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Bali�a db@vortexmakes.com
+ *  DaBa  Dario Balina db@vortexmakes.com
  *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
@@ -29,6 +29,7 @@
 #include "cbox.h"
 #include "GStatus.h"
 #include "IOStatus.h"
+#include "Trace.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -200,6 +201,15 @@ struct SensorData
 {
     RKH_EVT_T evt;
     CBOX_STR cbox;
+};
+
+typedef struct TraceEvt TraceEvt;
+struct TraceEvt
+{
+    RKH_EVT_T evt;
+    TraceId id;
+    TraceArg arg0;
+    TraceArg arg1;
 };
 
 /* -------------------------- External variables --------------------------- */
