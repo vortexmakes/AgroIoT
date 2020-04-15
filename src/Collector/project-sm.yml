@@ -22,5 +22,6 @@
     - ../ffile/portable/test
     - ../ffile/inc
     - ../Crc32/inc
+    - ../Trace/inc
     - ../
   :support:

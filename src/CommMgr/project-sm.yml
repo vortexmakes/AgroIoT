@@ -16,5 +16,6 @@
     - ../epoch/inc
     - ../YFrame/inc
     - ../Crc32/inc
+    - ../Trace/inc
     - ../
   :support:
