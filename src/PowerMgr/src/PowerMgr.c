@@ -126,6 +126,7 @@ ReadyToPowerMgrFinalExt1(PowerMgr *const me, RKH_EVT_T *pe)
 {
 	storeStatus(me);
 	ffile_sync();
+	RKH_TRC_FLUSH();
 	trace_msd_close();
 	BatChr_shutDown();
 }
