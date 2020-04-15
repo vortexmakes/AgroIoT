@@ -199,4 +199,13 @@ ffdir_getDirty(DirId dir)
     }
 }
 
+FFILE_T *
+ffdir_clean(void)
+{
+    devflash_setInvalidPage();
+    ffdir_getDirty(DirMainId);
+    ffdir_getDirty(DirBackupId);
+    return ffdir_restore((ffui8_t *)0);
+}
+
 /* ------------------------------ End of file ------------------------------ */

@@ -496,4 +496,33 @@ test_RequestAFileWithCurruptedQty(void)
     ffdir_getFile(fd);
 }
 
+void
+test_CleanDirectoryFormat(void)
+{
+    FFILE_T *file = (FFILE_T *)0;
+
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_write_Expect(0, offsetof(DirSector, main), sizeof(Dir));
+    eeprom_write_IgnoreArg_p();
+    eeprom_write_StubWithCallback(MockEepromWriteCallback);
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+    eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
+    eeprom_write_IgnoreArg_p();
+    eeprom_write_StubWithCallback(MockEepromWriteCallback);
+
+    eeprom_init_Expect();
+    eeprom_read_Expect(0, 0, sizeof(DirSector));
+    eeprom_read_IgnoreArg_p();
+    eeprom_read_StubWithCallback(MockEepromReadCallback);
+
+    file = ffdir_clean();
+
+    TEST_ASSERT_NOT_NULL(file);
+}
+
 /* ------------------------------ End of file ------------------------------ */

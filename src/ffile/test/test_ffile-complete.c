@@ -26,6 +26,7 @@
 #include "GStatus.h"
 #include "Config.h"
 #include "eeprom.h"
+#include "Mock_rkhassert.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -62,7 +63,7 @@ test_RestoreDefaultDirectory(void)
     FFUInt result;
 
     crashDirectory();
-    ffile_init();
+    ffile_init(RestoreMode);
     file = ffile_get_file_info(FFD0);
     result = ffile_is_corrupted(FFD0);
 
@@ -88,7 +89,7 @@ test_RestoreDirectoryFromBackup(void)
     Config writeData;
 
     crashDirectory();
-    ffile_init();
+    ffile_init(RestoreMode);
 
     nWritten = ffile_random_access(FFD1, WRITE_ACCESS, &writeData, 1);
     file = ffile_get_file_info(FFD1);
@@ -97,7 +98,7 @@ test_RestoreDirectoryFromBackup(void)
     ffile_sync();
 
     rfile_getDirtyDir(DirMainId);
-    ffile_init();
+    ffile_init(RestoreMode);
 
     TEST_ASSERT_EQUAL(1, file->pos);
 }
@@ -110,7 +111,7 @@ test_RestoreDirectoryFromMain(void)
     Config writeData;
 
     crashDirectory();
-    ffile_init();
+    ffile_init(RestoreMode);
 
     file = ffile_get_file_info(FFD1);
     nWritten = ffile_random_access(FFD1, WRITE_ACCESS, &writeData, 1);
@@ -120,7 +121,7 @@ test_RestoreDirectoryFromMain(void)
     ffile_sync();
 
     rfile_getDirtyDir(DirBackupId);
-    ffile_init();
+    ffile_init(RestoreMode);
 
     TEST_ASSERT_EQUAL(1, file->pos);
 }
@@ -133,7 +134,7 @@ test_RestoreDirectoryFromMemory(void)
     Config writeData;
 
     crashDirectory();
-    ffile_init();
+    ffile_init(RestoreMode);
 
     file = ffile_get_file_info(FFD1);
     nWritten = ffile_random_access(FFD1, WRITE_ACCESS, &writeData, 1);
@@ -142,7 +143,7 @@ test_RestoreDirectoryFromMemory(void)
     TEST_ASSERT_EQUAL(1, file->pos);
     ffile_sync();
 
-    ffile_init();
+    ffile_init(RestoreMode);
 
     TEST_ASSERT_EQUAL(1, file->pos);
 }
@@ -158,7 +159,7 @@ test_WriteAndReadRandomFile(void)
     memset(&readData, 0xad, sizeof(Config));
 
     crashDirectory();
-    ffile_init();
+    ffile_init(RestoreMode);
     nWritten = ffile_random_access(FFD1, WRITE_ACCESS, &writeData, 1);
     ffile_seek(FFD1, 0);
     nRead = ffile_random_access(FFD1, READ_ACCESS, &readData, 1);

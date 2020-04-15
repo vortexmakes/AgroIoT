@@ -414,7 +414,7 @@ typedef struct
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void rfile_init_directory(void);
+void rfile_init_directory(ffui8_t mode);
 void rfile_update_directory(FFILE_T *pf);
 void rfile_file_format(FFILE_T *pf);
 void rfile_access_register(RACC_T *pra);

@@ -120,10 +120,7 @@ main(int argc, char *argv[])
     epoch_init();
     init_seqs();
     mTime_init();
-    ffile_init();
-
-//    ffile_file_format(FFD0);
-//    ffile_file_format(FFD1);
+    ffile_init(RestoreMode);
 
     StatQue_init();
     Config_init();

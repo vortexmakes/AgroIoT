@@ -147,17 +147,12 @@ proc_page_backup(void)
 static ffui8_t
 proc_page_cmp(void)
 {
-    ffui8_t result;
+    ffui8_t result = DIR_OK;
 
     if (mainDir.checksum != backupDir.checksum)
     {
         result = proc_page_backup();
     }
-    else
-    {
-        result = DIR_OK;
-    }
-
     return result;
 }
 
@@ -244,6 +239,15 @@ ffdir_getDirty(DirId dir)
     eeprom_read((uint8_t *)&sector, EEPROM_DIRSECTOR_ADDR, sizeof(DirSector));
     pDir->checksum = ~pDir->checksum;
     eeprom_write((uint8_t *)pDir, addr, sizeof(Dir));
+}
+
+FFILE_T *
+ffdir_clean(void)
+{
+    eeprom_init();
+    ffdir_getDirty(DirMainId);
+    ffdir_getDirty(DirBackupId);
+    return ffdir_restore((ffui8_t *)0);
 }
 
 /* ------------------------------ End of file ------------------------------ */
