@@ -217,7 +217,8 @@ noResponse(ModMgr *const me, RKH_EVT_T *pe)
     RKH_SMA_POST_FIFO((RKH_SMA_T *)*(me->pCmd->args.aoDest),
                       &e_noResp, modMgr);
 
-    RKH_FWK_GC(RKH_CAST(RKH_EVT_T, me->pCmd), me);
+    //RKH_FWK_GC(RKH_CAST(RKH_EVT_T, me->pCmd), me);
+    moreCmd(me, pe);
 }
 
 static void

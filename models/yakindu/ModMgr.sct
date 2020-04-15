@@ -18,7 +18,7 @@
             <outgoingTransitions xmi:id="_-IQggGUnEeqvPKcbvC_cWA" specification="" target="_tNsegOUPEemMB6bmaFt2TA"/>
           </vertices>
           <vertices xsi:type="sgraph:State" xmi:id="_NKw2YGUoEeqvPKcbvC_cWA" specification="entry/setupResponse()&#xD;&#xA;evDataModeReady/sendData()" name="InProgress" incomingTransitions="_3pDpQG67EeqfEfrTroDmhQ">
-            <outgoingTransitions xmi:id="_sag28GUoEeqvPKcbvC_cWA" specification="evToutWaitResponse/&#xD;&#xA;noResponse()" target="_tNsegOUPEemMB6bmaFt2TA"/>
+            <outgoingTransitions xmi:id="_sag28GUoEeqvPKcbvC_cWA" specification="evToutWaitResponse/&#xD;&#xA;noResponse();&#xD;&#xA;moreCmd()" target="_tNsegOUPEemMB6bmaFt2TA"/>
             <outgoingTransitions xmi:id="_8QB-IGUoEeqvPKcbvC_cWA" specification="evResponse/sendResponse()" target="_VOmJ8GUoEeqvPKcbvC_cWA"/>
           </vertices>
           <vertices xsi:type="sgraph:State" xmi:id="_OAY20GUoEeqvPKcbvC_cWA" specification="" name="WaitInterCmdDelay" incomingTransitions="_J_ND4GUpEeqvPKcbvC_cWA">
