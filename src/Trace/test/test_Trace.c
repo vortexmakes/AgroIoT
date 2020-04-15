@@ -120,8 +120,8 @@ test_SendATraceEventToBeStored(void)
     rkh_fwk_ae_ExpectAndReturn(sizeof(TraceEvt), evTrace, 0,
                                (RKH_EVT_T *)&traceEvtObj);
     rkh_fwk_ae_IgnoreArg_sender();
-    rkh_sma_post_fifo_Expect(collector, (RKH_EVT_T *)&traceEvtObj, 0);
-    rkh_sma_post_fifo_IgnoreArg_sender();
+    rkh_sma_post_lifo_Expect(collector, (RKH_EVT_T *)&traceEvtObj, 0);
+    rkh_sma_post_lifo_IgnoreArg_sender();
 
     Trace_send(id, arg0, arg1);
 

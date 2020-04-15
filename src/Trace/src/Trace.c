@@ -73,16 +73,19 @@ Trace_send(TraceId id, TraceArg arg0, TraceArg arg1)
         evt->id = id;
         evt->arg0 = arg0;
         evt->arg1 = arg1;
-        RKH_SMA_POST_FIFO(collector, RKH_UPCAST(RKH_EVT_T, evt), &trace);
+        RKH_SMA_POST_LIFO(collector, RKH_UPCAST(RKH_EVT_T, evt), &trace);
     }
 }
 
 void 
 Trace_put(TraceId id, TraceArg arg0, TraceArg arg1)
 {
-    traceGStatus.data.devData.a.x = id;
-    traceGStatus.data.devData.a.y = arg0;
-    traceGStatus.data.devData.a.z = arg1;
+    ACCEL_T *trace;
+
+    trace = &traceGStatus.data.devData.a;
+    trace->x = id;
+    trace->y = arg0;
+    trace->z = arg1;
 
     GStatus_setChecksum(&traceGStatus);
     StatQue_put(&traceGStatus);
