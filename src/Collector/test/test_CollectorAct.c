@@ -34,6 +34,7 @@
 #include "Mock_GStatus.h"
 #include "Mock_ffile.h"
 #include "Mock_geoMgr.h"
+#include "Mock_Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -420,6 +421,15 @@ test_IsSyncDirOnRunning(void)
     result = Mapping_isSyncDirOnRunning(RKH_UPCAST(RKH_SM_T, region),
                                         (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(RKH_TRUE, result);
+}
+
+void
+test_StoreTrace(void)
+{
+    TraceEvt event = {2, 4, 6};
+
+    Trace_put_Expect(event.id, event.arg0, event.arg1);
+    Collector_storeTrace(me, RKH_UPCAST(RKH_EVT_T, &event));
 }
 
 /* ------------------------------ End of file ------------------------------ */

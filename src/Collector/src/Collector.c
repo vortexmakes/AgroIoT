@@ -36,6 +36,7 @@ RKH_TRINT(evGeo, NULL, Collector_updatePosition),
 RKH_TRINT(evGeoInvalid, NULL, Collector_updatePosition),
 RKH_TRINT(evDigOutChanged, NULL, Collector_updateDigOut),
 RKH_TRINT(evTimeout, NULL, Collector_publishCurrStatus),
+RKH_TRINT(evTrace, NULL, Collector_storeTrace),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(DevStatus_DevNotConnected,

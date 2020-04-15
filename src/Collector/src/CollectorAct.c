@@ -32,6 +32,7 @@
 #include "GStatus.h"
 #include "ffile.h"
 #include "geoMgr.h"
+#include "Trace.h"
 
 RKH_MODULE_NAME(CollectorAct)
 
@@ -210,6 +211,15 @@ Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe)
     device_update(me->dev, RKH_UPCAST(RKH_EVT_T, evtDevData));
     result = device_test(me->dev);
     propagateMappingEvent(me, result);
+}
+
+void
+Collector_storeTrace(Collector *const me, RKH_EVT_T *pe)
+{
+    TraceEvt *event;
+
+    event = RKH_DOWNCAST(TraceEvt, pe);
+    Trace_put(event->id, event->arg0, event->arg1);
 }
 
 void
