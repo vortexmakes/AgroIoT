@@ -38,6 +38,7 @@
     - ../BatChr
     - ../Config/inc
     - ../Crc32/inc
+    - ../Trace/inc
   :support:
     - test/support
 

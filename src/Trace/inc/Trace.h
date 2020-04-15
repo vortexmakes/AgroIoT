@@ -39,14 +39,16 @@ enum TraceId
     TraceId_CmdFmt,         /*  6 */
     TraceId_QfullServer,    /*  7 */
     TraceId_SmsRcv,         /*  8 */
-    TraceId_Ffd0Format,     /*  9 */
-    TraceId_Ffd1Format,     /* 10 */
-    TraceId_DflshDirBad,    /* 11 */
-    TraceId_PageInError,    /* 12 */
-    TraceId_PageRecovery,   /* 13 */
-    TraceId_PageBackup,     /* 14 */
-    TraceId_PageCmp,        /* 15 */
+    TraceId_Ffd0Format,     /*  9 */ /* It should be deprecated */
+    TraceId_Ffd1Format,     /* 10 */ /* It should be deprecated */
+    TraceId_DflshDirBad,    /* 11 */ /* It should be deprecated */
+    TraceId_PageInError,    /* 12 */ /* It should be deprecated */
+    TraceId_PageRecovery,   /* 13 */ /* It should be deprecated */
+    TraceId_PageBackup,     /* 14 */ /* It should be deprecated */
+    TraceId_PageCmp,        /* 15 */ /* It should be deprecated */
     TraceId_PowerFail,      /* 16 */
+    TraceId_Restore,        /* 17 */
+    TraceId_FileFormat,     /* 18 */
 
     TraceId_NumOfEvents
 };

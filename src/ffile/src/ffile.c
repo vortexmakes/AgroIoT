@@ -16,6 +16,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "ffile.h"
 #include "ffdir.h"
+#include "Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define ffile_prepare_access(p, o, ta, pd, pos, q) \
@@ -64,6 +65,7 @@ ffile_file_format(FFD_T ffd)
 
     p = rfile_get_file(ffd);
     rfile_file_format(p);
+    Trace_put(TraceId_FileFormat, p->fd, 0);
 }
 #endif
 

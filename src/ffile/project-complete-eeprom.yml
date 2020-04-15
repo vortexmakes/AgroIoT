@@ -9,6 +9,7 @@
   :source:
   :include:
     - portable/eeprom
+    - ../Trace/inc
   :support:
     - portable/ceedling/ffport.c
     - portable/ceedling/eeprom.c

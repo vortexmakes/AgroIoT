@@ -25,6 +25,7 @@
 #include "rkhtype.h"
 #include "rkhassert.h"
 #include "rkhfwk_module.h"
+#include "Trace.h"
 
 RKH_MODULE_NAME(ffdir);
 
@@ -178,6 +179,7 @@ ffdir_restore(ffui8_t *status)
     {
         *status = dirStatus;
     }
+    Trace_put(TraceId_Restore, (TraceArg)dirStatus, 0);
     FFDBG_RESTORE_DIR(dirStatus);
     return dir->file;
 }

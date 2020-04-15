@@ -20,6 +20,7 @@
 #include "ffdir.h"
 #include "ffdata.h"
 #include "devflash.h"
+#include "Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -137,6 +138,7 @@ ffdir_restore(ffui8_t *status)
                sizeof(FFILE_T) * NUM_FLASH_FILES);
     }
 
+    Trace_put(TraceId_Restore, (TraceArg)*status, 0);
     FFDBG_RESTORE_DIR(r);
     return dir;
 }

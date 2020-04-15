@@ -22,6 +22,7 @@
 #include "ffdata.h"
 #include "Mock_eeprom.h"
 #include "Mock_rkhassert.h"
+#include "Mock_Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -103,11 +104,16 @@ restoreDir(void)
 {
     ffui8_t status;
     FFILE_T *dir;
+    TraceId id;
+    TraceArg arg0;
 
+    id = TraceId_Restore;
+    arg0 = DIR_OK;
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
+    Trace_put_Expect(id, arg0, 0);
 
     dir = ffdir_restore(&status);
 
@@ -148,18 +154,24 @@ tearDown(void)
 void
 test_RestoreDirWhenMainBackupAreEquals(void)
 {
-    ffui8_t status;
+    ffui8_t status, expStatus;
     FFILE_T *dir;
+    TraceId id;
+    TraceArg arg0;
 
+    expStatus = DIR_OK;
+    id = TraceId_Restore;
+    arg0 = (TraceArg)expStatus;
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
+    Trace_put_Expect(id, arg0, 0);
 
     dir = ffdir_restore(&status);
 
     TEST_ASSERT_NOT_NULL(dir);
-    TEST_ASSERT_EQUAL(DIR_OK, status);
+    TEST_ASSERT_EQUAL(expStatus, status);
     TEST_ASSERT_EQUAL(FFD0, dir->fd);
     TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
     ++dir;
@@ -170,8 +182,14 @@ test_RestoreDirWhenMainBackupAreEquals(void)
 void
 test_RestoreDirFromBackup(void)
 {
-    ffui8_t status;
+    ffui8_t status, expStatus;
     FFILE_T *dir;
+    TraceId id;
+    TraceArg arg0;
+
+    expStatus = DIR_BACKUP;
+    id = TraceId_Restore;
+    arg0 = (TraceArg)expStatus;
 
     crashDirSector(&dirSectorRead.backup);
     eeprom_init_Expect();
@@ -180,11 +198,12 @@ test_RestoreDirFromBackup(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
     eeprom_write_IgnoreArg_p();
+    Trace_put_Expect(id, arg0, 0);
 
     dir = ffdir_restore(&status);
 
     TEST_ASSERT_NOT_NULL(dir);
-    TEST_ASSERT_EQUAL(DIR_BACKUP, status);
+    TEST_ASSERT_EQUAL(expStatus, status);
     TEST_ASSERT_EQUAL(FFD0, dir->fd);
     TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
     ++dir;
@@ -195,8 +214,14 @@ test_RestoreDirFromBackup(void)
 void
 test_RestoreDirFromMain(void)
 {
-    ffui8_t status;
+    ffui8_t status, expStatus;
     FFILE_T *dir;
+    TraceId id;
+    TraceArg arg0;
+
+    expStatus = DIR_RECOVERY;
+    id = TraceId_Restore;
+    arg0 = (TraceArg)expStatus;
 
     crashDirSector(&dirSectorRead.main);
     eeprom_init_Expect();
@@ -205,11 +230,12 @@ test_RestoreDirFromMain(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, 0, sizeof(Dir));
     eeprom_write_IgnoreArg_p();
+    Trace_put_Expect(id, arg0, 0);
 
     dir = ffdir_restore(&status);
 
     TEST_ASSERT_NOT_NULL(dir);
-    TEST_ASSERT_EQUAL(DIR_RECOVERY, status);
+    TEST_ASSERT_EQUAL(expStatus, status);
     TEST_ASSERT_EQUAL(FFD0, dir->fd);
     TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
     ++dir;
@@ -220,8 +246,14 @@ test_RestoreDirFromMain(void)
 void
 test_RestoreDirFromDefault(void)
 {
-    ffui8_t status;
+    ffui8_t status, expStatus;
     FFILE_T *dir;
+    TraceId id;
+    TraceArg arg0;
+
+    expStatus = DIR_BAD;
+    id = TraceId_Restore;
+    arg0 = (TraceArg)expStatus;
 
     crashDirSector(&dirSectorRead.main);
     crashDirSector(&dirSectorRead.backup);
@@ -231,11 +263,12 @@ test_RestoreDirFromDefault(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, 0, sizeof(DirSector));
     eeprom_write_IgnoreArg_p();
+    Trace_put_Expect(id, arg0, 0);
 
     dir = ffdir_restore(&status);
 
     TEST_ASSERT_NOT_NULL(dir);
-    TEST_ASSERT_EQUAL(DIR_BAD, status);
+    TEST_ASSERT_EQUAL(expStatus, status);
     TEST_ASSERT_EQUAL(FFD0, dir->fd);
     TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
     ++dir;
@@ -246,8 +279,14 @@ test_RestoreDirFromDefault(void)
 void
 test_RestoreDirFromBackupChecksumNotEqual(void)
 {
-    ffui8_t status;
+    ffui8_t status, expStatus;
     FFILE_T *dir;
+    TraceId id;
+    TraceArg arg0;
+
+    expStatus = DIR_BACKUP;
+    id = TraceId_Restore;
+    arg0 = (TraceArg)expStatus;
 
     memcpy(&dirSectorRead.main.file[1],
            &dirSectorRead.main.file[0],
@@ -260,11 +299,12 @@ test_RestoreDirFromBackupChecksumNotEqual(void)
     eeprom_read_StubWithCallback(MockEepromReadCallback);
     eeprom_write_Expect(0, offsetof(DirSector, backup), sizeof(Dir));
     eeprom_write_IgnoreArg_p();
+    Trace_put_Expect(id, arg0, 0);
 
     dir = ffdir_restore(&status);
 
     TEST_ASSERT_NOT_NULL(dir);
-    TEST_ASSERT_EQUAL(DIR_BACKUP, status);
+    TEST_ASSERT_EQUAL(expStatus, status);
     TEST_ASSERT_EQUAL(FFD0, dir->fd);
     TEST_ASSERT_EQUAL(QFILE_TYPE, dir->type);
     ++dir;
@@ -304,11 +344,16 @@ void
 test_StoreWholeDirectoryInMemory(void)
 {
     ffui8_t status;
+    TraceId id;
+    TraceArg arg0;
 
+    id = TraceId_Restore;
+    arg0 = DIR_OK;
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
+    Trace_put_Expect(id, arg0, 0);
 
     ffdir_restore(&status);
 
@@ -327,11 +372,16 @@ void
 test_StoreOneFileInMemory(void)
 {
     ffui8_t status;
+    TraceId id;
+    TraceArg arg0;
 
+    id = TraceId_Restore;
+    arg0 = DIR_OK;
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
+    Trace_put_Expect(id, arg0, 0);
 
     ffdir_restore(&status);
 
@@ -500,7 +550,11 @@ void
 test_CleanDirectoryFormat(void)
 {
     FFILE_T *file = (FFILE_T *)0;
+    TraceId id;
+    TraceArg arg0;
 
+    id = TraceId_Restore;
+    arg0 = DIR_OK;
     eeprom_init_Expect();
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
@@ -519,6 +573,7 @@ test_CleanDirectoryFormat(void)
     eeprom_read_Expect(0, 0, sizeof(DirSector));
     eeprom_read_IgnoreArg_p();
     eeprom_read_StubWithCallback(MockEepromReadCallback);
+    Trace_put_Expect(id, arg0, 0);
 
     file = ffdir_clean();
 
