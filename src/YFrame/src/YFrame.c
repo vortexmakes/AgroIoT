@@ -11,6 +11,7 @@
 /* -------------------------------- Authors -------------------------------- */
 /*
  *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ *  DaBa  Darío Baliña       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -32,6 +33,7 @@
 #define FLG_GPS_VALID           1
 #define FLG_HISTORY             2
 #define FLG_MOVING              4
+#define FLG_LINE	            8
 
 #define YFRAME_ACK_LEN          (sizeof(YFRAME_ACK) - 1)
 
@@ -57,7 +59,7 @@ YFrame_getFlags(GStatusType *from, rui8_t *flags, rInt type)
         flag |= (Geo_isValid(&from->position) == 1) ? FLG_GPS_VALID : 0;
         flag |= (type == YFRAME_MGP_TYPE) ? FLG_HISTORY : 0;
         flag |= (cbox_isMoving(&from->devData) == 1) ? FLG_MOVING : 0;
-        flag |= (BatChr_getStatus() << 3);
+        flag |= (from->batChrStatus == LINE_BATT) ? FLG_LINE : 0;
         *flags = flag;
     }
     else
