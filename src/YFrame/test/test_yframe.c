@@ -53,16 +53,16 @@ static GStatusType invStatus =
 };
 
 static const char singleFrame[] =
-    "!0|19355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+    "!0|01355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 
 static const char multipleFrame[] =
-    "!1|0002|355826018345180|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3#";
+    "!1|0002|355826018345180|03,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3|03,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3#";
 
 static const char corruptSingleFrame[] =
-    "!0|19355826018345180,,,,,,,FFFF,FFFF,FF,FF,FFFF,FFFF,FFFF,FF";
+    "!0|01355826018345180,,,,,,,FFFF,FFFF,FF,FF,FFFF,FFFF,FFFF,FF";
 
 static const char invFrame[] =
-    "!0|19355826018345180,120000,-38.0030396,-057.3266218,000.000,000,190918,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+    "!0|01355826018345180,120000,-38.0030396,-057.3266218,000.000,000,190918,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -118,11 +118,10 @@ test_ValidGetFlags(void)
     flags = 0;
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
     cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
-    BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
 
     err = YFrame_getFlags((GStatusType *)&status0, &flags, YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL(0, err);
-    TEST_ASSERT_EQUAL_HEX(0x19, flags);
+    TEST_ASSERT_EQUAL_HEX(0x01, flags);
 }
 
 void
@@ -130,11 +129,10 @@ test_MakeSingleHeader(void)
 {
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
     cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
-    BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     GsmMgr_getImei_ExpectAndReturn("355826018345180");
 
     size = YFrame_header(&status0, buf, 0, YFRAME_SGP_TYPE);
-    TEST_ASSERT_EQUAL_STRING("!0|19355826018345180,", buf);
+    TEST_ASSERT_EQUAL_STRING("!0|01355826018345180,", buf);
 }
 
 void
@@ -145,7 +143,6 @@ test_MakeSingleFrame(void)
     expLen = strlen(singleFrame);
     Geo_isValid_ExpectAndReturn(&(status0.position), 1);
     cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
-    BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     GsmMgr_getImei_ExpectAndReturn("355826018345180");
     Geo_getUtc_ExpectAndReturn(&status0.position, status0.position.utc);
     Geo_getLatInd_ExpectAndReturn(&status0.position, status0.position.latInd);
@@ -159,7 +156,7 @@ test_MakeSingleFrame(void)
     Geo_getDate_ExpectAndReturn(&status0.position, status0.position.date);
 
     size = YFrame_header(&status0, buf, 0, YFRAME_SGP_TYPE);
-    TEST_ASSERT_EQUAL_STRING("!0|19355826018345180,", buf);
+    TEST_ASSERT_EQUAL_STRING("!0|01355826018345180,", buf);
     TEST_ASSERT_TRUE(size != 0);
 
     size += YFrame_data(&status0, &buf[size], YFRAME_SGP_TYPE);
@@ -190,7 +187,6 @@ test_MakeMultipleFrame(void)
     {
         Geo_isValid_ExpectAndReturn(&(status0.position), 1);
         cbox_isMoving_ExpectAndReturn(&(status0.devData), 0);
-        BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
         Geo_getUtc_ExpectAndReturn(&status0.position, status0.position.utc);
         Geo_getLatInd_ExpectAndReturn(&status0.position, 
                                       status0.position.latInd);
@@ -278,7 +274,6 @@ test_AttemptToMakeACorruptFrame(void)
     expLen = strlen(corruptSingleFrame);
     Geo_isValid_ExpectAndReturn(&(status.position), 1);
     cbox_isMoving_ExpectAndReturn(&(status.devData), 0);
-    BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     GsmMgr_getImei_ExpectAndReturn("355826018345180");
     Geo_getUtc_ExpectAndReturn(&status.position, 0);
     Geo_getLatInd_ExpectAndReturn(&status.position, 0);
@@ -290,7 +285,7 @@ test_AttemptToMakeACorruptFrame(void)
     Geo_getDate_ExpectAndReturn(&status.position, 0);
 
     size = YFrame_header(&status, buf, 0, YFRAME_SGP_TYPE);
-    TEST_ASSERT_EQUAL_STRING("!0|19355826018345180,", buf);
+    TEST_ASSERT_EQUAL_STRING("!0|01355826018345180,", buf);
     TEST_ASSERT_TRUE(size != 0);
 
     size += YFrame_data(&status, &buf[size], YFRAME_SGP_TYPE);
@@ -308,7 +303,6 @@ test_MakeSingleFrameWithAnInvalidPosition(void)
     expLen = strlen(invFrame);
     Geo_isValid_ExpectAndReturn(position, 1);
     cbox_isMoving_ExpectAndReturn(&(invStatus.devData), 0);
-    BatChr_getStatus_ExpectAndReturn(NOLINE_BATT);
     GsmMgr_getImei_ExpectAndReturn("355826018345180");
     Geo_getUtc_ExpectAndReturn(position, position->utc);
     Geo_getLatInd_ExpectAndReturn(position, position->latInd);
@@ -320,7 +314,7 @@ test_MakeSingleFrameWithAnInvalidPosition(void)
     Geo_getDate_ExpectAndReturn(position, position->date);
 
     size = YFrame_header(&invStatus, buf, 0, YFRAME_SGP_TYPE);
-    TEST_ASSERT_EQUAL_STRING("!0|19355826018345180,", buf);
+    TEST_ASSERT_EQUAL_STRING("!0|01355826018345180,", buf);
     TEST_ASSERT_TRUE(size != 0);
 
     size += YFrame_data(&invStatus, &buf[size], YFRAME_SGP_TYPE);
