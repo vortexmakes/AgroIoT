@@ -149,4 +149,25 @@ test_PutATraceInMemory(void)
     Trace_put(id, arg0, arg1);
 }
 
+void
+test_GenerateATrace(void)
+{
+    GStatusType status;
+    TraceId id;
+    TraceArg arg0, arg1;
+
+    id = TraceId_CorruptStatus;
+    arg0 = 4;
+    arg1 = 8;
+    status.devData.a.x = 0;
+    status.devData.a.y = 0;
+    status.devData.a.z = 0;
+
+    Trace_generate(&status, id, arg0, arg1);
+
+    TEST_ASSERT_EQUAL(id, status.devData.a.x);
+    TEST_ASSERT_EQUAL(arg0, status.devData.a.y);
+    TEST_ASSERT_EQUAL(arg1, status.devData.a.z);
+}
+
 /* ------------------------------ End of file ------------------------------ */
