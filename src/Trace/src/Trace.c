@@ -92,4 +92,19 @@ Trace_put(TraceId id, TraceArg arg0, TraceArg arg1)
     ffile_sync();
 }
 
+void 
+Trace_generate(GStatusType *status, TraceId id, TraceArg arg0, 
+                    TraceArg arg1)
+{
+    ACCEL_T *trace;
+
+    trace = &status->devData.a;
+    if (status != (GStatusType *)0)
+    {
+        trace->x = id;
+        trace->y = arg0;
+        trace->z = arg1;
+    }
+}
+
 /* ------------------------------ End of file ------------------------------ */

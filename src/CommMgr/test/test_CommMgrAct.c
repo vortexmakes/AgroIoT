@@ -32,6 +32,7 @@
 #include "Mock_rkhassert.h"
 #include "Mock_Config.h"
 #include "Mock_geoMgr.h"
+#include "Mock_Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -82,7 +83,6 @@ static const char frameData[] =
     "|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 static const char invalidFrameData[] =
     "|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
-static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -90,14 +90,6 @@ static void
 MockAssertCallback(const char* const file, int line, int cmock_num_calls)
 {
     TEST_PASS();
-}
-
-static ruint
-MockYFrameDataCallback(GStatusType *from, char *to, rInt type, 
-                       int cmock_num_calls)
-{
-    TEST_ASSERT_EQUAL_MEMORY(&from->position, &invalidPosition, sizeof(Geo));
-    return strlen(invalidFrameData);
 }
 
 static int
@@ -116,14 +108,15 @@ setupForSendingABlockOfFrames(ruint nFrames, int len, bool validity)
         StatQue_read_IgnoreArg_elem();
         GStatus_checkValidity_ExpectAndReturn(0, validity);
         GStatus_checkValidity_IgnoreArg_me();
+        if (validity == false)
+        {
+            Trace_generate_Expect(0, TraceId_CorruptStatus, 0, 0);
+            Trace_generate_IgnoreArg_status(); 
+        }
         YFrame_data_ExpectAndReturn(&elem.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 
                                     YFRAME_MGP_TYPE, len);
         YFrame_data_IgnoreArg_from(); 
-        if (validity == false)
-        {
-            YFrame_data_StubWithCallback(MockYFrameDataCallback);
-        }
     }
     return n;
 }

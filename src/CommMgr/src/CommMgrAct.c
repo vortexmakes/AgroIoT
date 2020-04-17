@@ -27,6 +27,7 @@
 #include "rkhassert.h"
 #include "Config.h"
 #include "geoMgr.h"
+#include "Trace.h"
 
 RKH_MODULE_NAME(CommMgrAct);
 
@@ -44,7 +45,6 @@ RKH_MODULE_NAME(CommMgrAct);
 /* ------------------------------- Constants ------------------------------- */
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static RKH_ROM_STATIC_EVENT(evRestartObj, evRestart);
-static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -99,8 +99,7 @@ sendFrames(CommMgr *const me)
         res = (bool)GStatus_checkValidity(&to);
         if (res == false)
         {
-            to.data = me->status;
-            to.data.position = invalidPosition;
+            Trace_generate(&to.data, TraceId_CorruptStatus, 0, 0);
         }
         me->evSendObj.size += YFrame_data(&to.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 
