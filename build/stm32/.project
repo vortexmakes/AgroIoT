@@ -112,6 +112,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/UsbMgr</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/YCommand</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/YCommand</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/YFrame</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/YFrame</locationURI>

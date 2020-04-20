@@ -1,51 +1,49 @@
 /**
- *  \file       GsmMgr_sendSMS.c
- *  \brief      Example: Sending Test SMS using GsmMgr interface.
+ *  \file       YCommand.c
+ *  \brief      ...
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
+ *  2020.04.17  Daba  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
+ *  DaBa  Dario Baliña db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include <string.h>
-#include <stdio.h>
-#include "GsmMgr_sendSMS.h"
-#include "signals.h"
-#include "events.h"
-#include "topic.h"
+#include "rkh.h"
+#include "YCommand.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-#define DESTINATION_PHONE_NUM   "2235493862"
-
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static YCommand yCmd;
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-/* ---------------------------- Global functions --------------------------- */
-static SendSMSEvt SMSEvtobj;
-static ruint smsCount;
 
-void
-GsmMgr_sendTestSMS(RKH_SMA_T *ao)
+YCommand_parse(char *p, ruint size)
 {
-    ++smsCount;
-    RKH_SET_STATIC_EVENT(&SMSEvtobj, evSendSMS);
+    TypeOfCmd cmd;
 
-    strcpy(SMSEvtobj.dest, DESTINATION_PHONE_NUM);
+    if(p == NULL || size == 0)
+    {
+        return 0;
+    }
 
-    sprintf(SMSEvtobj.buf, "SMS Test Count: %d", smsCount);
-    SMSEvtobj.size = strlen(SMSEvtobj.buf);
-
-    topic_publish(TCPConnection,
-                  RKH_UPCAST(RKH_EVT_T, &SMSEvtobj), ao);
+    YCommandParser_init(&yCmd);
+    
+    cmd = CommandParser_search(p, size);
+        
+    return cmd;
 }
 
+
+/* ---------------------------- Global functions --------------------------- */
 /* ------------------------------ End of file ------------------------------ */

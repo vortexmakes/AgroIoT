@@ -1,5 +1,5 @@
 /**
- *  \file       YCommand.h
+ *  \file       YCommandParser.h
  *  \brief      Yipies Command Parser.
  */
 
@@ -15,8 +15,8 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __YCOMMAND_H__
-#define __YCOMMAND_H__
+#ifndef __YCOMMANDPARSER_H__
+#define __YCOMMANDPARSER_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
@@ -36,6 +36,9 @@ SSP_DCLR_NORMAL_NODE rootYCommandParser;
 extern ruint YCommandParser;
 
 /* -------------------------- Function prototypes -------------------------- */
+void YCommandParser_init(YCommand *p);
+TypeOfCmd YCommandParser_search(char *p, ruint size);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

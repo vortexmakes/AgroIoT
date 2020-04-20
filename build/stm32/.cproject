@@ -66,7 +66,7 @@
 									<listOptionValue builtIn="false" value="../../../src/parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../src/date"/>
 									<listOptionValue builtIn="false" value="../../../src/parser/sim5320"/>
-									<listOptionValue builtIn="false" value="../../../src/parser/YCommand"/>
+                                    <listOptionValue builtIn="false" value="../../../src/YCommand/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/sequence"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
@@ -142,7 +142,7 @@
 									<listOptionValue builtIn="false" value="../../../src/parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../src/date"/>
 									<listOptionValue builtIn="false" value="../../../src/parser/sim5320"/>
-									<listOptionValue builtIn="false" value="../../../src/parser/YCommand"/>
+                                    <listOptionValue builtIn="false" value="../../../src/YCommand/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/sequence"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
@@ -215,7 +215,7 @@
 									<listOptionValue builtIn="false" value="../../../src/parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../src/date"/>
 									<listOptionValue builtIn="false" value="../../../src/parser/sim5320"/>
-									<listOptionValue builtIn="false" value="../../../src/parser/YCommand"/>
+                                    <listOptionValue builtIn="false" value="../../../src/YCommand/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/sequence"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
@@ -332,7 +332,7 @@
 									<listOptionValue builtIn="false" value="../../../src/parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../src/date"/>
 									<listOptionValue builtIn="false" value="../../../src/parser/sim5320"/>
-									<listOptionValue builtIn="false" value="../../../src/parser/YCommand"/>
+                                    <listOptionValue builtIn="false" value="../../../src/YCommand/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/sequence"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
@@ -408,7 +408,7 @@
 									<listOptionValue builtIn="false" value="../../../src/parser/ubxm8"/>
 									<listOptionValue builtIn="false" value="../../../src/date"/>
 									<listOptionValue builtIn="false" value="../../../src/parser/sim5320"/>
-									<listOptionValue builtIn="false" value="../../../src/parser/YCommand"/>
+                                    <listOptionValue builtIn="false" value="../../../src/YCommand/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/sequence"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
