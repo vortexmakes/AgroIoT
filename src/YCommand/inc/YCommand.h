@@ -54,24 +54,31 @@ enum TypeOfCmd
     TypeOfCmdSampleTime,
     TypeOfCmdDataFormat,
 
+    TypeOfCmdInvalidKey,
+
     TypeOfCmdUnknown
 };
 
+#define COMMAND_SECURITY_KEY_DFT    "1234"
+
 /* ------------------------------- Data types ------------------------------ */
-typedef struct YCommand
+typedef union
 {
-    SSP parser;
+    char raw[COMMAND_DATA_LEN+1];
+    char serverIp[COMMAND_DATA_LEN+1];
+    char serverPort[COMMAND_DATA_LEN+1];
+}cmdData;
+
+typedef struct
+{
     char index[COMMAND_INDEX_LEN+1];
-    char id[COMMAND_ID_LEN+1];
-    char security[COMMAND_SECURITY_LEN+1];
-    char data[COMMAND_DATA_LEN+1];
-    ruint command;
+    rui8_t id;
+    cmdData data;
 }YCommand;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void YCommandParser_init(YCommand *p);
-TypeOfCmd YCommandParser_search(char *p, ruint size);
+TypeOfCmd YCommand_parse(YCommand *pCmd, char *p, ruint size);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

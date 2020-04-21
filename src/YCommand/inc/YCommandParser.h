@@ -33,11 +33,10 @@ SSP_DCLR_NORMAL_NODE rootYCommandParser;
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
-extern ruint YCommandParser;
-
 /* -------------------------- Function prototypes -------------------------- */
-void YCommandParser_init(YCommand *p);
-TypeOfCmd YCommandParser_search(char *p, ruint size);
+rInt YCommandParser_search(char *p, ruint size);
+rInt YCommandParser_securityCheck(char *pkey);
+ruint YCommandParser_getId(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
