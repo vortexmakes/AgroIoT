@@ -198,7 +198,7 @@ YCommandParser_search(char *p, ruint size)
 rInt
 YCommandParser_securityCheck(char *pkey)
 {
-    if(strncmp(me->security, pkey, COMMAND_SECURITY_LEN) != 0);
+    if(strncmp(me->security, pkey, COMMAND_SECURITY_LEN) != 0)
     {
         return -1; 
     }
