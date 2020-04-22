@@ -29,14 +29,27 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-SSP_DCLR_NORMAL_NODE rootYCommandParser;
+#define YCOMMAND_INDEX_LEN       11
+#define YCOMMAND_ID_LEN          2
+#define YCOMMAND_SECURITY_LEN    3
+#define YCOMMAND_DATA_LEN        32
 
 /* ------------------------------- Data types ------------------------------ */
+typedef struct
+{
+    SSP parser;
+    char index[YCOMMAND_INDEX_LEN+1];
+    char id[YCOMMAND_ID_LEN+1];
+    char security[YCOMMAND_SECURITY_LEN+1];
+    char data[YCOMMAND_DATA_LEN+1];
+    ruint result;
+}YCommandParser;
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-rInt YCommandParser_search(char *p, ruint size);
-rInt YCommandParser_securityCheck(char *pkey);
-ruint YCommandParser_getId(void);
+rInt YCommandParser_search(YCommandParser *me, char *p, ruint size);
+rInt YCommandParser_securityCheck(YCommandParser *me, char *pkey);
+ruint YCommandParser_getId(YCommandParser *me);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

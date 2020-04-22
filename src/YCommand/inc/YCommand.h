@@ -21,6 +21,8 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "ssp.h"
+#include "YCommandParser.h"
+#include "Config.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -29,11 +31,6 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define COMMAND_INDEX_LEN       11
-#define COMMAND_ID_LEN          2
-#define COMMAND_SECURITY_LEN    3
-#define COMMAND_DATA_LEN        32
-
 typedef enum TypeOfCmd TypeOfCmd;
 enum TypeOfCmd
 {
@@ -59,19 +56,25 @@ enum TypeOfCmd
     TypeOfCmdUnknown
 };
 
-#define COMMAND_SECURITY_KEY_DFT    "1234"
+#define YCOMMAND_SECURITY_KEY_DFT    "1234"
 
 /* ------------------------------- Data types ------------------------------ */
 typedef union
 {
-    char raw[COMMAND_DATA_LEN+1];
-    char serverIp[COMMAND_DATA_LEN+1];
-    char serverPort[COMMAND_DATA_LEN+1];
+    char serverIp[IP_LENGTH+1];
+    char serverPort[PORT_LENGTH+1];
+    rui8_t connTime;
+    rui8_t updateGPSTime;
+    rui8_t accLimit;
+    rui8_t brLimit;
+    rui8_t status;
+    rui8_t outValue;
+    rui8_t sampleTime;
 }cmdData;
 
 typedef struct
 {
-    char index[COMMAND_INDEX_LEN+1];
+    char index[YCOMMAND_INDEX_LEN+1];
     rui8_t id;
     cmdData data;
 }YCommand;

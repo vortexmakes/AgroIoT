@@ -26,23 +26,12 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
-typedef struct
-{
-    SSP parser;
-    char index[COMMAND_INDEX_LEN+1];
-    char id[COMMAND_ID_LEN+1];
-    char security[COMMAND_SECURITY_LEN+1];
-    char data[COMMAND_DATA_LEN+1];
-    ruint result;
-}YCommandParser;
-
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 SSP_DCLR_NORMAL_NODE rootYCommandParser;
 SSP_DCLR_TRN_NODE socketIndex, id, security, data;
 
-static YCommandParser yCommandParser;
-static YCommandParser *me;
+static YCommandParser *pYCmd;
 
 static char *p;
 
@@ -110,13 +99,13 @@ indexInit(unsigned char pos)
 {
     (void)pos;
 
-    fieldInit(me->index);
+    fieldInit(pYCmd->index);
 }
 
 static void
 indexCollect(unsigned char c)
 {
-    fieldInsert(me->index, COMMAND_INDEX_LEN, c);
+    fieldInsert(pYCmd->index, YCOMMAND_INDEX_LEN, c);
 }
 
 static void
@@ -124,8 +113,8 @@ noIndexidInit(unsigned char pos)
 {
     (void)pos;
 
-    fieldInit(me->index);
-    fieldInit(me->id);
+    fieldInit(pYCmd->index);
+    fieldInit(pYCmd->id);
 }
 
 static void
@@ -133,26 +122,26 @@ idInit(unsigned char pos)
 {
     (void)pos;
 
-    fieldInit(me->id);
+    fieldInit(pYCmd->id);
 }
 
 static void
 idCollect(unsigned char c)
 {
-    fieldInsert(me->id, COMMAND_ID_LEN, c);
+    fieldInsert(pYCmd->id, YCOMMAND_ID_LEN, c);
 }
 
 static void
 securityInit(unsigned char pos)
 {
     (void)pos;
-    fieldInit(me->security);
+    fieldInit(pYCmd->security);
 }
 
 static void
 securityCollect(unsigned char c)
 {
-    fieldInsert(me->security, COMMAND_SECURITY_LEN, c);
+    fieldInsert(pYCmd->security, YCOMMAND_SECURITY_LEN, c);
 }
 
 static void
@@ -160,13 +149,13 @@ dataInit(unsigned char pos)
 {
     (void)pos;
 
-    fieldInit(me->data);
+    fieldInit(pYCmd->data);
 }
 
 static void
 dataCollect(unsigned char c)
 {
-    fieldInsert(me->data, COMMAND_DATA_LEN, c);
+    fieldInsert(pYCmd->data, YCOMMAND_DATA_LEN, c);
 }
 
 static void
@@ -174,31 +163,31 @@ found(unsigned char pos)
 {
     (void)pos;
 
-    me->result = 0;
+    pYCmd->result = 0;
 }
 
 rInt
-YCommandParser_search(char *p, ruint size)
+YCommandParser_search(YCommandParser *me, char *p, ruint size)
 {
-    YCommandParser *me = &yCommandParser;
+    pYCmd = me;
 
-    ssp_init(&me->parser, &rootYCommandParser);
+    ssp_init(&pYCmd->parser, &rootYCommandParser);
 
-    me->result = -1; 
+    pYCmd->result = -1; 
 
     do
     {
-        ssp_doSearch(&me->parser, *p++);
+        ssp_doSearch(&pYCmd->parser, *p++);
     }
     while(--size);
 
-    return me->result;
+    return pYCmd->result;
 }
 
 rInt
-YCommandParser_securityCheck(char *pkey)
+YCommandParser_securityCheck(YCommandParser *me, char *pkey)
 {
-    if(strncmp(me->security, pkey, COMMAND_SECURITY_LEN) != 0)
+    if(strncmp(me->security, pkey, YCOMMAND_SECURITY_LEN) != 0)
     {
         return -1; 
     }
@@ -207,7 +196,13 @@ YCommandParser_securityCheck(char *pkey)
 }
 
 ruint
-YCommandParser_getId(void)
+YCommandParser_getIndex(YCommandParser *me)
+{
+   return me->index; 
+}
+
+ruint
+YCommandParser_getId(YCommandParser *me)
 {
     ruint id;
     

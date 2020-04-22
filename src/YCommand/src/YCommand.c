@@ -15,15 +15,16 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <string.h>
 #include "rkh.h"
 #include "YCommand.h"
-#include "YCommandParser.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static YCommandParser yCmdParser;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -37,15 +38,19 @@ YCommand_parse(YCommand *pCmd, char *p, ruint size)
         return TypeOfCmdUnknown;
     }
  
-    if(YCommandParser_search(p, size) < 0)
+    if(YCommandParser_search(&yCmdParser, p, size) < 0)
         return TypeOfCmdUnknown;
 
-    if(YCommandParser_securityCheck(COMMAND_SECURITY_KEY_DFT) < 0)
+    if(YCommandParser_securityCheck(&yCmdParser, YCOMMAND_SECURITY_KEY_DFT) < 0)
     {
         return TypeOfCmdInvalidKey;
     }
 
-    cmd = YCommandParser_getId();
+    cmd = YCommandParser_getId(&yCmdParser);
+
+    strcpy(pCmd->index, YCommandParser_getIndex(&yCmdParser));
+    pCmd->id = YCommandParser_getId(&yCmdParser);
+    
 
     return cmd;
 }
