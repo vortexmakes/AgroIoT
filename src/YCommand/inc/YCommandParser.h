@@ -29,6 +29,16 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+typedef enum
+{
+    YCommandFound,
+    YCommandValidKey = YCommandFound,
+
+    YCommandNotFound = -1,
+    YCommandInvalidKey = YCommandNotFound,
+
+}YCmdPResult;
+
 #define YCOMMAND_INDEX_LEN       11
 #define YCOMMAND_ID_LEN          2
 #define YCOMMAND_SECURITY_LEN    3
@@ -42,13 +52,13 @@ typedef struct
     char id[YCOMMAND_ID_LEN+1];
     char security[YCOMMAND_SECURITY_LEN+1];
     char data[YCOMMAND_DATA_LEN+1];
-    ruint result;
+    YCmdPResult result;
 }YCommandParser;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-rInt YCommandParser_search(YCommandParser *me, char *p, ruint size);
-rInt YCommandParser_securityCheck(YCommandParser *me, char *pkey);
+YCmdPResult YCommandParser_search(YCommandParser *me, char *p, ruint size);
+YCmdPResult YCommandParser_securityCheck(YCommandParser *me, char *pkey);
 ruint YCommandParser_getId(YCommandParser *me);
 
 /* -------------------- External C language linkage end -------------------- */

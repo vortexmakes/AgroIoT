@@ -31,30 +31,31 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-typedef enum TypeOfCmd TypeOfCmd;
-enum TypeOfCmd
+typedef enum
 {
-    TypeOfCmdServerIp,
-    TypeOfCmdServerPort,
-    TypeOfCmdConnectionTime,
-    TypeOfCmdGpsTime,
-    TypeOfCmdAccLimit,
-    TypeOfCmdBreakLimit,
-    TypeOfCmdStatus,
-    TypeOfCmdSetOut1,
-    TypeOfCmdSetOut2,
-    TypeOfCmdSetOut3,
-    TypeOfCmdSetOut4,
-    TypeOfCmdSetOut5,
-    TypeOfCmdSetOut6,
-    TypeOfCmdReset,
-    TypeOfCmdSampleTime,
-    TypeOfCmdDataFormat,
+    YCmdServerIp,
+    YCmdServerPort,
+    YCmdConnectionTime,
+    YCmdGpsTime,
+    YCmdAccLimit,
+    YCmdBreakLimit,
+    YCmdStatus,
+    YCmdSetOut1,
+    YCmdSetOut2,
+    YCmdSetOut3,
+    YCmdSetOut4,
+    YCmdSetOut5,
+    YCmdSetOut6,
+    YCmdReset,
+    YCmdSampleTime,
+    YCmdDataFormat,
 
-    TypeOfCmdInvalidKey,
+    YCmdNum,
 
-    TypeOfCmdUnknown
-};
+    YCmdUnknown = -1,
+    YCmdInvalidKey = -2,
+
+}YCmd_t;
 
 #define YCOMMAND_SECURITY_KEY_DFT    "1234"
 
@@ -65,11 +66,11 @@ typedef union
     char serverPort[PORT_LENGTH+1];
     rui8_t connTime;
     rui8_t updateGPSTime;
+    rui8_t sampleTime;
     rui8_t accLimit;
     rui8_t brLimit;
     rui8_t status;
     rui8_t outValue;
-    rui8_t sampleTime;
 }cmdData;
 
 typedef struct
@@ -81,7 +82,7 @@ typedef struct
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-TypeOfCmd YCommand_parse(YCommand *pCmd, char *p, ruint size);
+YCmd_t YCommand_parse(YCommand *pCmd, char *p, ruint size);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

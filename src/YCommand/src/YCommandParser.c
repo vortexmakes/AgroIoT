@@ -163,17 +163,17 @@ found(unsigned char pos)
 {
     (void)pos;
 
-    pYCmd->result = 0;
+    pYCmd->result = YCommandFound;
 }
 
-rInt
+YCmdPResult
 YCommandParser_search(YCommandParser *me, char *p, ruint size)
 {
     pYCmd = me;
 
     ssp_init(&pYCmd->parser, &rootYCommandParser);
 
-    pYCmd->result = -1; 
+    pYCmd->result = YCommandNotFound; 
 
     do
     {
@@ -184,15 +184,15 @@ YCommandParser_search(YCommandParser *me, char *p, ruint size)
     return pYCmd->result;
 }
 
-rInt
+YCmdPResult
 YCommandParser_securityCheck(YCommandParser *me, char *pkey)
 {
     if(strncmp(me->security, pkey, YCOMMAND_SECURITY_LEN) != 0)
     {
-        return -1; 
+        return YCommandInvalidKey; 
     }
 
-    return 0;
+    return YCommandValidKey;
 }
 
 ruint
@@ -208,12 +208,7 @@ YCommandParser_getId(YCommandParser *me)
     
     id = atoi(me->id);
 
-    if(id > TypeOfCmdUnknown)
-    {
-        id = TypeOfCmdUnknown;
-    }
-
-    return id;
+    return (id > YCmdUnknown) ? YCmdUnknown : id;
 }
 
 /* ---------------------------- Global functions --------------------------- */
