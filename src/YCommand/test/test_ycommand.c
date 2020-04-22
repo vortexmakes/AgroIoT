@@ -19,6 +19,7 @@
 #include "unity.h"
 #include "YCommand.h"
 #include "YCommandParser.h"
+#include "IpValid.h"
 #include "ssp.h"
 
 /* ----------------------------- Local macros ------------------------------ */
@@ -50,7 +51,7 @@ test_ServerIp(void)
 
     TEST_ASSERT_EQUAL(YCmdServerIp, res);
     TEST_ASSERT_EQUAL(YCmdServerIp, yCmd.id);
-//    TEST_ASSERT_EQUAL_STRING("255.255.255.255", yCmd.data.serverIp);
+    TEST_ASSERT_EQUAL_STRING("255.255.255.255", yCmd.data.serverIp);
 }
 
 /* ------------------------------ End of file ------------------------------ */

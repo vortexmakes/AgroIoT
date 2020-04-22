@@ -38,11 +38,13 @@
     - ../YCommand/inc
     - ../Config/inc
     - ../Collector/inc
+    - ../IpValid/inc
     - ../
   :support:
     - test/support
     - src/YCommandParser.c
     - ../../third-party/ssp/src/ssp.c
+    - ../IpValid/src/IpValid.c
 
 :defines:
   :common: &common_defines [__TEST__]

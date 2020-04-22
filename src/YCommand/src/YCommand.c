@@ -16,72 +16,79 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <string.h>
+#include <stdlib.h>
 #include "rkh.h"
 #include "YCommand.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
-typedef rInt (*yCmdFormat)(YCommand *pCmd, char *data);
+typedef struct YCmdFormat
+{
+    YCmd_t (*fmt)(YCommand *pCmd, const struct YCmdFormat *pFmt);
+    ruint min;
+    ruint max;
+}YCmdFormat;
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 static YCommandParser yCmdParser;
 
 /* ----------------------- Local function prototypes ----------------------- */
-static rInt fmt_none(YCommand *pCmd, char *p);
-static rInt fmt_serverIp(YCommand *pCmd, char *p);
-static rInt fmt_serverPort(YCommand *pCmd, char *p);
-static rInt fmt_rui8(YCommand *pCmd, char *p);
+static YCmd_t fmt_none(YCommand *pCmd, const YCmdFormat *pFmt);
+static YCmd_t fmt_serverIp(YCommand *pCmd, const YCmdFormat *pFmt);
+static YCmd_t fmt_string(YCommand *pCmd, const YCmdFormat *pFmt);
+static YCmd_t fmt_rui8(YCommand *pCmd, const YCmdFormat *pFmt);
 
-static const yCmdFormat formatTable[YCmdNum] =
+static const YCmdFormat fmtTable[YCmdNum] =
 {
-    fmt_serverIp,
-    fmt_serverPort,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_rui8,
-    fmt_none,
-    fmt_rui8,
-    fmt_none
+    { fmt_serverIp, 7, IP_LENGTH },
+    { fmt_string, 1, PORT_LENGTH},
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 2 },
+    { fmt_none, 0, 0 },
+    { fmt_rui8, 1, 2 },
+    { fmt_none, 0, 0 }
 };
 
 
 /* ---------------------------- Local functions ---------------------------- */
+
 static
-rInt
-fmt_none(YCommand *pCmd, char *p)
+YCmd_t
+fmt_none(YCommand *pCmd, const YCmdFormat *pFmt)
 {
-    return 0;
+    return YCmdWrongFormat;
 }
 
 static
-rInt
-fmt_serverIp(YCommand *pCmd, char *p)
+YCmd_t
+fmt_serverIp(YCommand *pCmd, const YCmdFormat *pFmt)
 {
-    return 0;
+    return YCmdWrongFormat;
 }
 
 static
-rInt
-fmt_serverPort(YCommand *pCmd, char *p)
+YCmd_t
+fmt_string(YCommand *pCmd, const YCmdFormat *pFmt)
 {
-    return 0;
+    return YCmdWrongFormat;
 }
 
 static
-rInt
-fmt_rui8(YCommand *pCmd, char *p)
+YCmd_t
+fmt_rui8(YCommand *pCmd, const YCmdFormat *pFmt)
 {
-    return 0;
+    return YCmdWrongFormat;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -89,6 +96,7 @@ YCmd_t
 YCommand_parse(YCommand *pCmd, char *p, ruint size)
 {
     YCmd_t cmd;
+    const YCmdFormat *pFmt;
 
     if(p == NULL || size == 0)
     {
@@ -105,11 +113,14 @@ YCommand_parse(YCommand *pCmd, char *p, ruint size)
 
     cmd = YCommandParser_getId(&yCmdParser);
 
+    memset(pCmd, 0, sizeof(YCommand));
+
     strcpy(pCmd->index, YCommandParser_getIndex(&yCmdParser));
     pCmd->id = YCommandParser_getId(&yCmdParser);
     
+    pFmt = &fmtTable[cmd];
     
-    return cmd;
+    return (*pFmt->fmt)(pCmd, pFmt);
 }
 
 /* ------------------------------ End of file ------------------------------ */
