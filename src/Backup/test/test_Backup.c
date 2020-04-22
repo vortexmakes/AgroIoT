@@ -132,6 +132,8 @@ test_InitWithFrmDirWithoutFiles(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
     TEST_ASSERT_EQUAL(0, info.nFiles);
+    TEST_ASSERT_EQUAL(-1, info.oldest);
+    TEST_ASSERT_EQUAL(-1, info.newest);
 }
 
 void
@@ -147,6 +149,8 @@ test_InitWithFrmDirWithOneFile(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
     TEST_ASSERT_EQUAL(1, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(0, info.newest);
 }
 
 void
@@ -162,6 +166,8 @@ test_InitWithFrmDirWithMoreThanOneFile(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
     TEST_ASSERT_EQUAL(3, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(2, info.newest);
 }
 
 void
@@ -177,6 +183,8 @@ test_InitWithFrmDirWithExactlyAllowedFiles(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES - 1, info.newest);
 }
 
 void
@@ -194,6 +202,8 @@ test_InitWithFrmDirWithMoreThanAllowedFiles(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES - 1, info.newest);
 }
 
 void
@@ -209,6 +219,8 @@ test_InitWithoutFrmDir(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
     TEST_ASSERT_EQUAL(0, info.nFiles);
+    TEST_ASSERT_EQUAL(-1, info.oldest);
+    TEST_ASSERT_EQUAL(-1, info.newest);
 }
 
 void
@@ -223,10 +235,12 @@ test_InitMkDirFail(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(1, initResult);
     TEST_ASSERT_EQUAL(-1, info.nFiles);
+    TEST_ASSERT_EQUAL(-1, info.oldest);
+    TEST_ASSERT_EQUAL(-1, info.newest);
 }
 
 void
-test_InitCalculateOldestFile(void)
+test_InitGetNumberOfScannedFiles(void)
 {
     Backup info;
     int initResult;
@@ -238,8 +252,25 @@ test_InitCalculateOldestFile(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
     TEST_ASSERT_EQUAL(3, info.nFiles);
-    /*TEST_ASSERT_EQUAL(0, info.oldest);
-    TEST_ASSERT_EQUAL(2, info.newest);*/
+}
+
+void
+test_InitGetOldestAndNewestFiles(void)
+{
+    Backup info;
+    int initResult;
+    int nFilesExpected;
+
+    nFilesExpected = 3;
+    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_OK);
+    f_mkdir_IgnoreArg_path();
+    findFiles(nFilesExpected);
+
+    initResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
 }
 
 /* ------------------------------ End of file ------------------------------ */
