@@ -18,10 +18,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "rkh.h"
+#include "ssp.h"
 #include "YCommand.h"
 #include "YCommandParser.h"
-#include "signals.h"
-#include "events.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -195,7 +194,7 @@ YCommandParser_securityCheck(YCommandParser *me, char *pkey)
     return YCommandValidKey;
 }
 
-ruint
+char *
 YCommandParser_getIndex(YCommandParser *me)
 {
    return me->index; 

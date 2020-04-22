@@ -20,7 +20,6 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
-#include "ssp.h"
 #include "YCommandParser.h"
 #include "Config.h"
 
@@ -57,7 +56,7 @@ typedef enum
 
 }YCmd_t;
 
-#define YCOMMAND_SECURITY_KEY_DFT    "1234"
+#define YCOMMAND_SECURITY_KEY_DFT    "123"
 
 /* ------------------------------- Data types ------------------------------ */
 typedef union

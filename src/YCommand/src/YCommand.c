@@ -108,6 +108,7 @@ YCommand_parse(YCommand *pCmd, char *p, ruint size)
     strcpy(pCmd->index, YCommandParser_getIndex(&yCmdParser));
     pCmd->id = YCommandParser_getId(&yCmdParser);
     
+    
     return cmd;
 }
 
