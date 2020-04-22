@@ -1,6 +1,6 @@
 /**
  *  \file       YCommand.h
- *  \brief      Yipies Command .
+ *  \brief      Yipies Command.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -53,7 +53,8 @@ typedef enum
 
     YCmdUnknown = -1,
     YCmdInvalidKey = -2,
-    YCmdWrongFormat = -3
+    YCmdWrongLen = -3,
+    YCmdWrongFormat = -4
 
 }YCmd_t;
 

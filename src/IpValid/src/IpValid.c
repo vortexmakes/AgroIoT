@@ -48,6 +48,8 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static char _ip[20];
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /*
@@ -77,10 +79,12 @@ IpValid_check(char *ip)
   
     if (ip == NULL) 
         return 0; 
+
+    strcpy(_ip, ip);
   
     // See following link for strtok() 
     // http://pubs.opengroup.org/onlinepubs/009695399/functions/strtok_r.html 
-    ptr = strtok(ip, IP_DELIMITER); 
+    ptr = strtok(_ip, IP_DELIMITER); 
   
     if (ptr == NULL) 
         return 0; 

@@ -200,6 +200,12 @@ YCommandParser_getIndex(YCommandParser *me)
    return me->index; 
 }
 
+char *
+YCommandParser_getData(YCommandParser *me)
+{
+    return me->data;
+}
+
 ruint
 YCommandParser_getId(YCommandParser *me)
 {

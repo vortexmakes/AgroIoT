@@ -61,6 +61,7 @@ YCmdPResult YCommandParser_search(YCommandParser *me, char *p, ruint size);
 YCmdPResult YCommandParser_securityCheck(YCommandParser *me, char *pkey);
 ruint YCommandParser_getId(YCommandParser *me);
 char * YCommandParser_getIndex(YCommandParser *me);
+char * YCommandParser_getData(YCommandParser *me);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
