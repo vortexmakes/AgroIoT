@@ -25,12 +25,21 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define BACKUP_FRMDIR      "frames"
+#define BACKUP_FRMDIR           "frames"
+#define BACKUP_MAXNUMFRMFILES   20
 
 /* ------------------------------- Data types ------------------------------ */
+typedef struct Backup Backup;
+struct Backup
+{
+    int nFiles;
+    int oldest;
+    int newest;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void Backup_init(void);
+int Backup_init(Backup *info);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

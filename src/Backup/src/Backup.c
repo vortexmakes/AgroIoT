@@ -24,21 +24,40 @@
 /* ---------------------------- Local variables ---------------------------- */
 static DIR dir;
 static FILINFO file;
+static Backup backInfo;
+static const Backup defBackInfo = {-1, -1, -1};
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void
-Backup_init(void)
+int
+Backup_init(Backup *info)
 {
-    FRESULT result;
+    FRESULT fsResult;
+    int initResult = 0;
 
-    f_mkdir(BACKUP_FRMDIR);
-    result = f_findfirst(&dir, &file, BACKUP_FRMDIR, "*.frm");
-    while ((result == FR_OK) && (file.fname[0] != 0))
+    fsResult = f_mkdir(BACKUP_FRMDIR);
+    if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
     {
-        result = f_findnext(&dir, &file);
+        backInfo.nFiles = 0;
+        fsResult = f_findfirst(&dir, &file, BACKUP_FRMDIR, "*.frm");
+        while ((fsResult == FR_OK) && (file.fname[0] != 0))
+        {
+            ++backInfo.nFiles;
+            fsResult = f_findnext(&dir, &file);
+        }
     }
+    else
+    {
+        initResult = 1;
+        backInfo = defBackInfo;
+    }
+
+    if (info != (Backup *)0)
+    {
+        *info = backInfo;
+    }
+    return initResult;
 }
 
 /* ------------------------------ End of file ------------------------------ */
