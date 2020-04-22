@@ -44,12 +44,12 @@ void
 test_ServerIp(void)
 {
     YCommand yCmd;
-    YCmdPResult res;
+    YCmd_t cmd;
     char *p = "Im:0,123,255.255.255.255;";
 
-    res = YCommand_parse(&yCmd, p, strlen(p));
+    cmd = YCommand_parse(&yCmd, p, strlen(p));
 
-    TEST_ASSERT_EQUAL(YCmdServerIp, res);
+    TEST_ASSERT_EQUAL(YCmdServerIp, cmd);
     TEST_ASSERT_EQUAL(YCmdServerIp, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("255.255.255.255", yCmd.data.serverIp);
 }

@@ -162,6 +162,8 @@ found(unsigned char pos)
 {
     (void)pos;
 
+    *(p - 1) = '\0';
+
     pYCmd->result = YCommandFound;
 }
 

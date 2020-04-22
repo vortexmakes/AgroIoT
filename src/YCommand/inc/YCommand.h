@@ -77,7 +77,7 @@ typedef union
 typedef struct
 {
     char index[YCOMMAND_INDEX_LEN+1];
-    rui8_t id;
+    YCmd_t id;
     cmdData data;
 }YCommand;
 

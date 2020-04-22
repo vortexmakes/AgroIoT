@@ -81,15 +81,12 @@ fmt_none(YCommand *pCmd, char *pData)
     return YCmdWrongFormat;
 }
 
-#include "stdio.h"
 static
 YCmd_t
 fmt_serverIp(YCommand *pCmd, char *pData)
 {
-    printf("server ip:%d\r\n",pCmd->id);
     if(IpValid_check(pData))
     {
-        printf("is valid\r\n");
         strcpy(pCmd->data.serverIp, pData);
     }
     else
@@ -97,9 +94,6 @@ fmt_serverIp(YCommand *pCmd, char *pData)
         pCmd->id = YCmdWrongFormat;
     }
 
-    printf("%s\r\n", pCmd->data.serverIp);
-    printf("%s\r\n", pData);
-    printf("server ip:%d\r\n",pCmd->id);
     return pCmd->id;
 }
 
