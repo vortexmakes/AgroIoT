@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include "Backup.h"
 #include "Mock_ff.h"
+#include "Mock_GStatus.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -28,6 +29,7 @@
 static FRESULT mkdirResult, findFirstResult, findNextResult;
 static int fileIndex;
 static TCHAR files[BACKUP_MAXNUMFRMFILES][16];
+static char openPath[24];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -55,6 +57,14 @@ f_findnext_Callback(DIR* dp, FILINFO* fno, int cmock_num_calls)
     return findNextResult;
 }
 
+static FRESULT
+f_open_Callback(FIL* fp, const TCHAR* path, BYTE mode, 
+                int cmock_num_calls)
+{
+    TEST_ASSERT_EQUAL_STRING(openPath, path);
+    return FR_OK;
+}
+
 static int
 findFiles(int nFiles)
 {
@@ -70,7 +80,7 @@ findFiles(int nFiles)
     }
     for (i = 0; i < actualNumFiles; ++i)
     {
-        sprintf(files[i], "%d.frm", i);
+        sprintf(files[i], "%05d.frm", i);
     }
     files[actualNumFiles][0] = 0;
 
@@ -271,6 +281,85 @@ test_InitGetOldestAndNewestFiles(void)
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
+}
+
+void
+test_InitGetCurrentFile(void)
+{
+    Backup info;
+    int initResult;
+    int nFilesExpected;
+    char name[12];
+
+    nFilesExpected = 3;
+    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_OK);
+    f_mkdir_IgnoreArg_path();
+    findFiles(nFilesExpected);
+
+    initResult = Backup_init(&info);
+
+    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
+    sprintf(name, "%05d.frm", nFilesExpected - 1);
+    TEST_ASSERT_EQUAL_STRING(name, info.current);
+}
+
+void
+test_GetInfo(void)
+{
+    Backup info, retInfo;
+    int initResult;
+    int nFilesExpected;
+    char name[12];
+
+    nFilesExpected = 3;
+    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_OK);
+    f_mkdir_IgnoreArg_path();
+    findFiles(nFilesExpected);
+
+    initResult = Backup_init(&info);
+    Backup_getInfo(&retInfo);
+
+    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(retInfo.nFiles, info.nFiles);
+    TEST_ASSERT_EQUAL(retInfo.oldest, info.oldest);
+    TEST_ASSERT_EQUAL(retInfo.newest, info.newest);
+    sprintf(name, "%05d.frm", nFilesExpected - 1);
+    TEST_ASSERT_EQUAL_STRING(name, retInfo.current);
+}
+
+void
+test_StoreCreatesTheFirstFile(void)
+{
+    Backup info;
+    int backupResult;
+    GStatus status;
+    char name[12];
+
+    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    findFiles(0);
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    strcpy(openPath, "frames/00000.frm");
+    f_open_ExpectAndReturn(0, 0, 0, FR_OK);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+    f_open_StubWithCallback(f_open_Callback);
+    backupResult = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    Backup_getInfo(&info);
+    TEST_ASSERT_EQUAL(1, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(0, info.newest);
+    sprintf(name, "%05d.frm", info.newest);
+    TEST_ASSERT_EQUAL_STRING(name, info.current);
 }
 
 /* ------------------------------ End of file ------------------------------ */

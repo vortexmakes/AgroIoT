@@ -33,6 +33,7 @@
     - ../ffile/inc
     - ../Config/inc
     - ../gps/inc
+    - ../Crc32/inc
     - ../
   :support:
     - test/support

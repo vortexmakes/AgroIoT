@@ -18,6 +18,8 @@
 #define __BACKUP_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "GStatus.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -35,11 +37,14 @@ struct Backup
     int nFiles;
     int oldest;
     int newest;
+    char current[12];
 };
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 int Backup_init(Backup *info);
+void Backup_getInfo(Backup *info);
+int Backup_store(GStatus *status);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
