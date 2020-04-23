@@ -98,7 +98,8 @@ dIn_scan(void)
 
             p->status = assembleDin();
 
-            topic_publish(Status, p, &inChg);
+            topic_publish(Status, RKH_UPCAST(RKH_EVT_T, p),
+                                  RKH_UPCAST(RKH_SMA_T, &inChg));
         }
         else if ((dIns[i] == DEBOUNCE_NOT_CHG) && (din == DEBOUNCE_NOT_MASK) &&
                  (dInsSt[i] == 1))
@@ -109,7 +110,8 @@ dIn_scan(void)
 
             p->status = assembleDin();
 
-            topic_publish(Status, p, &inChg);
+            topic_publish(Status, RKH_UPCAST(RKH_EVT_T, p),
+                                  RKH_UPCAST(RKH_SMA_T, &inChg));
         }
 
         dIns[i] = din;

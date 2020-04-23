@@ -632,13 +632,15 @@ sendData(RKH_EVT_T *pe)
 static void
 sendOk(Socket *const me)
 {
-    topic_publish(TCPConnection, &e_Sent, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish(TCPConnection, RKH_UPCAST(RKH_EVT_T, &e_Sent),
+                                 RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
 sendFail(Socket *const me)
 {
-    topic_publish(TCPConnection, &e_SendFail, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish(TCPConnection, RKH_UPCAST(RKH_EVT_T, &e_SendFail),
+                                 RKH_UPCAST(RKH_SMA_T, me));
 
     ModCmd_init();
 }
@@ -660,7 +662,8 @@ recvOk(Socket *const me, RKH_EVT_T *pe)
 static void
 recvFail(Socket *const me)
 {
-    topic_publish(TCPConnection, &e_RecvFail, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish(TCPConnection, RKH_UPCAST(RKH_EVT_T, &e_RecvFail),
+                                 RKH_UPCAST(RKH_SMA_T, me));
 
     ModCmd_init();
 }
@@ -698,7 +701,8 @@ reqRecall(Socket *const me)
 static void
 socketConnected(Socket *const me)
 {
-    topic_publish(TCPConnection, &e_NetConnected, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish(TCPConnection, RKH_UPCAST(RKH_EVT_T, &e_NetConnected),
+                                 RKH_UPCAST(RKH_SMA_T, me));
 
     bsp_netStatus(ConnectedSt);
 }
@@ -706,7 +710,8 @@ socketConnected(Socket *const me)
 static void
 socketDisconnected(Socket *const me)
 {
-    topic_publish(TCPConnection, &e_NetDisconnected, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish(TCPConnection, RKH_UPCAST(RKH_EVT_T, &e_NetDisconnected),
+                                 RKH_UPCAST(RKH_SMA_T, me));
 
     bsp_netStatus(DisconnectedSt);
 }
@@ -714,31 +719,36 @@ socketDisconnected(Socket *const me)
 static void
 gsmIsReady(GsmMgr *const me)
 {
-    RKH_SMA_POST_FIFO(gsmMgr, &e_GsmReady, RKH_UPCAST(RKH_SMA_T, me));
+    RKH_SMA_POST_FIFO(gsmMgr, RKH_UPCAST(RKH_EVT_T, &e_GsmReady),
+                              RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
 gsmInError(void *const me)
 {
-    RKH_SMA_POST_FIFO(gsmMgr, &e_GsmError, RKH_UPCAST(RKH_SMA_T, me));
+    RKH_SMA_POST_FIFO(gsmMgr, RKH_UPCAST(RKH_EVT_T, &e_GsmError),
+                              RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
 publishSMS(SMS *const me, SMSEvt *pe)
 {
-    topic_publish(TCPConnection, pe, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish(TCPConnection, RKH_UPCAST(RKH_EVT_T, pe),
+                                 RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
 sendSMSOk(SMS *const me)
 {
-    topic_publish(TCPConnection, &e_SendSMSOk, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish(TCPConnection, RKH_UPCAST(RKH_EVT_T, &e_SendSMSOk),
+                                 RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
 sendSMSFail(SMS *const me)
 {
-    topic_publish(TCPConnection, &e_SendSMSFail, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish(TCPConnection, RKH_UPCAST(RKH_EVT_T, &e_SendSMSFail),
+                                 RKH_UPCAST(RKH_SMA_T, me));
 }
 
 /* ............................ Effect actions ............................. */

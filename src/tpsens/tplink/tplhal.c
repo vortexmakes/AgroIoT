@@ -24,7 +24,7 @@ tplink_tx_isr(void)
 
     if (enable_xmit)
     {
-    	bsp_serial_putnchar(TPSENS_PORT, &xmit_thr, 1);
+    	bsp_serial_putnchar(TPSENS_PORT, (unsigned char *)&xmit_thr, 1);
     }
 }
 
