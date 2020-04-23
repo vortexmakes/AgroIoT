@@ -32,7 +32,6 @@ static DIR dir;
 static FILINFO file;
 static FIL fp;
 static Backup backInfo;
-static const Backup defBackInfo = {-1, -1, -1};
 static char name[12];
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -46,7 +45,8 @@ Backup_init(Backup *info)
     char *pName;
 
     fsResult = f_mkdir(BACKUP_DIR_NAME);
-    backInfo = defBackInfo;
+    backInfo.nFiles = backInfo.oldest = backInfo.newest = -1;
+    backInfo.nWrites = 0;
     if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
     {
         backInfo.nFiles = 0;
@@ -113,12 +113,14 @@ Backup_store(GStatus *status)
         strcpy(path, DIR_PATH);
         if (backInfo.nFiles == 0)
         {
+            /* Create the first file */
             strcat(path, FIRST_FILE_NAME);
             fsResult = f_open(&fp, path, FA_CREATE_ALWAYS | 
                                          FA_WRITE | 
                                          FA_READ);
             if (fsResult == FR_OK)
             {
+                backInfo.nWrites = 0;
                 backInfo.nFiles = 1;
                 backInfo.oldest = backInfo.newest = 0;
                 strcpy(backInfo.current, FIRST_FILE_NAME);
@@ -132,7 +134,8 @@ Backup_store(GStatus *status)
         {
             strcat(path, backInfo.current);
             fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
-            if (fsResult == FR_OK)
+            /* Does it align the file size to BACKUP_SIZEOF_REG? */
+            if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
             {
                 if (f_size(&fp) >= (BACKUP_MAXNUMREGPERFILE * 
                                     BACKUP_SIZEOF_REG))
@@ -159,6 +162,7 @@ Backup_store(GStatus *status)
                                                  FA_READ);
                     if (fsResult == FR_OK)
                     {
+                        backInfo.nWrites = 0;
                         backInfo.nFiles = nFiles;
                         ++backInfo.newest;
                         backInfo.oldest = oldest;
@@ -182,7 +186,15 @@ Backup_store(GStatus *status)
             {
                 storeResult = 1;
             }
-            f_close(&fp);
+            else
+            {
+                ++backInfo.nWrites;
+                if (backInfo.nWrites >= BACKUP_NUMWRITES)
+                {
+                    backInfo.nWrites = 0;
+                    f_sync(&fp);
+                }
+            }
         }
     }
     else

@@ -40,6 +40,7 @@ static FRESULT mkdirResult, findFirstResult, findNextResult, writeResult;
 static int fileIndex;
 static TCHAR files[BACKUP_MAXNUMFILES][16];
 static UINT bytesWritten;
+static FSIZE_t fileSize;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -82,6 +83,7 @@ f_write_Callback(FIL* fp, const void* buff, UINT btw, UINT* bw,
                  int cmock_num_calls)
 {
     *bw = bytesWritten;
+    fp->obj.objsize = fileSize;
     return writeResult;
 }
 
@@ -167,6 +169,7 @@ test_InitWithFrmDirWithoutFiles(void)
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(-1, info.oldest);
     TEST_ASSERT_EQUAL(-1, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -184,6 +187,7 @@ test_InitWithFrmDirWithOneFile(void)
     TEST_ASSERT_EQUAL(1, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -201,6 +205,7 @@ test_InitWithFrmDirWithMoreThanOneFile(void)
     TEST_ASSERT_EQUAL(3, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(2, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -218,6 +223,7 @@ test_InitWithFrmDirWithExactlyAllowedFiles(void)
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES - 1, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -237,6 +243,7 @@ test_InitWithFrmDirWithMoreThanAllowedFiles(void)
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES - 1, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -254,6 +261,7 @@ test_InitWithoutFrmDir(void)
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(-1, info.oldest);
     TEST_ASSERT_EQUAL(-1, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -270,6 +278,7 @@ test_InitMkDirFail(void)
     TEST_ASSERT_EQUAL(-1, info.nFiles);
     TEST_ASSERT_EQUAL(-1, info.oldest);
     TEST_ASSERT_EQUAL(-1, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -304,6 +313,7 @@ test_InitGetOldestAndNewestFiles(void)
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -327,6 +337,7 @@ test_InitGetCurrentFile(void)
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
     sprintf(name, "%05d.frm", nFilesExpected - 1);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -349,6 +360,8 @@ test_GetInfo(void)
     TEST_ASSERT_EQUAL(retInfo.nFiles, info.nFiles);
     TEST_ASSERT_EQUAL(retInfo.oldest, info.oldest);
     TEST_ASSERT_EQUAL(retInfo.newest, info.newest);
+    TEST_ASSERT_EQUAL(retInfo.nWrites, info.nWrites);
+    TEST_ASSERT_EQUAL(retInfo.state, info.state);
     sprintf(name, "%05d.frm", nFilesExpected - 1);
     TEST_ASSERT_EQUAL_STRING(name, retInfo.current);
 }
@@ -390,14 +403,13 @@ test_StoreCreatesTheFirstFile(void)
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_OK;
     bytesWritten = BACKUP_SIZEOF_REG;
+    fileSize = 0;
     f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
-    f_close_ExpectAndReturn(0, FR_OK);
-    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(0, backupResult);
@@ -407,6 +419,7 @@ test_StoreCreatesTheFirstFile(void)
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
+    TEST_ASSERT_EQUAL(1, info.nWrites);
 }
 
 void
@@ -436,17 +449,17 @@ test_StoreCreatesTheFirstFileButFailToWriteDiskErr(void)
     f_open_IgnoreArg_mode();
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_DISK_ERR;
-    f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
+    fileSize = 0;
+    f_write_ExpectAndReturn(0, 0, 0, 0, FR_DISK_ERR);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
-    f_close_ExpectAndReturn(0, FR_OK);
-    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -477,17 +490,17 @@ test_StoreCreatesTheFirstFileButFailToWriteLessBytesWritten(void)
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_OK;
     bytesWritten = 1;
+    fileSize = 0;
     f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
-    f_close_ExpectAndReturn(0, FR_OK);
-    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 void
 test_StoreFailToCreateTheFirstFile(void)
@@ -544,17 +557,19 @@ test_StoreInCurrentFile(void)
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_OK;
     bytesWritten = BACKUP_SIZEOF_REG;
+    fileSize = 0;
     f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
-    f_close_ExpectAndReturn(0, FR_OK);
-    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(0, backupResult);
+
+    Backup_getInfo(&info);
+    TEST_ASSERT_EQUAL(1, info.nWrites);
 }
 
 void
@@ -617,14 +632,13 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_OK;
     bytesWritten = BACKUP_SIZEOF_REG;
+    fileSize = 0;
     f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
-    f_close_ExpectAndReturn(0, FR_OK);
-    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(0, backupResult);
@@ -635,6 +649,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     TEST_ASSERT_EQUAL(1, info.newest);
     sprintf(name, "%05d.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
+    TEST_ASSERT_EQUAL(1, info.nWrites);
 }
 
 void
@@ -681,6 +696,7 @@ test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
     TEST_ASSERT_EQUAL(0, info.newest);
     sprintf(name, "%05d.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
@@ -722,14 +738,13 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_OK;
     bytesWritten = BACKUP_SIZEOF_REG;
+    fileSize = 0;
     f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
-    f_close_ExpectAndReturn(0, FR_OK);
-    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(0, backupResult);
@@ -740,6 +755,70 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.newest);
     sprintf(name, "%05d.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
+    TEST_ASSERT_EQUAL(1, info.nWrites);
+}
+
+void
+test_SyncFile(void)
+{
+    Backup info;
+    int backupResult;
+    GStatus status;
+    char name[12];
+    int i;
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    findFiles(1);
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    strcpy(name, "00000.frm");
+    strcpy(openCtx[0].path, "frames/");
+    strcat(openCtx[0].path, name);
+    openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = 0;
+    openCtx[0].result = FR_OK;
+    writeResult = FR_OK;
+    bytesWritten = BACKUP_SIZEOF_REG;
+
+    for (i = 0; i < (BACKUP_NUMWRITES - 1); ++i)
+    {
+        f_open_ExpectAndReturn(0, 0, 0, FR_OK);
+        f_open_IgnoreArg_fp();
+        f_open_IgnoreArg_path();
+        f_open_IgnoreArg_mode();
+        f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
+        f_write_IgnoreArg_fp();
+        f_write_IgnoreArg_buff();
+        f_write_IgnoreArg_btw();
+        f_write_IgnoreArg_bw();
+        f_write_StubWithCallback(f_write_Callback);
+
+        backupResult = Backup_store(&status);
+        TEST_ASSERT_EQUAL(0, backupResult);
+        Mock_ff_Verify();
+        Mock_ff_Destroy();
+    }
+
+    f_open_ExpectAndReturn(0, 0, 0, FR_OK);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+    f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
+    f_write_IgnoreArg_fp();
+    f_write_IgnoreArg_buff();
+    f_write_IgnoreArg_btw();
+    f_write_IgnoreArg_bw();
+    f_write_StubWithCallback(f_write_Callback);
+    f_sync_ExpectAndReturn(0, FR_OK);
+    f_sync_IgnoreArg_fp();
+
+    backupResult = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, backupResult);
+    Backup_getInfo(&info);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 /* ------------------------------ End of file ------------------------------ */

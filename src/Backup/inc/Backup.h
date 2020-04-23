@@ -29,10 +29,17 @@ extern "C" {
 /* -------------------------------- Constants ------------------------------ */
 #define BACKUP_DIR_NAME             "frames"
 #define BACKUP_MAXNUMFILES          20
-#define BACKUP_MAXNUMREGPERFILE     12000 /* 10[h]*60[m/h]*60[s/m]/3[s] */
+#define BACKUP_MAXNUMREGPERFILE     15600 /* 13[h]*60[m/h]*60[s/m]/3[s] */
 #define BACKUP_SIZEOF_REG           sizeof(GStatus)
+#define BACKUP_NUMWRITES            1200
 
 /* ------------------------------- Data types ------------------------------ */
+typedef enum FileState FileState;
+enum FileState
+{
+    BackupOpen, BackupClosed
+};
+
 typedef struct Backup Backup;
 struct Backup
 {
@@ -40,6 +47,8 @@ struct Backup
     int oldest;
     int newest;
     char current[12];
+    FileState state;
+    uint32_t nWrites;
 };
 
 /* -------------------------- External variables --------------------------- */
