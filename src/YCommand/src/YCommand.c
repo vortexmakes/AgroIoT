@@ -40,25 +40,26 @@ static YCmd_t fmt_none(YCommand *pCmd, char *pData);
 static YCmd_t fmt_serverIp(YCommand *pCmd, char *pData);
 static YCmd_t fmt_string(YCommand *pCmd, char *pData);
 static YCmd_t fmt_rui8(YCommand *pCmd, char *pData);
+static YCmd_t fmt_rui16(YCommand *pCmd, char *pData);
 
 static const YCmdFormat fmtTable[YCmdNum] =
 {
-    { fmt_serverIp, 7, IP_LENGTH },
-    { fmt_string, 1, PORT_LENGTH},
-    { fmt_rui8, 1, 3 },
-    { fmt_rui8, 1, 3 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 1 },
-    { fmt_rui8, 1, 1 },
-    { fmt_rui8, 1, 1 },
-    { fmt_rui8, 1, 1 },
-    { fmt_rui8, 1, 1 },
-    { fmt_rui8, 1, 1 },
-    { fmt_rui8, 1, 1 },
-    { fmt_none, 0, 0 },
-    { fmt_rui8, 1, 3 },
-    { fmt_none, 0, 0 }
+    { fmt_serverIp, 7, IP_LENGTH },     // YCmdServerIp
+    { fmt_string, 1, PORT_LENGTH},      // YCmdServerPort
+    { fmt_rui16, 1, 4 },                // YCmdConnectionTime
+    { fmt_rui16, 1, 4 },                // YCmdGpsTime
+    { fmt_rui8, 1, 2 },                 // YCmdAccLimit
+    { fmt_rui8, 1, 2 },                 // YCmdBreakLimit
+    { fmt_rui8, 1, 1 },                 // YCmdStatus
+    { fmt_rui8, 1, 1 },                 // YCmdSetOut1
+    { fmt_rui8, 1, 1 },                 // YCmdSetOut2
+    { fmt_rui8, 1, 1 },                 // YCmdSetOut3
+    { fmt_rui8, 1, 1 },                 // YCmdSetOut4
+    { fmt_rui8, 1, 1 },                 // YCmdSetOut5
+    { fmt_rui8, 1, 1 },                 // YCmdSetOut6
+    { fmt_none, 1, 1 },                 // YCmdReset
+    { fmt_rui8, 1, 1 },                 // YCmdSampleTime
+    { fmt_none, 1, 1 }                  // YCmdDataFormat
 };
 
 
@@ -78,7 +79,7 @@ static
 YCmd_t
 fmt_none(YCommand *pCmd, char *pData)
 {
-    return YCmdWrongFormat;
+    return pCmd->id;
 }
 
 static
@@ -108,16 +109,23 @@ fmt_string(YCommand *pCmd, char *pData)
 
 static
 YCmd_t
+fmt_rui16(YCommand *pCmd, char *pData)
+{
+    pCmd->data._rui16 = (rui16_t)atoi(pData);
+
+    return pCmd->id;
+}
+
+static
+YCmd_t
 fmt_rui8(YCommand *pCmd, char *pData)
 {
-    pCmd->data.integer = atoi(pData);
+    pCmd->data._rui8 = (rui8_t)atoi(pData);
 
     return pCmd->id;
 }
 
 /* ---------------------------- Global functions --------------------------- */
-#include <stdio.h>
-
 YCmd_t
 YCommand_parse(YCommand *pCmd, char *p, ruint size)
 {
@@ -155,7 +163,7 @@ YCommand_parse(YCommand *pCmd, char *p, ruint size)
     pCmd->id = YCommandParser_getId(&yCmdParser);
     cmd = (*pFmt->fmt)(pCmd, pData);
 
-    if(cmd > 0)
+    if(cmd >= 0)
     {
         strcpy(pCmd->index, YCommandParser_getIndex(&yCmdParser));
     }

@@ -82,7 +82,12 @@ fieldInsert(char *pb, int len, unsigned char c)
         return;
     }
 
-    *p++ = (char)c;
+    if(c == ',' || c == ';')
+        *p = '\0';
+    else
+        *p = (char)c;
+
+    ++p;
     *p = '\0';
 };
 
@@ -116,6 +121,7 @@ noIndexidInit(unsigned char pos)
     fieldInit(pYCmd->id);
 }
 
+#include  <stdio.h>
 static void
 idInit(unsigned char pos)
 {
@@ -161,8 +167,6 @@ static void
 found(unsigned char pos)
 {
     (void)pos;
-
-    *(p - 1) = '\0';
 
     pYCmd->result = YCommandFound;
 }

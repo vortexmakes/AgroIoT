@@ -56,7 +56,7 @@ typedef enum
     YCmdWrongLen = -3,
     YCmdWrongFormat = -4
 
-}YCmd_t;
+} YCmd_t;
 
 #define YCOMMAND_SECURITY_KEY_DFT    "123"
 
@@ -65,22 +65,25 @@ typedef union
 {
     char serverIp[IP_LENGTH+1];
     char serverPort[PORT_LENGTH+1];
-    rui8_t integer;
-    rui8_t connTime;
-    rui8_t updateGPSTime;
-    rui8_t sampleTime;
-    rui8_t accLimit;
-    rui8_t brLimit;
-    rui8_t status;
-    rui8_t outValue;
-}cmdData;
+
+    rui16_t _rui16;
+        rui16_t connTime;
+        rui16_t updateGPSTime;
+
+    rui8_t _rui8;
+        rui8_t sampleTime;
+        rui8_t accLimit;
+        rui8_t brLimit;
+        rui8_t status;
+        rui8_t outValue;
+} cmdData;
 
 typedef struct
 {
     char index[YCOMMAND_INDEX_LEN+1];
     YCmd_t id;
     cmdData data;
-}YCommand;
+} YCommand;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
