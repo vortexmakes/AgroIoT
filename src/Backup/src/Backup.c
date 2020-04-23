@@ -33,6 +33,7 @@ static FILINFO file;
 static FIL fp;
 static Backup backInfo;
 static const Backup defBackInfo = {-1, -1, -1};
+static char name[12];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -42,7 +43,7 @@ Backup_init(Backup *info)
 {
     FRESULT fsResult;
     int initResult = 0, fileNumber;
-    char *pName, name[12];
+    char *pName;
 
     fsResult = f_mkdir(BACKUP_DIR_NAME);
     backInfo = defBackInfo;
@@ -132,10 +133,12 @@ Backup_store(GStatus *status)
             fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
             if (fsResult == FR_OK)
             {
-                if (f_size(&fp) >= (BACKUP_MAXNUMREGPERFILE * sizeof(GStatus)))
+                if (f_size(&fp) >= (BACKUP_MAXNUMREGPERFILE * 
+                                    BACKUP_SIZEOF_REG))
                 {
-                    sprintf(path, "%s/%05d.frm", BACKUP_DIR_NAME, 
-                                                 backInfo.newest + 1);
+                    sprintf(name, "%05d.frm", backInfo.newest + 1);
+                    strcpy(path, DIR_PATH);
+                    strcat(path, name);
                     fsResult = f_open(&fp, path, FA_CREATE_ALWAYS | 
                                                  FA_WRITE | 
                                                  FA_READ);
@@ -143,7 +146,7 @@ Backup_store(GStatus *status)
                     {
                         ++backInfo.nFiles;
                         ++backInfo.newest;
-                        sprintf(backInfo.current, "%05d.frm", backInfo.newest);
+                        strcpy(backInfo.current, name);
                     }
                     else
                     {
@@ -158,8 +161,8 @@ Backup_store(GStatus *status)
         }
         if (storeResult == 0)
         {
-            fsResult = f_write(&fp, status, sizeof(GStatus), &bytesWritten);
-            if ((fsResult != FR_OK) || (bytesWritten != sizeof(GStatus)))
+            fsResult = f_write(&fp, status, BACKUP_SIZEOF_REG, &bytesWritten);
+            if ((fsResult != FR_OK) || (bytesWritten != BACKUP_SIZEOF_REG))
             {
                 storeResult = 1;
             }

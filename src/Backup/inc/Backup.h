@@ -30,6 +30,7 @@ extern "C" {
 #define BACKUP_DIR_NAME             "frames"
 #define BACKUP_MAXNUMFILES          20
 #define BACKUP_MAXNUMREGPERFILE     12000 /* 10[h]*60[m/h]*60[s/m]/3[s] */
+#define BACKUP_SIZEOF_REG           sizeof(GStatus)
 
 /* ------------------------------- Data types ------------------------------ */
 typedef struct Backup Backup;

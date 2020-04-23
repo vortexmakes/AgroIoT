@@ -393,7 +393,7 @@ test_StoreCreatesTheFirstFile(void)
     f_open_IgnoreArg_mode();
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_OK;
-    bytesWritten = sizeof(GStatus);
+    bytesWritten = BACKUP_SIZEOF_REG;
     f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
@@ -531,14 +531,14 @@ test_StoreInCurrentFile(void)
     strcpy(openPath, "frames/");
     strcat(openPath, name);
     openMode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
-    openFileSize = sizeof(GStatus) * 1;
+    openFileSize = BACKUP_SIZEOF_REG * 1;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
     f_open_IgnoreArg_mode();
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_OK;
-    bytesWritten = sizeof(GStatus);
+    bytesWritten = BACKUP_SIZEOF_REG;
     f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
@@ -590,7 +590,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
 
     sprintf(openPath, "%s/%s", BACKUP_DIR_NAME, info.current);
     openMode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
-    openFileSize = sizeof(GStatus) * BACKUP_MAXNUMREGPERFILE;
+    openFileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
     secondOpenResult = FR_OK;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
@@ -603,7 +603,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     f_open_IgnoreArg_mode();
     f_open_StubWithCallback(f_open_Callback);
     writeResult = FR_OK;
-    bytesWritten = sizeof(GStatus);
+    bytesWritten = BACKUP_SIZEOF_REG;
     f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
     f_write_IgnoreArg_fp();
     f_write_IgnoreArg_buff();
@@ -639,7 +639,7 @@ test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
 
     sprintf(openPath, "%s/%s", BACKUP_DIR_NAME, info.current);
     openMode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
-    openFileSize = sizeof(GStatus) * BACKUP_MAXNUMREGPERFILE;
+    openFileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
     secondOpenResult = FR_DISK_ERR;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
