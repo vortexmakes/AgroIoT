@@ -112,6 +112,8 @@ fmt_rui8(YCommand *pCmd, char *pData)
 }
 
 /* ---------------------------- Global functions --------------------------- */
+#include <stdio.h>
+
 YCmd_t
 YCommand_parse(YCommand *pCmd, char *p, ruint size)
 {
@@ -119,33 +121,38 @@ YCommand_parse(YCommand *pCmd, char *p, ruint size)
     const YCmdFormat *pFmt;
     char *pData;
 
-    if(p == NULL || size == 0)
+    if(pCmd == NULL || p == NULL || size == 0)
     {
         return YCmdUnknown;
     }
+
+    memset(pCmd, 0, sizeof(YCommand));
  
     if(YCommandParser_search(&yCmdParser, p, size) < 0)
         return YCmdUnknown;
+
+    cmd = YCommandParser_getId(&yCmdParser);
+    if(cmd == YCmdUnknown)
+    {
+        return YCmdUnknown;
+    }
 
     if(YCommandParser_securityCheck(&yCmdParser, YCOMMAND_SECURITY_KEY_DFT) < 0)
     {
         return YCmdInvalidKey;
     }
 
-    cmd = YCommandParser_getId(&yCmdParser);
     pData = YCommandParser_getData(&yCmdParser);
     pFmt = &fmtTable[cmd];
     
     if(checkLen(pData, pFmt->min, pFmt->max) < 0)
         return YCmdWrongLen;
 
-    memset(pCmd, 0, sizeof(YCommand));
-    
-    pCmd->id = YCommandParser_getId(&yCmdParser);
     cmd = (*pFmt->fmt)(pCmd, pData);
 
     if(cmd > 0)
     {
+        pCmd->id = YCommandParser_getId(&yCmdParser);
         strcpy(pCmd->index, YCommandParser_getIndex(&yCmdParser));
     }
     

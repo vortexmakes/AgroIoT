@@ -41,17 +41,87 @@ tearDown(void)
 }
 
 void
+test_InvalidKey(void)
+{
+    YCommand yCmd;
+    YCmd_t res;
+    char *p;
+    
+    p= "Im:2,321,10;"; 
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdInvalidKey, res);
+    TEST_ASSERT_EQUAL(0, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
+}
+
+void
+test_Unknown(void)
+{
+    YCommand yCmd;
+    YCmd_t res;
+    char *p;
+    
+    p = "Im:16,123,10;"; 
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdUnknown, res);
+    TEST_ASSERT_EQUAL(0, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
+
+    p = "Im:000";
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdUnknown, res);
+    TEST_ASSERT_EQUAL(0, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
+}
+
+void
 test_ServerIp(void)
 {
     YCommand yCmd;
-    YCmd_t cmd;
-    char *p = "Im:0,123,255.255.255.255;";
+    YCmd_t res;
+    char *p;
+    
+    /* Success */
+    p = "Im:0,123,255.255.255.255;"; 
 
-    cmd = YCommand_parse(&yCmd, p, strlen(p));
+    res = YCommand_parse(&yCmd, p, strlen(p));
 
-    TEST_ASSERT_EQUAL(YCmdServerIp, cmd);
+    TEST_ASSERT_EQUAL(YCmdServerIp, res);
     TEST_ASSERT_EQUAL(YCmdServerIp, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("255.255.255.255", yCmd.data.serverIp);
+
+    /* WrongLen min */
+    p = "Im:0,123,255;"; 
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdWrongLen, res);
+    TEST_ASSERT_EQUAL(0, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
+
+    /* WrongLen max */
+    p = "Im:0,123,2552132142421123212132134;"; 
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdWrongLen, res);
+    TEST_ASSERT_EQUAL(0, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
+
+    /* WrongFormat */
+    p = "Im:0,123,255.2552.55.6666;"; 
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdWrongFormat, res);
+    TEST_ASSERT_EQUAL(YCmdWrongFormat, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
 }
 
 /* ------------------------------ End of file ------------------------------ */

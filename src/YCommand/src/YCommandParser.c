@@ -215,7 +215,7 @@ YCommandParser_getId(YCommandParser *me)
     
     id = atoi(me->id);
 
-    return (id > YCmdUnknown) ? YCmdUnknown : id;
+    return (id >= YCmdNum) ? YCmdUnknown : id;
 }
 
 /* ---------------------------- Global functions --------------------------- */
