@@ -19,6 +19,7 @@
 #include "signals.h"
 #include "modmgr.h"
 #include <stdlib.h>
+#include <string.h>
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */

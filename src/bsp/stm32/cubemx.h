@@ -16,6 +16,7 @@
 #include "dma.h"
 #include "fatfs.h"
 #include "usb_host.h"
+#include "crc.h"
 
 #include "rkhtype.h"
 
