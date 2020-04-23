@@ -124,4 +124,122 @@ test_ServerIp(void)
     TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
 }
 
+void
+test_ServerPort(void)
+{
+    YCommand yCmd;
+    YCmd_t res;
+    char *p;
+    
+    /* Success */
+    p = "Im:1,123,1234;"; 
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdServerIp, res);
+    TEST_ASSERT_EQUAL(YCmdServerIp, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("1234", yCmd.data.serverIp);
+
+    /* WrongLen min */
+    p = "Im:1,123,;"; 
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdWrongLen, res);
+    TEST_ASSERT_EQUAL(0, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
+
+    /* WrongLen max */
+    p = "Im:1,123,1234567;"; 
+
+    res = YCommand_parse(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdWrongLen, res);
+    TEST_ASSERT_EQUAL(0, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.data.serverIp);
+}
+
+void
+test_ConnectionTime(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_GpsTime(void)
+{
+    TEST_IGNORE();
+}
+void
+test_AccLimit(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_BreakLimit(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_Status(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_SetOut1(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_SetOut2(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_SetOut3(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_SetOut4(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_SetOut5(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_SetOut6(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_Reset(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_SampleTime(void)
+{
+    TEST_IGNORE();
+}
+
+void
+test_DataFormat(void)
+{
+    TEST_IGNORE();
+}
+
 /* ------------------------------ End of file ------------------------------ */

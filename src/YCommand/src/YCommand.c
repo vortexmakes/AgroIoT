@@ -101,7 +101,9 @@ static
 YCmd_t
 fmt_string(YCommand *pCmd, char *pData)
 {
-    return YCmdWrongFormat;
+    strcpy(pCmd->data.serverIp, pData);
+
+    return pCmd->id;
 }
 
 static
