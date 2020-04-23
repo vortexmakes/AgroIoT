@@ -45,19 +45,19 @@ static const YCmdFormat fmtTable[YCmdNum] =
 {
     { fmt_serverIp, 7, IP_LENGTH },
     { fmt_string, 1, PORT_LENGTH},
+    { fmt_rui8, 1, 3 },
+    { fmt_rui8, 1, 3 },
     { fmt_rui8, 1, 2 },
     { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
-    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 1 },
+    { fmt_rui8, 1, 1 },
+    { fmt_rui8, 1, 1 },
+    { fmt_rui8, 1, 1 },
+    { fmt_rui8, 1, 1 },
+    { fmt_rui8, 1, 1 },
+    { fmt_rui8, 1, 1 },
     { fmt_none, 0, 0 },
-    { fmt_rui8, 1, 2 },
+    { fmt_rui8, 1, 3 },
     { fmt_none, 0, 0 }
 };
 
@@ -110,7 +110,9 @@ static
 YCmd_t
 fmt_rui8(YCommand *pCmd, char *pData)
 {
-    return YCmdWrongFormat;
+    pCmd->data.integer = atoi(pData);
+
+    return pCmd->id;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -150,11 +152,11 @@ YCommand_parse(YCommand *pCmd, char *p, ruint size)
     if(checkLen(pData, pFmt->min, pFmt->max) < 0)
         return YCmdWrongLen;
 
+    pCmd->id = YCommandParser_getId(&yCmdParser);
     cmd = (*pFmt->fmt)(pCmd, pData);
 
     if(cmd > 0)
     {
-        pCmd->id = YCommandParser_getId(&yCmdParser);
         strcpy(pCmd->index, YCommandParser_getIndex(&yCmdParser));
     }
     

@@ -65,6 +65,7 @@ typedef union
 {
     char serverIp[IP_LENGTH+1];
     char serverPort[PORT_LENGTH+1];
+    rui8_t integer;
     rui8_t connTime;
     rui8_t updateGPSTime;
     rui8_t sampleTime;
