@@ -121,7 +121,6 @@ noIndexidInit(unsigned char pos)
     fieldInit(pYCmd->id);
 }
 
-#include  <stdio.h>
 static void
 idInit(unsigned char pos)
 {

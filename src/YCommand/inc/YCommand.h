@@ -87,6 +87,30 @@ typedef struct
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+/*
+ *  \brief
+ *  Yipies Command message parser (SMS or GPRS) and key validation
+ *  message format: 
+ *        
+ *        < SMS or Gprs Header,CmdId,SecurityKey,CmdData; >
+ *
+ *  Gprs Header: "!3<index>" where index is an integer expresed in char
+ *                        1 to 11 bytes len. Used for command execution 
+ *                        confirmation (Gprs only)
+ *  SMS Header:  "Im:"
+ *  CmdId:       Command identification number [1 to 2 bytes len]
+ *  SecurityKey: Security Key [3 bytes len]
+ *  CmdData:     Command data buffer 1 to 32 bytes len
+ *
+ *  \param pCmd: destination YCommand pointer.
+ *  \param p: received message buffer (null or not null terminated).
+ *  \param size: size of message.
+ *
+ *  \return
+ *      - If parse success returns command id according to YCmd_t 
+ *                  and fill pCmd with command data args.
+ *      - If error returns error code according to YCmd_t.
+ */
 YCmd_t YCommand_parse(YCommand *pCmd, char *p, ruint size);
 
 /* -------------------- External C language linkage end -------------------- */
