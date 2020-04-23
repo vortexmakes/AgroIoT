@@ -22,6 +22,9 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
+#define FIRST_FILE_NAME         "00000.frm"
+#define DIR_PATH                BACKUP_DIR_NAME"/"
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
@@ -41,12 +44,12 @@ Backup_init(Backup *info)
     int initResult = 0, fileNumber;
     char *pName, name[12];
 
-    fsResult = f_mkdir(BACKUP_FRMDIR);
+    fsResult = f_mkdir(BACKUP_DIR_NAME);
     backInfo = defBackInfo;
     if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
     {
         backInfo.nFiles = 0;
-        fsResult = f_findfirst(&dir, &file, BACKUP_FRMDIR, "*.frm");
+        fsResult = f_findfirst(&dir, &file, BACKUP_DIR_NAME, "*.frm");
         while ((fsResult == FR_OK) && (file.fname[0] != 0))
         {
             ++backInfo.nFiles;
@@ -71,7 +74,7 @@ Backup_init(Backup *info)
         {
             sprintf(backInfo.current, "%05d.frm", backInfo.newest);
         }
-        /*f_closedir(&dir);*/
+        f_closedir(&dir);
     }
     else
     {
@@ -100,13 +103,15 @@ Backup_store(GStatus *status)
     FRESULT fsResult;
     int storeResult = 0;
     char path[24];
+    UINT bytesWritten;
 
     if (status != (GStatus *)0)
     {
         /* Convert to frame? */
+        strcpy(path, DIR_PATH);
         if (backInfo.nFiles == 0)
         {
-            sprintf(path, "%s/00000.frm", BACKUP_FRMDIR);
+            strcat(path, FIRST_FILE_NAME);
             fsResult = f_open(&fp, path, FA_CREATE_ALWAYS | 
                                          FA_WRITE | 
                                          FA_READ);
@@ -114,7 +119,7 @@ Backup_store(GStatus *status)
             {
                 backInfo.nFiles = 1;
                 backInfo.oldest = backInfo.newest = 0;
-                strcpy(backInfo.current, "00000.frm");
+                strcpy(backInfo.current, FIRST_FILE_NAME);
             }
             else
             {
@@ -123,6 +128,20 @@ Backup_store(GStatus *status)
         }
         else
         {
+            strcat(path, backInfo.current);
+            fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
+            if (fsResult != FR_OK)
+            {
+                storeResult = 1;
+            }
+        }
+        if (storeResult == FR_OK)
+        {
+            fsResult = f_write(&fp, status, sizeof(GStatus), &bytesWritten);
+            if ((fsResult != FR_OK) || (bytesWritten != sizeof(GStatus)))
+            {
+                storeResult = 1;
+            }
         }
     }
     else

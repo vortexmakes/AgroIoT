@@ -26,17 +26,19 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static FRESULT mkdirResult, findFirstResult, findNextResult;
+static FRESULT mkdirResult, findFirstResult, findNextResult, writeResult;
 static int fileIndex;
-static TCHAR files[BACKUP_MAXNUMFRMFILES][16];
+static TCHAR files[BACKUP_MAXNUMFILES][16];
 static char openPath[24];
+static UINT bytesWritten;
+static BYTE openMode;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static FRESULT
 f_mkdir_Callback(const TCHAR* path, int cmock_num_calls)
 {
-    TEST_ASSERT_EQUAL_STRING(BACKUP_FRMDIR, path);
+    TEST_ASSERT_EQUAL_STRING(BACKUP_DIR_NAME, path);
     return mkdirResult;
 }
 
@@ -45,7 +47,7 @@ f_findfirst_Callback(DIR* dp, FILINFO* fno, const TCHAR* path,
                      const TCHAR* pattern, int cmock_num_calls)
 {
     strcpy(fno->fname, files[fileIndex++]);
-    TEST_ASSERT_EQUAL_STRING(BACKUP_FRMDIR, path);
+    TEST_ASSERT_EQUAL_STRING(BACKUP_DIR_NAME, path);
     TEST_ASSERT_EQUAL_STRING("*.frm", pattern);
     return findFirstResult;
 }
@@ -62,7 +64,17 @@ f_open_Callback(FIL* fp, const TCHAR* path, BYTE mode,
                 int cmock_num_calls)
 {
     TEST_ASSERT_EQUAL_STRING(openPath, path);
+    TEST_ASSERT_EQUAL(openMode, mode);
     return FR_OK;
+}
+
+static FRESULT
+f_write_Callback(FIL* fp, const void* buff, UINT btw, UINT* bw, 
+                 int cmock_num_calls)
+{
+    
+    *bw = bytesWritten;
+    return writeResult;
 }
 
 static int
@@ -70,9 +82,9 @@ findFiles(int nFiles)
 {
     int i, actualNumFiles;
 
-    if (nFiles > BACKUP_MAXNUMFRMFILES)
+    if (nFiles > BACKUP_MAXNUMFILES)
     {
-        actualNumFiles = BACKUP_MAXNUMFRMFILES;
+        actualNumFiles = BACKUP_MAXNUMFILES;
     }
     else
     {
@@ -85,7 +97,7 @@ findFiles(int nFiles)
     files[actualNumFiles][0] = 0;
 
     fileIndex = 0;
-    f_findfirst_ExpectAndReturn(0, 0, BACKUP_FRMDIR, "*.frm", FR_OK);
+    f_findfirst_ExpectAndReturn(0, 0, BACKUP_DIR_NAME, "*.frm", FR_OK);
     f_findfirst_IgnoreArg_dp();
     f_findfirst_IgnoreArg_fno();
     f_findfirst_IgnoreArg_path();
@@ -107,6 +119,9 @@ findFiles(int nFiles)
         f_findnext_IgnoreArg_fno();
         f_findnext_StubWithCallback(f_findnext_Callback);
     }
+
+    f_closedir_ExpectAndReturn(0, FR_OK);
+    f_closedir_IgnoreArg_dp();
     return actualNumFiles;
 }
 
@@ -134,7 +149,7 @@ test_InitWithFrmDirWithoutFiles(void)
     int initResult;
 
     mkdirResult = FR_EXIST;
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_EXIST);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
     f_mkdir_StubWithCallback(f_mkdir_Callback);
     findFiles(0);
@@ -152,7 +167,7 @@ test_InitWithFrmDirWithOneFile(void)
     Backup info;
     int initResult;
 
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_EXIST);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
     findFiles(1);
 
@@ -169,7 +184,7 @@ test_InitWithFrmDirWithMoreThanOneFile(void)
     Backup info;
     int initResult;
 
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_EXIST);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
     findFiles(3);
 
@@ -186,15 +201,15 @@ test_InitWithFrmDirWithExactlyAllowedFiles(void)
     Backup info;
     int initResult;
 
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_EXIST);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
-    findFiles(BACKUP_MAXNUMFRMFILES);
+    findFiles(BACKUP_MAXNUMFILES);
 
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
-    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES, info.nFiles);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
-    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES - 1, info.newest);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES - 1, info.newest);
 }
 
 void
@@ -204,16 +219,16 @@ test_InitWithFrmDirWithMoreThanAllowedFiles(void)
     Backup info;
     int initResult;
 
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_EXIST);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
-    nFiles = findFiles(BACKUP_MAXNUMFRMFILES + 1);
-    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES, nFiles);
+    nFiles = findFiles(BACKUP_MAXNUMFILES + 1);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, nFiles);
 
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
-    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES, info.nFiles);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
-    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFRMFILES - 1, info.newest);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES - 1, info.newest);
 }
 
 void
@@ -222,7 +237,7 @@ test_InitWithoutFrmDir(void)
     Backup info;
     int initResult;
 
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_OK);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_OK);
     f_mkdir_IgnoreArg_path();
     findFiles(0);
 
@@ -239,7 +254,7 @@ test_InitMkDirFail(void)
     Backup info;
     int initResult;
 
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_DISK_ERR);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_DISK_ERR);
     f_mkdir_IgnoreArg_path();
 
     initResult = Backup_init(&info);
@@ -255,7 +270,7 @@ test_InitGetNumberOfScannedFiles(void)
     Backup info;
     int initResult;
 
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_OK);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_OK);
     f_mkdir_IgnoreArg_path();
     findFiles(3);
 
@@ -272,7 +287,7 @@ test_InitGetOldestAndNewestFiles(void)
     int nFilesExpected;
 
     nFilesExpected = 3;
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_OK);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_OK);
     f_mkdir_IgnoreArg_path();
     findFiles(nFilesExpected);
 
@@ -292,7 +307,7 @@ test_InitGetCurrentFile(void)
     char name[12];
 
     nFilesExpected = 3;
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_OK);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_OK);
     f_mkdir_IgnoreArg_path();
     findFiles(nFilesExpected);
 
@@ -315,7 +330,7 @@ test_GetInfo(void)
     char name[12];
 
     nFilesExpected = 3;
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_OK);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_OK);
     f_mkdir_IgnoreArg_path();
     findFiles(nFilesExpected);
 
@@ -331,6 +346,15 @@ test_GetInfo(void)
 }
 
 void
+test_StoreWrongArg(void)
+{
+    int backupResult;
+
+    backupResult = Backup_store((GStatus *)0);
+    TEST_ASSERT_EQUAL(1, backupResult);
+}
+
+void
 test_StoreCreatesTheFirstFile(void)
 {
     Backup info;
@@ -338,19 +362,31 @@ test_StoreCreatesTheFirstFile(void)
     GStatus status;
     char name[12];
 
-    f_mkdir_ExpectAndReturn(BACKUP_FRMDIR, FR_EXIST);
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
     findFiles(0);
 
     backupResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, backupResult);
 
-    strcpy(openPath, "frames/00000.frm");
+    strcpy(name, "00000.frm");
+    strcpy(openPath, "frames/");
+    strcat(openPath, name);
+    openMode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
     f_open_IgnoreArg_mode();
     f_open_StubWithCallback(f_open_Callback);
+    writeResult = FR_OK;
+    bytesWritten = sizeof(GStatus);
+    f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
+    f_write_IgnoreArg_fp();
+    f_write_IgnoreArg_buff();
+    f_write_IgnoreArg_btw();
+    f_write_IgnoreArg_bw();
+    f_write_StubWithCallback(f_write_Callback);
+
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(0, backupResult);
 
@@ -358,8 +394,166 @@ test_StoreCreatesTheFirstFile(void)
     TEST_ASSERT_EQUAL(1, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
-    sprintf(name, "%05d.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
+}
+
+void
+test_StoreCreatesTheFirstFileButFailToWriteDiskErr(void)
+{
+    Backup info;
+    int backupResult;
+    GStatus status;
+    char name[12];
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    findFiles(0);
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    strcpy(name, "00000.frm");
+    strcpy(openPath, "frames/");
+    strcat(openPath, name);
+    openMode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
+    f_open_ExpectAndReturn(0, 0, 0, FR_OK);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+    f_open_StubWithCallback(f_open_Callback);
+    writeResult = FR_DISK_ERR;
+    f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
+    f_write_IgnoreArg_fp();
+    f_write_IgnoreArg_buff();
+    f_write_IgnoreArg_btw();
+    f_write_IgnoreArg_bw();
+    f_write_StubWithCallback(f_write_Callback);
+
+    backupResult = Backup_store(&status);
+    TEST_ASSERT_EQUAL(1, backupResult);
+}
+
+void
+test_StoreCreatesTheFirstFileButFailToWriteLessBytesWritten(void)
+{
+    Backup info;
+    int backupResult;
+    GStatus status;
+    char name[12];
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    findFiles(0);
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    strcpy(name, "00000.frm");
+    strcpy(openPath, "frames/");
+    strcat(openPath, name);
+    openMode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
+    f_open_ExpectAndReturn(0, 0, 0, FR_OK);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+    f_open_StubWithCallback(f_open_Callback);
+    writeResult = FR_OK;
+    bytesWritten = 1;
+    f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
+    f_write_IgnoreArg_fp();
+    f_write_IgnoreArg_buff();
+    f_write_IgnoreArg_btw();
+    f_write_IgnoreArg_bw();
+    f_write_StubWithCallback(f_write_Callback);
+
+    backupResult = Backup_store(&status);
+    TEST_ASSERT_EQUAL(1, backupResult);
+}
+void
+test_StoreFailToCreateTheFirstFile(void)
+{
+    Backup info;
+    int backupResult;
+    GStatus status;
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    findFiles(0);
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    f_open_ExpectAndReturn(0, 0, 0, FR_DISK_ERR);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+    backupResult = Backup_store(&status);
+    TEST_ASSERT_EQUAL(1, backupResult);
+
+    Backup_getInfo(&info);
+    TEST_ASSERT_EQUAL(0, info.nFiles);
+    TEST_ASSERT_EQUAL(-1, info.oldest);
+    TEST_ASSERT_EQUAL(-1, info.newest);
+}
+
+void
+test_StoreInCurrentFile(void)
+{
+    Backup info;
+    int backupResult;
+    GStatus status;
+    char name[12];
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    findFiles(1);
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    strcpy(name, "00000.frm");
+    strcpy(openPath, "frames/");
+    strcat(openPath, name);
+    openMode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
+    f_open_ExpectAndReturn(0, 0, 0, FR_OK);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+    f_open_StubWithCallback(f_open_Callback);
+    writeResult = FR_OK;
+    bytesWritten = sizeof(GStatus);
+    f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
+    f_write_IgnoreArg_fp();
+    f_write_IgnoreArg_buff();
+    f_write_IgnoreArg_btw();
+    f_write_IgnoreArg_bw();
+    f_write_StubWithCallback(f_write_Callback);
+
+    backupResult = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, backupResult);
+}
+
+void
+test_StoreFailsToOpenCurrentFile(void)
+{
+    Backup info;
+    int backupResult;
+    GStatus status;
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    findFiles(1);
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    f_open_ExpectAndReturn(0, 0, 0, FR_DISK_ERR);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+
+    backupResult = Backup_store(&status);
+    TEST_ASSERT_EQUAL(1, backupResult);
 }
 
 /* ------------------------------ End of file ------------------------------ */
