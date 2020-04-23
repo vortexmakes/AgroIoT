@@ -130,12 +130,33 @@ Backup_store(GStatus *status)
         {
             strcat(path, backInfo.current);
             fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
-            if (fsResult != FR_OK)
+            if (fsResult == FR_OK)
+            {
+                if (f_size(&fp) >= (BACKUP_MAXNUMREGPERFILE * sizeof(GStatus)))
+                {
+                    sprintf(path, "%s/%05d.frm", BACKUP_DIR_NAME, 
+                                                 backInfo.newest + 1);
+                    fsResult = f_open(&fp, path, FA_CREATE_ALWAYS | 
+                                                 FA_WRITE | 
+                                                 FA_READ);
+                    if (fsResult == FR_OK)
+                    {
+                        ++backInfo.nFiles;
+                        ++backInfo.newest;
+                        sprintf(backInfo.current, "%05d.frm", backInfo.newest);
+                    }
+                    else
+                    {
+                        storeResult = 1;
+                    }
+                }
+            }
+            else
             {
                 storeResult = 1;
             }
         }
-        if (storeResult == FR_OK)
+        if (storeResult == 0)
         {
             fsResult = f_write(&fp, status, sizeof(GStatus), &bytesWritten);
             if ((fsResult != FR_OK) || (bytesWritten != sizeof(GStatus)))

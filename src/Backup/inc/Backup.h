@@ -27,8 +27,9 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define BACKUP_DIR_NAME     "frames"
-#define BACKUP_MAXNUMFILES  20
+#define BACKUP_DIR_NAME             "frames"
+#define BACKUP_MAXNUMFILES          20
+#define BACKUP_MAXNUMREGPERFILE     12000 /* 10[h]*60[m/h]*60[s/m]/3[s] */
 
 /* ------------------------------- Data types ------------------------------ */
 typedef struct Backup Backup;
