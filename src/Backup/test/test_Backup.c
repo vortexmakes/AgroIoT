@@ -24,16 +24,22 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
+typedef struct OpenContext OpenContext;
+struct OpenContext
+{
+    char path[24];
+    BYTE mode;
+    FSIZE_t fileSize;
+    FRESULT result;
+};
+
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static OpenContext openCtx[2];
 static FRESULT mkdirResult, findFirstResult, findNextResult, writeResult;
 static int fileIndex;
 static TCHAR files[BACKUP_MAXNUMFILES][16];
-static char openPath[24];
 static UINT bytesWritten;
-static BYTE openMode;
-static FSIZE_t openFileSize;
-static FRESULT secondOpenResult;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -65,27 +71,16 @@ static FRESULT
 f_open_Callback(FIL* fp, const TCHAR* path, BYTE mode, 
                 int cmock_num_calls)
 {
-    if (cmock_num_calls == 0)
-    {
-        fp->obj.objsize = openFileSize;
-        TEST_ASSERT_EQUAL_STRING(openPath, path);
-        TEST_ASSERT_EQUAL(openMode, mode);
-        return FR_OK;
-    }
-    else
-    {
-        fp->obj.objsize = 0;
-        TEST_ASSERT_EQUAL(FA_CREATE_ALWAYS | FA_WRITE | FA_READ, mode);
-        TEST_ASSERT_EQUAL_STRING("frames/00001.frm", path);
-        return secondOpenResult;
-    }
+    fp->obj.objsize = openCtx[cmock_num_calls].fileSize;
+    TEST_ASSERT_EQUAL_STRING(openCtx[cmock_num_calls].path, path);
+    TEST_ASSERT_EQUAL(openCtx[cmock_num_calls].mode, mode);
+    return openCtx[cmock_num_calls].result;
 }
 
 static FRESULT
 f_write_Callback(FIL* fp, const void* buff, UINT btw, UINT* bw, 
                  int cmock_num_calls)
 {
-    
     *bw = bytesWritten;
     return writeResult;
 }
@@ -383,10 +378,11 @@ test_StoreCreatesTheFirstFile(void)
     TEST_ASSERT_EQUAL(0, backupResult);
 
     strcpy(name, "00000.frm");
-    strcpy(openPath, "frames/");
-    strcat(openPath, name);
-    openMode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
-    openFileSize = 0;
+    strcpy(openCtx[0].path, "frames/");
+    strcat(openCtx[0].path, name);
+    openCtx[0].mode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = 0;
+    openCtx[0].result = FR_OK;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
@@ -400,6 +396,8 @@ test_StoreCreatesTheFirstFile(void)
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(0, backupResult);
@@ -427,10 +425,11 @@ test_StoreCreatesTheFirstFileButFailToWriteDiskErr(void)
     TEST_ASSERT_EQUAL(0, backupResult);
 
     strcpy(name, "00000.frm");
-    strcpy(openPath, "frames/");
-    strcat(openPath, name);
-    openMode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
-    openFileSize = 0;
+    strcpy(openCtx[0].path, "frames/");
+    strcat(openCtx[0].path, name);
+    openCtx[0].mode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = 0;
+    openCtx[0].result = FR_OK;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
@@ -443,6 +442,8 @@ test_StoreCreatesTheFirstFileButFailToWriteDiskErr(void)
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(1, backupResult);
@@ -464,10 +465,11 @@ test_StoreCreatesTheFirstFileButFailToWriteLessBytesWritten(void)
     TEST_ASSERT_EQUAL(0, backupResult);
 
     strcpy(name, "00000.frm");
-    strcpy(openPath, "frames/");
-    strcat(openPath, name);
-    openMode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
-    openFileSize = 0;
+    strcpy(openCtx[0].path, "frames/");
+    strcat(openCtx[0].path, name);
+    openCtx[0].mode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = 0;
+    openCtx[0].result = FR_OK;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
@@ -481,6 +483,8 @@ test_StoreCreatesTheFirstFileButFailToWriteLessBytesWritten(void)
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(1, backupResult);
@@ -528,10 +532,11 @@ test_StoreInCurrentFile(void)
     TEST_ASSERT_EQUAL(0, backupResult);
 
     strcpy(name, "00000.frm");
-    strcpy(openPath, "frames/");
-    strcat(openPath, name);
-    openMode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
-    openFileSize = BACKUP_SIZEOF_REG * 1;
+    strcpy(openCtx[0].path, "frames/");
+    strcat(openCtx[0].path, name);
+    openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = BACKUP_SIZEOF_REG * 1;
+    openCtx[0].result = FR_OK;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
@@ -545,6 +550,8 @@ test_StoreInCurrentFile(void)
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(0, backupResult);
@@ -588,15 +595,21 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     backupResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, backupResult);
 
-    sprintf(openPath, "%s/%s", BACKUP_DIR_NAME, info.current);
-    openMode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
-    openFileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
-    secondOpenResult = FR_OK;
+    sprintf(openCtx[0].path, "%s/%s", BACKUP_DIR_NAME, info.current);
+    openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
+    openCtx[0].result = FR_OK;
+    openCtx[1].mode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
+    openCtx[1].result = FR_OK;
+    strcpy(openCtx[1].path, "frames/00001.frm");
+    openCtx[1].fileSize = 0;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
     f_open_IgnoreArg_mode();
     f_open_StubWithCallback(f_open_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
@@ -610,6 +623,8 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     f_write_IgnoreArg_btw();
     f_write_IgnoreArg_bw();
     f_write_StubWithCallback(f_write_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(0, backupResult);
@@ -637,15 +652,21 @@ test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
     backupResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, backupResult);
 
-    sprintf(openPath, "%s/%s", BACKUP_DIR_NAME, info.current);
-    openMode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
-    openFileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
-    secondOpenResult = FR_DISK_ERR;
+    sprintf(openCtx[0].path, "%s/%s", BACKUP_DIR_NAME, info.current);
+    openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
+    openCtx[0].result = FR_OK;
+    openCtx[1].mode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
+    openCtx[1].result = FR_DISK_ERR;
+    strcpy(openCtx[1].path, "frames/00001.frm");
+    openCtx[1].fileSize = 0;
     f_open_ExpectAndReturn(0, 0, 0, FR_OK);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
     f_open_IgnoreArg_mode();
     f_open_StubWithCallback(f_open_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
     f_open_ExpectAndReturn(0, 0, 0, FR_DISK_ERR);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
@@ -658,6 +679,65 @@ test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
     TEST_ASSERT_EQUAL(1, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
+    sprintf(name, "%05d.frm", info.newest);
+    TEST_ASSERT_EQUAL_STRING(name, info.current);
+}
+
+void
+test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
+{
+    Backup info;
+    int backupResult;
+    GStatus status;
+    char name[12];
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    findFiles(BACKUP_MAXNUMFILES);
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    sprintf(openCtx[0].path, "%s/%s", BACKUP_DIR_NAME, info.current);
+    openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
+    openCtx[0].result = FR_OK;
+    openCtx[1].mode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
+    openCtx[1].result = FR_OK;
+    strcpy(openCtx[1].path, "frames/00020.frm");
+    openCtx[1].fileSize = 0;
+    f_open_ExpectAndReturn(0, 0, 0, FR_OK);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+    f_open_StubWithCallback(f_open_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
+    f_unlink_ExpectAndReturn(0, FR_OK);
+    f_unlink_IgnoreArg_path();
+    f_open_ExpectAndReturn(0, 0, 0, FR_OK);
+    f_open_IgnoreArg_fp();
+    f_open_IgnoreArg_path();
+    f_open_IgnoreArg_mode();
+    f_open_StubWithCallback(f_open_Callback);
+    writeResult = FR_OK;
+    bytesWritten = BACKUP_SIZEOF_REG;
+    f_write_ExpectAndReturn(0, 0, 0, 0, FR_OK);
+    f_write_IgnoreArg_fp();
+    f_write_IgnoreArg_buff();
+    f_write_IgnoreArg_btw();
+    f_write_IgnoreArg_bw();
+    f_write_StubWithCallback(f_write_Callback);
+    f_close_ExpectAndReturn(0, FR_OK);
+    f_close_IgnoreArg_fp();
+
+    backupResult = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, backupResult);
+
+    Backup_getInfo(&info);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
+    TEST_ASSERT_EQUAL(1, info.oldest);
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.newest);
     sprintf(name, "%05d.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
 }

@@ -105,6 +105,7 @@ Backup_store(GStatus *status)
     int storeResult = 0;
     char path[24];
     UINT bytesWritten;
+    int nFiles, oldest;
 
     if (status != (GStatus *)0)
     {
@@ -136,16 +137,31 @@ Backup_store(GStatus *status)
                 if (f_size(&fp) >= (BACKUP_MAXNUMREGPERFILE * 
                                     BACKUP_SIZEOF_REG))
                 {
-                    sprintf(name, "%05d.frm", backInfo.newest + 1);
+                    f_close(&fp);
+                    nFiles = backInfo.nFiles;
+                    oldest = backInfo.oldest;
+                    if (backInfo.nFiles >= BACKUP_MAXNUMFILES)
+                    {
+                        /* Recycle the oldest file */
+                        sprintf(path, "%s%05d.frm", DIR_PATH, backInfo.oldest);
+                        f_unlink(path);
+                        ++oldest;
+                    }
+                    else
+                    {
+                        ++nFiles;
+                    }
                     strcpy(path, DIR_PATH);
+                    sprintf(name, "%05d.frm", backInfo.newest + 1);
                     strcat(path, name);
                     fsResult = f_open(&fp, path, FA_CREATE_ALWAYS | 
                                                  FA_WRITE | 
                                                  FA_READ);
                     if (fsResult == FR_OK)
                     {
-                        ++backInfo.nFiles;
+                        backInfo.nFiles = nFiles;
                         ++backInfo.newest;
+                        backInfo.oldest = oldest;
                         strcpy(backInfo.current, name);
                     }
                     else
@@ -166,6 +182,7 @@ Backup_store(GStatus *status)
             {
                 storeResult = 1;
             }
+            f_close(&fp);
         }
     }
     else
