@@ -1,20 +1,22 @@
 /**
- *  \file       Trace.c
- *  \brief      Implementation of application tracing module.
+ *  \file       rkhassert.c
+ *  \brief      RKH assert function for 80x86
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
+ *  2017.04.14  DaBa  v2.4.05  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  LeFr  Leandro Francucci lf@vortexmakes.com
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ *  DaBa  Dario Baliña       dariosb@gmail.com
  */
-
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "Trace.h"
+#include <stdio.h>
+#include "rkhplat.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -25,23 +27,10 @@
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
-Trace_init(void)
+rkh_assert(RKHROM char * const file, int line)
 {
+    fprintf(stderr,    "RKH_ASSERT: [%d] line from %s "
+            "file\n", line, file);
 }
 
-void 
-Trace_send(TraceId id, TraceArg arg0, TraceArg arg1)
-{
-}
-
-void 
-Trace_put(TraceId id, TraceArg arg0, TraceArg arg1)
-{
-}
-
-void 
-Trace_generate(GStatusType *status, TraceId id, TraceArg arg0, TraceArg arg1)
-{
-}
-
-/* ------------------------------ End of file ------------------------------ */
+/* ------------------------------ File footer ------------------------------ */
