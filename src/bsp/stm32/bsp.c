@@ -54,7 +54,10 @@ static RKH_TS_T tstamp;
 static ModCmdRcvHandler gsmCmdParser;
 static GpsRcvHandler    gpsParser;
 static SIMSelect_t      simSelect;
+static FATFS USBDISKFatFs;    /* File system object for USB disk logical drive */
+static char USBDISKPath[4];   /* USB Host logical drive path */
 static UsbHostStatus_t usbHostStatus = UsbHostClassDisconnect;
+static UsbDiskStatus_t usbDiskStatus = UsbDiskNotReady;
 
 static uint8_t uart1RxBuff[10];
 static uint8_t uart2RxBuff[10];
@@ -79,6 +82,15 @@ getUartHandle(int ch)
 		default:
             return NULL;
     }
+}
+
+static void
+usbDisk_init(void)
+{
+    MX_FATFS_Init();
+    USBDISKFatFs.fs_type = 0;
+    usbHostStatus = UsbHostClassDisconnect;
+    usbDiskStatus = UsbDiskNotReady;
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -136,13 +148,13 @@ bsp_init(int argc, char *argv[])
     MX_ADC1_Init();
     HAL_ADC_Start(&hadc1);
     MX_SPI3_Init();
-    MX_FATFS_Init();
     MX_USB_HOST_Init();
     MX_CRC_Init();
 
     modPwr_init();
     dIn_init();
     dOut_init();
+    usbDisk_init();
 }
 
 void
@@ -413,18 +425,37 @@ void
 bsp_usbDeviceEnable(void)
 {
     usbHostStatus = UsbHostClassReady;
+
+    if(USBDISKFatFs.fs_type == 0)
+    {
+        if(f_mount(&USBDISKFatFs, (TCHAR const*)USBDISKPath, 0) != FR_OK)
+        {
+            //Error_Handler();
+            return;
+        }
+        usbDiskStatus = UsbDiskReady;
+    }
 }
 
 void
 bsp_usbDeviceDisable(void)
 {
     usbHostStatus = UsbHostClassDisconnect;
+    usbDiskStatus = UsbDiskNotReady;
+    USBDISKFatFs.fs_type = 0;
+    f_mount(0, "", 0);
 }
 
 UsbHostStatus_t
 bsp_usbDeviceStatus(void)
 {
     return usbHostStatus;
+}
+
+UsbDiskStatus_t
+bsp_usbDiskStatus(void)
+{
+    return usbDiskStatus;
 }
 
 UsbHostStatus_t
