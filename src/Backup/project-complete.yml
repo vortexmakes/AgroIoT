@@ -10,6 +10,7 @@
   :support:
     - test/support/ff/ff.c
     - test/support/ff/findfile.c
+    - test/support/ff/rmrf.c
 
 :defines:
   :test:
