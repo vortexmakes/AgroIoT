@@ -45,7 +45,7 @@ Backup_init(Backup *info)
     char *pName;
 
     fsResult = f_mkdir(BACKUP_DIR_NAME);
-    backInfo.nFiles = backInfo.oldest = backInfo.newest = -1;
+    backInfo.nFiles = backInfo.oldest = backInfo.newest = 0;
     backInfo.nWrites = 0;
     if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
     {
@@ -54,7 +54,6 @@ Backup_init(Backup *info)
         while ((fsResult == FR_OK) && (file.fname[0] != 0))
         {
             ++backInfo.nFiles;
-            backInfo.oldest = backInfo.newest = 0;
             strcpy(name, file.fname);   /* Get file name excluding */
             pName = strtok(name, ".");   /* its extension */
             if (pName != (char *)0)

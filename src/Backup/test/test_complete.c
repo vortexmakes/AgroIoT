@@ -1,6 +1,6 @@
 /**
- *  \file       test_Backup.c
- *  \brief      Unit test for system status backup
+ *  \file       test_complete.c
+ *  \brief      Unit test for system status backup on Linux
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -17,158 +17,98 @@
 #include "unity.h"
 #include <string.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <ftw.h>
+#include <errno.h>
 #include "Backup.h"
-#include "Mock_ff.h"
-#include "Mock_GStatus.h"
+#include "ff.h"
+#include "GStatus.h"
+#include "findfile.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-/* ---------------------------- Local data types --------------------------- */
-typedef struct OpenContext OpenContext;
-struct OpenContext
-{
-    char path[24];
-    BYTE mode;
-    FSIZE_t fileSize;
-    FRESULT result;
-};
+#define FRAME_DIR_PATH          "./test/support/ff"
 
+/* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static OpenContext openCtx[2];
-static FRESULT mkdirResult, findFirstResult, findNextResult, writeResult;
-static int fileIndex;
-static TCHAR files[BACKUP_MAXNUMFILES][16];
-static UINT bytesWritten;
-static FSIZE_t fileSize;
+static char dirPath[64];
+static char filePath[128];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
-static FRESULT
-f_mkdir_Callback(const TCHAR* path, int cmock_num_calls)
+static int 
+unlink_cb(const char *fpath, const struct stat *sb, int typeflag, 
+          struct FTW *ftwbuf)
 {
-    TEST_ASSERT_EQUAL_STRING(BACKUP_DIR_NAME, path);
-    return mkdirResult;
-}
+    int rv = remove(fpath);
 
-static FRESULT
-f_findfirst_Callback(DIR* dp, FILINFO* fno, const TCHAR* path, 
-                     const TCHAR* pattern, int cmock_num_calls)
-{
-    strcpy(fno->fname, files[fileIndex++]);
-    TEST_ASSERT_EQUAL_STRING(BACKUP_DIR_NAME, path);
-    TEST_ASSERT_EQUAL_STRING("*.frm", pattern);
-    return findFirstResult;
-}
-
-static FRESULT
-f_findnext_Callback(DIR* dp, FILINFO* fno, int cmock_num_calls)
-{
-    strcpy(fno->fname, files[fileIndex++]);
-    return findNextResult;
-}
-
-static FRESULT
-f_open_Callback(FIL* fp, const TCHAR* path, BYTE mode, 
-                int cmock_num_calls)
-{
-    fp->obj.objsize = openCtx[cmock_num_calls].fileSize;
-    TEST_ASSERT_EQUAL_STRING(openCtx[cmock_num_calls].path, path);
-    TEST_ASSERT_EQUAL(openCtx[cmock_num_calls].mode, mode);
-    return openCtx[cmock_num_calls].result;
-}
-
-static FRESULT
-f_write_Callback(FIL* fp, const void* buff, UINT btw, UINT* bw, 
-                 int cmock_num_calls)
-{
-    *bw = bytesWritten;
-    fp->obj.objsize = fileSize;
-    return writeResult;
-}
-
-static int
-findFiles(int nFiles)
-{
-    int i, actualNumFiles;
-
-    if (nFiles > BACKUP_MAXNUMFILES)
+    if (rv)
     {
-        actualNumFiles = BACKUP_MAXNUMFILES;
+        perror(fpath);
     }
-    else
+
+    return rv;
+}
+
+static int 
+rmrf(char *path)
+{
+    return nftw(path, unlink_cb, 64, FTW_DEPTH | FTW_PHYS);
+}
+
+void static
+createFiles(int nFiles)
+{
+    int i;
+    FILE *file;
+
+    sprintf(dirPath, "%s/%s", FRAME_DIR_PATH, BACKUP_DIR_NAME);
+    mkdir(dirPath, 0777);
+    for (i = 0; i < nFiles; ++i)
     {
-        actualNumFiles = nFiles;
-    }
-    if (actualNumFiles > 0)
-    {
-        for (i = actualNumFiles - 1; i >= 0; --i)
+        sprintf(filePath, "%s/%05d.frm", dirPath, i);
+        file = fopen(filePath, "w+");
+        if (file == NULL)
         {
-            sprintf(files[i], "%05d.frm", i);
+            printf("%s\n", strerror(errno));
+            break;
         }
     }
-    files[actualNumFiles][0] = 0;
-
-    fileIndex = 0;
-    f_findfirst_ExpectAndReturn(0, 0, BACKUP_DIR_NAME, "*.frm", FR_OK);
-    f_findfirst_IgnoreArg_dp();
-    f_findfirst_IgnoreArg_fno();
-    f_findfirst_IgnoreArg_path();
-    f_findfirst_IgnoreArg_pattern();
-    f_findfirst_StubWithCallback(f_findfirst_Callback);
-
-    if (actualNumFiles > 0)
-    {
-        for (i = 0; i < (actualNumFiles - 1); ++i)
-        {
-            f_findnext_ExpectAndReturn(0, 0, FR_OK);
-            f_findnext_IgnoreArg_dp();
-            f_findnext_IgnoreArg_fno();
-            f_findnext_StubWithCallback(f_findnext_Callback);
-        }
-
-        f_findnext_ExpectAndReturn(0, 0, FR_OK);
-        f_findnext_IgnoreArg_dp();
-        f_findnext_IgnoreArg_fno();
-        f_findnext_StubWithCallback(f_findnext_Callback);
-    }
-
-    f_closedir_ExpectAndReturn(0, FR_OK);
-    f_closedir_IgnoreArg_dp();
-    return actualNumFiles;
 }
 
 /* ---------------------------- Global functions --------------------------- */
 void
 setUp(void)
 {
-    Mock_ff_Init();
-    mkdirResult = FR_DISK_ERR;
-    findFirstResult = FR_OK;
-    findNextResult = FR_OK;
+    int result;
+    char path[64];
+
+    /* In order to execute these test cases the disk have to be mounted */
+    /* and BACKUP_DIR_NAME directory has to be recursively deleted */
+    sprintf(path, "%s/%s", FRAME_DIR_PATH, BACKUP_DIR_NAME);
+    result = rmrf(path);
+    if (result == 0)
+    {
+        printf("Remove %s directory\n", path);
+    }
 }
 
 void
 tearDown(void)
 {
-    Mock_ff_Verify();
-    Mock_ff_Destroy();
 }
 
 void
-test_InitWithFrmDirWithoutFiles(void)
+test_InitWithoutBackupDir(void)
 {
     Backup info;
-    int initResult;
+    int result;
 
-    mkdirResult = FR_EXIST;
-    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
-    f_mkdir_IgnoreArg_path();
-    f_mkdir_StubWithCallback(f_mkdir_Callback);
-    findFiles(0);
-
-    initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    result = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, result);
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
@@ -176,23 +116,47 @@ test_InitWithFrmDirWithoutFiles(void)
 }
 
 void
-test_InitWithFrmDirWithOneFile(void)
+test_InitWithBackupDirWithOneFile(void)
 {
     Backup info;
-    int initResult;
+    int result;
 
-    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
-    f_mkdir_IgnoreArg_path();
-    findFiles(1);
+    createFiles(1);
 
-    initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    result = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, result);
     TEST_ASSERT_EQUAL(1, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
+void
+test_InitWithBackupDirWithMoreThanOneFile(void)
+{
+    Backup info;
+    int result;
+    char dirPath[64];
+
+    createFiles(3);
+#if 0
+    sprintf(dirPath, "%s/%s", FRAME_DIR_PATH, BACKUP_DIR_NAME);
+    printf("%s\n", findFirstFile(dirPath));
+    printf("%s\n", findNextFile());
+    printf("%s\n", findNextFile());
+    printf("%s\n", findNextFile());
+    printf("%s", findNextFile());
+#endif
+
+    result = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, result);
+    TEST_ASSERT_EQUAL(3, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(2, info.newest);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
+}
+
+#if 0
 void
 test_InitWithFrmDirWithMoreThanOneFile(void)
 {
@@ -262,8 +226,8 @@ test_InitWithoutFrmDir(void)
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, initResult);
     TEST_ASSERT_EQUAL(0, info.nFiles);
-    TEST_ASSERT_EQUAL(0, info.oldest);
-    TEST_ASSERT_EQUAL(0, info.newest);
+    TEST_ASSERT_EQUAL(-1, info.oldest);
+    TEST_ASSERT_EQUAL(-1, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
@@ -278,9 +242,9 @@ test_InitMkDirFail(void)
 
     initResult = Backup_init(&info);
     TEST_ASSERT_EQUAL(1, initResult);
-    TEST_ASSERT_EQUAL(0, info.nFiles);
-    TEST_ASSERT_EQUAL(0, info.oldest);
-    TEST_ASSERT_EQUAL(0, info.newest);
+    TEST_ASSERT_EQUAL(-1, info.nFiles);
+    TEST_ASSERT_EQUAL(-1, info.oldest);
+    TEST_ASSERT_EQUAL(-1, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
@@ -528,8 +492,8 @@ test_StoreFailToCreateTheFirstFile(void)
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(0, info.nFiles);
-    TEST_ASSERT_EQUAL(0, info.oldest);
-    TEST_ASSERT_EQUAL(0, info.newest);
+    TEST_ASSERT_EQUAL(-1, info.oldest);
+    TEST_ASSERT_EQUAL(-1, info.newest);
 }
 
 void
@@ -823,5 +787,6 @@ test_SyncFile(void)
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
+#endif
 
 /* ------------------------------ End of file ------------------------------ */

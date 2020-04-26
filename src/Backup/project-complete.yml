@@ -1,0 +1,16 @@
+#
+# YAML for ceedling test in module level
+#
+
+:paths:
+  :test:
+  :source:
+  :include:
+    - test/support/ff
+  :support:
+    - test/support/ff/ff.c
+    - test/support/ff/findfile.c
+
+:defines:
+  :test:
+    - _XOPEN_SOURCE=500

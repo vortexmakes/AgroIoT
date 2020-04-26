@@ -10,7 +10,7 @@
   :which_ceedling: ../../third-party/ceedling
   :test_file_prefix: test_
   :options_paths: 
-    - ../../tools/ceedling
+    - .
 
 :environment: []
 
