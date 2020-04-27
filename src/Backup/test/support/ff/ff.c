@@ -22,7 +22,7 @@
 #include <errno.h>
 #include <ftw.h>
 #include "ff.h"
-#include "findfile.h"
+#include "FindFile.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -92,7 +92,7 @@ f_sync (FIL* fp)
 FRESULT 
 f_closedir (DIR* dp)
 {
-    closeDir();
+    FindFile_closeDir();
     return FR_OK;
 }
 
@@ -103,7 +103,7 @@ f_findfirst (DIR* dp, FILINFO* fno, const TCHAR* path, const TCHAR* pattern)
     char *fileName;
 
     sprintf(dirPath, "%s/%s", FRAME_DIR_PATH, path);
-    fileName = findFirstFile((char *)dirPath);
+    fileName = FindFile_findFirstFile((char *)dirPath);
     if (fileName != NULL)
     {
         strcpy(fno->fname, fileName);
@@ -122,7 +122,7 @@ f_findnext (DIR* dp, FILINFO* fno)
     FRESULT result = FR_OK;
     char *fileName;
 
-    fileName = findNextFile();
+    fileName = FindFile_findNextFile();
     if (fileName != NULL)
     {
         strcpy(fno->fname, fileName);

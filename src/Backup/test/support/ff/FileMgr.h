@@ -1,5 +1,5 @@
 /**
- *  \file       rmrf.h
+ *  \file       FileMgr.h
  *  \brief      
  */
 
@@ -14,8 +14,8 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __RMRF_H__
-#define __RMRF_H__
+#ifndef __FILEMGR_H__
+#define __FILEMGR_H__
 
 /* ----------------------------- Include files ----------------------------- */
 /* ---------------------- External C language linkage ---------------------- */
@@ -29,10 +29,10 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-int rmrf(void);
-void createFiles(int nFiles);
-void cd(char *path);
-void fillFile(char *path);
+int FileMgr_rmrf(void);
+void FileMgr_createFiles(int nFiles);
+void FileMgr_cd(char *path);
+void FileMgr_fillFile(char *path);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -1,5 +1,5 @@
 /**
- *  \file       findfile.h
+ *  \file       FindFile.h
  *  \brief      
  */
 
@@ -28,9 +28,9 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-char *findFirstFile(char *path);
-char *findNextFile(void);
-void closeDir(void);
+char *FindFile_findFirstFile(char *path);
+char *FindFile_findNextFile(void);
+void FindFile_closeDir(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

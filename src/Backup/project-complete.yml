@@ -9,8 +9,8 @@
     - test/support/ff
   :support:
     - test/support/ff/ff.c
-    - test/support/ff/findfile.c
-    - test/support/ff/rmrf.c
+    - test/support/ff/FindFile.c
+    - test/support/ff/FileMgr.c
 
 :defines:
   :test:

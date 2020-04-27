@@ -1,6 +1,6 @@
 /**
  *  \file       test_complete.c
- *  \brief      Unit test for system status backup on Linux
+ *  \brief      Unit test for system status backup on any platform
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -20,9 +20,8 @@
 #include <stdio.h>
 #include "Backup.h"
 #include "ff.h"
-#include "GStatus.h"
-#include "findfile.h"
-#include "rmrf.h"
+#include "FindFile.h"
+#include "FileMgr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -37,8 +36,8 @@ setUp(void)
 {
     /* In order to execute these test cases the disk have to be mounted */
     /* and BACKUP_DIR_NAME directory has to be recursively deleted */
-    cd(BACKUP_DIR_NAME);
-    rmrf();
+    FileMgr_cd(BACKUP_DIR_NAME);
+    FileMgr_rmrf();
 }
 
 void
@@ -53,6 +52,7 @@ test_InitWithoutBackupDir(void)
     int result;
 
     result = Backup_init(&info);
+
     TEST_ASSERT_EQUAL(0, result);
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
@@ -69,7 +69,7 @@ test_InitWithBackupDirWithOneFile(void)
     char name[12];
 
     nFilesExpected = 1;
-    createFiles(nFilesExpected);
+    FileMgr_createFiles(nFilesExpected);
 
     result = Backup_init(&info);
 
@@ -91,7 +91,7 @@ test_InitWithBackupDirWithMoreThanOneFile(void)
     char name[12];
 
     nFilesExpected = 3;
-    createFiles(nFilesExpected);
+    FileMgr_createFiles(nFilesExpected);
 
     result = Backup_init(&info);
 
@@ -105,7 +105,7 @@ test_InitWithBackupDirWithMoreThanOneFile(void)
 }
 
 void
-test_InitWithFrmDirWithExactlyAllowedFiles(void)
+test_InitWithBackupDirWithExactlyAllowedFiles(void)
 {
     Backup info;
     int result;
@@ -113,7 +113,7 @@ test_InitWithFrmDirWithExactlyAllowedFiles(void)
     char name[12];
 
     nFilesExpected = BACKUP_MAXNUMFILES;
-    createFiles(nFilesExpected);
+    FileMgr_createFiles(nFilesExpected);
 
     result = Backup_init(&info);
 
@@ -127,14 +127,15 @@ test_InitWithFrmDirWithExactlyAllowedFiles(void)
 }
 
 void
-test_InitWithoutFrmDir(void)
+test_InitWithoutBackupFiles(void)
 {
     Backup info;
     int result;
 
-    createFiles(0);
+    FileMgr_createFiles(0);
 
     result = Backup_init(&info);
+
     TEST_ASSERT_EQUAL(0, result);
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
@@ -151,7 +152,7 @@ test_GetInfo(void)
     char name[12];
 
     nFilesExpected = 3;
-    createFiles(nFilesExpected);
+    FileMgr_createFiles(nFilesExpected);
 
     result = Backup_init(&info);
     Backup_getInfo(&retInfo);
@@ -169,10 +170,10 @@ test_GetInfo(void)
 void
 test_StoreWrongArg(void)
 {
-    int backupResult;
+    int result;
 
-    backupResult = Backup_store((GStatus *)0);
-    TEST_ASSERT_EQUAL(1, backupResult);
+    result = Backup_store((GStatus *)0);
+    TEST_ASSERT_EQUAL(1, result);
 }
 
 void
@@ -202,16 +203,16 @@ void
 test_StoresInCurrentFile(void)
 {
     Backup info;
-    int backupResult;
+    int result;
     GStatus status;
 
-    createFiles(1);
+    FileMgr_createFiles(1);
 
-    backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    result = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, result);
 
-    backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    result = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, result);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(1, info.nWrites);
@@ -221,20 +222,21 @@ void
 test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
 {
     Backup info;
-    int backupResult;
+    int result;
     GStatus status;
     char name[12];
 
-    createFiles(1);
-    fillFile("00000.frm");
+    FileMgr_createFiles(1);
+    FileMgr_fillFile("00000.frm");
 
-    backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    result = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, result);
 
-    backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    result = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, result);
 
     Backup_getInfo(&info);
+
     TEST_ASSERT_EQUAL(2, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(1, info.newest);
@@ -247,20 +249,21 @@ void
 test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
 {
     Backup info;
-    int backupResult;
+    int result;
     GStatus status;
     char name[12];
 
-    createFiles(BACKUP_MAXNUMFILES);
-    fillFile("00019.frm");
+    FileMgr_createFiles(BACKUP_MAXNUMFILES);
+    FileMgr_fillFile("00019.frm");
 
-    backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    result = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, result);
 
-    backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    result = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, result);
 
     Backup_getInfo(&info);
+
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(1, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.newest);
@@ -268,12 +271,13 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(1, info.nWrites);
 
-    fillFile("00020.frm");
+    FileMgr_fillFile("00020.frm");
 
-    backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    result = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, result);
 
     Backup_getInfo(&info);
+
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(2, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES + 1, info.newest);

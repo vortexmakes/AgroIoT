@@ -1,5 +1,5 @@
 /**
- *  \file       rmrf.c
+ *  \file       FileMgr.c
  *  \brief      ...
  */
 
@@ -34,11 +34,8 @@ static GStatus status =
 {
     {
         {
-            "000000", {'V'},
-            {"38.0030396"}, {"-"},
-            {"057.3266218"}, {"-"},
-            {"000.000"}, {"000"},
-            "000000"
+            "000000", {'V'}, {"38.0030396"}, {"-"}, {"057.3266218"}, {"-"},
+            {"000.000"}, {"000"}, "000000"
         },
         {0, 0, {0, 0, 0}, {0, 0, 0}, 0},
         {0, 0},
@@ -67,13 +64,13 @@ unlink_cb(const char *fpath, const struct stat *sb, int typeflag,
 }
 
 int 
-rmrf(void)
+FileMgr_rmrf(void)
 {
     return nftw(dirPath, unlink_cb, 64, FTW_DEPTH | FTW_PHYS);
 }
 
 void
-createFiles(int nFiles)
+FileMgr_createFiles(int nFiles)
 {
     int i;
     FILE *file;
@@ -93,27 +90,27 @@ createFiles(int nFiles)
 }
 
 void 
-cd(char *path)
+FileMgr_cd(char *path)
 {
     sprintf(dirPath, "%s/%s", FRAME_DIR_PATH, path);
 }
 
 void
-fillFile(char *path)
+FileMgr_fillFile(char *path)
 {
-    FILE *f;
+    FILE *file;
     int i;
 
     sprintf(filePath, "%s/%s/%s", FRAME_DIR_PATH, BACKUP_DIR_NAME, path);
-    f = fopen(filePath, "w+");
-    if (f != NULL)
+    file = fopen(filePath, "w+");
+    if (file != NULL)
     {
         for (i = 0; i < BACKUP_MAXNUMREGPERFILE; ++i)
         {
-            fwrite(&status, BACKUP_SIZEOF_REG, 1, f);
+            fwrite(&status, BACKUP_SIZEOF_REG, 1, file);
         }
-        fflush(f);
-        fclose(f);
+        fflush(file);
+        fclose(file);
     }
 }
 

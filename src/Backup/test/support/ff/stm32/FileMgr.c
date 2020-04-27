@@ -1,0 +1,105 @@
+/**
+ *  \file       FileMgr.c
+ *  \brief      Implementation for fatfs on stm32
+ */
+
+/* -------------------------- Development history -------------------------- */
+/*
+ */
+
+/* -------------------------------- Authors -------------------------------- */
+/*
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
+ */
+
+/* --------------------------------- Notes --------------------------------- */
+/* ----------------------------- Include files ----------------------------- */
+#include <string.h>
+#include <stdlib.h>
+#include "Backup.h"
+#include "GStatus.h"
+#include "ff.h"
+
+/* ----------------------------- Local macros ------------------------------ */
+/* ------------------------------- Constants ------------------------------- */
+/* ---------------------------- Local data types --------------------------- */
+/* ---------------------------- Global variables --------------------------- */
+/* ---------------------------- Local variables ---------------------------- */
+static GStatus status = 
+{
+    {
+        {
+            "000000", {'V'}, {"38.0030396"}, {"-"}, {"057.3266218"}, {"-"},
+            {"000.000"}, {"000"}, "000000"
+        },
+        {0, 0, {0, 0, 0}, {0, 0, 0}, 0},
+        {0, 0},
+        0
+    },
+    0
+};
+static char filePath[32];
+static char dirPath[32];
+
+/* ----------------------- Local function prototypes ----------------------- */
+/* ---------------------------- Local functions ---------------------------- */
+/* ---------------------------- Global functions --------------------------- */
+int 
+FileMgr_rmrf(void)
+{
+    FRESULT result;
+
+    result = f_unlink(BACKUP_DIR_NAME);
+    return (int)result;
+}
+
+void
+FileMgr_createFiles(int nFiles)
+{
+    int i;
+    FRESULT result;
+    FIL file;
+
+    result = f_mkdir(dirPath);
+    if ((result == FR_OK) || (result == FR_EXIST))
+    {
+        for (i = 0; i < nFiles; ++i)
+        {
+            sprintf(filePath, "%s/%05d.frm", dirPath, i);
+            result = f_open(&file, filePath, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+            if ((result == FR_OK) || (result == FR_EXIST))
+            {
+                fclose(file);
+            }
+        }
+    }
+}
+
+void 
+FileMgr_cd(char *path)
+{
+    strcpy(dirPath, path);
+}
+
+void
+FileMgr_fillFile(char *path)
+{
+    int i;
+    FRESULT result;
+    FIL file;
+    UINT nBytesWritten;
+
+    sprintf(filePath, "%s/%s", BACKUP_DIR_NAME, path);
+    result = f_open(&file, filePath, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+    if ((result == FR_OK) || (result == FR_EXIST))
+    {
+        for (i = 0; i < BACKUP_MAXNUMREGPERFILE; ++i)
+        {
+            f_write(&file, &status, BACKUP_SIZEOF_REG, &nBytesWritten);
+        }
+        f_sync(file);
+        f_close(file);
+    }
+}
+
+/* ------------------------------ End of file ------------------------------ */
