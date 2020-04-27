@@ -31,7 +31,7 @@
 static DIR dir;
 static FILINFO file;
 static FIL fp;
-static Backup backInfo;
+static Backup backInfo = {0, 0, 0, "null", 0, 1};
 static char name[12];
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -44,9 +44,9 @@ Backup_init(Backup *info)
     int initResult = 0, fileNumber;
     char *pName;
 
-    fsResult = f_mkdir(BACKUP_DIR_NAME);
-    backInfo.nFiles = backInfo.oldest = backInfo.newest = 0;
+    backInfo.nFiles = backInfo.oldest = backInfo.newest = backInfo.error = 0;
     backInfo.nWrites = 0;
+    fsResult = f_mkdir(BACKUP_DIR_NAME);
     if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
     {
         backInfo.nFiles = 0;
@@ -78,7 +78,7 @@ Backup_init(Backup *info)
     }
     else
     {
-        initResult = 1;
+        backInfo.error = initResult = 1;
     }
 
     if (info != (Backup *)0)
@@ -86,6 +86,17 @@ Backup_init(Backup *info)
         *info = backInfo;
     }
     return initResult;
+}
+
+int 
+Backup_deinit(Backup *info)
+{
+    backInfo.error = 1;
+    if (info != (Backup *)0)
+    {
+        *info = backInfo;
+    }
+    return 0;
 }
 
 void
@@ -106,7 +117,7 @@ Backup_store(GStatus *status)
     UINT bytesWritten;
     int nFiles, oldest;
 
-    if (status != (GStatus *)0)
+    if ((status != (GStatus *)0) && (backInfo.error == 0))
     {
         /* Convert to frame? */
         strcpy(path, DIR_PATH);

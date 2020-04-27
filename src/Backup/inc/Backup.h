@@ -49,11 +49,13 @@ struct Backup
     char current[12];
     FileState state;
     uint32_t nWrites;
+    int error;
 };
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 int Backup_init(Backup *info);
+int Backup_deinit(Backup *info);
 void Backup_getInfo(Backup *info);
 int Backup_store(GStatus *status);
 

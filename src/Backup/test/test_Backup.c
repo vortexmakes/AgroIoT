@@ -156,6 +156,17 @@ tearDown(void)
 }
 
 void
+test_Deinit(void)
+{
+    Backup info;
+    int initResult;
+
+    initResult = Backup_deinit(&info);
+    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(1, info.error);
+}
+
+void
 test_InitWithFrmDirWithoutFiles(void)
 {
     Backup info;
@@ -173,6 +184,7 @@ test_InitWithFrmDirWithoutFiles(void)
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
+    TEST_ASSERT_EQUAL(0, info.error);
 }
 
 void
@@ -191,6 +203,7 @@ test_InitWithFrmDirWithOneFile(void)
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
+    TEST_ASSERT_EQUAL(0, info.error);
 }
 
 void
@@ -209,6 +222,7 @@ test_InitWithFrmDirWithMoreThanOneFile(void)
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(2, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
+    TEST_ASSERT_EQUAL(0, info.error);
 }
 
 void
@@ -227,6 +241,7 @@ test_InitWithFrmDirWithExactlyAllowedFiles(void)
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES - 1, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
+    TEST_ASSERT_EQUAL(0, info.error);
 }
 
 void
@@ -247,6 +262,7 @@ test_InitWithFrmDirWithMoreThanAllowedFiles(void)
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES - 1, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
+    TEST_ASSERT_EQUAL(0, info.error);
 }
 
 void
@@ -265,6 +281,7 @@ test_InitWithoutFrmDir(void)
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
+    TEST_ASSERT_EQUAL(0, info.error);
 }
 
 void
@@ -282,6 +299,7 @@ test_InitMkDirFail(void)
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
+    TEST_ASSERT_EQUAL(1, info.error);
 }
 
 void
@@ -375,6 +393,22 @@ test_StoreWrongArg(void)
     int backupResult;
 
     backupResult = Backup_store((GStatus *)0);
+    TEST_ASSERT_EQUAL(1, backupResult);
+}
+
+void
+test_StoreWithInitError(void)
+{
+    Backup info;
+    GStatus status;
+    int backupResult;
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_DISK_ERR);
+    f_mkdir_IgnoreArg_path();
+
+    backupResult = Backup_init(&info);
+    TEST_ASSERT_EQUAL(1, backupResult);
+    backupResult = Backup_store(&status);
     TEST_ASSERT_EQUAL(1, backupResult);
 }
 
