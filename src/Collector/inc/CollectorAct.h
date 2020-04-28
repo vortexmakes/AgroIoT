@@ -42,6 +42,8 @@ void Collector_updateDigInTestDevNull(Collector *const me, RKH_EVT_T *pe);
 void Collector_updateDigIn(Collector *const me, RKH_EVT_T *pe);
 void Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe);
 void Collector_storeTrace(Collector *const me, RKH_EVT_T *pe);
+void Collector_initBackup(Collector *const me, RKH_EVT_T *pe);
+void Collector_deinitBackup(Collector *const me, RKH_EVT_T *pe);
 void Mapping_storeStatus(Mapping *const me, RKH_EVT_T *pe);
 void Mapping_syncDir(Mapping *const me, RKH_EVT_T *pe);
 

@@ -23,5 +23,6 @@
     - ../ffile/inc
     - ../Crc32/inc
     - ../Trace/inc
+    - ../Backup/inc
     - ../
   :support:

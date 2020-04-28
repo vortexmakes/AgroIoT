@@ -38,6 +38,7 @@
     - ../GStatus/inc
     - ../Crc32/inc
     - ../BatChr
+    - ../Backup/inc
     - ../
   :support:
     - test/support
