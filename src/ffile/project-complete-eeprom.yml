@@ -13,4 +13,6 @@
   :support:
     - portable/ceedling/ffport.c
     - portable/ceedling/eeprom.c
+    - portable/ceedling/Trace.c
+    - portable/ceedling/rkhassert.c
     - portable/eeprom/ffdir.c

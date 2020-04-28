@@ -109,7 +109,9 @@ enum Signals
     evSendSMSFail,
     evDoneSMS,
     evBatChrStatus,
-    evTrace
+    evTrace,
+    evUsbMounted,
+    evUsbUnmounted    
 };
 
 /* ------------------------------- Data types ------------------------------ */

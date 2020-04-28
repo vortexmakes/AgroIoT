@@ -102,7 +102,7 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     RKH_FILTER_OFF_SMA(powerMgr);
     /*RKH_FILTER_OFF_SMA(modMgr); */
-    /*RKH_FILTER_OFF_SMA(gsmMgr);*/
+    RKH_FILTER_OFF_SMA(gsmMgr);
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);

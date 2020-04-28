@@ -454,10 +454,10 @@ ModCmd_sendSMS(char *dest, char *text, ruint size)
     evtCmd = RKH_ALLOC_EVT(ModMgrEvt, evCmd, *p->aoDest);
 
     snprintf(evtCmd->cmd, MODMGR_MAX_SIZEOF_CMDSTR, p->fmt, dest);
-    evtCmd->data = text;
+    evtCmd->data = (unsigned char *)text;
     evtCmd->nData = size + 3;
 
-    postFIFOEvtCmd(evtCmd, p, text, size + 3);
+    postFIFOEvtCmd(evtCmd, p, (unsigned char *)text, size + 3);
 }
 
 /* ------------------------------ End of file ------------------------------ */

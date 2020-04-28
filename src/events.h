@@ -109,8 +109,8 @@ typedef struct SendSMSEvt SendSMSEvt;
 struct SendSMSEvt
 {
     RKH_EVT_T evt;
-    unsigned char dest[SMS_DEST_BUF_SIZE];
-    unsigned char buf[SMS_BUF_SIZE];
+    char dest[SMS_DEST_BUF_SIZE];
+    char buf[SMS_BUF_SIZE];
     ruint size;
 };
 

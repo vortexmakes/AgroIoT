@@ -28,9 +28,7 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static FATFS USBDISKFatFs;    /* File system object for USB disk logical drive */
 static FIL File;              /* File object */
-static char USBDISKPath[4];   /* USB Host logical drive path */
 static char fileName[25];
 static ruint isopen = 0;
 
@@ -40,7 +38,6 @@ static ruint isopen = 0;
 void
 trace_msd_init(void)
 {
-    USBDISKFatFs.fs_type = 0;
     isopen = 1;
 }
 
@@ -52,7 +49,6 @@ trace_msd_close(void)
 	if(File.obj.fs != NULL)
 	{
 		f_close(&File);
-		f_mount(NULL, (TCHAR const*)USBDISKPath, 0);
 	}
 }
 
@@ -66,20 +62,10 @@ trace_msd_write(uint8_t *pData, uint16_t Size)
     if(!isopen)
     	return;
 
-    if(bsp_usbDeviceStatus() != UsbHostClassReady)
+    if(bsp_usbDiskStatus() != UsbDiskReady)
     {
-        USBDISKFatFs.fs_type = 0;
         File.obj.fs = NULL;
         return;
-    }
-
-    if(USBDISKFatFs.fs_type == 0)
-    {
-        if(f_mount(&USBDISKFatFs, (TCHAR const*)USBDISKPath, 0) != FR_OK)
-        {
-            //Error_Handler();
-            return;
-        }
     }
 
     if(File.obj.fs == NULL)
@@ -94,25 +80,22 @@ trace_msd_write(uint8_t *pData, uint16_t Size)
         }
     }
 
-    if((USBDISKFatFs.fs_type != 0) && (File.obj.fs != NULL))
-    {
-        res = f_write(&File, pData, Size, (void *)&byteswritten);
+    res = f_write(&File, pData, Size, (void *)&byteswritten);
 
-        if((byteswritten != Size) || (res != FR_OK))
-        {
-            //Error_Handler();
-            f_close(&File);
-            File.obj.fs = NULL;
-            return;
-        }
-        
-        fileSize = f_size(&File);
-        if(fileSize > TRACE_FILE_MAX_SIZE)
-        {
-            f_close(&File);
-            File.obj.fs = NULL;
-            return;
-        }
+    if((byteswritten != Size) || (res != FR_OK))
+    {
+        //Error_Handler();
+        f_close(&File);
+        File.obj.fs = NULL;
+        return;
+    }
+    
+    fileSize = f_size(&File);
+    if(fileSize > TRACE_FILE_MAX_SIZE)
+    {
+        f_close(&File);
+        File.obj.fs = NULL;
+        return;
     }
 }
 

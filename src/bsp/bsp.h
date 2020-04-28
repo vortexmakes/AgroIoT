@@ -97,8 +97,17 @@ typedef enum
 typedef enum
 {
     UsbHostClassReady,
-    UsbHostClassDisconnect,
+    UsbHostClassDisconnect
 } UsbHostStatus_t;
+
+/*
+ * UsbDisk Status
+ */
+typedef enum
+{
+    UsbDiskReady,
+    UsbDiskNotReady
+} UsbDiskStatus_t;
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
@@ -142,6 +151,7 @@ void bsp_usbDeviceDisable(void);
 UsbHostStatus_t bsp_usbDeviceStatus(void);
 void bsp_usbHostProcess(void);
 UsbHostStatus_t bsp_usbHostStatus(void);
+UsbDiskStatus_t bsp_usbDiskStatus(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

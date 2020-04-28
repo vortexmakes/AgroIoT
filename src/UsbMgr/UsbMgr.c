@@ -97,6 +97,9 @@ RKH_SMA_DEF_PTR(usbMgr);
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static RKH_ROM_STATIC_EVENT(e_UsbMounted, evUsbMounted);
+static RKH_ROM_STATIC_EVENT(e_UsbUnmounted, evUsbUnmounted);
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ............................ Initial action ............................. */
@@ -135,6 +138,8 @@ enableUsbDevice(UsbMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 
     bsp_usbDeviceEnable();
+    topic_publish(Status, RKH_UPCAST(RKH_EVT_T, &e_UsbMounted),
+                          RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
@@ -144,6 +149,8 @@ disableUsbDevice(UsbMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 
     bsp_usbDeviceDisable();
+    topic_publish(Status, RKH_UPCAST(RKH_EVT_T, &e_UsbUnmounted),
+                          RKH_UPCAST(RKH_SMA_T, me));
 }
 
 /* ............................. Entry actions ............................. */

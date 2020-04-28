@@ -87,6 +87,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/GsmMgr</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/IpValid</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/IpValid</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/PowerMgr</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/PowerMgr</locationURI>
@@ -110,6 +115,11 @@
 			<name>Sources/src/UsbMgr</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/UsbMgr</locationURI>
+		</link>
+		<link>
+			<name>Sources/src/YCommand</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/YCommand</locationURI>
 		</link>
 		<link>
 			<name>Sources/src/YFrame</name>

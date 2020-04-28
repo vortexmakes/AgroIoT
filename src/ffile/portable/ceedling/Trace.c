@@ -1,6 +1,6 @@
 /**
- *  \file       GsmMgr_sendSMS.c
- *  \brief      Example: Sending Test SMS using GsmMgr interface.
+ *  \file       rkhassert.c
+ *  \brief      Stub for rkhassert
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -9,43 +9,39 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include <string.h>
-#include <stdio.h>
-#include "GsmMgr_sendSMS.h"
-#include "signals.h"
-#include "events.h"
-#include "topic.h"
+#include "Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-#define DESTINATION_PHONE_NUM   "2235493862"
-
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-static SendSMSEvt SMSEvtobj;
-static ruint smsCount;
-
 void
-GsmMgr_sendTestSMS(RKH_SMA_T *ao)
+Trace_init(void)
 {
-    ++smsCount;
-    RKH_SET_STATIC_EVENT(&SMSEvtobj, evSendSMS);
+}
 
-    strcpy(SMSEvtobj.dest, DESTINATION_PHONE_NUM);
+void 
+Trace_send(TraceId id, TraceArg arg0, TraceArg arg1)
+{
+}
 
-    sprintf(SMSEvtobj.buf, "SMS Test Count: %d", smsCount);
-    SMSEvtobj.size = strlen(SMSEvtobj.buf);
+void 
+Trace_put(TraceId id, TraceArg arg0, TraceArg arg1)
+{
+}
 
-    topic_publish(TCPConnection,
-                  RKH_UPCAST(RKH_EVT_T, &SMSEvtobj), ao);
+void 
+Trace_generate(GStatusType *status, TraceId id, TraceArg arg0, TraceArg arg1)
+{
 }
 
 /* ------------------------------ End of file ------------------------------ */

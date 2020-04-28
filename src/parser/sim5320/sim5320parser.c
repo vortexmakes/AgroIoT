@@ -19,6 +19,7 @@
 #include "signals.h"
 #include "modmgr.h"
 #include <stdlib.h>
+#include <string.h>
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -39,7 +40,10 @@ SSP_DCLR_NORMAL_NODE at, waitOK, at_plus, at_plus_c, at_plus_cg, at_plus_cga,
                      at_plus_ciprxget_error,
                      at_plus_cipstatus, at_plus_cipstatus_status,
                      at_plus_cipopen, at_plus_cipclose,
-                     at_plus_cipsend, at_plus_cipsending, at_plus_cipsent,
+                     at_plus_cipsend, at_plus_cipsent,
+#ifdef _SEND_WITH_TERMINATOR
+                    at_plus_cipsending,
+#endif
                      at_plus_cpin, at_plus_creg, pinStatus, wpinSet, pinSet,
                      plus_c, plus_creg, at_plus_cifsr,
                      netClockSync,
@@ -90,11 +94,8 @@ static void registered(unsigned char pos);
 static void registered(unsigned char pos);
 static void no_registered(unsigned char pos);
 static void ipInitial(unsigned char pos);
-static void ipStart(unsigned char pos);
 static void ipStatus(unsigned char pos);
-static void ipGprsAct(unsigned char pos);
 static void ipDone(unsigned char pos);
-static void connecting(unsigned char pos);
 static void closed(unsigned char pos);
 static void connected(unsigned char pos);
 static void disconnected(unsigned char pos);
@@ -137,11 +138,6 @@ static void smsCollect(unsigned char c);
 static void smsNew(unsigned char pos);
 
 /* ---------------------------- Local functions ---------------------------- */
-
-static void
-debug(unsigned char pos)
-{
-}
 
 SSP_CREATE_NORMAL_NODE(rootCmdParser);
 SSP_CREATE_BR_TABLE(rootCmdParser)
@@ -650,14 +646,6 @@ ipInitial(unsigned char pos)
 }
 
 static void
-ipStart(unsigned char pos)
-{
-    (void)pos;
-
-    sendModResp_noArgs(evIPStart);
-}
-
-static void
 ipStatus(unsigned char pos)
 {
     (void)pos;
@@ -666,27 +654,11 @@ ipStatus(unsigned char pos)
 }
 
 static void
-ipGprsAct(unsigned char pos)
-{
-    (void)pos;
-
-    sendModResp_noArgs(evIPGprsAct);
-}
-
-static void
 ipDone(unsigned char pos)
 {
     (void)pos;
 
     sendModResp_noArgs(evIP);
-}
-
-static void
-connecting(unsigned char pos)
-{
-    (void)pos;
-
-    sendModResp_noArgs(evConnecting);
 }
 
 static void

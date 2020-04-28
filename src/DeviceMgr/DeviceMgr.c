@@ -204,7 +204,8 @@ ps_onStartCycle(void)
 void
 ps_onStop(void)
 {
-    topic_publish(Status, &evNoDevObj, deviceMgr);
+    topic_publish(Status, RKH_UPCAST(RKH_EVT_T, &evNoDevObj), 
+                          RKH_UPCAST(RKH_SMA_T, deviceMgr));
 }
 
 void
