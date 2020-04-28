@@ -43,6 +43,7 @@
   :test:
     - *common_defines
     - TEST
+    - _XOPEN_SOURCE=500
   :test_preprocess:
     - *common_defines
     - TEST

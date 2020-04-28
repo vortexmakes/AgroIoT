@@ -11,7 +11,3 @@
     - test/support/ff/ff.c
     - test/support/ff/FindFile.c
     - test/support/ff/FileMgr.c
-
-:defines:
-  :test:
-    - _XOPEN_SOURCE=500
