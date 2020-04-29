@@ -26,7 +26,7 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-#define FRAME_DIR_PATH      "./test/support/ff"
+#define FRAME_DIR_PATH      "./test/support/x86"
 #define APLUS               (0x30 | 0x01 | 0x02)
 #define WPLUS               (0x08 | 0x01 | 0x02)
 

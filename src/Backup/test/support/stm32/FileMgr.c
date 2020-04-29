@@ -69,7 +69,7 @@ FileMgr_createFiles(int nFiles)
             result = f_open(&file, filePath, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
             if ((result == FR_OK) || (result == FR_EXIST))
             {
-                fclose(file);
+                f_close(&file);
             }
         }
     }
@@ -97,8 +97,8 @@ FileMgr_fillFile(char *path)
         {
             f_write(&file, &status, BACKUP_SIZEOF_REG, &nBytesWritten);
         }
-        f_sync(file);
-        f_close(file);
+        f_sync(&file);
+        f_close(&file);
     }
 }
 

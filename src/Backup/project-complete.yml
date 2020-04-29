@@ -6,8 +6,9 @@
   :test:
   :source:
   :include:
-    - test/support/ff
+    - test/support/
+    - test/support/x86
   :support:
-    - test/support/ff/ff.c
-    - test/support/ff/FindFile.c
-    - test/support/ff/FileMgr.c
+    - test/support/x86/ff.c
+    - test/support/x86/FindFile.c
+    - test/support/x86/FileMgr.c

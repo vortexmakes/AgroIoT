@@ -53,6 +53,8 @@
 									<listOptionValue builtIn="false" value="../../../src/epoch/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ioChg"/>
 									<listOptionValue builtIn="false" value="../../../src/BatChr"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Config/inc"/>
@@ -60,6 +62,12 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
@@ -96,6 +104,8 @@
 									<listOptionValue builtIn="false" value="../../../src/epoch/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ioChg"/>
 									<listOptionValue builtIn="false" value="../../../src/BatChr"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Config/inc"/>
@@ -103,6 +113,10 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32"/>
@@ -124,6 +138,8 @@
 									<listOptionValue builtIn="false" value="../../../third-party/rkh/source/trc/inc"/>
 									<listOptionValue builtIn="false" value="../../../third-party/ceedling/vendor/unity/src"/>
 									<listOptionValue builtIn="false" value="../../../third-party/ceedling/vendor/unity/examples"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -154,6 +170,8 @@
 									<listOptionValue builtIn="false" value="../../../src/gps/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ioChg"/>
 									<listOptionValue builtIn="false" value="../../../src/BatChr"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Config/inc"/>
@@ -161,6 +179,12 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
@@ -189,7 +213,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/ffile/portable/ceedling/ffdir.c|src/ffile/portable/ceedling/ffport.c|src/ffile/portable/ceedling/eeprom.c|src/bsp/stm32/assert.c|src/Trace/build|src/Trace/test|src/bsp/stm32/trace_io.c|src/bsp/stm32/seqlog.c|src/bsp/stm32/rtime.c|src/bsp/stm32/modpwr.c|src/bsp/stm32/bsp.c|src/ffile/test/test_rfile.c|src/ffile/test/test_ffdir.c|src/ffile/test/test_ffile.c|src/ffile/test/test_devflash.c|src/epoch/build|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/portable/arm-cortex/ksdk_os|third-party/ssp/tools|third-party/ssp/tests|third-party/rkh/source/trc/test|third-party/rkh/source/trc/build|third-party/rkh/source/tmr/test|third-party/rkh/source/tmr/build|third-party/rkh/source/sma/test|third-party/rkh/source/sma/build|third-party/rkh/source/sm/test|third-party/rkh/source/sm/build|third-party/rkh/source/queue/build|third-party/rkh/source/portable/ucos|third-party/rkh/source/portable/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/cfv1|third-party/rkh/source/portable/80x86|third-party/rkh/source/mempool/build|third-party/rkh/source/fwk/test|third-party/rkh/source/fwk/build|third-party/rkh/tools|third-party/rkh/third-party|third-party/rkh/template|third-party/rkh/doc|third-party/rkh/demo|src/bsp/stm32/stm32f4_tracking.c|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp/win|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86|src/parser/sim900" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
+						<entry excluding="src/Backup/test/support/x86|src/Backup/test/test_Backup.c|src/Backup/build|src/ffile/portable/ceedling/ffdir.c|src/ffile/portable/ceedling/ffport.c|src/ffile/portable/ceedling/eeprom.c|src/bsp/stm32/assert.c|src/Trace/build|src/Trace/test|src/bsp/stm32/trace_io.c|src/bsp/stm32/seqlog.c|src/bsp/stm32/rtime.c|src/bsp/stm32/modpwr.c|src/bsp/stm32/bsp.c|src/ffile/test/test_rfile.c|src/ffile/test/test_ffdir.c|src/ffile/test/test_ffile.c|src/ffile/test/test_devflash.c|src/epoch/build|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/portable/arm-cortex/ksdk_os|third-party/ssp/tools|third-party/ssp/tests|third-party/rkh/source/trc/test|third-party/rkh/source/trc/build|third-party/rkh/source/tmr/test|third-party/rkh/source/tmr/build|third-party/rkh/source/sma/test|third-party/rkh/source/sma/build|third-party/rkh/source/sm/test|third-party/rkh/source/sm/build|third-party/rkh/source/queue/build|third-party/rkh/source/portable/ucos|third-party/rkh/source/portable/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/cfv1|third-party/rkh/source/portable/80x86|third-party/rkh/source/mempool/build|third-party/rkh/source/fwk/test|third-party/rkh/source/fwk/build|third-party/rkh/tools|third-party/rkh/third-party|third-party/rkh/template|third-party/rkh/doc|third-party/rkh/demo|src/bsp/stm32/stm32f4_tracking.c|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp/win|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86|src/parser/sim900" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -247,6 +271,8 @@
 									<listOptionValue builtIn="false" value="../../../src/gps/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ioChg"/>
 									<listOptionValue builtIn="false" value="../../../src/BatChr"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Config/inc"/>
@@ -254,6 +280,12 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
@@ -290,6 +322,8 @@
 									<listOptionValue builtIn="false" value="../../../src/epoch/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/ioChg"/>
 									<listOptionValue builtIn="false" value="../../../src/BatChr"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/Backup/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src/Crc32/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Collector/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Config/inc"/>
@@ -297,6 +331,10 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32"/>
@@ -318,6 +356,8 @@
 									<listOptionValue builtIn="false" value="../../../third-party/rkh/source/trc/inc"/>
 									<listOptionValue builtIn="false" value="../../../third-party/ceedling/vendor/unity/src"/>
 									<listOptionValue builtIn="false" value="../../../third-party/ceedling/vendor/unity/examples"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
+									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -326,7 +366,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/ffile/portable/ceedling/ffdir.c|src/ffile/portable/ceedling/ffport.c|src/ffile/portable/ceedling/eeprom.c|src/Trace/build|src/Trace/test|src/ffile/test/test_rfile.c|src/ffile/test/test_ffdir.c|src/ffile/test/test_ffile.c|src/ffile/test/test_devflash.c|src/epoch/build|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/portable/arm-cortex/ksdk_os|third-party/ssp/tools|third-party/ssp/tests|third-party/rkh/source/trc/test|third-party/rkh/source/trc/build|third-party/rkh/source/tmr/test|third-party/rkh/source/tmr/build|third-party/rkh/source/sma/test|third-party/rkh/source/sma/build|third-party/rkh/source/sm/test|third-party/rkh/source/sm/build|third-party/rkh/source/queue/build|third-party/rkh/source/portable/ucos|third-party/rkh/source/portable/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/cfv1|third-party/rkh/source/portable/80x86|third-party/rkh/source/mempool/build|third-party/rkh/source/fwk/test|third-party/rkh/source/fwk/build|third-party/rkh/tools|third-party/rkh/third-party|third-party/rkh/template|third-party/rkh/doc|third-party/rkh/demo|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/parser/sim900|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
+						<entry excluding="src/Backup/test/support/x86|src/Backup/test/test_Backup.c|src/Backup/build|src/ffile/portable/ceedling/ffdir.c|src/ffile/portable/ceedling/ffport.c|src/ffile/portable/ceedling/eeprom.c|src/Trace/build|src/Trace/test|src/ffile/test/test_rfile.c|src/ffile/test/test_ffdir.c|src/ffile/test/test_ffile.c|src/ffile/test/test_devflash.c|src/epoch/build|third-party/rkh/source/portable/arm-cortex/rkhs/ksdk|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/cw_v10|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm4f/ciaa_nxp|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm3|third-party/rkh/source/portable/arm-cortex/rkhs/arm_cm0|third-party/rkh/source/portable/arm-cortex/ksdk_os|third-party/ssp/tools|third-party/ssp/tests|third-party/rkh/source/trc/test|third-party/rkh/source/trc/build|third-party/rkh/source/tmr/test|third-party/rkh/source/tmr/build|third-party/rkh/source/sma/test|third-party/rkh/source/sma/build|third-party/rkh/source/sm/test|third-party/rkh/source/sm/build|third-party/rkh/source/queue/build|third-party/rkh/source/portable/ucos|third-party/rkh/source/portable/test|third-party/rkh/source/portable/s08|third-party/rkh/source/portable/cfv1|third-party/rkh/source/portable/80x86|third-party/rkh/source/mempool/build|third-party/rkh/source/fwk/test|third-party/rkh/source/fwk/build|third-party/rkh/tools|third-party/rkh/third-party|third-party/rkh/template|third-party/rkh/doc|third-party/rkh/demo|src/ffile/build|src/modcmd/modcmdSim900.c|src/bsp|src/device/build|src/YFrame/test|src/YFrame/build|src/StatQue/test|src/StatQue/build|src/Config/test|src/Config/build|src/device/test|src/GStatus/build|src/ffile/portable/test|src/parser/sim900|src/epoch/test|src/GStatus/test|src/ffile/portable/80x86" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Sources"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
