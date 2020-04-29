@@ -23,8 +23,19 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+extern ApplicationTypeDef Appli_state;
+static FATFS USBDISKFatFs;    /* File system object for USB disk logical drive */
+static char USBDISKPath[4];   /* USB Host logical drive path */
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static void
+usbDisk_init(void)
+{
+    MX_FATFS_Init();
+    USBDISKFatFs.fs_type = 0;
+}
+
 /* ---------------------------- Global functions --------------------------- */
 /*
  * Unity printout on UART5 at CubeMX configuration (115200 8N1)
@@ -54,6 +65,20 @@ suiteSetUp(void)
     MX_CAN1_Init();
     MX_ADC1_Init();
     MX_SPI3_Init();
+    MX_USB_HOST_Init();
+
+    usbDisk_init();
+
+    printf("Detecting USBMassStorage device...\r");
+    while(Appli_state != APPLICATION_READY)
+        MX_USB_HOST_Process();
+
+    if(f_mount(&USBDISKFatFs, (TCHAR const*)USBDISKPath, 0) != FR_OK)
+    {
+         printf("Error mounting disk\r");
+         printf("test ABORTED\r");
+         __asm volatile	("	bkpt 0x00FF\n" );
+    }
 }
 
 /*
