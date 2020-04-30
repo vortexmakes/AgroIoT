@@ -40,6 +40,8 @@ static GStatus status =
 };
 static char filePath[32];
 static char dirPath[32];
+static FIL file;
+static DIR dir;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -49,7 +51,15 @@ FileMgr_rmrf(void)
 {
     FRESULT result;
 
-    result = f_unlink(BACKUP_DIR_NAME);
+    result = f_findfirst(&dir, &file, BACKUP_DIR_NAME, "*.frm");
+    while ((result == FR_OK) && (file.fname[0] != 0))
+    {
+        f_unlink(file.fname[0]); /* Remove *.frm file */
+        result = f_findnext(&dir, &file);
+    }
+    f_closedir(&dir); /* Close BACKUP_DIR_NAME if it exists */
+    result = f_unlink(BACKUP_DIR_NAME); /* Remove BACKUP_DIR_NAME */
+                                        /* if it exists */
     return (int)result;
 }
 
@@ -58,7 +68,6 @@ FileMgr_createFiles(int nFiles)
 {
     int i;
     FRESULT result;
-    FIL file;
 
     result = f_mkdir(dirPath);
     if ((result == FR_OK) || (result == FR_EXIST))
@@ -86,7 +95,6 @@ FileMgr_fillFile(char *path)
 {
     int i;
     FRESULT result;
-    FIL file;
     UINT nBytesWritten;
 
     sprintf(filePath, "%s/%s", BACKUP_DIR_NAME, path);
