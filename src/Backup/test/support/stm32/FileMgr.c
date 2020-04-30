@@ -52,10 +52,13 @@ FileMgr_rmrf(void)
     FRESULT result;
     FILINFO f;
 
+
     result = f_findfirst(&dir, &f, BACKUP_DIR_NAME, "*.frm");
+
     while ((result == FR_OK) && (f.fname[0] != 0))
     {
-        f_unlink(f.fname); /* Remove *.frm file */
+        sprintf(filePath, "%s/%s", BACKUP_DIR_NAME, f.fname);
+        f_unlink(filePath); /* Remove *.frm file */
         result = f_findnext(&dir, &f);
     }
     f_closedir(&dir); /* Close BACKUP_DIR_NAME if it exists */
