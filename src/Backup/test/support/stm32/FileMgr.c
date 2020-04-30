@@ -50,12 +50,13 @@ int
 FileMgr_rmrf(void)
 {
     FRESULT result;
+    FILINFO f;
 
-    result = f_findfirst(&dir, &file, BACKUP_DIR_NAME, "*.frm");
-    while ((result == FR_OK) && (file.fname[0] != 0))
+    result = f_findfirst(&dir, &f, BACKUP_DIR_NAME, "*.frm");
+    while ((result == FR_OK) && (f.fname[0] != 0))
     {
-        f_unlink(file.fname[0]); /* Remove *.frm file */
-        result = f_findnext(&dir, &file);
+        f_unlink(f.fname); /* Remove *.frm file */
+        result = f_findnext(&dir, &f);
     }
     f_closedir(&dir); /* Close BACKUP_DIR_NAME if it exists */
     result = f_unlink(BACKUP_DIR_NAME); /* Remove BACKUP_DIR_NAME */
@@ -75,7 +76,8 @@ FileMgr_createFiles(int nFiles)
         for (i = 0; i < nFiles; ++i)
         {
             sprintf(filePath, "%s/%05d.frm", dirPath, i);
-            result = f_open(&file, filePath, FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+            result = f_open(&file, filePath, 
+                            FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
             if ((result == FR_OK) || (result == FR_EXIST))
             {
                 f_close(&file);
