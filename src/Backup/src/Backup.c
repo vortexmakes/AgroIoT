@@ -33,6 +33,7 @@ static FILINFO file;
 static FIL fp;
 static Backup backInfo = {0, 0, 0, "null", 0, 1};
 static char name[12];
+static char path[24];
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -55,7 +56,7 @@ Backup_init(Backup *info)
         {
             ++backInfo.nFiles;
             strcpy(name, file.fname);   /* Get file name excluding */
-            pName = strtok(name, ".");   /* its extension */
+            pName = strtok(name, ".");  /* its extension */
             if (pName != (char *)0)
             {
                 fileNumber = atoi(pName);
@@ -73,6 +74,13 @@ Backup_init(Backup *info)
         if (backInfo.nFiles > 0)
         {
             sprintf(backInfo.current, "%05d.frm", backInfo.newest);
+            strcpy(path, DIR_PATH);
+            strcat(path, backInfo.current);
+            fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
+            if (fsResult != FR_OK)
+            {
+                backInfo.error = initResult = 1;
+            }
         }
         f_closedir(&dir);
     }
@@ -113,7 +121,6 @@ Backup_store(GStatus *status)
 {
     FRESULT fsResult;
     int storeResult = 0;
-    char path[24];
     UINT bytesWritten;
     int nFiles, oldest;
 
@@ -142,51 +149,42 @@ Backup_store(GStatus *status)
         }
         else
         {
-            strcat(path, backInfo.current);
-            fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
             /* Does it align the file size to BACKUP_SIZEOF_REG? */
-            if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
+            if (f_size(&fp) >= (BACKUP_MAXNUMREGPERFILE * 
+                                BACKUP_SIZEOF_REG))
             {
-                if (f_size(&fp) >= (BACKUP_MAXNUMREGPERFILE * 
-                                    BACKUP_SIZEOF_REG))
+                f_close(&fp);
+                nFiles = backInfo.nFiles;
+                oldest = backInfo.oldest;
+                if (backInfo.nFiles >= BACKUP_MAXNUMFILES)
                 {
-                    f_close(&fp);
-                    nFiles = backInfo.nFiles;
-                    oldest = backInfo.oldest;
-                    if (backInfo.nFiles >= BACKUP_MAXNUMFILES)
-                    {
-                        /* Recycle the oldest file */
-                        sprintf(path, "%s%05d.frm", DIR_PATH, backInfo.oldest);
-                        f_unlink(path);
-                        ++oldest;
-                    }
-                    else
-                    {
-                        ++nFiles;
-                    }
-                    strcpy(path, DIR_PATH);
-                    sprintf(name, "%05d.frm", backInfo.newest + 1);
-                    strcat(path, name);
-                    fsResult = f_open(&fp, path, FA_CREATE_ALWAYS | 
-                                                 FA_WRITE | 
-                                                 FA_READ);
-                    if (fsResult == FR_OK)
-                    {
-                        backInfo.nWrites = 0;
-                        backInfo.nFiles = nFiles;
-                        ++backInfo.newest;
-                        backInfo.oldest = oldest;
-                        strcpy(backInfo.current, name);
-                    }
-                    else
-                    {
-                        storeResult = 1;
-                    }
+                    /* Recycle the oldest file */
+                    sprintf(path, "%s%05d.frm", DIR_PATH, backInfo.oldest);
+                    f_unlink(path);
+                    ++oldest;
                 }
-            }
-            else
-            {
-                storeResult = 1;
+                else
+                {
+                    ++nFiles;
+                }
+                strcpy(path, DIR_PATH);
+                sprintf(name, "%05d.frm", backInfo.newest + 1);
+                strcat(path, name);
+                fsResult = f_open(&fp, path, FA_CREATE_ALWAYS | 
+                                             FA_WRITE | 
+                                             FA_READ);
+                if (fsResult == FR_OK)
+                {
+                    backInfo.nWrites = 0;
+                    backInfo.nFiles = nFiles;
+                    ++backInfo.newest;
+                    backInfo.oldest = oldest;
+                    strcpy(backInfo.current, name);
+                }
+                else
+                {
+                    storeResult = 1;
+                }
             }
         }
         if (storeResult == 0)

@@ -73,11 +73,15 @@ FRESULT
 f_write (FIL* fp, const void* buff, UINT btw, UINT* bw)
 {
     int bytesWritten;
+    int size;
 
     bytesWritten = fwrite(buff, 1, btw, file);
     if (bw != (UINT *)0)
     {
         *bw = bytesWritten;
+        fseek(file, 0, SEEK_END);
+        size = ftell(file);
+        fp->obj.objsize = size;
     }
     return FR_OK;
 }

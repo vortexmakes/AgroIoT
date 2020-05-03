@@ -249,7 +249,7 @@ void
 test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
 {
     Backup info;
-    int result;
+    int i, result;
     GStatus status;
     char name[12];
 
@@ -271,10 +271,11 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(1, info.nWrites);
 
-    FileMgr_fillFile("00020.frm");
-
-    result = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, result);
+    for (i = 0; i < BACKUP_MAXNUMREGPERFILE; ++i)
+    {
+        result = Backup_store(&status);
+        TEST_ASSERT_EQUAL(0, result);
+    }
 
     Backup_getInfo(&info);
 

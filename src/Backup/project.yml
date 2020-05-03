@@ -37,6 +37,7 @@
     - ../
   :support:
     - test/support
+    - test/support/x86
 
 :defines:
   :common: &common_defines [__TEST__]
