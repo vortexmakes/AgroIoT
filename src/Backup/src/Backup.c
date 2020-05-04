@@ -42,13 +42,13 @@ BackupCode
 Backup_init(Backup *info)
 {
     FRESULT fsResult;
-    BackupCode initResult = BackupOk; 
+    BackupCode initResult = Backup_Ok; 
     int fileNumber;
     char *pName;
     uint32_t oldest;
 
     backInfo.nFiles = backInfo.newest = 0;
-    backInfo.error = BackupOk;
+    backInfo.error = Backup_Ok;
     backInfo.nWrites = 0;
     oldest = 99999;
     fsResult = f_mkdir(BACKUP_DIR_NAME);
@@ -83,7 +83,7 @@ Backup_init(Backup *info)
             fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
             if (fsResult != FR_OK)
             {
-                backInfo.error = initResult = BackupOpenFileError;
+                backInfo.error = initResult = Backup_OpenFileError;
             }
         }
         else
@@ -94,7 +94,7 @@ Backup_init(Backup *info)
     }
     else
     {
-        backInfo.error = initResult = BackupDirError;
+        backInfo.error = initResult = Backup_DirError;
         oldest = 0;
     }
 
@@ -109,12 +109,12 @@ Backup_init(Backup *info)
 BackupCode  
 Backup_deinit(Backup *info)
 {
-    backInfo.error = BackupNoInit;
+    backInfo.error = Backup_NoInit;
     if (info != (Backup *)0)
     {
         *info = backInfo;
     }
-    return BackupOk;
+    return Backup_Ok;
 }
 
 void
@@ -130,12 +130,12 @@ BackupCode
 Backup_store(GStatus *status)
 {
     FRESULT fsResult;
-    BackupCode storeResult = BackupOk;
+    BackupCode storeResult = Backup_Ok;
     UINT bytesWritten;
     int nFiles;
     uint32_t oldest;
 
-    if ((status != (GStatus *)0) && (backInfo.error == BackupOk))
+    if ((status != (GStatus *)0) && (backInfo.error == Backup_Ok))
     {
         /* Convert to frame? */
         strcpy(path, DIR_PATH);
@@ -155,7 +155,7 @@ Backup_store(GStatus *status)
             }
             else
             {
-                storeResult = BackupFailToCreateFirstFile;
+                storeResult = Backup_FailToCreateFirstFile;
             }
         }
         else
@@ -194,7 +194,7 @@ Backup_store(GStatus *status)
                 }
                 else
                 {
-                    storeResult = BackupFailToCreateNewFile;
+                    storeResult = Backup_FailToCreateNewFile;
                 }
             }
         }
@@ -203,7 +203,7 @@ Backup_store(GStatus *status)
             fsResult = f_write(&fp, status, BACKUP_SIZEOF_REG, &bytesWritten);
             if ((fsResult != FR_OK) || (bytesWritten != BACKUP_SIZEOF_REG))
             {
-                storeResult = BackupWriteError;
+                storeResult = Backup_WriteError;
             }
             else
             {
@@ -218,7 +218,7 @@ Backup_store(GStatus *status)
     }
     else
     {
-        storeResult = BackupWrongArgsInitError;
+        storeResult = Backup_WrongArgsInitError;
     }
 
     return storeResult;

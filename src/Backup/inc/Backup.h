@@ -37,14 +37,14 @@ extern "C" {
 typedef enum BackupCode BackupCode;
 enum BackupCode
 {
-    BackupOk, 
-    BackupNoInit,
-    BackupOpenFileError,
-    BackupDirError,
-    BackupWrongArgsInitError,
-    BackupWriteError,
-    BackupFailToCreateFirstFile,
-    BackupFailToCreateNewFile
+    Backup_Ok, 
+    Backup_NoInit,
+    Backup_OpenFileError,
+    Backup_DirError,
+    Backup_WrongArgsInitError,
+    Backup_WriteError,
+    Backup_FailToCreateFirstFile,
+    Backup_FailToCreateNewFile
 };
 
 typedef enum FileState FileState;

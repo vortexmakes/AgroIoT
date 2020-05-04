@@ -53,7 +53,7 @@ test_InitWithoutBackupDir(void)
 
     result = Backup_init(&info);
 
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
@@ -73,7 +73,7 @@ test_InitWithBackupDirWithOneFile(void)
 
     result = Backup_init(&info);
 
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
@@ -95,7 +95,7 @@ test_InitWithBackupDirWithMoreThanOneFile(void)
 
     result = Backup_init(&info);
 
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
@@ -117,7 +117,7 @@ test_InitWithBackupDirWithExactlyAllowedFiles(void)
 
     result = Backup_init(&info);
 
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
@@ -136,7 +136,7 @@ test_InitWithoutBackupFiles(void)
 
     result = Backup_init(&info);
 
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
@@ -157,7 +157,7 @@ test_GetInfo(void)
     result = Backup_init(&info);
     Backup_getInfo(&retInfo);
 
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
     TEST_ASSERT_EQUAL(retInfo.nFiles, info.nFiles);
     TEST_ASSERT_EQUAL(retInfo.oldest, info.oldest);
     TEST_ASSERT_EQUAL(retInfo.newest, info.newest);
@@ -173,7 +173,7 @@ test_StoreWrongArg(void)
     BackupCode result;
 
     result = Backup_store((GStatus *)0);
-    TEST_ASSERT_EQUAL(BackupWrongArgsInitError, result);
+    TEST_ASSERT_EQUAL(Backup_WrongArgsInitError, result);
 }
 
 void
@@ -186,10 +186,10 @@ test_StoresAndCreatesTheFirstFile(void)
 
     strcpy(name, "00000.frm");
     result = Backup_init(&info);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     result = Backup_store(&status);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(1, info.nFiles);
@@ -209,10 +209,10 @@ test_StoresInCurrentFile(void)
     FileMgr_createFiles(1, 0);
 
     result = Backup_init(&info);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     result = Backup_store(&status);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(1, info.nWrites);
@@ -230,10 +230,10 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     FileMgr_fillFile("00000.frm");
 
     result = Backup_init(&info);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     result = Backup_store(&status);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     Backup_getInfo(&info);
 
@@ -258,10 +258,10 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     FileMgr_fillFile(name);
 
     result = Backup_init(&info);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     result = Backup_store(&status);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     Backup_getInfo(&info);
 
@@ -275,7 +275,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     for (i = 0; i < BACKUP_MAXNUMREGPERFILE; ++i)
     {
         result = Backup_store(&status);
-        TEST_ASSERT_EQUAL(BackupOk, result);
+        TEST_ASSERT_EQUAL(Backup_Ok, result);
     }
 
     Backup_getInfo(&info);
@@ -303,10 +303,10 @@ test_ExceedMaxNumberOfRecyclededFiles(void)
     FileMgr_fillFile(name);
 
     result = Backup_init(&info);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     result = Backup_store(&status);
-    TEST_ASSERT_EQUAL(BackupOk, result);
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
 
     Backup_getInfo(&info);
 
