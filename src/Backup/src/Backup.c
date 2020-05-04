@@ -38,17 +38,19 @@ static char path[24];
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-int
+BackupCode 
 Backup_init(Backup *info)
 {
     FRESULT fsResult;
-    int initResult = 0, fileNumber;
+    BackupCode initResult = BackupOk; 
+    int fileNumber;
     char *pName;
     uint32_t oldest;
 
-    backInfo.nFiles = backInfo.newest = backInfo.error = 0;
+    backInfo.nFiles = backInfo.newest = 0;
+    backInfo.error = BackupOk;
     backInfo.nWrites = 0;
-    oldest = 65536;
+    oldest = 99999;
     fsResult = f_mkdir(BACKUP_DIR_NAME);
     if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
     {
@@ -81,7 +83,7 @@ Backup_init(Backup *info)
             fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
             if (fsResult != FR_OK)
             {
-                backInfo.error = initResult = 1;
+                backInfo.error = initResult = BackupOpenFileError;
             }
         }
         else
@@ -92,7 +94,7 @@ Backup_init(Backup *info)
     }
     else
     {
-        backInfo.error = initResult = 1;
+        backInfo.error = initResult = BackupDirError;
         oldest = 0;
     }
 
@@ -104,15 +106,15 @@ Backup_init(Backup *info)
     return initResult;
 }
 
-int 
+BackupCode  
 Backup_deinit(Backup *info)
 {
-    backInfo.error = 1;
+    backInfo.error = BackupNoInit;
     if (info != (Backup *)0)
     {
         *info = backInfo;
     }
-    return 0;
+    return BackupOk;
 }
 
 void
@@ -124,16 +126,16 @@ Backup_getInfo(Backup *info)
     }
 }
 
-int
+BackupCode 
 Backup_store(GStatus *status)
 {
     FRESULT fsResult;
-    int storeResult = 0;
+    BackupCode storeResult = BackupOk;
     UINT bytesWritten;
     int nFiles;
     uint32_t oldest;
 
-    if ((status != (GStatus *)0) && (backInfo.error == 0))
+    if ((status != (GStatus *)0) && (backInfo.error == BackupOk))
     {
         /* Convert to frame? */
         strcpy(path, DIR_PATH);
@@ -153,7 +155,7 @@ Backup_store(GStatus *status)
             }
             else
             {
-                storeResult = 1;
+                storeResult = BackupFailToCreateFirstFile;
             }
         }
         else
@@ -192,7 +194,7 @@ Backup_store(GStatus *status)
                 }
                 else
                 {
-                    storeResult = 1;
+                    storeResult = BackupFailToCreateNewFile;
                 }
             }
         }
@@ -201,7 +203,7 @@ Backup_store(GStatus *status)
             fsResult = f_write(&fp, status, BACKUP_SIZEOF_REG, &bytesWritten);
             if ((fsResult != FR_OK) || (bytesWritten != BACKUP_SIZEOF_REG))
             {
-                storeResult = 1;
+                storeResult = BackupWriteError;
             }
             else
             {
@@ -216,7 +218,7 @@ Backup_store(GStatus *status)
     }
     else
     {
-        storeResult = 1;
+        storeResult = BackupWrongArgsInitError;
     }
 
     return storeResult;

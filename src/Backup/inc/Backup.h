@@ -28,12 +28,25 @@ extern "C" {
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
 #define BACKUP_DIR_NAME             "frames"
-#define BACKUP_MAXNUMFILES          20
+#define BACKUP_MAXNUMFILES          40
 #define BACKUP_MAXNUMREGPERFILE     15600 /* 13[h]*60[m/h]*60[s/m]/3[s] */
 #define BACKUP_SIZEOF_REG           sizeof(GStatus)
 #define BACKUP_NUMWRITES            1200
 
 /* ------------------------------- Data types ------------------------------ */
+typedef enum BackupCode BackupCode;
+enum BackupCode
+{
+    BackupOk, 
+    BackupNoInit,
+    BackupOpenFileError,
+    BackupDirError,
+    BackupWrongArgsInitError,
+    BackupWriteError,
+    BackupFailToCreateFirstFile,
+    BackupFailToCreateNewFile
+};
+
 typedef enum FileState FileState;
 enum FileState
 {
@@ -49,15 +62,15 @@ struct Backup
     char current[12];
     FileState state;
     uint32_t nWrites;
-    int error;
+    BackupCode error;
 };
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-int Backup_init(Backup *info);
-int Backup_deinit(Backup *info);
+BackupCode Backup_init(Backup *info);
+BackupCode Backup_deinit(Backup *info);
 void Backup_getInfo(Backup *info);
-int Backup_store(GStatus *status);
+BackupCode Backup_store(GStatus *status);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

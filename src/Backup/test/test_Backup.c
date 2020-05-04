@@ -164,18 +164,18 @@ void
 test_Deinit(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
 
     initResult = Backup_deinit(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
-    TEST_ASSERT_EQUAL(1, info.error);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
+    TEST_ASSERT_EQUAL(BackupNoInit, info.error);
 }
 
 void
 test_InitWithFrmDirWithoutFiles(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
 
     mkdirResult = FR_EXIST;
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
@@ -184,19 +184,19 @@ test_InitWithFrmDirWithoutFiles(void)
     findFiles(0);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
-    TEST_ASSERT_EQUAL(0, info.error);
+    TEST_ASSERT_EQUAL(BackupOk, info.error);
 }
 
 void
 test_InitWithFrmDirWithOneFile(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
     char name[12];
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
@@ -211,19 +211,19 @@ test_InitWithFrmDirWithOneFile(void)
     findFiles(1);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(1, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
-    TEST_ASSERT_EQUAL(0, info.error);
+    TEST_ASSERT_EQUAL(BackupOk, info.error);
 }
 
 void
 test_InitWithFrmDirWithOneFileButFailsToOpenIt(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
     char name[12];
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
@@ -238,46 +238,46 @@ test_InitWithFrmDirWithOneFileButFailsToOpenIt(void)
     findFiles(1);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(1, initResult);
-    TEST_ASSERT_EQUAL(1, info.error);
+    TEST_ASSERT_EQUAL(BackupOpenFileError, initResult);
+    TEST_ASSERT_EQUAL(BackupOpenFileError, info.error);
 }
 
 void
 test_InitWithFrmDirWithMoreThanOneFile(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
     findFiles(3);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(3, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(2, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
-    TEST_ASSERT_EQUAL(0, info.error);
+    TEST_ASSERT_EQUAL(BackupOk, info.error);
 }
 
 void
 test_InitWithFrmDirWithExactlyAllowedFiles(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
     findFiles(BACKUP_MAXNUMFILES);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES - 1, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
-    TEST_ASSERT_EQUAL(0, info.error);
+    TEST_ASSERT_EQUAL(BackupOk, info.error);
 }
 
 void
@@ -285,7 +285,7 @@ test_InitWithFrmDirWithMoreThanAllowedFiles(void)
 {
     int nFiles;
     Backup info;
-    int initResult;
+    BackupCode initResult;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
@@ -293,63 +293,63 @@ test_InitWithFrmDirWithMoreThanAllowedFiles(void)
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, nFiles);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES - 1, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
-    TEST_ASSERT_EQUAL(0, info.error);
+    TEST_ASSERT_EQUAL(BackupOk, info.error);
 }
 
 void
 test_InitWithoutFrmDir(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_OK);
     f_mkdir_IgnoreArg_path();
     findFiles(0);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
-    TEST_ASSERT_EQUAL(0, info.error);
+    TEST_ASSERT_EQUAL(BackupOk, info.error);
 }
 
 void
 test_InitMkDirFail(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_DISK_ERR);
     f_mkdir_IgnoreArg_path();
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(1, initResult);
+    TEST_ASSERT_EQUAL(BackupDirError, initResult);
     TEST_ASSERT_EQUAL(0, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
     TEST_ASSERT_EQUAL(0, info.nWrites);
-    TEST_ASSERT_EQUAL(1, info.error);
+    TEST_ASSERT_EQUAL(BackupDirError, info.error);
 }
 
 void
 test_InitGetNumberOfScannedFiles(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_OK);
     f_mkdir_IgnoreArg_path();
     findFiles(3);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(3, info.nFiles);
 }
 
@@ -357,7 +357,7 @@ void
 test_InitGetOldestAndNewestFiles(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
     int nFilesExpected;
 
     nFilesExpected = 3;
@@ -366,7 +366,7 @@ test_InitGetOldestAndNewestFiles(void)
     findFiles(nFilesExpected);
 
     initResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
@@ -377,7 +377,7 @@ void
 test_InitGetCurrentFile(void)
 {
     Backup info;
-    int initResult;
+    BackupCode initResult;
     int nFilesExpected;
     char name[12];
 
@@ -388,7 +388,7 @@ test_InitGetCurrentFile(void)
 
     initResult = Backup_init(&info);
 
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
@@ -401,7 +401,7 @@ void
 test_GetInfo(void)
 {
     Backup info, retInfo;
-    int initResult;
+    BackupCode initResult;
     int nFilesExpected;
     char name[12];
 
@@ -413,7 +413,7 @@ test_GetInfo(void)
     initResult = Backup_init(&info);
     Backup_getInfo(&retInfo);
 
-    TEST_ASSERT_EQUAL(0, initResult);
+    TEST_ASSERT_EQUAL(BackupOk, initResult);
     TEST_ASSERT_EQUAL(retInfo.nFiles, info.nFiles);
     TEST_ASSERT_EQUAL(retInfo.oldest, info.oldest);
     TEST_ASSERT_EQUAL(retInfo.newest, info.newest);
@@ -426,10 +426,10 @@ test_GetInfo(void)
 void
 test_StoreWrongArg(void)
 {
-    int backupResult;
+    BackupCode backupResult;
 
     backupResult = Backup_store((GStatus *)0);
-    TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(BackupWrongArgsInitError, backupResult);
 }
 
 void
@@ -437,22 +437,22 @@ test_StoreWithInitError(void)
 {
     Backup info;
     GStatus status;
-    int backupResult;
+    BackupCode backupResult;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_DISK_ERR);
     f_mkdir_IgnoreArg_path();
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(BackupDirError, backupResult);
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(BackupWrongArgsInitError, backupResult);
 }
 
 void
 test_StoreCreatesTheFirstFile(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
     char name[12];
 
@@ -461,7 +461,7 @@ test_StoreCreatesTheFirstFile(void)
     findFiles(0);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     strcpy(name, "00000.frm");
     strcpy(openCtx[0].path, "frames/");
@@ -485,7 +485,7 @@ test_StoreCreatesTheFirstFile(void)
     f_write_StubWithCallback(f_write_Callback);
 
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(1, info.nFiles);
@@ -499,7 +499,7 @@ void
 test_StoreCreatesTheFirstFileButFailToWriteDiskErr(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
     char name[12];
 
@@ -508,7 +508,7 @@ test_StoreCreatesTheFirstFileButFailToWriteDiskErr(void)
     findFiles(0);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     strcpy(name, "00000.frm");
     strcpy(openCtx[0].path, "frames/");
@@ -531,7 +531,7 @@ test_StoreCreatesTheFirstFileButFailToWriteDiskErr(void)
     f_write_StubWithCallback(f_write_Callback);
 
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(BackupWriteError, backupResult);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
@@ -539,7 +539,7 @@ void
 test_StoreCreatesTheFirstFileButFailToWriteLessBytesWritten(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
     char name[12];
 
@@ -548,7 +548,7 @@ test_StoreCreatesTheFirstFileButFailToWriteLessBytesWritten(void)
     findFiles(0);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     strcpy(name, "00000.frm");
     strcpy(openCtx[0].path, "frames/");
@@ -572,14 +572,14 @@ test_StoreCreatesTheFirstFileButFailToWriteLessBytesWritten(void)
     f_write_StubWithCallback(f_write_Callback);
 
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(BackupWriteError, backupResult);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 void
 test_StoreFailToCreateTheFirstFile(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
@@ -587,14 +587,14 @@ test_StoreFailToCreateTheFirstFile(void)
     findFiles(0);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     f_open_ExpectAndReturn(0, 0, 0, FR_DISK_ERR);
     f_open_IgnoreArg_fp();
     f_open_IgnoreArg_path();
     f_open_IgnoreArg_mode();
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(BackupFailToCreateFirstFile, backupResult);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(0, info.nFiles);
@@ -606,7 +606,7 @@ void
 test_StoreInCurrentFile(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
@@ -614,7 +614,7 @@ test_StoreInCurrentFile(void)
     findFiles(1);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     writeResult = FR_OK;
     bytesWritten = BACKUP_SIZEOF_REG;
@@ -627,7 +627,7 @@ test_StoreInCurrentFile(void)
     f_write_StubWithCallback(f_write_Callback);
 
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(1, info.nWrites);
@@ -637,7 +637,7 @@ void
 test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
     char name[12];
 
@@ -655,7 +655,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     findFiles(1);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     f_close_ExpectAndReturn(0, FR_OK);
     f_close_IgnoreArg_fp();
@@ -675,7 +675,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     f_write_StubWithCallback(f_write_Callback);
 
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(2, info.nFiles);
@@ -690,7 +690,7 @@ void
 test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
     char name[12];
 
@@ -708,7 +708,7 @@ test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
     findFiles(1);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     f_close_ExpectAndReturn(0, FR_OK);
     f_close_IgnoreArg_fp();
@@ -718,7 +718,7 @@ test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
     f_open_IgnoreArg_mode();
 
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(1, backupResult);
+    TEST_ASSERT_EQUAL(BackupFailToCreateNewFile, backupResult);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(1, info.nFiles);
@@ -733,7 +733,7 @@ void
 test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
     char name[12];
 
@@ -744,7 +744,8 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
     openCtx[0].fileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
     openCtx[0].result = FR_OK;
-    strcpy(openCtx[1].path, "frames/00020.frm");
+    sprintf(openCtx[1].path, "%s/%05u.frm", BACKUP_DIR_NAME, 
+            BACKUP_MAXNUMFILES);
     openCtx[1].mode = FA_CREATE_ALWAYS | FA_WRITE | FA_READ;
     openCtx[1].fileSize = 0;
     openCtx[1].result = FR_OK;
@@ -752,7 +753,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     findFiles(BACKUP_MAXNUMFILES);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     f_close_ExpectAndReturn(0, FR_OK);
     f_close_IgnoreArg_fp();
@@ -774,7 +775,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     f_write_StubWithCallback(f_write_Callback);
 
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
@@ -789,7 +790,7 @@ void
 test_SyncFile(void)
 {
     Backup info;
-    int backupResult;
+    BackupCode backupResult;
     GStatus status;
     int i;
 
@@ -803,7 +804,7 @@ test_SyncFile(void)
     findFiles(1);
 
     backupResult = Backup_init(&info);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
 
     writeResult = FR_OK;
     bytesWritten = BACKUP_SIZEOF_REG;
@@ -818,7 +819,7 @@ test_SyncFile(void)
         f_write_StubWithCallback(f_write_Callback);
 
         backupResult = Backup_store(&status);
-        TEST_ASSERT_EQUAL(0, backupResult);
+        TEST_ASSERT_EQUAL(BackupOk, backupResult);
         Mock_ff_Verify();
         Mock_ff_Destroy();
     }
@@ -833,7 +834,7 @@ test_SyncFile(void)
     f_sync_IgnoreArg_fp();
 
     backupResult = Backup_store(&status);
-    TEST_ASSERT_EQUAL(0, backupResult);
+    TEST_ASSERT_EQUAL(BackupOk, backupResult);
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
