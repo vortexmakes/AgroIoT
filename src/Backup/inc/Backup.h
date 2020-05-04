@@ -44,8 +44,8 @@ typedef struct Backup Backup;
 struct Backup
 {
     int nFiles;
-    int oldest;
-    int newest;
+    uint32_t oldest;
+    uint32_t newest;
     char current[12];
     FileState state;
     uint32_t nWrites;

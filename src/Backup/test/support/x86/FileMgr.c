@@ -78,7 +78,7 @@ FileMgr_createFiles(int nFiles)
     mkdir(dirPath, 0777);
     for (i = 0; i < nFiles; ++i)
     {
-        sprintf(filePath, "%s/%05d.frm", dirPath, i);
+        sprintf(filePath, "%s/%05u.frm", dirPath, i);
         file = fopen(filePath, "w+");
         if (file == NULL)
         {

@@ -104,7 +104,7 @@ findFiles(int nFiles)
     {
         for (i = actualNumFiles - 1; i >= 0; --i)
         {
-            sprintf(files[i], "%05d.frm", i);
+            sprintf(files[i], "%05u.frm", i);
         }
     }
     files[actualNumFiles][0] = 0;
@@ -392,7 +392,7 @@ test_InitGetCurrentFile(void)
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
-    sprintf(name, "%05d.frm", nFilesExpected - 1);
+    sprintf(name, "%05u.frm", nFilesExpected - 1);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
@@ -419,7 +419,7 @@ test_GetInfo(void)
     TEST_ASSERT_EQUAL(retInfo.newest, info.newest);
     TEST_ASSERT_EQUAL(retInfo.nWrites, info.nWrites);
     TEST_ASSERT_EQUAL(retInfo.state, info.state);
-    sprintf(name, "%05d.frm", nFilesExpected - 1);
+    sprintf(name, "%05u.frm", nFilesExpected - 1);
     TEST_ASSERT_EQUAL_STRING(name, retInfo.current);
 }
 
@@ -643,7 +643,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
-    sprintf(openCtx[0].path, "%s/%05d.frm", BACKUP_DIR_NAME, 0);
+    sprintf(openCtx[0].path, "%s/%05u.frm", BACKUP_DIR_NAME, 0);
     openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
     openCtx[0].fileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
     openCtx[0].result = FR_OK;
@@ -681,7 +681,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     TEST_ASSERT_EQUAL(2, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(1, info.newest);
-    sprintf(name, "%05d.frm", info.newest);
+    sprintf(name, "%05u.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(1, info.nWrites);
 }
@@ -696,7 +696,7 @@ test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
-    sprintf(openCtx[0].path, "%s/%05d.frm", BACKUP_DIR_NAME, 0);
+    sprintf(openCtx[0].path, "%s/%05u.frm", BACKUP_DIR_NAME, 0);
     openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
     openCtx[0].fileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
     openCtx[0].result = FR_OK;
@@ -724,7 +724,7 @@ test_ThereIsNoRoomToStoreButFailsToCreateANewFile(void)
     TEST_ASSERT_EQUAL(1, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(0, info.newest);
-    sprintf(name, "%05d.frm", info.newest);
+    sprintf(name, "%05u.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
@@ -739,7 +739,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
-    sprintf(openCtx[0].path, "%s/%05d.frm", BACKUP_DIR_NAME, 
+    sprintf(openCtx[0].path, "%s/%05u.frm", BACKUP_DIR_NAME, 
             BACKUP_MAXNUMFILES - 1);
     openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
     openCtx[0].fileSize = BACKUP_SIZEOF_REG * BACKUP_MAXNUMREGPERFILE;
@@ -780,7 +780,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(1, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.newest);
-    sprintf(name, "%05d.frm", info.newest);
+    sprintf(name, "%05u.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(1, info.nWrites);
 }
@@ -795,7 +795,7 @@ test_SyncFile(void)
 
     f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
     f_mkdir_IgnoreArg_path();
-    sprintf(openCtx[0].path, "%s/%05d.frm", BACKUP_DIR_NAME, 0);
+    sprintf(openCtx[0].path, "%s/%05u.frm", BACKUP_DIR_NAME, 0);
     openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
     openCtx[0].fileSize = 0;
     openCtx[0].result = FR_OK;

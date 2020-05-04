@@ -77,7 +77,7 @@ test_InitWithBackupDirWithOneFile(void)
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
-    sprintf(name, "%05d.frm", nFilesExpected - 1);
+    sprintf(name, "%05u.frm", nFilesExpected - 1);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
@@ -99,7 +99,7 @@ test_InitWithBackupDirWithMoreThanOneFile(void)
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
-    sprintf(name, "%05d.frm", nFilesExpected - 1);
+    sprintf(name, "%05u.frm", nFilesExpected - 1);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
@@ -121,7 +121,7 @@ test_InitWithBackupDirWithExactlyAllowedFiles(void)
     TEST_ASSERT_EQUAL(nFilesExpected, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(nFilesExpected - 1, info.newest);
-    sprintf(name, "%05d.frm", nFilesExpected - 1);
+    sprintf(name, "%05u.frm", nFilesExpected - 1);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(0, info.nWrites);
 }
@@ -163,7 +163,7 @@ test_GetInfo(void)
     TEST_ASSERT_EQUAL(retInfo.newest, info.newest);
     TEST_ASSERT_EQUAL(retInfo.nWrites, info.nWrites);
     TEST_ASSERT_EQUAL(retInfo.state, info.state);
-    sprintf(name, "%05d.frm", nFilesExpected - 1);
+    sprintf(name, "%05u.frm", nFilesExpected - 1);
     TEST_ASSERT_EQUAL_STRING(name, retInfo.current);
 }
 
@@ -240,7 +240,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     TEST_ASSERT_EQUAL(2, info.nFiles);
     TEST_ASSERT_EQUAL(0, info.oldest);
     TEST_ASSERT_EQUAL(1, info.newest);
-    sprintf(name, "%05d.frm", info.newest);
+    sprintf(name, "%05u.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(1, info.nWrites);
 }
@@ -267,7 +267,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(1, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.newest);
-    sprintf(name, "%05d.frm", info.newest);
+    sprintf(name, "%05u.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(1, info.nWrites);
 
@@ -282,7 +282,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(2, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES + 1, info.newest);
-    sprintf(name, "%05d.frm", info.newest);
+    sprintf(name, "%05u.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(1, info.nWrites);
 }

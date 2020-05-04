@@ -44,9 +44,11 @@ Backup_init(Backup *info)
     FRESULT fsResult;
     int initResult = 0, fileNumber;
     char *pName;
+    uint32_t oldest;
 
-    backInfo.nFiles = backInfo.oldest = backInfo.newest = backInfo.error = 0;
+    backInfo.nFiles = backInfo.newest = backInfo.error = 0;
     backInfo.nWrites = 0;
+    oldest = 65536;
     fsResult = f_mkdir(BACKUP_DIR_NAME);
     if ((fsResult == FR_OK) || (fsResult == FR_EXIST))
     {
@@ -60,9 +62,9 @@ Backup_init(Backup *info)
             if (pName != (char *)0)
             {
                 fileNumber = atoi(pName);
-                if (fileNumber < backInfo.oldest)
+                if (fileNumber < oldest)
                 {
-                    backInfo.oldest = fileNumber;
+                    oldest = fileNumber;
                 }
                 if (fileNumber > backInfo.newest)
                 {
@@ -73,7 +75,7 @@ Backup_init(Backup *info)
         }
         if (backInfo.nFiles > 0)
         {
-            sprintf(backInfo.current, "%05d.frm", backInfo.newest);
+            sprintf(backInfo.current, "%05u.frm", backInfo.newest);
             strcpy(path, DIR_PATH);
             strcat(path, backInfo.current);
             fsResult = f_open(&fp, path, FA_OPEN_APPEND | FA_WRITE | FA_READ);
@@ -82,13 +84,19 @@ Backup_init(Backup *info)
                 backInfo.error = initResult = 1;
             }
         }
+        else
+        {
+            oldest = 0;
+        }
         f_closedir(&dir);
     }
     else
     {
         backInfo.error = initResult = 1;
+        oldest = 0;
     }
 
+    backInfo.oldest = oldest;
     if (info != (Backup *)0)
     {
         *info = backInfo;
@@ -122,7 +130,8 @@ Backup_store(GStatus *status)
     FRESULT fsResult;
     int storeResult = 0;
     UINT bytesWritten;
-    int nFiles, oldest;
+    int nFiles;
+    uint32_t oldest;
 
     if ((status != (GStatus *)0) && (backInfo.error == 0))
     {
@@ -159,7 +168,7 @@ Backup_store(GStatus *status)
                 if (backInfo.nFiles >= BACKUP_MAXNUMFILES)
                 {
                     /* Recycle the oldest file */
-                    sprintf(path, "%s%05d.frm", DIR_PATH, backInfo.oldest);
+                    sprintf(path, "%s%05u.frm", DIR_PATH, backInfo.oldest);
                     f_unlink(path);
                     ++oldest;
                 }
@@ -168,7 +177,7 @@ Backup_store(GStatus *status)
                     ++nFiles;
                 }
                 strcpy(path, DIR_PATH);
-                sprintf(name, "%05d.frm", backInfo.newest + 1);
+                sprintf(name, "%05u.frm", backInfo.newest + 1);
                 strcat(path, name);
                 fsResult = f_open(&fp, path, FA_CREATE_ALWAYS | 
                                              FA_WRITE | 
