@@ -30,7 +30,7 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 int FileMgr_rmrf(void);
-void FileMgr_createFiles(int nFiles);
+void FileMgr_createFiles(int nFiles, uint32_t from);
 void FileMgr_cd(char *path);
 void FileMgr_fillFile(char *path);
 

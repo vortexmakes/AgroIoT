@@ -68,7 +68,7 @@ FileMgr_rmrf(void)
 }
 
 void
-FileMgr_createFiles(int nFiles)
+FileMgr_createFiles(int nFiles, uint32_t from)
 {
     int i;
     FRESULT result;
@@ -78,7 +78,7 @@ FileMgr_createFiles(int nFiles)
     {
         for (i = 0; i < nFiles; ++i)
         {
-            sprintf(filePath, "%s/%05d.frm", dirPath, i);
+            sprintf(filePath, "%s/%05d.frm", dirPath, i + from);
             result = f_open(&file, filePath, 
                             FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
             if ((result == FR_OK) || (result == FR_EXIST))

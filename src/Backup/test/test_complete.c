@@ -69,7 +69,7 @@ test_InitWithBackupDirWithOneFile(void)
     char name[12];
 
     nFilesExpected = 1;
-    FileMgr_createFiles(nFilesExpected);
+    FileMgr_createFiles(nFilesExpected, 0);
 
     result = Backup_init(&info);
 
@@ -91,7 +91,7 @@ test_InitWithBackupDirWithMoreThanOneFile(void)
     char name[12];
 
     nFilesExpected = 3;
-    FileMgr_createFiles(nFilesExpected);
+    FileMgr_createFiles(nFilesExpected, 0);
 
     result = Backup_init(&info);
 
@@ -113,7 +113,7 @@ test_InitWithBackupDirWithExactlyAllowedFiles(void)
     char name[12];
 
     nFilesExpected = BACKUP_MAXNUMFILES;
-    FileMgr_createFiles(nFilesExpected);
+    FileMgr_createFiles(nFilesExpected, 0);
 
     result = Backup_init(&info);
 
@@ -132,7 +132,7 @@ test_InitWithoutBackupFiles(void)
     Backup info;
     int result;
 
-    FileMgr_createFiles(0);
+    FileMgr_createFiles(0, 0);
 
     result = Backup_init(&info);
 
@@ -152,7 +152,7 @@ test_GetInfo(void)
     char name[12];
 
     nFilesExpected = 3;
-    FileMgr_createFiles(nFilesExpected);
+    FileMgr_createFiles(nFilesExpected, 0);
 
     result = Backup_init(&info);
     Backup_getInfo(&retInfo);
@@ -206,7 +206,7 @@ test_StoresInCurrentFile(void)
     int result;
     GStatus status;
 
-    FileMgr_createFiles(1);
+    FileMgr_createFiles(1, 0);
 
     result = Backup_init(&info);
     TEST_ASSERT_EQUAL(0, result);
@@ -226,7 +226,7 @@ test_ThereIsNoRoomToStoreCreatesNewFileAndStores(void)
     GStatus status;
     char name[12];
 
-    FileMgr_createFiles(1);
+    FileMgr_createFiles(1, 0);
     FileMgr_fillFile("00000.frm");
 
     result = Backup_init(&info);
@@ -253,7 +253,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     GStatus status;
     char name[12];
 
-    FileMgr_createFiles(BACKUP_MAXNUMFILES);
+    FileMgr_createFiles(BACKUP_MAXNUMFILES, 0);
     FileMgr_fillFile("00019.frm");
 
     result = Backup_init(&info);
@@ -282,6 +282,33 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
     TEST_ASSERT_EQUAL(2, info.oldest);
     TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES + 1, info.newest);
+    sprintf(name, "%05u.frm", info.newest);
+    TEST_ASSERT_EQUAL_STRING(name, info.current);
+    TEST_ASSERT_EQUAL(1, info.nWrites);
+}
+
+void
+test_ExceedMaxNumberOfRecyclededFiles(void)
+{
+    Backup info;
+    int result;
+    GStatus status;
+    char name[12];
+
+    FileMgr_createFiles(BACKUP_MAXNUMFILES, 40);
+    FileMgr_fillFile("00059.frm");
+
+    result = Backup_init(&info);
+    TEST_ASSERT_EQUAL(0, result);
+
+    result = Backup_store(&status);
+    TEST_ASSERT_EQUAL(0, result);
+
+    Backup_getInfo(&info);
+
+    TEST_ASSERT_EQUAL(BACKUP_MAXNUMFILES, info.nFiles);
+    TEST_ASSERT_EQUAL(41, info.oldest);
+    TEST_ASSERT_EQUAL(60, info.newest);
     sprintf(name, "%05u.frm", info.newest);
     TEST_ASSERT_EQUAL_STRING(name, info.current);
     TEST_ASSERT_EQUAL(1, info.nWrites);

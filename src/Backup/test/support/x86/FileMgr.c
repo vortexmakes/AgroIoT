@@ -70,7 +70,7 @@ FileMgr_rmrf(void)
 }
 
 void
-FileMgr_createFiles(int nFiles)
+FileMgr_createFiles(int nFiles, uint32_t from)
 {
     int i;
     FILE *file;
@@ -78,7 +78,7 @@ FileMgr_createFiles(int nFiles)
     mkdir(dirPath, 0777);
     for (i = 0; i < nFiles; ++i)
     {
-        sprintf(filePath, "%s/%05u.frm", dirPath, i);
+        sprintf(filePath, "%s/%05u.frm", dirPath, i + from);
         file = fopen(filePath, "w+");
         if (file == NULL)
         {
