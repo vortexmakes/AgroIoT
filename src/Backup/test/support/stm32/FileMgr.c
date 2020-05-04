@@ -58,6 +58,8 @@ FileMgr_rmrf(void)
     while ((result == FR_OK) && (f.fname[0] != 0))
     {
         sprintf(filePath, "%s/%s", BACKUP_DIR_NAME, f.fname);
+        result = f_open(&file, filePath, FA_READ);
+        f_close(&file);
         f_unlink(filePath); /* Remove *.frm file */
         result = f_findnext(&dir, &f);
     }
