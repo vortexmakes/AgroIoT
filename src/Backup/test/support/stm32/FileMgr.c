@@ -38,6 +38,8 @@ static GStatus status =
     },
     0
 };
+static FATFS USBDISKFatFs;    /* File system object for USB disk logical drive */
+static char USBDISKPath[4];   /* USB Host logical drive path */
 static char filePath[32];
 static char dirPath[32];
 static FIL file;
@@ -91,10 +93,22 @@ FileMgr_createFiles(int nFiles, uint32_t from)
     }
 }
 
-void 
+void
 FileMgr_cd(char *path)
 {
-    strcpy(dirPath, path);
+	strcpy(dirPath, path);
+
+	if(USBDISKFatFs.fs_type != 0)
+	{
+		f_mount(&USBDISKFatFs, "", 0);
+	}
+
+	if(f_mount(&USBDISKFatFs, (TCHAR const*)USBDISKPath, 0) != FR_OK)
+    {
+         printf("Error mounting disk\r");
+         printf("test ABORTED\r");
+         __asm volatile	("	bkpt 0x00FF\n" );
+    }
 }
 
 void
