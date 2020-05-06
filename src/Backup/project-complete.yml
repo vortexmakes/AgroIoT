@@ -1,0 +1,14 @@
+#
+# YAML for ceedling test in module level
+#
+
+:paths:
+  :test:
+  :source:
+  :include:
+    - test/support/
+    - test/support/x86
+  :support:
+    - test/support/x86/ff.c
+    - test/support/x86/FindFile.c
+    - test/support/x86/FileMgr.c

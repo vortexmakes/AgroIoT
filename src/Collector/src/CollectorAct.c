@@ -33,6 +33,7 @@
 #include "ffile.h"
 #include "geoMgr.h"
 #include "Trace.h"
+#include "Backup.h"
 
 RKH_MODULE_NAME(CollectorAct)
 
@@ -220,6 +221,18 @@ Collector_storeTrace(Collector *const me, RKH_EVT_T *pe)
 
     event = RKH_DOWNCAST(TraceEvt, pe);
     Trace_put(event->id, event->arg0, event->arg1);
+}
+
+void
+Collector_initBackup(Collector *const me, RKH_EVT_T *pe)
+{
+    Backup_init(&me->backupInfo);
+}
+
+void
+Collector_deinitBackup(Collector *const me, RKH_EVT_T *pe)
+{
+    Backup_deinit(&me->backupInfo);
 }
 
 void

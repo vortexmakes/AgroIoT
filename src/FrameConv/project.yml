@@ -7,6 +7,7 @@
   :use_exceptions: FALSE
   :use_test_preprocessor: TRUE
   :use_auxiliary_dependencies: TRUE
+  :release_build: TRUE
   :build_root: build
   :which_ceedling: ../../third-party/ceedling
   :test_file_prefix: test_
@@ -18,12 +19,16 @@
 :extension:
   :executable: .out
 
+:release_build:
+  :output: frameconv
+
 :paths:
   :test:
     - +:test
     - -:test/support
   :source:
     - src
+    - ../Crc32/src/Crc32_sw.c
   :include:
     - inc
     - ../../third-party/rkh/source/portable/test
@@ -35,10 +40,10 @@
     - ../tpsens/cbox
     - ../Collector/inc
     - ../gps/inc
-    - ../GStatus/inc
-    - ../Crc32/inc
     - ../BatChr
-    - ../Backup/inc
+    - ../GsmMgr
+    - ../epoch
+    - ../Crc32/inc
     - ../
   :support:
     - test/support
@@ -51,6 +56,10 @@
   :test_preprocess:
     - *common_defines
     - TEST
+  :release:
+    - *common_defines
+  :release_preprocess:
+    - *common_defines
 
 :cmock:
   :when_no_prototypes: :warn
@@ -77,6 +86,7 @@
 
 :tools_test_compiler:
   :arguments:
+    - -D__UNITRAZER_LIB__
     - -Wall
     - -Wno-pointer-sign
     - -Wno-missing-braces

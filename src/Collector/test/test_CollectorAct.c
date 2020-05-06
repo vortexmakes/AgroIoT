@@ -35,6 +35,7 @@
 #include "Mock_ffile.h"
 #include "Mock_geoMgr.h"
 #include "Mock_Trace.h"
+#include "Mock_Backup.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -430,6 +431,20 @@ test_StoreTrace(void)
 
     Trace_put_Expect(event.id, event.arg0, event.arg1);
     Collector_storeTrace(me, RKH_UPCAST(RKH_EVT_T, &event));
+}
+
+void
+test_InitBackup(void)
+{
+    Backup_init_ExpectAndReturn(&me->backupInfo, 0);
+    Collector_initBackup(me, RKH_UPCAST(RKH_EVT_T, evt));
+}
+
+void
+test_deinitBackup(void)
+{
+    Backup_deinit_ExpectAndReturn(&me->backupInfo, 0);
+    Collector_deinitBackup(me, RKH_UPCAST(RKH_EVT_T, evt));
 }
 
 /* ------------------------------ End of file ------------------------------ */

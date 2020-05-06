@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_cNmXcP8iEemOF-Zd97UPAA" specification="@EventDriven&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;&#xA;interface:&#xA;// Define events&#xA;// and variables here. &#xA;// Use CTRL + Space for content assist.&#xA;internal:&#xA;&#x9;event evGeo&#xA;&#x9;event evGeoInvalid&#xA;&#x9;event evDigOutChanged&#xA;&#x9;event evDigInChanged&#xA;&#x9;event evDevData&#xA;&#x9;event evNoDev&#xA;&#x9;&#xA;&#x9;operation init()&#xA;&#x9;operation getUpdatingStatusTime()&#xA;&#x9;operation updatePosition()&#xA;&#x9;operation updateDigOut()&#xA;&#x9;operation publishCurrStatus()&#xA;&#x9;operation initAndTestDevNull()&#xA;&#x9;operation updateDigInTestDevNull()&#xA;&#x9;operation updateAndTestDevData()&#xA;&#x9;operation updateDigIn()&#xA;&#x9;operation testDevNull()&#xA;&#x9;" name="CollectorDevStatusRegion">
+  <sgraph:Statechart xmi:id="_cNmXcP8iEemOF-Zd97UPAA" specification="@EventDriven&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;&#xA;interface:&#xA;// Define events&#xA;// and variables here. &#xA;// Use CTRL + Space for content assist.&#xA;internal:&#xA;&#x9;event evGeo&#xA;&#x9;event evGeoInvalid&#xA;&#x9;event evDigOutChanged&#xA;&#x9;event evDigInChanged&#xA;&#x9;event evDevData&#xA;&#x9;event evNoDev&#xA;    event evUsbMounted&#xA;    event evUsbUnmounted&#xA;&#x9;&#xA;&#x9;operation init()&#xA;&#x9;operation getUpdatingStatusTime()&#xA;&#x9;operation updatePosition()&#xA;&#x9;operation updateDigOut()&#xA;&#x9;operation publishCurrStatus()&#xA;&#x9;operation initAndTestDevNull()&#xA;&#x9;operation updateDigInTestDevNull()&#xA;&#x9;operation updateAndTestDevData()&#xA;&#x9;operation updateDigIn()&#xA;&#x9;operation testDevNull()&#xA;&#x9;operation initBackup()&#xA;&#x9;operation deinitBackup()" name="CollectorDevStatusRegion">
     <regions xmi:id="_cN_ZA_8iEemOF-Zd97UPAA" name="DevStatus">
       <vertices xsi:type="sgraph:Entry" xmi:id="_cOVXQP8iEemOF-Zd97UPAA">
         <outgoingTransitions xmi:id="_0LWUkP8jEemOF-Zd97UPAA" specification="/ init()" target="_35P_IP8iEemOF-Zd97UPAA"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_35P_IP8iEemOF-Zd97UPAA" specification="evGeo / updatePosition()&#xD;&#xA;evGeoInvalid / updatePosition()&#xD;&#xA;evDigOutChanged / updateDigOut()&#xD;&#xA;every 1500ms /*UPDATING_STATUS_TIME*// &#xD;&#xA;publishCurrStatus()" name="Active" incomingTransitions="_0LWUkP8jEemOF-Zd97UPAA">
+      <vertices xsi:type="sgraph:State" xmi:id="_35P_IP8iEemOF-Zd97UPAA" specification="evGeo / updatePosition()&#xD;&#xA;evGeoInvalid / updatePosition()&#xD;&#xA;evDigOutChanged / updateDigOut()&#xD;&#xA;every 1500ms /*UPDATING_STATUS_TIME*// &#xD;&#xA;publishCurrStatus()&#xD;&#xA;evUsbMounted / initBackup()&#xD;&#xA;evUsbUnmounted / deinitBackup()" name="Active" incomingTransitions="_0LWUkP8jEemOF-Zd97UPAA">
         <regions xmi:id="_35RNQP8iEemOF-Zd97UPAA" name="r1">
           <vertices xsi:type="sgraph:State" xmi:id="_8mH98P8iEemOF-Zd97UPAA" specification="entry / initAndTestDevNull()&#xD;&#xA;evDigInChanged / updateDigInTestDevNull()" name="DevNotConnected" incomingTransitions="_8mJzIf8iEemOF-Zd97UPAA _8mLBTf8iEemOF-Zd97UPAA">
             <outgoingTransitions xmi:id="_8mIlGP8iEemOF-Zd97UPAA" specification="evDevData/&#xD;&#xA;updateAndTestDevData()" target="_8mKaMP8iEemOF-Zd97UPAA"/>
@@ -111,12 +111,12 @@
           <styles xsi:type="notation:ShapeStyle" xmi:id="_35SbYf8iEemOF-Zd97UPAA" fontName="Verdana" fillColor="15981773" lineColor="12632256"/>
           <styles xsi:type="notation:FontStyle" xmi:id="_35SbYv8iEemOF-Zd97UPAA"/>
           <styles xsi:type="notation:BooleanValueStyle" xmi:id="_35Tpgf8iEemOF-Zd97UPAA" name="isHorizontal" booleanValue="true"/>
-          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_35SbY_8iEemOF-Zd97UPAA" x="3" y="82" width="370" height="392"/>
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_35SbY_8iEemOF-Zd97UPAA" x="3" y="82" width="370" height="429"/>
         </children>
         <layoutConstraint xsi:type="notation:Bounds" xmi:id="_cOUJIv8iEemOF-Zd97UPAA"/>
       </children>
       <styles xsi:type="notation:ShapeStyle" xmi:id="_cOLmQf8iEemOF-Zd97UPAA" fontName="Verdana" fillColor="15790320" lineColor="12632256"/>
-      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_cOUwMP8iEemOF-Zd97UPAA" x="220" y="10" width="400" height="536"/>
+      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_cOUwMP8iEemOF-Zd97UPAA" x="220" y="10" width="400" height="567"/>
     </children>
     <children xsi:type="notation:Shape" xmi:id="_cOehMP8iEemOF-Zd97UPAA" type="StatechartText" fontName="Verdana" lineColor="4210752">
       <children xsi:type="notation:DecorationNode" xmi:id="_cOfIQP8iEemOF-Zd97UPAA" type="StatechartName">
@@ -172,7 +172,7 @@
       <styles xsi:type="notation:FontStyle" xmi:id="_0LXis_8jEemOF-Zd97UPAA" fontName="Verdana"/>
       <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_0LXisv8jEemOF-Zd97UPAA" points="[-1, 1, -78, -83]$[53, 1, -24, -83]$[53, 59, -24, -25]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_0LZ-8P8jEemOF-Zd97UPAA" id="(1.0,0.4)"/>
-      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_0LZ-8f8jEemOF-Zd97UPAA" id="(0.31891891891891894,0.06629479239298361)"/>
+      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_0LZ-8f8jEemOF-Zd97UPAA" id="(0.31891891891891894,0.060509633622841175)"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>

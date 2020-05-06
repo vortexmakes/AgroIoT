@@ -23,6 +23,7 @@
 #include "rkhsm.h"
 #include "rkhtmr.h"
 #include "GStatus.h"
+#include "Backup.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -70,6 +71,7 @@ struct Collector
     Device *dev;
     Mapping itsMapping;         /* Mapping orthogonal region */
     RKHTmEvt updateStatusTmr;
+    Backup backupInfo;
 };
 
 /* -------------------------- External variables --------------------------- */

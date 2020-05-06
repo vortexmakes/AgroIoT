@@ -60,12 +60,6 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
@@ -109,10 +103,6 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32"/>
@@ -134,8 +124,6 @@
 									<listOptionValue builtIn="false" value="../../../third-party/rkh/source/trc/inc"/>
 									<listOptionValue builtIn="false" value="../../../third-party/ceedling/vendor/unity/src"/>
 									<listOptionValue builtIn="false" value="../../../third-party/ceedling/vendor/unity/examples"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1710192698" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -173,12 +161,6 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
@@ -272,12 +254,6 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
@@ -321,10 +297,6 @@
 									<listOptionValue builtIn="false" value="../../../src/geoMgr"/>
 									<listOptionValue builtIn="false" value="../../../src/StatQue/inc"/>
 									<listOptionValue builtIn="false" value="../../../src/Trace/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/inc"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/dataflash"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/tplink"/>
 									<listOptionValue builtIn="false" value="../../../src/tpsens/cbox"/>
 									<listOptionValue builtIn="false" value="../../../src/bsp/stm32"/>
@@ -346,8 +318,6 @@
 									<listOptionValue builtIn="false" value="../../../third-party/rkh/source/trc/inc"/>
 									<listOptionValue builtIn="false" value="../../../third-party/ceedling/vendor/unity/src"/>
 									<listOptionValue builtIn="false" value="../../../third-party/ceedling/vendor/unity/examples"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/portable/eeprom/stm32"/>
-									<listOptionValue builtIn="false" value="../../../src/ffile/test/support"/>
 									<listOptionValue builtIn="false" value="../../../src"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.613463080" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
