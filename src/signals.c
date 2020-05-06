@@ -90,6 +90,8 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evDiskDisconnected);
     RKH_TR_FWK_SIG(evTout0);
     RKH_TR_FWK_SIG(evTout1);
+    RKH_TR_FWK_SIG(evUsbMounted);
+    RKH_TR_FWK_SIG(evUsbUnmounted);
 }
 
 /* ------------------------------ End of file ------------------------------ */
