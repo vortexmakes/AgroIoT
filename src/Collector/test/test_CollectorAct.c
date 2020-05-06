@@ -346,6 +346,7 @@ test_StoreStatus(void)
     GStatus_setChecksum_Expect(&region->itsCollector->status);
     StatQue_put_ExpectAndReturn(0, 0);
     StatQue_put_IgnoreArg_elem();
+    Backup_store_ExpectAndReturn(&region->itsCollector->status, Backup_Ok);
 
     Mapping_storeStatus(region, (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(n + 1, me->itsMapping.nStoreLastSync);

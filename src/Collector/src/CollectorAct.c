@@ -240,6 +240,7 @@ Mapping_storeStatus(Mapping *const me, RKH_EVT_T *pe)
 {
     GStatus_setChecksum(&me->itsCollector->status);
     StatQue_put(&me->itsCollector->status);
+    Backup_store(&me->itsCollector->status);
     ++me->nStoreLastSync;
 }
 
