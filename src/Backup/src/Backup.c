@@ -231,6 +231,7 @@ Backup_sync(void)
 
     if ((backInfo.error == Backup_Ok) && (backInfo.nFiles > 0))
     {
+        backInfo.nWrites = 0;
         f_sync(&fp);
     }
     else

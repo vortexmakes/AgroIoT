@@ -866,6 +866,14 @@ test_ForceSyncBackupFile(void)
     result = Backup_sync();
 
     TEST_ASSERT_EQUAL(Backup_Ok, result);
+
+    Backup_getInfo(&info);
+    TEST_ASSERT_EQUAL(1, info.nFiles);
+    TEST_ASSERT_EQUAL(0, info.oldest);
+    TEST_ASSERT_EQUAL(0, info.newest);
+    sprintf(name, "%05u.frm", info.newest);
+    TEST_ASSERT_EQUAL_STRING(name, info.current);
+    TEST_ASSERT_EQUAL(0, info.nWrites);
 }
 
 void
