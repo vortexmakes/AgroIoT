@@ -224,4 +224,20 @@ Backup_store(GStatus *status)
     return storeResult;
 }
 
+BackupCode 
+Backup_sync(void)
+{
+    BackupCode result = Backup_Ok;
+
+    if ((backInfo.error == Backup_Ok) && (backInfo.nFiles > 0))
+    {
+        f_sync(&fp);
+    }
+    else
+    {
+        result = Backup_NoInit;
+    }
+    return result;
+}
+
 /* ------------------------------ End of file ------------------------------ */

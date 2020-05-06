@@ -787,7 +787,7 @@ test_ThereIsNoRoomToStoreRecyclesOldestFileAndStores(void)
 }
 
 void
-test_SyncFile(void)
+test_AutomaticallySyncCurrentFile(void)
 {
     Backup info;
     BackupCode backupResult;
@@ -837,6 +837,56 @@ test_SyncFile(void)
     TEST_ASSERT_EQUAL(Backup_Ok, backupResult);
     Backup_getInfo(&info);
     TEST_ASSERT_EQUAL(0, info.nWrites);
+}
+
+void
+test_ForceSyncBackupFile(void)
+{
+    BackupCode result;
+    Backup info;
+    char name[12];
+
+    f_mkdir_ExpectAndReturn(BACKUP_DIR_NAME, FR_EXIST);
+    f_mkdir_IgnoreArg_path();
+    strcpy(name, "00000.frm");
+    strcpy(openCtx[0].path, "frames/");
+    strcat(openCtx[0].path, name);
+    openCtx[0].mode = FA_OPEN_APPEND | FA_WRITE | FA_READ;
+    openCtx[0].fileSize = 0;
+    openCtx[0].result = FR_OK;
+    f_open_StubWithCallback(f_open_Callback);
+    findFiles(1);
+
+    Backup_init(&info);
+    TEST_ASSERT_EQUAL(1, info.nFiles);
+    TEST_ASSERT_EQUAL(Backup_Ok, info.error);
+
+    f_sync_ExpectAndReturn(0, FR_OK);
+    f_sync_IgnoreArg_fp();
+    result = Backup_sync();
+
+    TEST_ASSERT_EQUAL(Backup_Ok, result);
+}
+
+void
+test_FailsToForceSyncBackupFile(void)
+{
+    BackupCode result;
+
+    /* Try to sync before initializing Backup */
+    Backup_deinit(0);
+    result = Backup_sync();
+    TEST_ASSERT_EQUAL(Backup_NoInit, result);
+
+    /* Without backup files */
+    f_mkdir_IgnoreAndReturn(FR_OK);
+    f_findfirst_IgnoreAndReturn(FR_NO_FILE);
+    f_closedir_IgnoreAndReturn(FR_NO_FILE);
+
+    Backup_init(0);
+    result = Backup_sync();
+
+    TEST_ASSERT_EQUAL(Backup_NoInit, result);
 }
 
 /* ------------------------------ End of file ------------------------------ */

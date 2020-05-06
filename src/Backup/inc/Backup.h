@@ -71,6 +71,7 @@ BackupCode Backup_init(Backup *info);
 BackupCode Backup_deinit(Backup *info);
 void Backup_getInfo(Backup *info);
 BackupCode Backup_store(GStatus *status);
+BackupCode Backup_sync(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
