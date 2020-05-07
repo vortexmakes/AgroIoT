@@ -20,6 +20,11 @@
 #include "GStatus.h"
 
 /* ----------------------------- Local macros ------------------------------ */
+#define printOffSize(m,po,o) \
+        {                   \
+            printf("%-27s%5d%8d\r\n", #m, po+o, sizeof(m)); \
+        }
+
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -39,54 +44,65 @@ usbDisk_init(void)
 
 static
 void
-logOffsets(void)
+gstatusOffsetSize(void)
 {
-	int dataOff;
-		int positionOff;
-		int devDataOff;
-		int ioStatusOff;
-		int BatchrStatusOff;
+    GStatus gs;
 
-	dataOff = offsetof(GStatus, data);
-		positionOff = dataOff + offsetof(GStatusType, position);
-		devDataOff= dataOff + offsetof(GStatusType, devData);
-		ioStatusOff= dataOff + offsetof(GStatusType, ioStatus);
-		BatchrStatusOff= dataOff + offsetof(GStatusType, ioStatus);
+	printf("GStatus members offsets and sizes\r\n");
 
-	printf("GStatus members offsets\r\n", dataOff);
-	printf("GStatus.data %d\r\n", dataOff);
-		printf("GStatus.data.position %d\r\n", positionOff);
-			printf("GStatus.data.position.utc %d\r\n", positionOff + offsetof(Geo, utc));
-			printf("GStatus.data.position.status %d\r\n", positionOff + offsetof(Geo, status));
-			printf("GStatus.data.position.latitude %d\r\n", positionOff + offsetof(Geo, latitude));
-			printf("GStatus.data.position.latInd %d\r\n", positionOff + offsetof(Geo, latInd));
-			printf("GStatus.data.position.longitude %d\r\n", positionOff + offsetof(Geo, longitude));
-			printf("GStatus.data.position.longInd %d\r\n", positionOff + offsetof(Geo, longInd));
-			printf("GStatus.data.position.speed %d\r\n", positionOff + offsetof(Geo, speed));
-			printf("GStatus.data.position.course %d\r\n", positionOff + offsetof(Geo, course));
-			printf("GStatus.data.position.date %d\r\n", positionOff + offsetof(Geo, date));
-		printf("GStatus.data.devData %d\r\n", devDataOff);
-			printf("GStatus.data.devData.cmd %d\r\n", devDataOff + offsetof(CBOX_STR, cmd));
-			printf("GStatus.data.devData.m %d\r\n", devDataOff + offsetof(CBOX_STR, m));
-			int hOff= devDataOff + offsetof(CBOX_STR, h);
-			printf("GStatus.data.devData.h %d\r\n", hOff);
-				printf("GStatus.data.devData.h.hoard %d\r\n", hOff + offsetof(GRSENS_T, hoard));
-				printf("GStatus.data.devData.h.pqty %d\r\n", hOff + offsetof(GRSENS_T, pqty));
-				printf("GStatus.data.devData.h.flow %d\r\n", hOff + offsetof(GRSENS_T, flow));
-			int aOff= devDataOff + offsetof(CBOX_STR, a);
-			printf("GStatus.data.devData.a %d\r\n", aOff);
-				printf("GStatus.data.devData.a.x %d\r\n", aOff + offsetof(ACCEL_T, x));
-				printf("GStatus.data.devData.a.y %d\r\n", aOff + offsetof(ACCEL_T, y));
-				printf("GStatus.data.devData.a.z %d\r\n", aOff + offsetof(ACCEL_T, z));
-				printf("GStatus.data.devData.a.m %d\r\n", aOff + offsetof(ACCEL_T, m));
-			printf("GStatus.data.devData.hum %d\r\n", devDataOff + offsetof(CBOX_STR, hum));
-		printf("GStatus.data.ioStatus %d\r\n", ioStatusOff);
-			printf("GStatus.data.ioStatus.digIn %d\r\n", ioStatusOff + offsetof(IOStatus, digIn));
-			printf("GStatus.data.ioStatus.digOuy %d\r\n", ioStatusOff + offsetof(IOStatus, digOut));
-		printf("GStatus.data.batChrStatus %d\r\n", BatchrStatusOff);
-	printf("GStatus.checksum %d\r\n", offsetof(GStatus, checksum));
+    printf("%-27s%-10s%-10s\r\n", "attribute", "offset", "size");
 
-	printf("\r\n", dataOff);
+    printOffSize(gs, 0, 0);
+    printOffSize(gs.data, 0, offsetof(GStatus, data));
+	int dataOff = offsetof(GStatus, data);
+
+    printOffSize(gs.data.position, dataOff, offsetof(GStatusType, position));
+    int posOff = dataOff + offsetof(GStatusType, position);
+
+    printOffSize(gs.data.position.utc, posOff, offsetof(Geo, utc));
+    printOffSize(gs.data.position.status, posOff, offsetof(Geo, status));
+    printOffSize(gs.data.position.latitude, posOff, offsetof(Geo, latitude));
+    printOffSize(gs.data.position.latInd, posOff, offsetof(Geo, latInd));
+    printOffSize(gs.data.position.longitude, posOff, offsetof(Geo, longitude));
+    printOffSize(gs.data.position.longInd, posOff, offsetof(Geo, longInd));
+    printOffSize(gs.data.position.speed, posOff, offsetof(Geo, speed));
+    printOffSize(gs.data.position.course, posOff, offsetof(Geo, course));
+    printOffSize(gs.data.position.date, posOff, offsetof(Geo, date));
+
+	printOffSize(gs.data.devData, dataOff, offsetof(GStatusType, devData));
+	int devDataOff= dataOff + offsetof(GStatusType, devData);
+
+	printOffSize(gs.data.devData.cmd, devDataOff, offsetof(CBOX_STR, cmd));
+	printOffSize(gs.data.devData.m, devDataOff, offsetof(CBOX_STR, m));
+
+	printOffSize(gs.data.devData.h, devDataOff, offsetof(CBOX_STR, h));
+	int hOff= devDataOff + offsetof(CBOX_STR, h);
+
+	printOffSize(gs.data.devData.h.hoard, hOff, offsetof(GRSENS_T, hoard));
+	printOffSize(gs.data.devData.h.pqty, hOff, offsetof(GRSENS_T, pqty));
+	printOffSize(gs.data.devData.h.flow, hOff, offsetof(GRSENS_T, flow));
+
+	printOffSize(gs.data.devData.a, devDataOff, offsetof(CBOX_STR, a))
+	int aOff= devDataOff + offsetof(CBOX_STR, a);
+
+	printOffSize(gs.data.devData.a.x, aOff, offsetof(ACCEL_T, x));
+	printOffSize(gs.data.devData.a.y, aOff, offsetof(ACCEL_T, y));
+	printOffSize(gs.data.devData.a.z, aOff, offsetof(ACCEL_T, z));
+	printOffSize(gs.data.devData.a.m, aOff, offsetof(ACCEL_T, m));
+
+	printOffSize(gs.data.devData.hum, devDataOff, offsetof(CBOX_STR, hum));
+		
+    printOffSize(gs.data.ioStatus, dataOff, offsetof(GStatusType, ioStatus));
+	int iosOff= dataOff + offsetof(GStatusType, ioStatus);
+
+	printOffSize(gs.data.ioStatus.digIn, iosOff, offsetof(IOStatus, digIn));
+	printOffSize(gs.data.ioStatus.digOut, iosOff, offsetof(IOStatus, digOut));
+
+    printOffSize(gs.data.batChrStatus, dataOff, offsetof(GStatusType, batChrStatus));
+
+	printOffSize(gs.checksum, 0, offsetof(GStatus, checksum));
+
+	printf("\r\n");
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -122,7 +138,7 @@ suiteSetUp(void)
 
     usbDisk_init();
 
-    logOffsets();
+    gstatusOffsetSize();
 
     printf("Detecting USBMassStorage device...\r");
     while(Appli_state != APPLICATION_READY)
