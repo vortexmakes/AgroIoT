@@ -19,11 +19,21 @@
 #include "unity.h"
 #include "FrameConv.h"
 #include "Mock_GStatus.h"
+#if 0
+#include "YFrame.h"
+#include "Geo.h"
+#include "cbox.h"
+#include "GsmMgr.h"
+#else
+#include "Mock_YFrame.h"
+#endif
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+extern char imei[16];
+
 /* ---------------------------- Local variables ---------------------------- */
 static uint8_t buf[128] =
 {
@@ -58,6 +68,7 @@ static GStatus expStatus =
 };
 
 static const char singleFrame[] =
+   /*------ header ------*/
     "!0|01355826018345180,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -122,10 +133,15 @@ test_ConvertGStatusToFrame(void)
 {
     int result;
     GStatus status;
+    size_t size;
 
-    result = FrameConv_GStatusToFrame(frame, &status);
+    YFrame_header_ExpectAndReturn(&status.data, frame, 0, YFRAME_SGP_TYPE, 8);
+    YFrame_data_ExpectAndReturn(&status.data, frame + 8, YFRAME_SGP_TYPE, 8);
+
+    result = FrameConv_GStatusToFrame(frame, &status, &size);
 
     TEST_ASSERT_EQUAL(0, result);
+    TEST_ASSERT_EQUAL(16, size);
 }
 
 /* ------------------------------ End of file ------------------------------ */

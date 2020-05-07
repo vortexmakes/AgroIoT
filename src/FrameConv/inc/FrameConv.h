@@ -35,7 +35,7 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 int FrameConv_STM32ToX86(GStatus *to, uint8_t from[], size_t size);
-int FrameConv_GStatusToFrame(uint8_t *to, GStatus *from);
+int FrameConv_GStatusToFrame(uint8_t *to, GStatus *from, size_t *size);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

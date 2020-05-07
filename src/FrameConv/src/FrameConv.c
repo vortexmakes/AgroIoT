@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "FrameConv.h"
 #include "GStatus.h"
+#include "YFrame.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -30,8 +31,8 @@ enum ByteOrder
 };
 
 /* ---------------------------- Local data types --------------------------- */
-typedef struct FieldLayout FieldLayout;
-struct FieldLayout
+typedef struct PrimLayout PrimLayout;   /* Layout of primitive type */
+struct PrimLayout
 {
     int offset;
     int size;
@@ -40,48 +41,48 @@ struct FieldLayout
 typedef struct IOStatusLayout IOStatusLayout;
 struct IOStatusLayout
 {
-    FieldLayout digIn;
-    FieldLayout digOut;
+    PrimLayout digIn;
+    PrimLayout digOut;
 };
 
 typedef struct ACCELLayout ACCELLayout;
 struct ACCELLayout
 {
-    FieldLayout x;
-    FieldLayout y;
-    FieldLayout z;
-    FieldLayout m;
+    PrimLayout x;
+    PrimLayout y;
+    PrimLayout z;
+    PrimLayout m;
 };
 typedef struct GRSENSLayout GRSENSLayout;
 struct GRSENSLayout
 {
-    FieldLayout hoard;
-    FieldLayout pqty;
-    FieldLayout flow;
+    PrimLayout hoard;
+    PrimLayout pqty;
+    PrimLayout flow;
 };
 
 typedef struct CBOX_STRLayout CBOX_STRLayout;
 struct CBOX_STRLayout
 {
-    FieldLayout cmd;
-    FieldLayout m;
+    PrimLayout cmd;
+    PrimLayout m;
     GRSENSLayout h;
     ACCELLayout a;
-    FieldLayout hum;
+    PrimLayout hum;
 };
 
 typedef struct GeoLayout GeoLayout;
 struct GeoLayout
 {
-    FieldLayout utc;
-    FieldLayout status;
-    FieldLayout latitude;
-    FieldLayout latInd;
-    FieldLayout longitude;
-    FieldLayout longInd;
-    FieldLayout speed;
-    FieldLayout course;
-    FieldLayout date;
+    PrimLayout utc;
+    PrimLayout status;
+    PrimLayout latitude;
+    PrimLayout latInd;
+    PrimLayout longitude;
+    PrimLayout longInd;
+    PrimLayout speed;
+    PrimLayout course;
+    PrimLayout date;
 };
 
 typedef struct GStatusTypeLayout GStatusTypeLayout;
@@ -90,14 +91,14 @@ struct GStatusTypeLayout
     GeoLayout position;
     CBOX_STRLayout devData;
     IOStatusLayout ioStatus;
-    FieldLayout batChrStatus;
+    PrimLayout batChrStatus;
 };
 
 typedef struct GStatusLayout GStatusLayout;
 struct GStatusLayout
 {
     GStatusTypeLayout data;
-    FieldLayout checksum;
+    PrimLayout checksum;
 };
 
 /* ---------------------------- Global variables --------------------------- */
@@ -143,6 +144,22 @@ static GStatusLayout layout =
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static uint32_t
+toh(uint32_t value, ByteOrder from) /* From LE or BE to host order */
+{
+    uint32_t val;
+
+    if (from == BigEndian)
+    {
+        val = be32toh(value);
+    }
+    else
+    {
+        val = le32toh(value);
+    }
+    return val;
+}
+
 /* ---------------------------- Global functions --------------------------- */
 int
 FrameConv_STM32ToX86(GStatus *to, uint8_t from[], size_t size)
@@ -201,14 +218,21 @@ FrameConv_STM32ToX86(GStatus *to, uint8_t from[], size_t size)
 }
 
 int 
-FrameConv_GStatusToFrame(uint8_t *to, GStatus *from)
+FrameConv_GStatusToFrame(uint8_t *to, GStatus *from, size_t *size)
 {
-#if 0
-    uint32_t val = 0xdeadbeef;
+    int result = 0;
 
-    printf("val (0x%x) -> 0x%x(le) and 0x%x(be)\n", val, le32toh(val), htobe32(val));
-#endif
-    return 1;
+    if ((to != (uint8_t *)0) && (from != (GStatus *)0) && 
+        (size != (size_t *)0))
+    {
+        *size = YFrame_header(&from->data, to, 0, YFRAME_SGP_TYPE);
+        *size += YFrame_data(&from->data, to + *size, YFRAME_SGP_TYPE);
+    }
+    else
+    {
+        result = 1;
+    }
+    return result;
 }
 
 /* ------------------------------ End of file ------------------------------ */
