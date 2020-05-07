@@ -27,6 +27,9 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static char finName[96], foutName[96];
+static uint8_t buf[128], frame[128];
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void
@@ -49,10 +52,14 @@ int
 main(int argc, char *argv[])
 {
     char *ivalue = (char *)0;
-    int index;
-    int c;
+    int index, c, result, res;
+    FILE *fin, *fout;
+    size_t finSize, foutSize, nElem, frameSize;
+    GStatus status;
+    int nRead;
 
     opterr = 0;
+    result = 0;
     while ((c = getopt (argc, argv, "i:")) != -1)
     {
         switch (c)
@@ -69,20 +76,72 @@ main(int argc, char *argv[])
     if (optind == 1)
     {
         usage(argv);
-        exit(EXIT_FAILURE);
+        result = 1;
     }
     else
     {
-        printf("ivalue=%s; optind=%d\n", ivalue, optind);
-        printf("name argument = %s\n", argv[optind]);
-        /* Open backup file as r */
-        /* Open converted file as w+ */
-        /* read GStatus bytes according to STM32 and convert it to GStatus */
-        /* store converted data into ivalue+.str file */
-        /* print imei, number of converted registers */
-        /* close both files */
+        strcpy(finName, argv[optind]);
+        fin = fopen(finName, "r");
+        if (fin != (FILE *)0)
+        {
+            fseek(fin, 0, SEEK_END);
+            finSize = ftell(fin);
+            rewind(fin);
+
+            sprintf(foutName, "%s.str", finName);
+            fout = fopen(foutName, "w+");
+            if (fout != (FILE *)0)
+            {
+                nRead = 0;
+                while (feof(fin) == 0)
+                {
+                    nElem = fread(buf, SIZEOF_GSTATUS_STM32, 1, fin);
+                    if (nElem == 1)
+                    {
+                        ++nRead;
+                        res = FrameConv_STM32ToX86(&status, 
+                                                   buf, 
+                                                   SIZEOF_GSTATUS_STM32);
+                        if (res == 1)
+                        {
+                            result = 1;
+                            break;
+                        }
+                        else
+                        {
+                            res = FrameConv_GStatusToFrame(frame, &status, 
+                                                           &frameSize);
+                            if (res == 0)
+                            {
+                                frame[frameSize] = '\n';
+                                fwrite(frame, frameSize + 1, 1, fout);
+                            }
+                        }
+                    }
+                }
+                printf("Read file %s of %d [bytes], which is equivalent to ", 
+                       finName, finSize);
+                printf("%d [registers]\n", finSize/SIZEOF_GSTATUS_STM32);
+                printf("Process %d registers from %s ", nRead, finName);
+                printf("into %s\n", foutName);
+                fclose(fout);
+            }
+            else
+            {
+                fprintf(stderr, "Cannot open file %s\n", foutName);
+                result = 1;
+            }
+            /* store converted data into ivalue+.str file */
+            /* print imei, number of converted registers */
+            fclose(fin);
+        }
+        else
+        {
+            fprintf(stderr, "Cannot open file %s\n", finName);
+            result = 1;
+        }
     }
-    exit(EXIT_SUCCESS);
+    return result;
 }
 
 /* ------------------------------ End of file ------------------------------ */
