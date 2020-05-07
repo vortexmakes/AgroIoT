@@ -93,10 +93,10 @@ rmc_timeUpdate(Rmc *p)
     return 0;
 }
 
-Time *
-rmc_timeGet(void)
+void
+rmc_timeGet(Time *p)
 {
-    return &rmcTime;
+    *p = rmcTime;
 }
 
 /* ------------------------------ End of file ------------------------------ */

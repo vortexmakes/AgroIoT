@@ -23,7 +23,7 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static Time t;
+static Time time;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -36,7 +36,8 @@ rtime_init(void)
 Time *
 rtime_get(void)
 {
-    return rmc_timeGet();
+    rmc_timeGet(&time);
+    return &time;
 }
 
 void
