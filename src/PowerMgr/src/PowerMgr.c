@@ -16,6 +16,7 @@
 #include "rkh.h"
 #include "signals.h"
 #include "PowerMgr.h"
+#include "Backup.h"
 #include "bsp.h"
 #include "PowerMgrRequired.h"
 
@@ -126,6 +127,7 @@ ReadyToPowerMgrFinalExt1(PowerMgr *const me, RKH_EVT_T *pe)
 {
 	storeStatus(me);
 	ffile_sync();
+    Backup_sync();
 	RKH_TRC_FLUSH();
 	trace_msd_close();
 	BatChr_shutDown();
