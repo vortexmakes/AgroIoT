@@ -19,6 +19,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <unistd.h>
 #include "FrameConv.h"
 
@@ -26,6 +27,8 @@
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+extern char imei[16];
+
 /* ---------------------------- Local variables ---------------------------- */
 static char finName[96], foutName[96];
 static uint8_t buf[128], frame[128];
@@ -44,7 +47,7 @@ usage(char *argv[])
     fprintf(stderr, "using the '355826018345180' IMEI.\n");
     fprintf(stderr, "\tThe generated file will be named as the input ");
     fprintf(stderr, "file name plus '.str' suffix\n");
-    fprintf(stderr, "\t$ frameconv 00000.frm -i 355826018345180\n");
+    fprintf(stderr, "\t$ frameconv -i 355826018345180 00000.frm\n");
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -93,6 +96,7 @@ main(int argc, char *argv[])
             if (fout != (FILE *)0)
             {
                 nRead = 0;
+                strcpy(imei, ivalue);
                 while (feof(fin) == 0)
                 {
                     nElem = fread(buf, SIZEOF_GSTATUS_STM32, 1, fin);
@@ -122,17 +126,18 @@ main(int argc, char *argv[])
                 printf("Read file %s of %d [bytes], which is equivalent to ", 
                        finName, finSize);
                 printf("%d [registers]\n", finSize/SIZEOF_GSTATUS_STM32);
-                printf("Process %d registers from %s ", nRead, finName);
-                printf("into %s\n", foutName);
+                printf("Processed %d registers from %s ", nRead, finName);
+                printf("and stored them into %s\n", foutName);
                 fclose(fout);
             }
             else
             {
                 fprintf(stderr, "Cannot open file %s\n", foutName);
+                fprintf(stderr, "%s\n", strerror(errno));
+                fprintf(stderr, "Please make sure you have the correct ");
+                fprintf(stderr, "access rights\n");
                 result = 1;
             }
-            /* store converted data into ivalue+.str file */
-            /* print imei, number of converted registers */
             fclose(fin);
         }
         else
