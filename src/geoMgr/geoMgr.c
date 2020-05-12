@@ -155,7 +155,7 @@ static const unsigned char vtgOff[] = UBX_VTG_OFF;
 static const unsigned char gsvOff[] = UBX_GSV_OFF;
 static const unsigned char gllOff[] = UBX_GLL_OFF;
 static const unsigned char ggaOff[] = UBX_GGA_OFF;
-static const unsigned char rmc2Hz[] = UBX_RMC_2HZ;
+static const unsigned char rmcHz[] = UBX_RMC_1HZ;
 
 static UBXCmd_t InitCmds[] =
 {
@@ -164,7 +164,7 @@ static UBXCmd_t InitCmds[] =
     {gsvOff, sizeof(gsvOff)},
     {gllOff, sizeof(gllOff)},
     {ggaOff, sizeof(ggaOff)},
-/*    { rmc2Hz, sizeof(rmc2Hz) }, */
+    {rmcHz, sizeof(rmcHz) },
     {NULL, 0}
 };
 
