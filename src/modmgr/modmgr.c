@@ -250,9 +250,11 @@ setupResponse(ModMgr *const me)
     RKH_TMR_ONESHOT(&me->timer, RKH_UPCAST(RKH_SMA_T, me),
                     me->pCmd->args.waitResponseTime);
 
+#if RKH_CFG_TRC_EN == RKH_ENABLED
     RKH_TRC_USR_BEGIN(MODCMD_USR_TRACE)
     RKH_TUSR_STR(me->pCmd->cmd);
     RKH_TRC_USR_END();
+#endif
 }
 
 /* ............................. Exit actions .............................. */
