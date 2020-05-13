@@ -172,10 +172,6 @@ Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
 {
     GStatusEvt *evt;
 
-    if (me->dev != (Device *)0)
-    {
-        device_updateRaw(me->dev);
-    }
     evt = RKH_ALLOC_EVT(GStatusEvt, evGStatus, me);
     evt->status = me->status.data;
     topic_publish(Status,
@@ -210,6 +206,7 @@ Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe)
     me->dev = evtDevData->dev; /* obtain device's instance */
 
     device_update(me->dev, RKH_UPCAST(RKH_EVT_T, evtDevData));
+    device_updateRaw(me->dev);
     result = device_test(me->dev);
     propagateMappingEvent(me, result);
 }

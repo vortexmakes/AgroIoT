@@ -211,10 +211,7 @@ void
 test_PublishCurrStatusWithDevConnected(void)
 {
     GStatusEvt event;
-    Device device;
 
-    me->dev = &device;
-    device_updateRaw_Expect(me->dev);
     rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
     topic_publish_Expect(Status,
@@ -290,6 +287,7 @@ test_UpdateDevDataAndJobCondTrue(void)
 
     event.base.dev = &device;
     device_update_Expect(event.base.dev, RKH_UPCAST(RKH_EVT_T, &event));
+    device_updateRaw_Expect(event.base.dev);
     device_test_ExpectAndReturn(event.base.dev, 1);
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();
@@ -306,6 +304,7 @@ test_UpdateDevDataAndJobCondFalse(void)
 
     event.base.dev = &device;
     device_update_Expect(event.base.dev, RKH_UPCAST(RKH_EVT_T, &event));
+    device_updateRaw_Expect(event.base.dev);
     device_test_ExpectAndReturn(event.base.dev, 0);
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();
