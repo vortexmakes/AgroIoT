@@ -108,6 +108,15 @@ setMappingStatus(Mapping *const me, int status)
     }
 }
 
+static void
+storeStatus(Mapping *const me)
+{
+    GStatus_setChecksum(&me->itsCollector->status);
+    StatQue_put(&me->itsCollector->status);
+    Backup_store(&me->itsCollector->status);
+    ++me->nStoreLastSync;
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 Collector_ctor(void)
@@ -205,8 +214,12 @@ Collector_updateAndTestDevData(Collector *const me, RKH_EVT_T *pe)
     RKH_REQUIRE(evtDevData->dev != (Device *)0);
     me->dev = evtDevData->dev; /* obtain device's instance */
 
-    device_update(me->dev, RKH_UPCAST(RKH_EVT_T, evtDevData));
+    result = device_update(me->dev, RKH_UPCAST(RKH_EVT_T, evtDevData));
     device_updateRaw(me->dev);
+    if (result == true)
+    {
+        storeStatus(&me->itsMapping);
+    }
     result = device_test(me->dev);
     propagateMappingEvent(me, result);
 }
@@ -235,10 +248,7 @@ Collector_deinitBackup(Collector *const me, RKH_EVT_T *pe)
 void
 Mapping_storeStatus(Mapping *const me, RKH_EVT_T *pe)
 {
-    GStatus_setChecksum(&me->itsCollector->status);
-    StatQue_put(&me->itsCollector->status);
-    Backup_store(&me->itsCollector->status);
-    ++me->nStoreLastSync;
+    storeStatus(me);
 }
 
 void

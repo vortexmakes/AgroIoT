@@ -63,7 +63,7 @@ sprayer_makeEvt(Device *const me, CBOX_STR *rawData)
     return (RKH_EVT_T *)evt;
 }
 
-static void
+static bool
 sprayer_update(Device *const me, RKH_EVT_T *evt)
 {
     Sprayer *currDev;
@@ -78,6 +78,7 @@ sprayer_update(Device *const me, RKH_EVT_T *evt)
     currDev = (Sprayer *)(collector->dev);
     currDev->nSection = realEvt->nSection;
     currDev->dose = realEvt->dose;
+    return false;
 }
 
 static void

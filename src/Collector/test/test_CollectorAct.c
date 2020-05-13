@@ -286,7 +286,8 @@ test_UpdateDevDataAndJobCondTrue(void)
     Device device;
 
     event.base.dev = &device;
-    device_update_Expect(event.base.dev, RKH_UPCAST(RKH_EVT_T, &event));
+    device_update_ExpectAndReturn(event.base.dev, 
+                                  RKH_UPCAST(RKH_EVT_T, &event), false);
     device_updateRaw_Expect(event.base.dev);
     device_test_ExpectAndReturn(event.base.dev, 1);
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
@@ -303,8 +304,31 @@ test_UpdateDevDataAndJobCondFalse(void)
     Device device;
 
     event.base.dev = &device;
-    device_update_Expect(event.base.dev, RKH_UPCAST(RKH_EVT_T, &event));
+    device_update_ExpectAndReturn(event.base.dev, 
+                                  RKH_UPCAST(RKH_EVT_T, &event), false);
     device_updateRaw_Expect(event.base.dev);
+    device_test_ExpectAndReturn(event.base.dev, 0);
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_updateAndTestDevData(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL(event.base.dev, me->dev);
+}
+
+void
+test_UpdateDevDataAndStoreStatus(void)
+{
+    EvtDevAData event;
+    Device device;
+
+    event.base.dev = &device;
+    device_update_ExpectAndReturn(event.base.dev, 
+                                  RKH_UPCAST(RKH_EVT_T, &event), true);
+    device_updateRaw_Expect(event.base.dev);
+    GStatus_setChecksum_Expect(&me->status);
+    StatQue_put_ExpectAndReturn(0, 0);
+    StatQue_put_IgnoreArg_elem();
+    Backup_store_ExpectAndReturn(&me->status, Backup_Ok);
     device_test_ExpectAndReturn(event.base.dev, 0);
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();

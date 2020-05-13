@@ -51,12 +51,12 @@ device_makeEvt(Device *const me, CBOX_STR *rawData)
     return (*me->vptr->makeEvt)(me, rawData);
 }
 
-void
+bool
 device_update(Device *const me, RKH_EVT_T *evt)
 {
     RKH_REQUIRE((me != (Device *)0) && (evt != (RKH_EVT_T *)0) &&
                 (me->vptr->makeEvt != (MakeEvtOper)0));
-    (*me->vptr->update)(me, evt);
+    return (*me->vptr->update)(me, evt);
 }
 
 int

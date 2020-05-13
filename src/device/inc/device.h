@@ -49,7 +49,7 @@ typedef int (*TestOper)(Device *const me);
 typedef RKH_EVT_T *(*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
 
 /** Collector updates device's data from received event */
-typedef void (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
+typedef bool (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
 
 /** Collector transforms device's data to CBOX_STR class */
 typedef void (*UpdateRawOper)(Device *const me);
@@ -87,7 +87,7 @@ struct EvtDevData
 void device_ctor(Device *const me, int id, RKH_SMA_T *collector,
                  JobCond *jobCond, DevVtbl *vtbl);
 RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
-void device_update(Device *const me, RKH_EVT_T *evt);
+bool device_update(Device *const me, RKH_EVT_T *evt);
 int device_test(Device *const me);
 void device_updateRaw(Device *const me);
 
