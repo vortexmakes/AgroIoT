@@ -29,6 +29,8 @@
   :source:
     - src
     - ../Crc32/src/Crc32_sw.c
+    - ../YFrame/src
+    - ../tpsens/cbox/cbox.c
   :include:
     - inc
     - ../../third-party/rkh/source/portable/test
@@ -42,8 +44,12 @@
     - ../gps/inc
     - ../BatChr
     - ../GsmMgr
-    - ../epoch
+    - ../epoch/inc
     - ../Crc32/inc
+    - ../GStatus/inc
+    - ../YFrame/inc
+    - ../GsmMgr/inc
+    - ../gps/inc
     - ../
   :support:
     - test/support

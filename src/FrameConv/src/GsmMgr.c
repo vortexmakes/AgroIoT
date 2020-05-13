@@ -1,11 +1,11 @@
 /**
- *  \file       GStatus.c
- *  \brief      Implements general status module
+ *  \file       GsmMgr.c
+ *  \brief      Trivial stub for frame converter program
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.08.02  LeFr  v1.0.00  Initial version
+ *  2020.07.05  LeFr  v1.0.00  ---
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -15,46 +15,20 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "GStatus.h"
-
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+char imei[16] = "355826018345180";
+
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-void 
-GStatus_setChecksum(GStatus *const me)
+char *
+GsmMgr_getImei(void)
 {
-    if (me != (GStatus *)0)
-    {
-        Crc32_init();
-        me->checksum = Crc32_calc((const uint8_t *)&me->data, 
-                                  sizeof(GStatusType), 
-                                  0xffffffff);
-    }
-}
-
-bool 
-GStatus_checkValidity(GStatus *const me)
-{
-    Crc32 checksum;
-    bool result = 0;
-
-    if (me != (GStatus *)0)
-    {
-        Crc32_init();
-        checksum = Crc32_calc((const uint8_t *)&me->data, 
-                              sizeof(GStatusType), 
-                              0xffffffff);
-        if (checksum == me->checksum)
-        {
-            result = true;
-        }
-    }
-    return result;
+    return imei;
 }
 
 /* ------------------------------ End of file ------------------------------ */

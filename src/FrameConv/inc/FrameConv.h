@@ -1,11 +1,11 @@
 /**
- *  \file       GStatus.h
- *  \brief      Specifies the interface of GStatus module.
+ *  \file       FrameConv.h
+ *  \brief      Specifies the interface of FramConv module.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2019.25.01  LeFr  v1.0.00  Initial version
+ *  2020.06.05  LeFr  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -15,15 +15,11 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __GSTATUS_H__
-#define __GSTATUS_H__
+#ifndef __FRAMECONV_H__
+#define __FRAMECONV_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "Geo.h"
-#include "cbox.h"
-#include "IOStatus.h"
-#include "BatChr.h"
-#include "Crc32.h"
+#include "GStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -32,30 +28,14 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define INOUT_LENGTH    4
-#define ACCELBR_LENGHT  4
+#define SIZEOF_GSTATUS_STM32    (80 + 4)    /* offsetof(checksum) + */
+                                            /* sizeof(checksum) */
 
 /* ------------------------------- Data types ------------------------------ */
-typedef struct GStatusType GStatusType;
-struct GStatusType
-{
-    Geo position;
-    CBOX_STR devData;
-    IOStatus ioStatus;
-    BatChrStatus batChrStatus;
-};
-
-typedef struct GStatus GStatus;
-struct GStatus
-{
-    GStatusType data;
-    Crc32 checksum;
-};
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void GStatus_setChecksum(GStatus *const me);
-bool GStatus_checkValidity(GStatus *const me);
+int FrameConv_STM32ToX86(GStatus *to, uint8_t from[], size_t size);
+int FrameConv_GStatusToFrame(uint8_t *to, GStatus *from, size_t *size);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
