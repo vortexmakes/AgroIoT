@@ -68,11 +68,14 @@ sprayer_update(Device *const me, RKH_EVT_T *evt)
 {
     Sprayer *currDev;
     EvtSprayerData *realEvt;
+    Collector *collector;
 
     realEvt = (EvtSprayerData *)evt;
+    collector = (Collector *)(me->collector);
 
-    ((Collector *)(me->collector))->dev = realEvt->base.dev;
-    currDev = (Sprayer *)(((Collector *)(me->collector))->dev);
+    collector->dev = realEvt->base.dev;
+    collector->status.data.devData.a.x = collector->dev->id;
+    currDev = (Sprayer *)(collector->dev);
     currDev->nSection = realEvt->nSection;
     currDev->dose = realEvt->dose;
 }
@@ -80,10 +83,10 @@ sprayer_update(Device *const me, RKH_EVT_T *evt)
 static void
 sprayer_updateRaw(Device *const me)
 {
-    ((Collector *)(me->collector))->status.data.devData.hum =
-        ((Sprayer *)me)->nSection;
-    ((Collector *)(me->collector))->status.data.devData.h.pqty =
-        ((Sprayer *)me)->dose;
+    CBOX_STR *rawData = &((Collector *)(me->collector))->status.data.devData;
+
+    rawData->hum = ((Sprayer *)me)->nSection;
+    rawData->h.pqty = ((Sprayer *)me)->dose;
 }
 
 static DevVtbl vtbl = {sprayer_test,

@@ -158,6 +158,7 @@ test_UpdateRawOperation(void)
 
     TEST_ASSERT_EQUAL(nSectionExpect, me->status.data.devData.hum);
     TEST_ASSERT_EQUAL(doseExpect, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(SPRAYER, me->status.data.devData.a.x);
 }
 
 void
