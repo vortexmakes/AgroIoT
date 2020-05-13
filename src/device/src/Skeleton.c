@@ -19,8 +19,8 @@
 typedef struct SkeletonJobCond SkeletonJobCond;
 struct SkeletonJobCond
 {
-    JobCond base;
-    int x;
+    JobCond base;   /* Base class */
+    int x;          /* Attribute used to check job condition */
 };
 
 /* ---------------------------- Global variables --------------------------- */
@@ -85,7 +85,7 @@ static DevVtbl vtbl = {Skeleton_test,
 
 /* ---------------------------- Global functions --------------------------- */
 Device *
-Skeleton_ctor(int doseMax)
+Skeleton_ctor(int xMax)
 {
     SkeletonJobCond *jc;
     Skeleton *me = &skeleton;
@@ -94,7 +94,7 @@ Skeleton_ctor(int doseMax)
                 (JobCond *)&skeletonJobCond, &vtbl);
     me->x = 0; /* atttibute default initialization */
     jc = (SkeletonJobCond *)(me->base.jobCond); /* it's not quite safe */
-    jc->xMax = xMax; /* initializes job condition */
+    jc->xMax = xMax; /* initializes job condition parameter */
     return (Device *)me;
 }
 

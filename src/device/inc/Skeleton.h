@@ -25,15 +25,15 @@ extern "C" {
 typedef struct Skeleton Skeleton;
 struct Skeleton
 {
-    Device base;
-    int x;
+    Device base;        /* Base class */
+    int x;              /* Device's attribute */
 };
 
 typedef struct EvtSkeletonData EvtSkeletonData;
 struct EvtSkeletonData
 {
-    EvtDevData base;
-    int x;       /* Device's attributes */
+    EvtDevData base;    /* Base class */
+    int x;              /* Device's attributes */
 };
 
 /* -------------------------- External variables --------------------------- */
