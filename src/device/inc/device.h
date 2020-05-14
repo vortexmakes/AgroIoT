@@ -48,7 +48,14 @@ typedef int (*TestOper)(Device *const me);
 /** DeviceServer makes an event from the device response */
 typedef RKH_EVT_T *(*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
 
-/** Collector updates device's data from received event */
+/** 
+ *  \brief
+ *  Collector updates device's data from received event
+ *
+ *  \return
+ *  If the device wants Collector stores the updated system's status, 
+ *  the device will return true. Otherwise, it will return false.
+ */
 typedef bool (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
 
 /** Collector transforms device's data to CBOX_STR class */

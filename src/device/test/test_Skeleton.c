@@ -1,23 +1,15 @@
 /**
- *  \file       test_sampler.c
- *  \brief      Unit test for Sampler concrete device..
+ *  \file       test_Skeleton.c
+ *  \brief      Unit test for Skeleton concrete device..
  */
 
 /* -------------------------- Development history -------------------------- */
-/*
- *  2018.17.10  LeFr  v1.0.00  ---
- */
-
 /* -------------------------------- Authors -------------------------------- */
-/*
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
- */
-
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
-#include "Sampler.h"
-#include "SamplerSpy.h"
+#include "Skeleton.h"
+#include "SkeletonSpy.h"
 #include "Mock_rkhassert.h"
 #include "Mock_device.h"
 #include "Mock_Collector.h"
@@ -41,8 +33,8 @@ Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
                           int cmock_num_calls)
 {
     me->id = id;
-    me->jobCond = SamplerSpy_getJobCondObj();
-    me->vptr = SamplerSpy_getVtbl();
+    me->jobCond = SkeletonSpy_getJobCondObj();
+    me->vptr = SkeletonSpy_getVtbl();
     me->collector = collector;
 }
 
@@ -68,8 +60,8 @@ test_InitAttributes(void)
 {
     Device *dev;
 
-    device_ctor_Expect(SamplerSpy_getObj(),
-                       SAMPLER,
+    device_ctor_Expect(SkeletonSpy_getObj(),
+                       SKELETON,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -77,11 +69,9 @@ test_InitAttributes(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Sampler_ctor();
+    dev = Skeleton_ctor();
 
-    TEST_ASSERT_EQUAL(0, SamplerSpy_getHarness());
-    TEST_ASSERT_EQUAL(0, SamplerSpy_getDeep());
-    TEST_ASSERT_EQUAL(false, SamplerSpy_getIsValid());
+    TEST_ASSERT_EQUAL(0, SkeletonSpy_getX());
     TEST_ASSERT_NOT_NULL(dev->jobCond);
     TEST_ASSERT_NOT_NULL(dev->vptr);
 }
@@ -91,14 +81,12 @@ test_MakeEventOperation(void)
 {
     Device *dev;
     RKH_EVT_T *evt;
-    int harnessExpect = 2;
-    int deepExpect = 4;
-    bool isValidExpect = true;
-    EvtSamplerData evtObj;
+    int xExpect = 2;
+    EvtSkeletonData evtObj;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(SamplerSpy_getObj(),
+    device_ctor_Expect(SkeletonSpy_getObj(),
                        SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
@@ -106,13 +94,11 @@ test_MakeEventOperation(void)
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.data.devData.a.y = harnessExpect;
-    me->status.data.devData.a.z = deepExpect;
-    me->status.data.devData.a.m = isValidExpect;
+    me->status.data.devData.a.y = xExpect;
 
-    dev = Sampler_ctor();
+    dev = Skeleton_ctor();
 
-    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSamplerData),
+    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSkeletonData),
                                (RKH_SIG_T)evDevData,
                                0,
                                (RKH_EVT_T *)&evtObj);
@@ -123,23 +109,19 @@ test_MakeEventOperation(void)
     evt = (*dev->vptr->makeEvt)(dev, &me->status.data.devData);
 
     TEST_ASSERT_NOT_NULL(evt);
-    TEST_ASSERT_EQUAL(dev, ((EvtSamplerData *)evt)->base.dev);
-    TEST_ASSERT_EQUAL(harnessExpect, ((EvtSamplerData *)evt)->harness);
-    TEST_ASSERT_EQUAL(deepExpect, ((EvtSamplerData *)evt)->deep);
-    TEST_ASSERT_EQUAL(isValidExpect, ((EvtSamplerData *)evt)->isValid);
+    TEST_ASSERT_EQUAL(dev, ((EvtSkeletonData *)evt)->base.dev);
+    TEST_ASSERT_EQUAL(xExpect, ((EvtSkeletonData *)evt)->x);
 }
 
 void
 test_UpdateRawOperation(void)
 {
     Device *dev;
-    int harnessExpect = 2;
-    int deepExpect = 4;
-    bool isValidExpect = true;
+    int xExpect = 2;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(SamplerSpy_getObj(),
+    device_ctor_Expect(SkeletonSpy_getObj(),
                        SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
@@ -148,41 +130,33 @@ test_UpdateRawOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
     me->status.data.devData.a.y = 2;
-    me->status.data.devData.a.z = 4;
-    me->status.data.devData.a.m = true;
 
-    dev = Sampler_ctor();
+    dev = Skeleton_ctor();
 
     me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->updateRaw);
     TEST_ASSERT_NOT_NULL(dev->collector);
-    ((Sampler *)dev)->harness = harnessExpect;
-    ((Sampler *)dev)->deep = deepExpect;
-    ((Sampler *)dev)->isValid = isValidExpect;
+    ((Skeleton *)dev)->x = xExpect;
 
     (*dev->vptr->updateRaw)(dev);
 
-    TEST_ASSERT_EQUAL(harnessExpect, me->status.data.devData.a.y);
-    TEST_ASSERT_EQUAL(deepExpect, me->status.data.devData.a.z);
-    TEST_ASSERT_EQUAL(isValidExpect, me->status.data.devData.a.m);
-    TEST_ASSERT_EQUAL(SAMPLER, me->status.data.devData.a.x);
+    TEST_ASSERT_EQUAL(xExpect, me->status.data.devData.a.y);
+    TEST_ASSERT_EQUAL(SKELETON, me->status.data.devData.a.x);
 }
 
 void
 test_UpdateOperation(void)
 {
     Device *dev;
-    int harnessExpect = 2;
-    int deepExpect = 4;
-    bool isValidExpect = true;
-    EvtSamplerData evtSamplerData;
+    int xExpect = 2;
+    EvtSkeletonData evtSkeletonData;
     RKH_EVT_T *evt;
-    Sampler *sampler;
+    Skeleton *Skeleton;
     Collector *me;
     bool result;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(SamplerSpy_getObj(),
+    device_ctor_Expect(SkeletonSpy_getObj(),
                        SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
@@ -191,31 +165,18 @@ test_UpdateOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Sampler_ctor();
+    dev = Skeleton_ctor();
 
-    evtSamplerData.base.dev = dev;
-    evtSamplerData.harness = harnessExpect;
-    evtSamplerData.deep = deepExpect;
-    evtSamplerData.isValid = isValidExpect;
-    evt = (RKH_EVT_T *)&evtSamplerData;
+    evtSkeletonData.base.dev = dev;
+    evtSkeletonData.x = xExpect;
+    evt = (RKH_EVT_T *)&evtSkeletonData;
 
     result = (*dev->vptr->update)(dev, evt);
 
-    sampler = (Sampler *)me->dev;
+    Skeleton = (Skeleton *)me->dev;
     TEST_ASSERT_EQUAL(dev, me->dev);
-    TEST_ASSERT_EQUAL(harnessExpect, sampler->harness);
-    TEST_ASSERT_EQUAL(deepExpect, sampler->deep);
-    TEST_ASSERT_EQUAL(isValidExpect, sampler->isValid);
-    TEST_ASSERT_EQUAL(true, result);
-
-    /* Invalid received data */
-    isValidExpect = false;
-    evtSamplerData.isValid = isValidExpect;
-
-    result = (*dev->vptr->update)(dev, evt);
-
-    TEST_ASSERT_EQUAL(dev, me->dev);
-    TEST_ASSERT_EQUAL(isValidExpect, result);
+    TEST_ASSERT_EQUAL(xExpect, Skeleton->x);
+    TEST_ASSERT_EQUAL(false, result);
 }
 
 void
@@ -226,7 +187,7 @@ test_TestOperation(void)
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(SamplerSpy_getObj(),
+    device_ctor_Expect(SkeletonSpy_getObj(),
                        SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
@@ -235,7 +196,7 @@ test_TestOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Sampler_ctor();
+    dev = Skeleton_ctor();
 
     me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->test);
