@@ -1,6 +1,6 @@
 /**
- *  \file       test_Skeleton.c
- *  \brief      Unit test for Skeleton concrete device..
+ *  \file       test_Harvest.c
+ *  \brief      Unit test for Harvest concrete device..
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -8,8 +8,8 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
-#include "Skeleton.h"
-#include "SkeletonSpy.h"
+#include "Harvest.h"
+#include "HarvestSpy.h"
 #include "Mock_rkhassert.h"
 #include "Mock_device.h"
 #include "Mock_Collector.h"
@@ -33,8 +33,8 @@ Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
                           int cmock_num_calls)
 {
     me->id = id;
-    me->jobCond = SkeletonSpy_getJobCondObj();
-    me->vptr = SkeletonSpy_getVtbl();
+    me->jobCond = HarvestSpy_getJobCondObj();
+    me->vptr = HarvestSpy_getVtbl();
     me->collector = collector;
 }
 
@@ -60,8 +60,8 @@ test_InitAttributes(void)
 {
     Device *dev;
 
-    device_ctor_Expect(SkeletonSpy_getObj(),
-                       SKELETON,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -69,9 +69,11 @@ test_InitAttributes(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Skeleton_ctor();
+    dev = Harvest_ctor(0);
 
-    TEST_ASSERT_EQUAL(0, SkeletonSpy_getX());
+    TEST_ASSERT_EQUAL(0, HarvestSpy_getHoard());
+    TEST_ASSERT_EQUAL(0, HarvestSpy_getNPail());
+    TEST_ASSERT_EQUAL(0, HarvestSpy_getFlow());
     TEST_ASSERT_NOT_NULL(dev->jobCond);
     TEST_ASSERT_NOT_NULL(dev->vptr);
 }
@@ -81,24 +83,28 @@ test_MakeEventOperation(void)
 {
     Device *dev;
     RKH_EVT_T *evt;
-    int xExpect = 2;
-    EvtSkeletonData evtObj;
+    uint16_t hoardExpect = 2;
+    uint16_t nPailExpect = 4;
+    uint16_t flowExpect = 6;
+    EvtHarvestData evtObj;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(SkeletonSpy_getObj(),
-                       SKELETON,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.data.devData.a.y = xExpect;
+    me->status.data.devData.h.hoard = hoardExpect;
+    me->status.data.devData.h.pqty = nPailExpect;
+    me->status.data.devData.h.flow = flowExpect;
 
-    dev = Skeleton_ctor();
+    dev = Harvest_ctor(0);
 
-    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSkeletonData),
+    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtHarvestData),
                                (RKH_SIG_T)evDevData,
                                0,
                                (RKH_EVT_T *)&evtObj);
@@ -109,55 +115,66 @@ test_MakeEventOperation(void)
     evt = (*dev->vptr->makeEvt)(dev, &me->status.data.devData);
 
     TEST_ASSERT_NOT_NULL(evt);
-    TEST_ASSERT_EQUAL(dev, ((EvtSkeletonData *)evt)->base.dev);
-    TEST_ASSERT_EQUAL(xExpect, ((EvtSkeletonData *)evt)->x);
+    TEST_ASSERT_EQUAL(dev, ((EvtHarvestData *)evt)->base.dev);
+    TEST_ASSERT_EQUAL(hoardExpect, ((EvtHarvestData *)evt)->hoard);
+    TEST_ASSERT_EQUAL(nPailExpect, ((EvtHarvestData *)evt)->nPail);
+    TEST_ASSERT_EQUAL(flowExpect, ((EvtHarvestData *)evt)->flow);
 }
 
 void
 test_UpdateRawOperation(void)
 {
     Device *dev;
-    int xExpect = 2;
+    uint16_t hoardExpect = 2;
+    uint16_t nPailExpect = 4;
+    uint16_t flowExpect = 6;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(SkeletonSpy_getObj(),
-                       SKELETON,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.data.devData.a.y = 2;
+    me->status.data.devData.h.hoard = 2;
+    me->status.data.devData.h.pqty = 4;
+    me->status.data.devData.h.flow = 6;
 
-    dev = Skeleton_ctor();
+    dev = Harvest_ctor(0);
 
     me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->updateRaw);
     TEST_ASSERT_NOT_NULL(dev->collector);
-    ((Skeleton *)dev)->x = xExpect;
+    ((Harvest *)dev)->hoard = hoardExpect;
+    ((Harvest *)dev)->nPail = nPailExpect;
+    ((Harvest *)dev)->flow = flowExpect;
 
     (*dev->vptr->updateRaw)(dev);
 
-    TEST_ASSERT_EQUAL(xExpect, me->status.data.devData.a.y);
-    TEST_ASSERT_EQUAL(SKELETON, me->status.data.devData.a.x);
+    TEST_ASSERT_EQUAL(hoardExpect, me->status.data.devData.h.hoard);
+    TEST_ASSERT_EQUAL(nPailExpect, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(flowExpect, me->status.data.devData.h.flow);
 }
 
 void
 test_UpdateOperation(void)
 {
     Device *dev;
-    int xExpect = 2;
-    EvtSkeletonData evtSkeletonData;
+    uint16_t hoardExpect = 2;
+    uint16_t nPailExpect = 4;
+    uint16_t flowExpect = 6;
+    EvtHarvestData evtHarvestData;
     RKH_EVT_T *evt;
-    Skeleton *Skeleton;
+    Harvest *harvest;
     Collector *me;
     bool result;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(SkeletonSpy_getObj(),
-                       SKELETON,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -165,17 +182,21 @@ test_UpdateOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Skeleton_ctor();
+    dev = Harvest_ctor(0);
 
-    evtSkeletonData.base.dev = dev;
-    evtSkeletonData.x = xExpect;
-    evt = (RKH_EVT_T *)&evtSkeletonData;
+    evtHarvestData.base.dev = dev;
+    evtHarvestData.hoard = hoardExpect;
+    evtHarvestData.nPail = nPailExpect;
+    evtHarvestData.flow = flowExpect;
+    evt = (RKH_EVT_T *)&evtHarvestData;
 
     result = (*dev->vptr->update)(dev, evt);
 
-    Skeleton = (Skeleton *)me->dev;
+    harvest = (Harvest *)me->dev;
     TEST_ASSERT_EQUAL(dev, me->dev);
-    TEST_ASSERT_EQUAL(xExpect, Skeleton->x);
+    TEST_ASSERT_EQUAL(hoardExpect, harvest->hoard);
+    TEST_ASSERT_EQUAL(nPailExpect, harvest->nPail);
+    TEST_ASSERT_EQUAL(flowExpect, harvest->flow);
     TEST_ASSERT_EQUAL(false, result);
 }
 
@@ -187,8 +208,8 @@ test_TestOperation(void)
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(SkeletonSpy_getObj(),
-                       SKELETON,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -196,14 +217,20 @@ test_TestOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Skeleton_ctor();
+    dev = Harvest_ctor(0);
 
     me->dev = dev;
+    ((Harvest *)dev)->nPail = 0;
     TEST_ASSERT_NOT_NULL(dev->vptr->test);
     TEST_ASSERT_NOT_NULL(dev->collector);
 
     result = (*dev->vptr->test)(dev);
     TEST_ASSERT_EQUAL(false, result);
+
+    ((Harvest *)dev)->nPail = 1;
+
+    result = (*dev->vptr->test)(dev);
+    TEST_ASSERT_EQUAL(true, result);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -54,7 +54,7 @@ Skeleton_makeEvt(Device *const me, CBOX_STR *rawData)
     return (RKH_EVT_T *)evt;
 }
 
-static void
+static bool
 Skeleton_update(Device *const me, RKH_EVT_T *evt)
 {
     Skeleton *currDev;
@@ -68,6 +68,7 @@ Skeleton_update(Device *const me, RKH_EVT_T *evt)
     collector->status.data.devData.a.x = collector->dev->id;
     currDev = (Skeleton *)(collector->dev);
     currDev->x = realEvt->x;
+    return false;
 }
 
 static void
