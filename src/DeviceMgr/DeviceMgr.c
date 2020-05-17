@@ -98,7 +98,7 @@ static const PS_PLBUFF_T reqs[] =
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
-extern Device *sprayer;
+extern Device *sprayer, *sampler, *harvest;
 
 /* ---------------------------- Local variables ---------------------------- */
 static RKH_ROM_STATIC_EVENT(evEndOfCycleObj, evEndOfCycle);
@@ -119,13 +119,20 @@ getDevice(DevId devId)
 {
     Device *dev;
 
-    if (devId == SPRAYER)
+    switch (devId)
     {
-        dev = (Device *)sprayer;
-    }
-    else
-    {
-        dev = (Device *)0;
+        case SPRAYER:
+            dev = (Device *)sprayer;
+            break;
+        case SAMPLER:
+            dev = (Device *)sampler;
+            break;
+        case HARVEST:
+            dev = (Device *)harvest;
+            break;
+        default:
+            dev = (Device *)0;
+            break;
     }
     return dev;
 }
@@ -238,8 +245,11 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             cbox.hum = *p++;
 
             dev = getDevice(cbox.a.x);
-            evt = device_makeEvt(dev, &cbox);
-            topic_publish(Status, evt, deviceMgr);
+            if (dev != (Device *)0)
+            {
+                evt = device_makeEvt(dev, &cbox);
+                topic_publish(Status, evt, deviceMgr);
+            }
             break;
 
         case ADDR_CAUDALIMETRO:

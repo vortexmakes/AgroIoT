@@ -32,6 +32,8 @@
 #include "DeviceMgr.h"
 #include "UsbMgr.h"
 #include "sprayer.h"
+#include "Sampler.h"
+#include "Harvest.h"
 #include "sim5320parser.h"
 #include "ubxm8parser.h"
 #include "cbox.h"
@@ -82,7 +84,7 @@ static rui8_t evPool0Sto[SIZEOF_EP0STO],
               evPool2Sto[SIZEOF_EP2STO];
 
 static RKH_ROM_STATIC_EVENT(evOpenObj, evOpen);
-Device *sprayer;
+Device *sprayer, *sampler, *harvest;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -143,6 +145,8 @@ main(int argc, char *argv[])
 
     GsmMgr_ctor();
     sprayer = sprayer_ctor(0);
+    sampler = Sampler_ctor();
+    harvest = Harvest_ctor(0);
     Collector_ctor();
     signals_publishSymbols();
 
