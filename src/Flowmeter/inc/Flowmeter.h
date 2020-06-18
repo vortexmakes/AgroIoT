@@ -20,6 +20,7 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhtype.h"
+#include "rkhevt.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -28,9 +29,32 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
+typedef enum FlowDir FlowDir;
+enum FlowDir
+{
+    Forward, Reverse
+};
+
 /* ------------------------------- Data types ------------------------------ */
+typedef struct FlowData FlowData;
+struct FlowData
+{
+    uint8_t nPulses;
+    FlowDir dir;
+};
+
+typedef struct Flowmeter Flowmeter;
+struct Flowmeter
+{
+    FlowData flow1;
+    FlowData flow2;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void Flowmeter_update(Flowmeter *flowmeter, RKH_EVT_T *event);
+void Flowmeter_updateRaw(Flowmeter *flowmeter);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

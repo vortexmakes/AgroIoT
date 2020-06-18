@@ -34,6 +34,7 @@
 #include "geoMgr.h"
 #include "Trace.h"
 #include "Backup.h"
+#include "Flowmeter.h"
 
 RKH_MODULE_NAME(CollectorAct)
 
@@ -243,6 +244,13 @@ void
 Collector_deinitBackup(Collector *const me, RKH_EVT_T *pe)
 {
     Backup_deinit(&me->backupInfo);
+}
+
+void
+Collector_updateFlowmeter(Collector *const me, RKH_EVT_T *pe)
+{
+    Flowmeter_update(&me->flowmeter, pe);
+    Flowmeter_updateRaw(&me->flowmeter);
 }
 
 void
