@@ -255,12 +255,11 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             break;
 
         case ADDR_CAUDALIMETRO:
-            /* Get payload and fill flowmeter's data from it */
-            /* ... */
-            flow1.nPulses = 0;      /* <--- */
-            flow1.dir = Forward;    /* <--- */
-            flow2.nPulses = 0;      /* <--- */
-            flow2.dir = Reverse;    /* <--- */
+            p = (uchar *)pb->payload;
+            flow1.nPulses = *p++;
+            flow1.dir = *p++;
+            flow2.nPulses = *p++;
+            flow2.dir = *p++;
             evt = Flowmeter_makeEvt(&flow1, &flow2);
             topic_publish(Status, evt, deviceMgr);
             break;
