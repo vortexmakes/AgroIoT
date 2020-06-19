@@ -36,6 +36,7 @@
 #include "Mock_geoMgr.h"
 #include "Mock_Trace.h"
 #include "Mock_Backup.h"
+#include "Mock_Flowmeter.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -139,6 +140,7 @@ test_Init(void)
     rkh_trc_symFil_Ignore();
     topic_subscribe_Expect(Status, RKH_UPCAST(RKH_SMA_T, me));
     rkh_sm_init_Expect(RKH_UPCAST(RKH_SM_T, &me->itsMapping));
+    Flowmeter_init_Expect(&me->flowmeter);
 
     Collector_init(me, evt);
 }
@@ -469,6 +471,21 @@ test_deinitBackup(void)
 {
     Backup_deinit_ExpectAndReturn(&me->backupInfo, 0);
     Collector_deinitBackup(me, RKH_UPCAST(RKH_EVT_T, evt));
+}
+
+void
+test_UpdateFlowmeterData(void)
+{
+    FlowmeterEvt event;
+
+    event.flow1.nPulses = 32;
+    event.flow1.dir = Forward;
+    event.flow2.nPulses = 64;
+    event.flow2.dir = Reverse;
+    Flowmeter_update_Expect(&me->flowmeter, RKH_UPCAST(RKH_EVT_T, &event));
+    Flowmeter_updateRaw_Expect(&me->flowmeter, &me->status.data.devData);
+
+    Collector_updateFlowmeter(me, RKH_UPCAST(RKH_EVT_T, &event));
 }
 
 /* ------------------------------ End of file ------------------------------ */

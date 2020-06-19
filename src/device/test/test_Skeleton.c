@@ -69,7 +69,7 @@ test_InitAttributes(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Skeleton_ctor();
+    dev = Skeleton_ctor(4);
 
     TEST_ASSERT_EQUAL(0, SkeletonSpy_getX());
     TEST_ASSERT_NOT_NULL(dev->jobCond);
@@ -94,9 +94,9 @@ test_MakeEventOperation(void)
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.data.devData.a.y = xExpect;
+    me->status.data.devData.hum = xExpect;
 
-    dev = Skeleton_ctor();
+    dev = Skeleton_ctor(0);
 
     rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSkeletonData),
                                (RKH_SIG_T)evDevData,
@@ -131,7 +131,7 @@ test_UpdateRawOperation(void)
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
     me->status.data.devData.a.y = 2;
 
-    dev = Skeleton_ctor();
+    dev = Skeleton_ctor(4);
 
     me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->updateRaw);
@@ -140,8 +140,7 @@ test_UpdateRawOperation(void)
 
     (*dev->vptr->updateRaw)(dev);
 
-    TEST_ASSERT_EQUAL(xExpect, me->status.data.devData.a.y);
-    TEST_ASSERT_EQUAL(SKELETON, me->status.data.devData.a.x);
+    TEST_ASSERT_EQUAL(xExpect, me->status.data.devData.hum);
 }
 
 void
@@ -151,7 +150,7 @@ test_UpdateOperation(void)
     int xExpect = 2;
     EvtSkeletonData evtSkeletonData;
     RKH_EVT_T *evt;
-    Skeleton *Skeleton;
+    Skeleton *skeleton;
     Collector *me;
     bool result;
 
@@ -165,7 +164,7 @@ test_UpdateOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Skeleton_ctor();
+    dev = Skeleton_ctor(4);
 
     evtSkeletonData.base.dev = dev;
     evtSkeletonData.x = xExpect;
@@ -173,9 +172,9 @@ test_UpdateOperation(void)
 
     result = (*dev->vptr->update)(dev, evt);
 
-    Skeleton = (Skeleton *)me->dev;
+    skeleton = (Skeleton *)me->dev;
     TEST_ASSERT_EQUAL(dev, me->dev);
-    TEST_ASSERT_EQUAL(xExpect, Skeleton->x);
+    TEST_ASSERT_EQUAL(xExpect, skeleton->x);
     TEST_ASSERT_EQUAL(false, result);
 }
 
@@ -196,7 +195,7 @@ test_TestOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = Skeleton_ctor();
+    dev = Skeleton_ctor(4);
 
     me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->test);

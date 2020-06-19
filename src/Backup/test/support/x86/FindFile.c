@@ -35,25 +35,27 @@ static DIR *dp;
 char *
 FindFile_findFirstFile(char *path)
 {
-    struct dirent *entry;
+    struct dirent *dir;
+    char *file;
 
-    if ((dp = opendir(path)) == NULL)
+    file = NULL;
+    if ((dp = opendir(path)) != NULL)
     {
-        return NULL;
-    }
-    if ((entry = readdir(dp)) != NULL) 
-    {
-        if ((strcmp(entry->d_name, ".") == 0) ||
-            (strcmp(entry->d_name, "..") == 0))
+        while ((dir = readdir(dp)) != NULL)
         {
-            return NULL;
+            if ((strcmp(dir->d_name, ".") == 0) ||
+                    (strcmp(dir->d_name, "..") == 0))
+            {
+                continue;
+            }
+            else
+            {
+                file = dir->d_name;
+                break;
+            }
         }
-        return entry->d_name;
     }
-    else
-    {
-        return NULL;
-    }
+    return file;
 }
 
 char *

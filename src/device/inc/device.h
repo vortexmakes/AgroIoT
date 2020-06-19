@@ -34,7 +34,7 @@ extern "C" {
 typedef enum DevId DevId;
 enum DevId
 {
-    SPRAYER, HARVEST, SAMPLER, DEVNULL, NUM_DEVS
+    SPRAYER, HARVEST, SAMPLER, DEVNULL, SKELETON, NUM_DEVS
 };
 
 /* ------------------------------- Data types ------------------------------ */
