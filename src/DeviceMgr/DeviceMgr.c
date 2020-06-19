@@ -32,6 +32,7 @@
 #include "tplink.h"
 #include "tplhal.h"
 #include "Config.h"
+#include "Flowmeter.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
@@ -228,6 +229,7 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
     Device *dev;
     uchar *p;
     RKH_EVT_T *evt;
+    FlowData flow1, flow2;
 
     switch (station)
     {
@@ -253,6 +255,15 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             break;
 
         case ADDR_CAUDALIMETRO:
+            /* Get payload and fill flowmeter's data from it */
+            /* ... */
+            flow1.nPulses = 0;      /* <--- */
+            flow1.dir = Forward;    /* <--- */
+            flow2.nPulses = 0;      /* <--- */
+            flow2.dir = Reverse;    /* <--- */
+            evt = Flowmeter_makeEvt(&flow1, &flow2);
+            topic_publish(Status, evt, deviceMgr);
+            break;
         default:
             break;
     }
