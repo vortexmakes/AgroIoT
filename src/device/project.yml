@@ -39,6 +39,7 @@
     - ../Crc32/inc
     - ../BatChr
     - ../Backup/inc
+    - ../Flowmeter/inc
     - ../
   :support:
     - test/support

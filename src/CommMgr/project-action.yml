@@ -21,6 +21,7 @@
     - ../Crc32/inc
     - ../geoMgr
     - ../Trace/inc
+    - ../Flowmeter/inc
     - ../
   :support:
 

@@ -39,7 +39,7 @@ Skeleton_test(Device *const me)
 
     realMe = (Skeleton *)me;
     jc = (SkeletonJobCond *)(me->jobCond);
-    result = (realMe->x > jc->xMax) ? 1 : 0;
+    result = (realMe->x > jc->x) ? 1 : 0;
     return result;
 }
 
@@ -95,30 +95,30 @@ Skeleton_ctor(int xMax)
                 (JobCond *)&skeletonJobCond, &vtbl);
     me->x = 0; /* atttibute default initialization */
     jc = (SkeletonJobCond *)(me->base.jobCond); /* it's not quite safe */
-    jc->xMax = xMax; /* initializes job condition parameter */
+    jc->x = xMax; /* initializes job condition parameter */
     return (Device *)me;
 }
 
 int
-skeletonSpy_getX(void)
+SkeletonSpy_getX(void)
 {
     return skeleton.x;
 }
 
 Device *
-skeletonSpy_getObj(void)
+SkeletonSpy_getObj(void)
 {
     return (Device *)&skeleton;
 }
 
 JobCond *
-skeletonSpy_getJobCondObj(void)
+SkeletonSpy_getJobCondObj(void)
 {
     return (JobCond *)&skeletonJobCond;
 }
 
 DevVtbl *
-skeletonSpy_getVtbl(void)
+SkeletonSpy_getVtbl(void)
 {
     return (DevVtbl *)&vtbl;
 }
