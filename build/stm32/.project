@@ -77,6 +77,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/DeviceMgr</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/Flowmeter</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/Flowmeter</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/FsMgr</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/FsMgr</locationURI>
