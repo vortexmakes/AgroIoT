@@ -473,4 +473,15 @@ bsp_usbHostProcess(void)
 //    MX_USB_HOST_Process();
 }
 
+void
+bsp_setAllLeds(uint8_t val)
+{
+    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, val);
+    HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, val);
+    HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, val);
+    HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, val);
+    HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, val);
+    HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, val);
+}
+
 /* ------------------------------ File footer ------------------------------ */

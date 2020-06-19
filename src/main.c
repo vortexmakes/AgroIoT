@@ -68,6 +68,9 @@
 #define SIZEOF_EP2STO           (16 * SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
+#define _CHECK_FORMATING_START_	0
+#define _DO_FIRST_FORMAT_		0
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
@@ -104,12 +107,12 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     RKH_FILTER_OFF_SMA(powerMgr);
     /*RKH_FILTER_OFF_SMA(modMgr); */
-    RKH_FILTER_OFF_SMA(gsmMgr);
+    /*RKH_FILTER_OFF_SMA(gsmMgr); */
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);
     RKH_FILTER_OFF_SMA(collector);
-    /*RKH_FILTER_OFF_SMA(usbMgr);*/
+    RKH_FILTER_OFF_SMA(usbMgr);
     /*RKH_FILTER_OFF_SMA(fsMgr); */
     RKH_FILTER_OFF_ALL_SIGNALS();
     /*RKH_FILTER_ON_SMA(((Collector *)collector)->itsMapping);*/
@@ -131,11 +134,23 @@ main(int argc, char *argv[])
     mTime_init();
     Trace_init();
 
+#if (_DO_FIRST_FORMAT_ == 1)
+    bsp_setAllLeds(1);
+    ffile_init(CleanAndRestoreMode);
+    StatQue_init();
+    Config_init();
+    bsp_setAllLeds(0);
+    for(;;);
+#else
+
+#if (_CHECK_FORMATING_START_ == 1)
     mode = (bsp_getDigIn(dIn1) == 0) ? CleanAndRestoreMode : RestoreMode;
+#else
+    mode = RestoreMode;
+#endif
     ffile_init(mode);
     StatQue_init();
     Config_init();
-
     rkh_fwk_init();
     rkh_pubsub_init();
 
@@ -179,6 +194,7 @@ main(int argc, char *argv[])
     rkh_fwk_enter();
 
     RKH_TRC_CLOSE();
+#endif
     return 0;
 }
 
