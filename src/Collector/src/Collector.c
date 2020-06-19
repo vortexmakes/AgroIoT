@@ -39,6 +39,7 @@ RKH_TRINT(evTimeout, NULL, Collector_publishCurrStatus),
 RKH_TRINT(evTrace, NULL, Collector_storeTrace),
 RKH_TRINT(evUsbMounted, NULL, Collector_initBackup),
 RKH_TRINT(evUsbUnmounted, NULL, Collector_deinitBackup),
+RKH_TRINT(evFlowmeter, NULL, Collector_updateFlowmeter),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(DevStatus_DevNotConnected,

@@ -32,6 +32,8 @@
     - ../../third-party/rkh/source/sm/inc
     - ../../third-party/rkh/source/queue/inc
     - ../../third-party/rkh/source/tmr/inc
+    - ../../third-party/rkh/source/trc/inc
+    - ../../third-party/rkh/source/mempool/inc
     - ../tpsens/cbox
     - ../Collector/inc
     - ../gps/inc
@@ -39,6 +41,9 @@
     - ../GStatus/inc
     - ../ffile/inc
     - ../Crc32/inc
+    - ../epoch/inc
+    - ../Trace/inc
+    - ../tpsens/cbox
     - ../
   :support:
     - test/support

@@ -21,6 +21,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhtype.h"
 #include "rkhevt.h"
+#include "GStatus.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -52,8 +53,10 @@ struct Flowmeter
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void Flowmeter_update(Flowmeter *flowmeter, RKH_EVT_T *event);
-void Flowmeter_updateRaw(Flowmeter *flowmeter);
+void Flowmeter_init(Flowmeter *me);
+void Flowmeter_update(Flowmeter *me, RKH_EVT_T *event);
+void Flowmeter_updateRaw(Flowmeter *me, CBOX_STR *status);
+RKH_EVT_T *Flowmeter_makeEvt(FlowData *flow1, FlowData *flow2);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -140,6 +140,7 @@ test_Init(void)
     rkh_trc_symFil_Ignore();
     topic_subscribe_Expect(Status, RKH_UPCAST(RKH_SMA_T, me));
     rkh_sm_init_Expect(RKH_UPCAST(RKH_SM_T, &me->itsMapping));
+    Flowmeter_init_Expect(&me->flowmeter);
 
     Collector_init(me, evt);
 }
@@ -482,7 +483,7 @@ test_UpdateFlowmeterData(void)
     event.flow2.nPulses = 64;
     event.flow2.dir = Reverse;
     Flowmeter_update_Expect(&me->flowmeter, RKH_UPCAST(RKH_EVT_T, &event));
-    Flowmeter_updateRaw_Expect(&me->flowmeter);
+    Flowmeter_updateRaw_Expect(&me->flowmeter, &me->status.data.devData);
 
     Collector_updateFlowmeter(me, RKH_UPCAST(RKH_EVT_T, &event));
 }
