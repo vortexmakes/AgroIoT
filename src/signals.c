@@ -92,6 +92,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evTout1);
     RKH_TR_FWK_SIG(evUsbMounted);
     RKH_TR_FWK_SIG(evUsbUnmounted);
+    RKH_TR_FWK_SIG(evFlowmeter);
 }
 
 /* ------------------------------ End of file ------------------------------ */
