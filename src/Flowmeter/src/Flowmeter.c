@@ -63,7 +63,8 @@ Flowmeter_updateRaw(Flowmeter *me, CBOX_STR *status)
 
     status->a.y = 0;
     status->a.y = (me->flow2.nPulses << 8) | me->flow1.nPulses;
-    status->a.m = (me->flow2.dir << 1) | me->flow1.dir;
+    status->a.z = 0;
+    status->a.z = (me->flow2.dir << 1) | me->flow1.dir;
 }
 
 RKH_EVT_T *

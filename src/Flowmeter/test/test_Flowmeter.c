@@ -84,7 +84,7 @@ test_UpdateRawStatus(void)
 
     Flowmeter_updateRaw(&me, &status);
     TEST_ASSERT_EQUAL_HEX16(0xdead, status.a.y);
-    TEST_ASSERT_EQUAL_HEX16(0x02, status.a.m);
+    TEST_ASSERT_EQUAL_HEX16(0x02, status.a.z);
 }
 
 void
