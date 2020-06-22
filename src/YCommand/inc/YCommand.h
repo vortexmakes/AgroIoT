@@ -113,6 +113,13 @@ typedef struct
  */
 YCmd_t YCommand_parse(YCommand *pCmd, char *p, ruint size);
 
+/*
+ * Yipies Command Execution
+ * 
+ *
+ */
+YCmd_t YCommand_exe(YCommand *pCmd);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }
