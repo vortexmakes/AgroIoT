@@ -34,7 +34,7 @@ extern "C" {
 typedef enum DevId DevId;
 enum DevId
 {
-    SPRAYER, HARVEST, SAMPLER, DEVNULL, NUM_DEVS
+    SPRAYER, HARVEST, SAMPLER, DEVNULL, SKELETON, NUM_DEVS
 };
 
 /* ------------------------------- Data types ------------------------------ */
@@ -48,8 +48,15 @@ typedef int (*TestOper)(Device *const me);
 /** DeviceServer makes an event from the device response */
 typedef RKH_EVT_T *(*MakeEvtOper)(Device *const me, CBOX_STR *rawData);
 
-/** Collector updates device's data from received event */
-typedef void (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
+/** 
+ *  \brief
+ *  Collector updates device's data from received event
+ *
+ *  \return
+ *  If the device wants Collector stores the updated system's status, 
+ *  the device will return true. Otherwise, it will return false.
+ */
+typedef bool (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
 
 /** Collector transforms device's data to CBOX_STR class */
 typedef void (*UpdateRawOper)(Device *const me);
@@ -87,7 +94,7 @@ struct EvtDevData
 void device_ctor(Device *const me, int id, RKH_SMA_T *collector,
                  JobCond *jobCond, DevVtbl *vtbl);
 RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
-void device_update(Device *const me, RKH_EVT_T *evt);
+bool device_update(Device *const me, RKH_EVT_T *evt);
 int device_test(Device *const me);
 void device_updateRaw(Device *const me);
 

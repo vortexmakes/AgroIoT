@@ -25,6 +25,7 @@
     - ../Crc32/inc
     - ../Trace/inc
     - ../Backup/inc
+    - ../Flowmeter/inc
     - ../
   :support:
 

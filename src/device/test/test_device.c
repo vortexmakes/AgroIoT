@@ -102,7 +102,7 @@ DevA_makeEvt(Device *const me, CBOX_STR *rawData)
     return RKH_UPCAST(RKH_EVT_T, &evtDevAData);
 }
 
-static void
+static bool
 DevA_update(Device *const me, RKH_EVT_T *evt)
 {
     DevA *dev;
@@ -112,6 +112,7 @@ DevA_update(Device *const me, RKH_EVT_T *evt)
     dev = (DevA *)(((EvtDevData *)devEvt)->dev);
     dev->x = devEvt->x;
     dev->y = devEvt->y;
+    return false;
 }
 
 static void
@@ -228,6 +229,7 @@ test_UpdateDeviceAttributes(void)
     Device *dev;                    /* collector attribute */
     RKH_EVT_T *evt;                 /* transition event */
     Collector *me;
+    bool result;
 
     me = RKH_DOWNCAST(Collector, collector);
     devAObj = DevA_ctor(2, 8, 3);   /* from main() */
@@ -240,11 +242,12 @@ test_UpdateDeviceAttributes(void)
     dev = me->dev;
     TEST_ASSERT_NOT_NULL(dev);
 
-    device_update(dev, evt);
+    result = device_update(dev, evt);
 
     TEST_ASSERT_EQUAL(DEVA, dev->id);
     TEST_ASSERT_EQUAL(4, ((DevA *)dev)->x);
     TEST_ASSERT_EQUAL(5, ((DevA *)dev)->y);
+    TEST_ASSERT_EQUAL(false, result);
 }
 
 void

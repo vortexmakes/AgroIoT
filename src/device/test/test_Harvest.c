@@ -1,23 +1,15 @@
 /**
- *  \file       test_sprayer.c
- *  \brief      Unit test for sprayer concrete device..
+ *  \file       test_Harvest.c
+ *  \brief      Unit test for Harvest concrete device..
  */
 
 /* -------------------------- Development history -------------------------- */
-/*
- *  2018.17.10  LeFr  v1.0.00  ---
- */
-
 /* -------------------------------- Authors -------------------------------- */
-/*
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
- */
-
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
-#include "sprayer.h"
-#include "sprayerSpy.h"
+#include "Harvest.h"
+#include "HarvestSpy.h"
 #include "Mock_rkhassert.h"
 #include "Mock_device.h"
 #include "Mock_Collector.h"
@@ -40,8 +32,9 @@ Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
                           JobCond *jobCond, DevVtbl *vtbl,
                           int cmock_num_calls)
 {
-    me->jobCond = sprayerSpy_getJobCondObj();
-    me->vptr = sprayerSpy_getVtbl();
+    me->id = id;
+    me->jobCond = HarvestSpy_getJobCondObj();
+    me->vptr = HarvestSpy_getVtbl();
     me->collector = collector;
 }
 
@@ -66,10 +59,9 @@ void
 test_InitAttributes(void)
 {
     Device *dev;
-    int nSectionMaxExpect = 5;
 
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -77,11 +69,11 @@ test_InitAttributes(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = sprayer_ctor(nSectionMaxExpect);
+    dev = Harvest_ctor(0);
 
-    TEST_ASSERT_EQUAL(0, sprayerSpy_getNSection());
-    TEST_ASSERT_EQUAL(0, sprayerSpy_getDose());
-    TEST_ASSERT_EQUAL(nSectionMaxExpect, sprayerSpy_getDoseMax());
+    TEST_ASSERT_EQUAL(0, HarvestSpy_getHoard());
+    TEST_ASSERT_EQUAL(0, HarvestSpy_getNPail());
+    TEST_ASSERT_EQUAL(0, HarvestSpy_getFlow());
     TEST_ASSERT_NOT_NULL(dev->jobCond);
     TEST_ASSERT_NOT_NULL(dev->vptr);
 }
@@ -91,26 +83,28 @@ test_MakeEventOperation(void)
 {
     Device *dev;
     RKH_EVT_T *evt;
-    int nSectionExpect = 2;
-    int doseExpect = 4;
-    EvtSprayerData evtObj;
+    uint16_t hoardExpect = 2;
+    uint16_t nPailExpect = 4;
+    uint16_t flowExpect = 6;
+    EvtHarvestData evtObj;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.data.devData.hum = nSectionExpect;
-    me->status.data.devData.h.pqty = doseExpect;
+    me->status.data.devData.h.hoard = hoardExpect;
+    me->status.data.devData.h.pqty = nPailExpect;
+    me->status.data.devData.h.flow = flowExpect;
 
-    dev = sprayer_ctor(0);
+    dev = Harvest_ctor(0);
 
-    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSprayerData),
+    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtHarvestData),
                                (RKH_SIG_T)evDevData,
                                0,
                                (RKH_EVT_T *)&evtObj);
@@ -121,61 +115,66 @@ test_MakeEventOperation(void)
     evt = (*dev->vptr->makeEvt)(dev, &me->status.data.devData);
 
     TEST_ASSERT_NOT_NULL(evt);
-    TEST_ASSERT_EQUAL(dev, ((EvtSprayerData *)evt)->base.dev);
-    TEST_ASSERT_EQUAL(nSectionExpect, ((EvtSprayerData *)evt)->nSection);
-    TEST_ASSERT_EQUAL(doseExpect, ((EvtSprayerData *)evt)->dose);
+    TEST_ASSERT_EQUAL(dev, ((EvtHarvestData *)evt)->base.dev);
+    TEST_ASSERT_EQUAL(hoardExpect, ((EvtHarvestData *)evt)->hoard);
+    TEST_ASSERT_EQUAL(nPailExpect, ((EvtHarvestData *)evt)->nPail);
+    TEST_ASSERT_EQUAL(flowExpect, ((EvtHarvestData *)evt)->flow);
 }
 
 void
 test_UpdateRawOperation(void)
 {
     Device *dev;
-    int nSectionExpect = 2;
-    int doseExpect = 4;
+    uint16_t hoardExpect = 2;
+    uint16_t nPailExpect = 4;
+    uint16_t flowExpect = 6;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.data.devData.hum = 0;
-    me->status.data.devData.h.pqty = 0;
+    me->status.data.devData.h.hoard = 2;
+    me->status.data.devData.h.pqty = 4;
+    me->status.data.devData.h.flow = 6;
 
-    dev = sprayer_ctor(0);
+    dev = Harvest_ctor(0);
 
     me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->updateRaw);
     TEST_ASSERT_NOT_NULL(dev->collector);
-    ((Sprayer *)dev)->nSection = nSectionExpect;
-    ((Sprayer *)dev)->dose = doseExpect;
+    ((Harvest *)dev)->hoard = hoardExpect;
+    ((Harvest *)dev)->nPail = nPailExpect;
+    ((Harvest *)dev)->flow = flowExpect;
 
     (*dev->vptr->updateRaw)(dev);
 
-    TEST_ASSERT_EQUAL(nSectionExpect, me->status.data.devData.hum);
-    TEST_ASSERT_EQUAL(doseExpect, me->status.data.devData.h.pqty);
-    TEST_ASSERT_EQUAL(SPRAYER, me->status.data.devData.a.x);
+    TEST_ASSERT_EQUAL(hoardExpect, me->status.data.devData.h.hoard);
+    TEST_ASSERT_EQUAL(nPailExpect, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(flowExpect, me->status.data.devData.h.flow);
 }
 
 void
 test_UpdateOperation(void)
 {
     Device *dev;
-    int nSectionExpect = 2;
-    int doseExpect = 4;
-    EvtSprayerData evtSprayerData;
+    uint16_t hoardExpect = 2;
+    uint16_t nPailExpect = 4;
+    uint16_t flowExpect = 6;
+    EvtHarvestData evtHarvestData;
     RKH_EVT_T *evt;
-    Sprayer *sprayer;
+    Harvest *harvest;
     Collector *me;
     bool result;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -183,19 +182,21 @@ test_UpdateOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = sprayer_ctor(0);
+    dev = Harvest_ctor(0);
 
-    evtSprayerData.base.dev = dev;
-    evtSprayerData.nSection = nSectionExpect;
-    evtSprayerData.dose = doseExpect;
-    evt = (RKH_EVT_T *)&evtSprayerData;
+    evtHarvestData.base.dev = dev;
+    evtHarvestData.hoard = hoardExpect;
+    evtHarvestData.nPail = nPailExpect;
+    evtHarvestData.flow = flowExpect;
+    evt = (RKH_EVT_T *)&evtHarvestData;
 
     result = (*dev->vptr->update)(dev, evt);
 
-    sprayer = (Sprayer *)me->dev;
+    harvest = (Harvest *)me->dev;
     TEST_ASSERT_EQUAL(dev, me->dev);
-    TEST_ASSERT_EQUAL(nSectionExpect, sprayer->nSection);
-    TEST_ASSERT_EQUAL(doseExpect, sprayer->dose);
+    TEST_ASSERT_EQUAL(hoardExpect, harvest->hoard);
+    TEST_ASSERT_EQUAL(nPailExpect, harvest->nPail);
+    TEST_ASSERT_EQUAL(flowExpect, harvest->flow);
     TEST_ASSERT_EQUAL(false, result);
 }
 
@@ -203,15 +204,12 @@ void
 test_TestOperation(void)
 {
     Device *dev;
-    int nSectionExpect = 2;
-    int doseMax = 5;
-    Sprayer *sprayer;
     int result = 0;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -219,22 +217,20 @@ test_TestOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = sprayer_ctor(doseMax);
+    dev = Harvest_ctor(0);
 
     me->dev = dev;
+    ((Harvest *)dev)->nPail = 0;
     TEST_ASSERT_NOT_NULL(dev->vptr->test);
     TEST_ASSERT_NOT_NULL(dev->collector);
-    sprayer = (Sprayer *)dev;
-    sprayer->nSection = nSectionExpect;
-    sprayer->dose = doseMax - 1;
 
     result = (*dev->vptr->test)(dev);
-    TEST_ASSERT_EQUAL(0, result);
+    TEST_ASSERT_EQUAL(false, result);
 
-    sprayer->dose = doseMax + 1;
+    ((Harvest *)dev)->nPail = 1;
 
     result = (*dev->vptr->test)(dev);
-    TEST_ASSERT_EQUAL(1, result);
+    TEST_ASSERT_EQUAL(true, result);
 }
 
 /* ------------------------------ End of file ------------------------------ */

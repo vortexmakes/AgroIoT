@@ -17,5 +17,6 @@
     - ../YFrame/inc
     - ../Crc32/inc
     - ../Trace/inc
+    - ../Flowmeter/inc
     - ../
   :support:

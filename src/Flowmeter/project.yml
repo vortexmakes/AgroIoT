@@ -32,20 +32,24 @@
     - ../../third-party/rkh/source/sm/inc
     - ../../third-party/rkh/source/queue/inc
     - ../../third-party/rkh/source/tmr/inc
+    - ../../third-party/rkh/source/trc/inc
+    - ../../third-party/rkh/source/mempool/inc
     - ../tpsens/cbox
     - ../Collector/inc
     - ../gps/inc
-    - ../GStatus/inc
-    - ../Crc32/inc
     - ../BatChr
-    - ../Backup/inc
-    - ../Flowmeter/inc
+    - ../GStatus/inc
+    - ../ffile/inc
+    - ../Crc32/inc
+    - ../epoch/inc
+    - ../Trace/inc
+    - ../tpsens/cbox
     - ../
   :support:
     - test/support
 
 :defines:
-  :common: &common_defines [__TEST__]
+  :common: &common_defines [__FFILETEST__, __TEST__]
   :test:
     - *common_defines
     - TEST

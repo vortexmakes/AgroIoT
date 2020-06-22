@@ -111,7 +111,8 @@ enum Signals
     evBatChrStatus,
     evTrace,
     evUsbMounted,
-    evUsbUnmounted    
+    evUsbUnmounted,
+    evFlowmeter
 };
 
 /* ------------------------------- Data types ------------------------------ */

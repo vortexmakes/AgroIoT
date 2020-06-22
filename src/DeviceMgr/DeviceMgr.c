@@ -32,6 +32,7 @@
 #include "tplink.h"
 #include "tplhal.h"
 #include "Config.h"
+#include "Flowmeter.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
@@ -98,7 +99,7 @@ static const PS_PLBUFF_T reqs[] =
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
-extern Device *sprayer;
+extern Device *sprayer, *sampler, *harvest;
 
 /* ---------------------------- Local variables ---------------------------- */
 static RKH_ROM_STATIC_EVENT(evEndOfCycleObj, evEndOfCycle);
@@ -119,13 +120,20 @@ getDevice(DevId devId)
 {
     Device *dev;
 
-    if (devId == SPRAYER)
+    switch (devId)
     {
-        dev = (Device *)sprayer;
-    }
-    else
-    {
-        dev = (Device *)0;
+        case SPRAYER:
+            dev = (Device *)sprayer;
+            break;
+        case SAMPLER:
+            dev = (Device *)sampler;
+            break;
+        case HARVEST:
+            dev = (Device *)harvest;
+            break;
+        default:
+            dev = (Device *)0;
+            break;
     }
     return dev;
 }
@@ -221,6 +229,7 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
     Device *dev;
     uchar *p;
     RKH_EVT_T *evt;
+    FlowData flow1, flow2;
 
     switch (station)
     {
@@ -238,11 +247,22 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             cbox.hum = *p++;
 
             dev = getDevice(cbox.a.x);
-            evt = device_makeEvt(dev, &cbox);
-            topic_publish(Status, evt, deviceMgr);
+            if (dev != (Device *)0)
+            {
+                evt = device_makeEvt(dev, &cbox);
+                topic_publish(Status, evt, deviceMgr);
+            }
             break;
 
         case ADDR_CAUDALIMETRO:
+            p = (uchar *)pb->payload;
+            flow1.nPulses = *p++;
+            flow1.dir = *p++;
+            flow2.nPulses = *p++;
+            flow2.dir = *p++;
+            evt = Flowmeter_makeEvt(&flow1, &flow2);
+            topic_publish(Status, evt, deviceMgr);
+            break;
         default:
             break;
     }

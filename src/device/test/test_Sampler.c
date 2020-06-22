@@ -1,6 +1,6 @@
 /**
- *  \file       test_sprayer.c
- *  \brief      Unit test for sprayer concrete device..
+ *  \file       test_sampler.c
+ *  \brief      Unit test for Sampler concrete device..
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -16,8 +16,8 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "unity.h"
-#include "sprayer.h"
-#include "sprayerSpy.h"
+#include "Sampler.h"
+#include "SamplerSpy.h"
 #include "Mock_rkhassert.h"
 #include "Mock_device.h"
 #include "Mock_Collector.h"
@@ -40,8 +40,9 @@ Mock_device_ctor_Callback(Device *const me, int id, RKH_SMA_T *collector,
                           JobCond *jobCond, DevVtbl *vtbl,
                           int cmock_num_calls)
 {
-    me->jobCond = sprayerSpy_getJobCondObj();
-    me->vptr = sprayerSpy_getVtbl();
+    me->id = id;
+    me->jobCond = SamplerSpy_getJobCondObj();
+    me->vptr = SamplerSpy_getVtbl();
     me->collector = collector;
 }
 
@@ -66,10 +67,9 @@ void
 test_InitAttributes(void)
 {
     Device *dev;
-    int nSectionMaxExpect = 5;
 
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(SamplerSpy_getObj(),
+                       SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -77,11 +77,11 @@ test_InitAttributes(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = sprayer_ctor(nSectionMaxExpect);
+    dev = Sampler_ctor();
 
-    TEST_ASSERT_EQUAL(0, sprayerSpy_getNSection());
-    TEST_ASSERT_EQUAL(0, sprayerSpy_getDose());
-    TEST_ASSERT_EQUAL(nSectionMaxExpect, sprayerSpy_getDoseMax());
+    TEST_ASSERT_EQUAL(0, SamplerSpy_getHarness());
+    TEST_ASSERT_EQUAL(0, SamplerSpy_getDeep());
+    TEST_ASSERT_EQUAL(false, SamplerSpy_getIsValid());
     TEST_ASSERT_NOT_NULL(dev->jobCond);
     TEST_ASSERT_NOT_NULL(dev->vptr);
 }
@@ -91,26 +91,28 @@ test_MakeEventOperation(void)
 {
     Device *dev;
     RKH_EVT_T *evt;
-    int nSectionExpect = 2;
-    int doseExpect = 4;
-    EvtSprayerData evtObj;
+    int harnessExpect = 2;
+    int deepExpect = 4;
+    bool isValidExpect = true;
+    EvtSamplerData evtObj;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(SamplerSpy_getObj(),
+                       SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.data.devData.hum = nSectionExpect;
-    me->status.data.devData.h.pqty = doseExpect;
+    me->status.data.devData.a.y = harnessExpect;
+    me->status.data.devData.a.z = deepExpect;
+    me->status.data.devData.a.m = isValidExpect;
 
-    dev = sprayer_ctor(0);
+    dev = Sampler_ctor();
 
-    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSprayerData),
+    rkh_fwk_ae_ExpectAndReturn((RKH_ES_T)sizeof(EvtSamplerData),
                                (RKH_SIG_T)evDevData,
                                0,
                                (RKH_EVT_T *)&evtObj);
@@ -121,61 +123,67 @@ test_MakeEventOperation(void)
     evt = (*dev->vptr->makeEvt)(dev, &me->status.data.devData);
 
     TEST_ASSERT_NOT_NULL(evt);
-    TEST_ASSERT_EQUAL(dev, ((EvtSprayerData *)evt)->base.dev);
-    TEST_ASSERT_EQUAL(nSectionExpect, ((EvtSprayerData *)evt)->nSection);
-    TEST_ASSERT_EQUAL(doseExpect, ((EvtSprayerData *)evt)->dose);
+    TEST_ASSERT_EQUAL(dev, ((EvtSamplerData *)evt)->base.dev);
+    TEST_ASSERT_EQUAL(harnessExpect, ((EvtSamplerData *)evt)->harness);
+    TEST_ASSERT_EQUAL(deepExpect, ((EvtSamplerData *)evt)->deep);
+    TEST_ASSERT_EQUAL(isValidExpect, ((EvtSamplerData *)evt)->isValid);
 }
 
 void
 test_UpdateRawOperation(void)
 {
     Device *dev;
-    int nSectionExpect = 2;
-    int doseExpect = 4;
+    int harnessExpect = 2;
+    int deepExpect = 4;
+    bool isValidExpect = true;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(SamplerSpy_getObj(),
+                       SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
     device_ctor_IgnoreArg_jobCond();
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
-    me->status.data.devData.hum = 0;
-    me->status.data.devData.h.pqty = 0;
+    me->status.data.devData.a.y = 2;
+    me->status.data.devData.a.z = 4;
+    me->status.data.devData.a.m = true;
 
-    dev = sprayer_ctor(0);
+    dev = Sampler_ctor();
 
     me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->updateRaw);
     TEST_ASSERT_NOT_NULL(dev->collector);
-    ((Sprayer *)dev)->nSection = nSectionExpect;
-    ((Sprayer *)dev)->dose = doseExpect;
+    ((Sampler *)dev)->harness = harnessExpect;
+    ((Sampler *)dev)->deep = deepExpect;
+    ((Sampler *)dev)->isValid = isValidExpect;
 
     (*dev->vptr->updateRaw)(dev);
 
-    TEST_ASSERT_EQUAL(nSectionExpect, me->status.data.devData.hum);
-    TEST_ASSERT_EQUAL(doseExpect, me->status.data.devData.h.pqty);
-    TEST_ASSERT_EQUAL(SPRAYER, me->status.data.devData.a.x);
+    TEST_ASSERT_EQUAL(harnessExpect, me->status.data.devData.a.y);
+    TEST_ASSERT_EQUAL(deepExpect, me->status.data.devData.a.z);
+    TEST_ASSERT_EQUAL(isValidExpect, me->status.data.devData.a.m);
+    TEST_ASSERT_EQUAL(SAMPLER, me->status.data.devData.a.x);
 }
 
 void
 test_UpdateOperation(void)
 {
     Device *dev;
-    int nSectionExpect = 2;
-    int doseExpect = 4;
-    EvtSprayerData evtSprayerData;
+    int harnessExpect = 2;
+    int deepExpect = 4;
+    bool isValidExpect = true;
+    EvtSamplerData evtSamplerData;
     RKH_EVT_T *evt;
-    Sprayer *sprayer;
+    Sampler *sampler;
     Collector *me;
     bool result;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(SamplerSpy_getObj(),
+                       SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -183,35 +191,43 @@ test_UpdateOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = sprayer_ctor(0);
+    dev = Sampler_ctor();
 
-    evtSprayerData.base.dev = dev;
-    evtSprayerData.nSection = nSectionExpect;
-    evtSprayerData.dose = doseExpect;
-    evt = (RKH_EVT_T *)&evtSprayerData;
+    evtSamplerData.base.dev = dev;
+    evtSamplerData.harness = harnessExpect;
+    evtSamplerData.deep = deepExpect;
+    evtSamplerData.isValid = isValidExpect;
+    evt = (RKH_EVT_T *)&evtSamplerData;
 
     result = (*dev->vptr->update)(dev, evt);
 
-    sprayer = (Sprayer *)me->dev;
+    sampler = (Sampler *)me->dev;
     TEST_ASSERT_EQUAL(dev, me->dev);
-    TEST_ASSERT_EQUAL(nSectionExpect, sprayer->nSection);
-    TEST_ASSERT_EQUAL(doseExpect, sprayer->dose);
-    TEST_ASSERT_EQUAL(false, result);
+    TEST_ASSERT_EQUAL(harnessExpect, sampler->harness);
+    TEST_ASSERT_EQUAL(deepExpect, sampler->deep);
+    TEST_ASSERT_EQUAL(isValidExpect, sampler->isValid);
+    TEST_ASSERT_EQUAL(true, result);
+
+    /* Invalid received data */
+    isValidExpect = false;
+    evtSamplerData.isValid = isValidExpect;
+
+    result = (*dev->vptr->update)(dev, evt);
+
+    TEST_ASSERT_EQUAL(dev, me->dev);
+    TEST_ASSERT_EQUAL(isValidExpect, result);
 }
 
 void
 test_TestOperation(void)
 {
     Device *dev;
-    int nSectionExpect = 2;
-    int doseMax = 5;
-    Sprayer *sprayer;
     int result = 0;
     Collector *me;
 
     me = RKH_DOWNCAST(Collector, collector);
-    device_ctor_Expect(sprayerSpy_getObj(),
-                       SPRAYER,
+    device_ctor_Expect(SamplerSpy_getObj(),
+                       SAMPLER,
                        (RKH_SMA_T *)collector,
                        (JobCond *)0,
                        (DevVtbl *)0);
@@ -219,22 +235,14 @@ test_TestOperation(void)
     device_ctor_IgnoreArg_vtbl();
     device_ctor_StubWithCallback(Mock_device_ctor_Callback);
 
-    dev = sprayer_ctor(doseMax);
+    dev = Sampler_ctor();
 
     me->dev = dev;
     TEST_ASSERT_NOT_NULL(dev->vptr->test);
     TEST_ASSERT_NOT_NULL(dev->collector);
-    sprayer = (Sprayer *)dev;
-    sprayer->nSection = nSectionExpect;
-    sprayer->dose = doseMax - 1;
 
     result = (*dev->vptr->test)(dev);
-    TEST_ASSERT_EQUAL(0, result);
-
-    sprayer->dose = doseMax + 1;
-
-    result = (*dev->vptr->test)(dev);
-    TEST_ASSERT_EQUAL(1, result);
+    TEST_ASSERT_EQUAL(false, result);
 }
 
 /* ------------------------------ End of file ------------------------------ */

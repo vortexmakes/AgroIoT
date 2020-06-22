@@ -24,6 +24,7 @@
 #include "rkhtmr.h"
 #include "GStatus.h"
 #include "Backup.h"
+#include "Flowmeter.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -72,6 +73,7 @@ struct Collector
     Mapping itsMapping;         /* Mapping orthogonal region */
     RKHTmEvt updateStatusTmr;
     Backup backupInfo;
+    Flowmeter flowmeter;
 };
 
 /* -------------------------- External variables --------------------------- */

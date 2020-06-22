@@ -30,6 +30,7 @@
 #include "GStatus.h"
 #include "IOStatus.h"
 #include "Trace.h"
+#include "Flowmeter.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -210,6 +211,14 @@ struct TraceEvt
     TraceId id;
     TraceArg arg0;
     TraceArg arg1;
+};
+
+typedef struct FlowmeterEvt FlowmeterEvt;
+struct FlowmeterEvt
+{
+    RKH_EVT_T evt;
+    FlowData flow1;
+    FlowData flow2;
 };
 
 /* -------------------------- External variables --------------------------- */
