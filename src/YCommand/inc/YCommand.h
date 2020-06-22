@@ -32,64 +32,30 @@ extern "C" {
 /* -------------------------------- Constants ------------------------------ */
 typedef enum
 {
-    YCmdServerIp,
-    YCmdServerPort,
-    YCmdConnectionTime,
-    YCmdGpsTime,
-    YCmdAccLimit,
-    YCmdBreakLimit,
-    YCmdStatus,
-    YCmdSetOut1,
-    YCmdSetOut2,
-    YCmdSetOut3,
-    YCmdSetOut4,
-    YCmdSetOut5,
-    YCmdSetOut6,
-    YCmdReset,
-    YCmdSampleTime,
-    YCmdDataFormat,
-
-    YCmdNum,
+    YCmdOk,
+    YAck,
 
     YCmdUnknown = -1,
     YCmdInvalidKey = -2,
     YCmdWrongLen = -3,
-    YCmdWrongFormat = -4
-
-} YCmd_t;
+    YCmdWrongFormat = -4,
+    YCmdExecError = -5
+} YCmdRes;
 
 #define YCOMMAND_SECURITY_KEY_DFT    "123"
 
 /* ------------------------------- Data types ------------------------------ */
-typedef union
-{
-    char serverIp[IP_LENGTH+1];
-    char serverPort[PORT_LENGTH+1];
-
-    rui16_t _rui16;
-        rui16_t connTime;
-        rui16_t updateGPSTime;
-
-    rui8_t _rui8;
-        rui8_t sampleTime;
-        rui8_t accLimit;
-        rui8_t brLimit;
-        rui8_t status;
-        rui8_t outValue;
-} cmdData;
-
 typedef struct
 {
-    char index[YCOMMAND_INDEX_LEN+1];
-    YCmd_t id;
-    cmdData data;
+    char index[YCOMMAND_INDEX_LEN+1]; // GPRS command index number [1 .. 11] 
+    rui8_t reset;                     // After command execution reset flag
 } YCommand;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /*
  *  \brief
- *  Yipies Command message parser (SMS or GPRS) and key validation
+ *  Yipies Command message parser (SMS or GPRS) key validation and execution
  *  message format: 
  *        
  *        < SMS or Gprs Header,CmdId,SecurityKey,CmdData; >
@@ -99,26 +65,20 @@ typedef struct
  *                        confirmation (Gprs only)
  *  SMS Header:  "Im:"
  *  CmdId:       Command identification number [1 to 2 bytes len]
- *  SecurityKey: Security Key [3 bytes len]
+ *  SecurityKey: Security Key [3 bytes len], is hardcoded to (123)
  *  CmdData:     Command data buffer 1 to 32 bytes len
  *
- *  \param pCmd: destination YCommand pointer.
+ *  \param pCmd: destination YCommand pointer where fill command args.
  *  \param p: received message buffer (null or not null terminated).
  *  \param size: size of message.
  *
  *  \return
- *      - If parse success returns command id according to YCmd_t 
- *                  and fill pCmd with command data args.
- *      - If error returns error code according to YCmd_t.
+ *      - If is ACK message returns YAck.
+ *      - If is command message and its execution success returns 
+ *        YCmdOk, filling pCmd with command args (id, index and reset).
+ *      - Else returns the error code according to YCmdRes.
  */
-YCmd_t YCommand_parse(YCommand *pCmd, char *p, ruint size);
-
-/*
- * Yipies Command Execution
- * 
- *
- */
-YCmd_t YCommand_exe(YCommand *pCmd);
+YCmdRes YCommand_parseAndExec(YCommand *pCmd, char *p, ruint size);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
