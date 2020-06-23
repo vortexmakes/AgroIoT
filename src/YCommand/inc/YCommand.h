@@ -20,8 +20,6 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
-#include "YCommandParser.h"
-#include "Config.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -43,6 +41,11 @@ typedef enum
 } YCmdRes;
 
 #define YCOMMAND_SECURITY_KEY_DFT    "123"
+
+#define YCOMMAND_ID_LEN          2
+#define YCOMMAND_SECURITY_LEN    3
+#define YCOMMAND_DATA_LEN        32
+#define YCOMMAND_INDEX_LEN       11
 
 /* ------------------------------- Data types ------------------------------ */
 typedef struct

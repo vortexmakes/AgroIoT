@@ -30,6 +30,7 @@
 SSP_DCLR_NORMAL_NODE rootYCommandParser;
 SSP_DCLR_TRN_NODE socketIndex, id, security, data;
 
+static YCommandParser yCmdParser;
 static YCommandParser *pYCmd;
 
 static char *p;
@@ -170,7 +171,7 @@ found(unsigned char pos)
     pYCmd->result = YCommandFound;
 }
 
-YCmdPResult
+static YCmdPResult
 YCommandParser_search(YCommandParser *me, char *p, ruint size)
 {
     pYCmd = me;
@@ -188,7 +189,7 @@ YCommandParser_search(YCommandParser *me, char *p, ruint size)
     return pYCmd->result;
 }
 
-YCmdPResult
+static YCmdPResult
 YCommandParser_securityCheck(YCommandParser *me, char *pkey)
 {
     if(strncmp(me->security, pkey, YCOMMAND_SECURITY_LEN) != 0)
@@ -199,27 +200,60 @@ YCommandParser_securityCheck(YCommandParser *me, char *pkey)
     return YCommandValidKey;
 }
 
-char *
+static char *
 YCommandParser_getIndex(YCommandParser *me)
 {
    return me->index; 
 }
 
-char *
+static char *
 YCommandParser_getData(YCommandParser *me)
 {
     return me->data;
 }
 
-ruint
+static YCmd_t
 YCommandParser_getId(YCommandParser *me)
 {
     ruint id;
     
     id = atoi(me->id);
 
-    return (id >= YCmdNum) ? YCmdUnknown : id;
+    return (id >= YCmdNum) ? YCmdNum : id;
 }
 
 /* ---------------------------- Global functions --------------------------- */
+YCmdRes
+YCommand_parse(YCmdParserData *pCmd, char *p, ruint size)
+{
+    YCmd_t id;
+    char *pData;
+    YCmdRes r;
+
+    if(YCommandParser_search(&yCmdParser, p, size) < 0)
+        return YCmdUnknown;
+
+    pCmd->id = YCommandParser_getId(&yCmdParser);
+    if(pCmd->id == YCmdNum)
+    {
+        return YCmdUnknown;
+    }
+
+    if(YCommandParser_securityCheck(&yCmdParser, YCOMMAND_SECURITY_KEY_DFT) < 0)
+    {
+        return YCmdInvalidKey;
+    }
+
+    pData = YCommandParser_getData(&yCmdParser);
+
+    if(r = YCommandFormat_format(pCmd, pData) < 0)
+    {
+        return r; 
+    }
+
+    strcpy(pCmd->p->index, YCommandParser_getIndex(&yCmdParser));
+    
+    return YCmdOk; 
+}
+
 /* ------------------------------ End of file ------------------------------ */

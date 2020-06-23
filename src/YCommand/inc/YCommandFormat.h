@@ -1,6 +1,6 @@
 /**
- *  \file       YCommandParser.h
- *  \brief      Yipies Command Parser.
+ *  \file       YCommandFormat.h
+ *  \brief      Yipies Command Format.
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -15,15 +15,12 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __YCOMMANDPARSER_H__
-#define __YCOMMANDPARSER_H__
+#ifndef __YCOMMANDFORMAT_H__
+#define __YCOMMANDFORMAT_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
-#include "ssp.h"
 #include "YCommand.h"
-#include "Config.h"
-
+#include "YCommandParser.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -32,75 +29,11 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-typedef enum
-{
-    YCommandFound,
-    YCommandValidKey = YCommandFound,
-
-    YCommandNotFound = -1,
-    YCommandInvalidKey = YCommandNotFound,
-
-}YCmdPResult;
-
 /* ------------------------------- Data types ------------------------------ */
-typedef enum
-{
-    YCmdServerIp,
-    YCmdServerPort,
-    YCmdConnectionTime,
-    YCmdGpsTime,
-    YCmdAccLimit,
-    YCmdBreakLimit,
-    YCmdStatus,
-    YCmdSetOut1,
-    YCmdSetOut2,
-    YCmdSetOut3,
-    YCmdSetOut4,
-    YCmdSetOut5,
-    YCmdSetOut6,
-    YCmdReset,
-    YCmdSampleTime,
-    YCmdDataFormat,
-
-    YCmdNum,
-} YCmd_t;
-
-typedef struct
-{
-    SSP parser;
-    char index[YCOMMAND_INDEX_LEN+1];
-    char id[YCOMMAND_ID_LEN+1];
-    char security[YCOMMAND_SECURITY_LEN+1];
-    char data[YCOMMAND_DATA_LEN+1];
-    YCmdPResult result;
-}YCommandParser;
-
-typedef union
-{
-    char serverIp[IP_LENGTH+1];
-    char serverPort[PORT_LENGTH+1];
-
-    rui16_t _rui16;
-        rui16_t connTime;
-        rui16_t updateGPSTime;
-
-    rui8_t _rui8;
-        rui8_t sampleTime;
-        rui8_t accLimit;
-        rui8_t brLimit;
-        rui8_t status;
-        rui8_t outValue;
-} CmdData;
-
-typedef struct
-{
-    YCommand *p;
-    YCmd_t id;
-    CmdData data;
-}YCmdParserData;
-
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+YCmdRes YCommandFormat_format(YCmdParserData *pCmd, char *p);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

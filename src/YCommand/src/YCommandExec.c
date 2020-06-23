@@ -24,27 +24,27 @@
 /* ---------------------------- Local data types --------------------------- */
 typedef struct YCmdExec
 {
-    rInt (*exec)(YCommand *pcmd);
+    rInt (*exec)(YCmdParserData *pcmd);
 }YCmdExec;
 
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static rInt exec_serverIp(YCommand *pcmd);
-static rInt exec_serverPort(YCommand *pcmd);
-static rInt exec_connectionTime(YCommand *pcmd);
-static rInt exec_gpsTime(YCommand *pcmd);
-static rInt exec_accLimit(YCommand *pcmd);
-static rInt exec_breakLimit(YCommand *pcmd);
-static rInt exec_cmdStatus(YCommand *pcmd);
-static rInt exec_setOut1(YCommand *pcmd);
-static rInt exec_setOut2(YCommand *pcmd);
-static rInt exec_setOut3(YCommand *pcmd);
-static rInt exec_setOut4(YCommand *pcmd);
-static rInt exec_setOut5(YCommand *pcmd);
-static rInt exec_setOut6(YCommand *pcmd);
-static rInt exec_reset(YCommand *pcmd);
-static rInt exec_sampleTime(YCommand *pcmd);
-static rInt exec_dataFormat(YCommand *pcmd);
+static rInt exec_serverIp(YCmdParserData *pcmd);
+static rInt exec_serverPort(YCmdParserData *pcmd);
+static rInt exec_connectionTime(YCmdParserData *pcmd);
+static rInt exec_gpsTime(YCmdParserData *pcmd);
+static rInt exec_accLimit(YCmdParserData *pcmd);
+static rInt exec_breakLimit(YCmdParserData *pcmd);
+static rInt exec_cmdStatus(YCmdParserData *pcmd);
+static rInt exec_setOut1(YCmdParserData *pcmd);
+static rInt exec_setOut2(YCmdParserData *pcmd);
+static rInt exec_setOut3(YCmdParserData *pcmd);
+static rInt exec_setOut4(YCmdParserData *pcmd);
+static rInt exec_setOut5(YCmdParserData *pcmd);
+static rInt exec_setOut6(YCmdParserData *pcmd);
+static rInt exec_reset(YCmdParserData *pcmd);
+static rInt exec_sampleTime(YCmdParserData *pcmd);
+static rInt exec_dataFormat(YCmdParserData *pcmd);
 
 /* ----------------------- Local function prototypes ----------------------- */
 static const YCmdExec execTable[YCmdNum] =
@@ -71,118 +71,118 @@ static const YCmdExec execTable[YCmdNum] =
 /* ---------------------------- Local functions ---------------------------- */
 static
 rInt
-exec_serverIp(YCommand *pcmd)
+exec_serverIp(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static
-rInt exec_serverPort(YCommand *pcmd)
+rInt exec_serverPort(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_connectionTime(YCommand *pcmd)
+exec_connectionTime(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static
 rInt 
-exec_gpsTime(YCommand *pcmd)
+exec_gpsTime(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_accLimit(YCommand *pcmd)
+exec_accLimit(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_breakLimit(YCommand *pcmd)
+exec_breakLimit(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_cmdStatus(YCommand *pcmd)
+exec_cmdStatus(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_setOut1(YCommand *pcmd)
+exec_setOut1(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_setOut2(YCommand *pcmd)
+exec_setOut2(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_setOut3(YCommand *pcmd)
+exec_setOut3(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_setOut4(YCommand *pcmd)
+exec_setOut4(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_setOut5(YCommand *pcmd)
+exec_setOut5(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_setOut6(YCommand *pcmd)
+exec_setOut6(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_reset(YCommand *pcmd)
+exec_reset(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_sampleTime(YCommand *pcmd)
+exec_sampleTime(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 static 
 rInt 
-exec_dataFormat(YCommand *pcmd)
+exec_dataFormat(YCmdParserData *pcmd)
 {
     return 0;
 }
 
 /* ---------------------------- Global functions --------------------------- */
-YCmd_t
-YCommand_exec(YCommand *pcmd)
+YCmdRes
+YCommand_exec(YCmdParserData *pcmd)
 {
     
 }
