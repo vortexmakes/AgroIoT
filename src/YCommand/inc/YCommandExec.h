@@ -31,7 +31,7 @@ extern "C" {
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-YCmdRes YCommand_exec(YCmdParserData *pcmd);
+YCmdRes YCommandExec_exec(YCmdParserData *pcmd);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

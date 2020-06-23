@@ -35,6 +35,7 @@ YCmdRes
 YCommand_parseAndExec(YCommand *pCmd, char *p, ruint size)
 {
     YCmdParserData cmd;
+    YCmdRes r;
 
     if(pCmd == NULL || p == NULL || size == 0)
     {
@@ -46,7 +47,9 @@ YCommand_parseAndExec(YCommand *pCmd, char *p, ruint size)
     cmd.p = pCmd;
     memset(&(cmd.data), 0, sizeof(CmdData));
 
-    YCommand_parse(&cmd, p, size);
+    r = YCommandParser_parse(&cmd, p, size);
+    if((r < 0) || (r == YAck))
+        return r;
 
     return YCmdOk;
 }

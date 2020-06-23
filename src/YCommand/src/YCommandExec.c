@@ -182,7 +182,7 @@ exec_dataFormat(YCmdParserData *pcmd)
 
 /* ---------------------------- Global functions --------------------------- */
 YCmdRes
-YCommand_exec(YCmdParserData *pcmd)
+YCommandExec_exec(YCmdParserData *pcmd)
 {
     
 }

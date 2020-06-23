@@ -36,6 +36,7 @@ typedef enum
 {
     YCommandFound,
     YCommandValidKey = YCommandFound,
+    YAckFound,
 
     YCommandNotFound = -1,
     YCommandInvalidKey = YCommandNotFound,
@@ -101,6 +102,8 @@ typedef struct
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+YCmdRes YCommandParser_parse(YCmdParserData *pCmd, char *p, ruint size);
+
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

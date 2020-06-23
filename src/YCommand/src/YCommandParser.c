@@ -21,13 +21,14 @@
 #include "ssp.h"
 #include "YCommand.h"
 #include "YCommandParser.h"
+#include "YCommandFormat.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-SSP_DCLR_NORMAL_NODE rootYCommandParser;
+SSP_DCLR_NORMAL_NODE rootYCommandParser, socket;
 SSP_DCLR_TRN_NODE socketIndex, id, security, data;
 
 static YCommandParser yCmdParser;
@@ -45,14 +46,21 @@ static void securityInit(unsigned char pos);
 static void securityCollect(unsigned char c);
 static void dataInit(unsigned char pos);
 static void dataCollect(unsigned char c);
+static void foundAck(unsigned char pos);
 static void found(unsigned char pos);
 
 /* ---------------------------- Local functions ---------------------------- */
 
 SSP_CREATE_NORMAL_NODE(rootYCommandParser);
 SSP_CREATE_BR_TABLE(rootYCommandParser)
-SSPBR("!3",    indexInit,       &socketIndex),
+SSPBR("!",     NULL,            &socket),
 SSPBR("Im:",   noIndexidInit,   &id),
+SSP_END_BR_TABLE
+
+SSP_CREATE_NORMAL_NODE(socket);
+SSP_CREATE_BR_TABLE(socket)
+SSPBR("2|",     foundAck,       &rootYCommandParser),
+SSPBR("3",     indexInit,       &socketIndex),
 SSP_END_BR_TABLE
 
 SSP_CREATE_TRN_NODE(socketIndex, indexCollect);
@@ -164,6 +172,14 @@ dataCollect(unsigned char c)
 }
 
 static void
+foundAck(unsigned char pos)
+{
+    (void)pos;
+
+    pYCmd->result = YAckFound;
+}
+
+static void
 found(unsigned char pos)
 {
     (void)pos;
@@ -224,14 +240,17 @@ YCommandParser_getId(YCommandParser *me)
 
 /* ---------------------------- Global functions --------------------------- */
 YCmdRes
-YCommand_parse(YCmdParserData *pCmd, char *p, ruint size)
+YCommandParser_parse(YCmdParserData *pCmd, char *p, ruint size)
 {
-    YCmd_t id;
-    char *pData;
     YCmdRes r;
+    
+    r = YCommandParser_search(&yCmdParser, p, size);
 
-    if(YCommandParser_search(&yCmdParser, p, size) < 0)
+    if(r < 0)
         return YCmdUnknown;
+    
+    if(r == YAckFound)
+        return YAck;
 
     pCmd->id = YCommandParser_getId(&yCmdParser);
     if(pCmd->id == YCmdNum)
@@ -244,9 +263,8 @@ YCommand_parse(YCmdParserData *pCmd, char *p, ruint size)
         return YCmdInvalidKey;
     }
 
-    pData = YCommandParser_getData(&yCmdParser);
-
-    if(r = YCommandFormat_format(pCmd, pData) < 0)
+    r = YCommandFormat_format(pCmd, YCommandParser_getData(&yCmdParser));
+    if(r < 0)
     {
         return r; 
     }
