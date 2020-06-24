@@ -51,6 +51,11 @@ YCommand_parseAndExec(YCommand *pCmd, char *p, ruint size)
     if((r < 0) || (r == YAck))
         return r;
 
+    if(YCommandExec_exec(&cmd) < 0)
+    {
+        return YCmdExecError; 
+    }
+
     return YCmdOk;
 }
 
