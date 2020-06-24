@@ -115,6 +115,8 @@ typedef enum
 void bsp_init(int argc, char *argv[]);
 void bsp_close(void);
 
+void bsp_reset(void);
+
 void bsp_keyParser(int c);
 void bsp_timeTick(void);
 

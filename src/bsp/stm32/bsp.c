@@ -38,6 +38,12 @@
 RKH_THIS_MODULE
 
 /* ----------------------------- Local macros ------------------------------ */
+#ifdef DEBUG
+#define reset_now()		__asm volatile	("	bkpt 0x00FF\n" )
+#else
+#define reset_now()		NVIC_SystemReset()
+#endif
+
 #define BlinkLed(b)  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, b)
 #define ModemCTS(b)  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, b)
 #define RS485_DIR(b) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, b)
@@ -155,6 +161,12 @@ bsp_init(int argc, char *argv[])
     dIn_init();
     dOut_init();
     usbDisk_init();
+}
+
+void
+bsp_reset(void)
+{
+    reset_now();
 }
 
 void

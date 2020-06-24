@@ -51,18 +51,12 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <stdio.h>
-
 #include "rkh.h"
+#include "bsp.h"
 
 RKH_THIS_MODULE
 
 /* ----------------------------- Local macros ------------------------------ */
-#ifdef DEBUG
-#define reset_now()		__asm volatile	("	bkpt 0x00FF\n" )
-#else
-#define reset_now()		NVIC_SystemReset()
-#endif
-
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -78,7 +72,7 @@ rkh_assert(RKHROM char * const file, int line)
     RKH_DIS_INTERRUPT();
     RKH_TR_FWK_ASSERT((RKHROM char *)file, __LINE__);
     rkh_fwk_exit();
-	reset_now();
+	bsp_reset();
 }
 
 /* ------------------------------ File footer ------------------------------ */
