@@ -292,6 +292,70 @@ test_smsSetOut2(void)
 }
 
 void
+test_smsSetOut3(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "Im:9,123,1;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_smsSetOut4(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "Im:10,123,1;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_smsSetOut5(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "Im:11,123,1;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_smsSetOut6(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "Im:12,123,1;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
 test_smsReset(void)
 {
     YCommand yCmd;
@@ -637,6 +701,70 @@ test_gprsSetOut2(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_gprsSetOut3(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "!3123456789AB,9,123,1;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_gprsSetOut4(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "!3123456789AB,10,123,1;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_gprsSetOut5(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "!3123456789AB,11,123,1;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_gprsSetOut6(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "!3123456789AB,12,123,1;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
