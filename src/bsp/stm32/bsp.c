@@ -310,13 +310,9 @@ bsp_SIMReady(void)
 void 
 bsp_SIMSelect(SIMSelect_t sim)
 {
-    simSelect = sim;
-
     HAL_GPIO_WritePin(SIM_SELECT_GPIO_Port,
                               SIM_SELECT_Pin, 
                               sim == MainSIM ? 0 : 1);
-
-//    set_led(LED_SIM, simSelect ? SEQ_LSTAGE2 : SEQ_LSTAGE1);
 }
 
 void
@@ -324,6 +320,7 @@ bsp_SIMChange(void)
 {
     simSelect = (simSelect == MainSIM) ? SecSIM : MainSIM;
 
+    set_led(LED_SIM, (simSelect == MainSIM) ? SEQ_NO_LIT : SEQ_LIT);
     bsp_SIMSelect(simSelect);
 }
 

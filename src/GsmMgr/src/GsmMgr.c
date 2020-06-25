@@ -1262,15 +1262,6 @@ IdleSMSToSendingSMSExt74(SMS *const me, RKH_EVT_T *pe)
                     ((SendSMSEvt *)(pe))->size);
 }
 
-#if 0
-static void 
-ListSMSToDeleteSMSExt77(SMS *const me, RKH_EVT_T *pe)
-{
-    ModCmd_deleteSMS(((SMSEvt *)(pe))->index);
-}
-
-#endif
-
 static void 
 ListSMSToC4Ext77(SMS *const me, RKH_EVT_T *pe)
 {
