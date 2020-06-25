@@ -30,6 +30,28 @@ extern "C" {
 /* -------------------------------- Constants ------------------------------ */
 typedef enum
 {
+    YCmdServerIp,
+    YCmdServerPort,
+    YCmdConnectionTime,
+    YCmdGpsTime,
+    YCmdAccLimit,
+    YCmdBreakLimit,
+    YCmdStatus,
+    YCmdSetOut1,
+    YCmdSetOut2,
+    YCmdSetOut3,
+    YCmdSetOut4,
+    YCmdSetOut5,
+    YCmdSetOut6,
+    YCmdReset,
+    YCmdSampleTime,
+    YCmdDataFormat,
+
+    YCmdNum,
+} YCmd_t;
+
+typedef enum
+{
     YCmdOk,
     YAck,
 
@@ -50,6 +72,7 @@ typedef enum
 /* ------------------------------- Data types ------------------------------ */
 typedef struct
 {
+    YCmd_t id;
     char index[YCOMMAND_INDEX_LEN+1]; // GPRS command index number [1 .. 11] 
     rui8_t reset;                     // After command execution reset flag
 } YCommand;

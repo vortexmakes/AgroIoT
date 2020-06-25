@@ -41,31 +41,9 @@ typedef enum
     YCommandNotFound = -1,
     YCommandInvalidKey = YCommandNotFound,
 
-}YCmdPResult;
+} YCmdPResult;
 
 /* ------------------------------- Data types ------------------------------ */
-typedef enum
-{
-    YCmdServerIp,
-    YCmdServerPort,
-    YCmdConnectionTime,
-    YCmdGpsTime,
-    YCmdAccLimit,
-    YCmdBreakLimit,
-    YCmdStatus,
-    YCmdSetOut1,
-    YCmdSetOut2,
-    YCmdSetOut3,
-    YCmdSetOut4,
-    YCmdSetOut5,
-    YCmdSetOut6,
-    YCmdReset,
-    YCmdSampleTime,
-    YCmdDataFormat,
-
-    YCmdNum,
-} YCmd_t;
-
 typedef struct
 {
     SSP parser;
@@ -74,7 +52,7 @@ typedef struct
     char security[YCOMMAND_SECURITY_LEN+1];
     char data[YCOMMAND_DATA_LEN+1];
     YCmdPResult result;
-}YCommandParser;
+} YCommandParser;
 
 typedef union
 {
@@ -98,7 +76,7 @@ typedef struct
     YCommand *p;
     YCmd_t id;
     CmdData data;
-}YCmdParserData;
+} YCmdParserData;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */

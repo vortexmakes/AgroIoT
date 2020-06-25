@@ -242,14 +242,15 @@ YCommandParser_getId(YCommandParser *me)
 YCmdRes
 YCommandParser_parse(YCmdParserData *pCmd, char *p, ruint size)
 {
-    YCmdRes r;
+    YCmdPResult rp;
+    YCmdRes rf;
     
-    r = YCommandParser_search(&yCmdParser, p, size);
+    rp = YCommandParser_search(&yCmdParser, p, size);
 
-    if(r < 0)
+    if(rp < 0)
         return YCmdUnknown;
     
-    if(r == YAckFound)
+    if(rp == YAckFound)
         return YAck;
 
     pCmd->id = YCommandParser_getId(&yCmdParser);
@@ -263,10 +264,10 @@ YCommandParser_parse(YCmdParserData *pCmd, char *p, ruint size)
         return YCmdInvalidKey;
     }
 
-    r = YCommandFormat_format(pCmd, YCommandParser_getData(&yCmdParser));
-    if(r < 0)
+    rf = YCommandFormat_format(pCmd, YCommandParser_getData(&yCmdParser));
+    if(rf < 0)
     {
-        return r; 
+        return rf; 
     }
 
     strcpy(pCmd->p->index, YCommandParser_getIndex(&yCmdParser));

@@ -44,7 +44,6 @@ tearDown(void)
 {
 }
 
-#if 1
 void
 test_smsInvalidKey(void)
 {
@@ -57,6 +56,7 @@ test_smsInvalidKey(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdInvalidKey, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -73,6 +73,7 @@ test_smsUnknown(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdUnknown, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
@@ -81,6 +82,7 @@ test_smsUnknown(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdUnknown, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -98,6 +100,7 @@ test_smsWrongLen(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdWrongLen, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
@@ -107,6 +110,7 @@ test_smsWrongLen(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdWrongLen, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -123,6 +127,7 @@ test_smsWrongFormat(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdWrongFormat, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -141,6 +146,7 @@ test_smsServerIp(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdServerIp, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -159,6 +165,7 @@ test_smsServerPort(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdServerPort, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -177,6 +184,7 @@ test_smsConnectionTime(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdConnectionTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -195,6 +203,7 @@ test_smsGpsTime(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdGpsTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -213,6 +222,7 @@ test_smsAccLimit(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdAccLimit, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -231,6 +241,7 @@ test_smsBreakLimit(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdBreakLimit, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -249,6 +260,7 @@ test_smsStatus(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdStatus, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(1, yCmd.reset);
 }
@@ -268,6 +280,7 @@ test_smsSetOut1(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut1, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -287,6 +300,7 @@ test_smsSetOut2(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut2, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -303,6 +317,7 @@ test_smsSetOut3(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut3, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -319,6 +334,7 @@ test_smsSetOut4(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut4, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -335,6 +351,7 @@ test_smsSetOut5(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut5, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -351,6 +368,7 @@ test_smsSetOut6(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut6, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -367,6 +385,7 @@ test_smsReset(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdReset, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(1, yCmd.reset);
 }
@@ -385,6 +404,7 @@ test_smsSampleTime(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdSampleTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -401,6 +421,7 @@ test_smsDataFormat(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdDataFormat, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(1, yCmd.reset);
 }
@@ -417,6 +438,7 @@ test_ack(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YAck, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -435,6 +457,7 @@ test_gprsIndex(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdConnectionTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
@@ -445,6 +468,7 @@ test_gprsIndex(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdConnectionTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
@@ -455,6 +479,7 @@ test_gprsIndex(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdConnectionTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("1", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -471,6 +496,7 @@ test_gprsInvalidKey(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdInvalidKey, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -487,6 +513,7 @@ test_gprsUnknown(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdUnknown, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
@@ -495,6 +522,7 @@ test_gprsUnknown(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdUnknown, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -512,6 +540,7 @@ test_gprsWrongLen(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdWrongLen, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
@@ -521,6 +550,7 @@ test_gprsWrongLen(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdWrongLen, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -537,6 +567,7 @@ test_gprsWrongFormat(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdWrongFormat, res);
+    TEST_ASSERT_EQUAL(YCmdNum, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -555,6 +586,7 @@ test_gprsServerIp(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdServerIp, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -573,6 +605,7 @@ test_gprsServerPort(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdServerPort, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -591,6 +624,7 @@ test_gprsConnectionTime(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdConnectionTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -609,6 +643,7 @@ test_gprsGpsTime(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdGpsTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -627,6 +662,7 @@ test_gprsAccLimit(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdAccLimit, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -645,6 +681,7 @@ test_gprsBreakLimit(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdBreakLimit, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -663,6 +700,7 @@ test_gprsStatus(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdStatus, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(1, yCmd.reset);
 }
@@ -682,6 +720,7 @@ test_gprsSetOut1(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut1, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -701,6 +740,7 @@ test_gprsSetOut2(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut2, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -717,6 +757,7 @@ test_gprsSetOut3(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut3, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -733,6 +774,7 @@ test_gprsSetOut4(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut4, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -749,6 +791,7 @@ test_gprsSetOut5(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut5, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -765,6 +808,7 @@ test_gprsSetOut6(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdSetOut6, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -781,6 +825,7 @@ test_gprsReset(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdReset, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(1, yCmd.reset);
 }
@@ -799,6 +844,7 @@ test_gprsSampleTime(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdSampleTime, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 }
@@ -815,8 +861,9 @@ test_gprsDataFormat(void)
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
     TEST_ASSERT_EQUAL(YCmdOk, res);
+    TEST_ASSERT_EQUAL(YCmdDataFormat, yCmd.id);
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(1, yCmd.reset);
 }
-#endif
+
 /* ------------------------------ End of file ------------------------------ */

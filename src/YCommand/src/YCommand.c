@@ -46,10 +46,13 @@ YCommand_parseAndExec(YCommand *pCmd, char *p, ruint size)
  
     cmd.p = pCmd;
     memset(&(cmd.data), 0, sizeof(CmdData));
+    pCmd->id = YCmdNum;
 
     r = YCommandParser_parse(&cmd, p, size);
     if((r < 0) || (r == YAck))
         return r;
+
+    pCmd->id = cmd.id;
 
     if(YCommandExec_exec(&cmd) < 0)
     {
