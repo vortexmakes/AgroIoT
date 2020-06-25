@@ -13,6 +13,8 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <stdio.h>
+
 #include "rkh.h"
 #include "signals.h"
 #include "rkhtmr.h"
@@ -550,6 +552,36 @@ static Apn *defaultAPN = &(operTable[0].apn);
 
 static GsmMgrInternal GsmMgrInt;
 
+static const char *YCmdTxt[YCmdNum] =
+{
+    "Server Ip",
+    "Server Port",
+    "Connection Time",
+    "Gps Update Time",
+    "Acc Limit",
+    "Break Limit",
+    "Default Config",
+    "Set Out1",
+    "Set Out2",
+    "Set Out3",
+    "Set Out4",
+    "Set Out5",
+    "Set Out6",
+    "Reset",
+    "Sample Time",
+    "Data Format"
+};
+
+static const char *YCmdErrTxt[] =
+{
+    "Ok",
+    "Unknown",
+    "InvalidKey",
+    "WrongLen",
+    "WrongFormat",
+    "ExecError"
+};
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void
@@ -782,8 +814,27 @@ sendCmdResp(SMS *const me, SMSEvt *pe)
 {
     int len;
 
-    len = snprintf(me->cmdResp, SMS_BUF_SIZE, 
-                                "YCommand Result: %d", me->yCmdRes);
+    switch(me->yCmdRes)
+    {
+        case YCmdOk:
+            len = snprintf(me->cmdResp, SMS_BUF_SIZE, 
+                               "Command: %s\n%s", 
+                               YCmdTxt[me->yCmd.id], YCmdErrTxt[-me->yCmdRes]);
+            break;
+
+        case YCmdExecError:
+            len = snprintf(me->cmdResp, SMS_BUF_SIZE, 
+                               "Command: %s\n%s", 
+                               YCmdTxt[me->yCmd.id], YCmdErrTxt[-me->yCmdRes]);
+            break;
+
+        default:
+            len = snprintf(me->cmdResp, SMS_BUF_SIZE, 
+                               "Command Error: %s", 
+                               YCmdErrTxt[-me->yCmdRes]);
+            break;
+    }
+
 
     ModCmd_sendSMS(pe->from, me->cmdResp, len);
 }
