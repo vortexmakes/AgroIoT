@@ -112,8 +112,7 @@ enum Signals
     evTrace,
     evUsbMounted,
     evUsbUnmounted,
-    evFlowmeter,
-    evReset
+    evFlowmeter
 };
 
 /* ------------------------------- Data types ------------------------------ */

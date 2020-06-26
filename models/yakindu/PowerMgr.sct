@@ -7,9 +7,8 @@
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_yt8GZzjpEemSZunftq3MwQ" specification="evGStatus/updateStatus()&#xD;&#xA;exit/storeStatus();&#xD;&#xA;ffile_sync();&#xD;&#xA;Backup_sync();&#xD;&#xA;RKH_TRC_FLUSH();&#xD;&#xA;trace_msd_close()" name="Ready" incomingTransitions="_yt97kzjpEemSZunftq3MwQ">
         <outgoingTransitions xmi:id="_MCgkoOUSEemMB6bmaFt2TA" specification="evBatChrStatus[isPowerFail()]/&#xD;&#xA;BatChr_shutDown()" target="_60EiQHp4EeqnXJ7pLrXguA"/>
-        <outgoingTransitions xmi:id="_zrtrkLeZEeqVVtApH7NyEQ" specification="evReset/bsp_reset()" target="_60EiQHp4EeqnXJ7pLrXguA"/>
       </vertices>
-      <vertices xsi:type="sgraph:FinalState" xmi:id="_60EiQHp4EeqnXJ7pLrXguA" incomingTransitions="_MCgkoOUSEemMB6bmaFt2TA _zrtrkLeZEeqVVtApH7NyEQ"/>
+      <vertices xsi:type="sgraph:FinalState" xmi:id="_60EiQHp4EeqnXJ7pLrXguA" incomingTransitions="_MCgkoOUSEemMB6bmaFt2TA"/>
     </regions>
   </sgraph:Statechart>
   <notation:Diagram xmi:id="_yt2m0DjpEemSZunftq3MwQ" type="org.yakindu.sct.ui.editor.editor.StatechartDiagramEditor" element="_yt0KkDjpEemSZunftq3MwQ" measurementUnit="Pixel">
@@ -89,16 +88,6 @@
       <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_MCgko-USEemMB6bmaFt2TA" points="[-9, 57, 0, -154]$[-9, 209, 0, -2]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_MChywOUSEemMB6bmaFt2TA" id="(0.4441862237122829,0.29826179653022106)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_MChyweUSEemMB6bmaFt2TA" id="(0.26666666666666666,0.13333333333333333)"/>
-    </edges>
-    <edges xmi:id="_zrwu4LeZEeqVVtApH7NyEQ" type="Transition" element="_zrtrkLeZEeqVVtApH7NyEQ" source="_yt8tcjjpEemSZunftq3MwQ" target="_60FJUHp4EeqnXJ7pLrXguA">
-      <children xsi:type="notation:DecorationNode" xmi:id="_zrx9ALeZEeqVVtApH7NyEQ" type="TransitionExpression">
-        <styles xsi:type="notation:ShapeStyle" xmi:id="_zrx9AbeZEeqVVtApH7NyEQ"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_zrx9AreZEeqVVtApH7NyEQ" x="-45" y="-6"/>
-      </children>
-      <styles xsi:type="notation:ConnectorStyle" xmi:id="_zrwu4beZEeqVVtApH7NyEQ" routing="Rectilinear" lineColor="4210752"/>
-      <styles xsi:type="notation:FontStyle" xmi:id="_zrxV8LeZEeqVVtApH7NyEQ" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_zrwu4reZEeqVVtApH7NyEQ" points="[13, 56, 114, -184]$[24, 56, 125, -184]$[24, 239, 125, -1]$[-95, 239, 6, -1]"/>
-      <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_zr2OcLeZEeqVVtApH7NyEQ" id="(0.9343434343434344,0.13670332340968466)"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>

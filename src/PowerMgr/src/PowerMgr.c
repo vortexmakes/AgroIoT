@@ -32,7 +32,6 @@ RKH_DCLR_FINAL_STATE PowerMgrFinal;
 /* ........................ Declares effect actions ........................ */
 static void ToReadyExt0(PowerMgr *const me, RKH_EVT_T *pe);
 static void ReadyToPowerMgrFinalExt1(PowerMgr *const me, RKH_EVT_T *pe);
-static void ReadyToPowerMgrFinalExt2(PowerMgr *const me, RKH_EVT_T *pe);
 static void ReadyToReadyLoc0(PowerMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
@@ -48,7 +47,6 @@ RKH_CREATE_BASIC_STATE(PowerMgr_Ready, NULL, exReady, RKH_ROOT, NULL);
 
 RKH_CREATE_TRANS_TABLE(PowerMgr_Ready)
 	RKH_TRREG(evBatChrStatus, isCondReadyToPowerMgrFinal1, ReadyToPowerMgrFinalExt1, &PowerMgrFinal),
-	RKH_TRREG(evReset, NULL, ReadyToPowerMgrFinalExt2, &PowerMgrFinal),
 	RKH_TRINT(evGStatus, NULL, ReadyToReadyLoc0),
 RKH_END_TRANS_TABLE
 
@@ -70,8 +68,6 @@ RKH_SMA_DEF_PTR(powerMgr);
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_ROM_STATIC_EVENT(e_Reset, evReset);
-
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void
@@ -117,11 +113,9 @@ ToReadyExt0(PowerMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &PowerMgrFinal);
 	RKH_TR_FWK_SIG(evGStatus);
 	RKH_TR_FWK_SIG(evBatChrStatus);
-	RKH_TR_FWK_SIG(evReset);
 	#if 0
 		RKH_TR_FWK_OBJ_NAME(ToReadyExt0, "ToReadyExt0");
 		RKH_TR_FWK_OBJ_NAME(ReadoToPowerMgrFinalExt1, "ReadyToPowerMgrFinalExt1");
-		RKH_TR_FWK_OBJ_NAME(ReadyToPowerMgrFinalExt2, "ReadyToPowerMgrFinalExt2");
 		RKH_TR_FWK_OBJ_NAME(ReadyToReadyLoc0, "ReadyToReadyLoc0");
 		RKH_TR_FWK_OBJ_NAME(exReady, "exReady");
 		RKH_TR_FWK_OBJ_NAME(isCondReadyToPowerMgrFinal1, "isCondReadyToPowerMgrFinal1");
@@ -134,12 +128,6 @@ static void
 ReadyToPowerMgrFinalExt1(PowerMgr *const me, RKH_EVT_T *pe)
 {
 	BatChr_shutDown();
-}
-
-static void 
-ReadyToPowerMgrFinalExt2(PowerMgr *const me, RKH_EVT_T *pe)
-{
-	bsp_reset();
 }
 
 static void 
@@ -168,10 +156,4 @@ isCondReadyToPowerMgrFinal1(PowerMgr *const me, RKH_EVT_T *pe)
 }
 
 /* ---------------------------- Global functions --------------------------- */
-void
-PowerMgr_reset(RKH_SMA_T *sma)
-{
-    RKH_SMA_POST_FIFO(powerMgr, &e_Reset, sma);
-}
-
 /* ------------------------------ End of file ------------------------------ */

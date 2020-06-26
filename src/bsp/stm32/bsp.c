@@ -170,6 +170,16 @@ bsp_reset(void)
 }
 
 void
+bsp_safeReset(void)
+{
+	ffile_sync();
+    Backup_sync();
+	RKH_TRC_FLUSH();
+	trace_msd_close();
+    reset_now();
+}
+
+void
 bsp_timeTick(void)
 {
     ++tstamp;
