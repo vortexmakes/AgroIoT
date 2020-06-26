@@ -39,6 +39,8 @@
     - ../Config/inc
     - ../Collector/inc
     - ../IpValid/inc
+    - ../ffile/portable/test
+    - ../ffile/inc
     - ../ioChg
     - ../
   :support:
@@ -50,7 +52,7 @@
     - ../IpValid/src/IpValid.c
 
 :defines:
-  :common: &common_defines [__TEST__]
+  :common: &common_defines [__TEST__, __FFILETEST__]
   :test:
     - *common_defines
     - TEST

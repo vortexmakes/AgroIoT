@@ -25,6 +25,7 @@
 #include "ssp.h"
 #include "Mock_Config.h"
 #include "Mock_dOut.h"
+#include "Mock_ffdir.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -412,11 +413,15 @@ test_smsSampleTime(void)
 void
 test_smsDataFormat(void)
 {
+    FFILE_T *ff = NULL;
+
     YCommand yCmd;
     YCmdRes res;
     char *p;
     
     p = "Im:15,123,0;"; 
+
+    ffdir_clean_ExpectAndReturn(ff);
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -852,11 +857,14 @@ test_gprsSampleTime(void)
 void
 test_gprsDataFormat(void)
 {
+    FFILE_T *ff = NULL;
     YCommand yCmd;
     YCmdRes res;
     char *p;
     
     p = "!3123456789AB,15,123,0;"; 
+
+    ffdir_clean_ExpectAndReturn(ff);
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 

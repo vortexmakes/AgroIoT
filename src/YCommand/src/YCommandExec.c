@@ -20,6 +20,7 @@
 #include "YCommandExec.h"
 #include "Config.h"
 #include "dOut.h"
+#include "ffdir.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -179,6 +180,8 @@ static
 rInt 
 exec_dataFormat(YCmdParserData *pCmd)
 {
+    ffdir_clean();
+    pCmd->p->reset = 1;
     return 0;
 }
 
