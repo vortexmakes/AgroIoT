@@ -22,6 +22,7 @@
 #include "YCommand.h"
 #include "bsp.h"
 #include "GsmMgrRequired.h"
+#include "PowerMgr.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define WaitTime0	RKH_TIME_SEC(5)
@@ -1277,7 +1278,7 @@ SendingSMSToIdleSMSExt79(SMS *const me, RKH_EVT_T *pe)
 static void 
 C3ToSMSResetExt81(SMS *const me, RKH_EVT_T *pe)
 {
-	bsp_reset();
+	PowerMgr_reset(RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void 

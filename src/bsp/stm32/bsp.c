@@ -320,7 +320,7 @@ bsp_SIMChange(void)
 {
     simSelect = (simSelect == MainSIM) ? SecSIM : MainSIM;
 
-    set_led(LED_SIM, (simSelect == MainSIM) ? SEQ_NO_LIT : SEQ_LIT);
+    set_led(LED_SIM, simSelect == MainSIM ? SEQ_NO_LIT : SEQ_LSTAGE2);
     bsp_SIMSelect(simSelect);
 }
 
