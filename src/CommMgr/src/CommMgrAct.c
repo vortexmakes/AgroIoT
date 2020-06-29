@@ -70,7 +70,7 @@ parseReceived(CommMgr *const me, RKH_EVT_T *pe)
     ReceivedEvt *realEvt;
 
     realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
-    me->lastRecvResponse = YFrame_parse(realEvt->buf);
+    me->lastRecvResponse = YFrame_parse(realEvt->buf, realEvt->size, &me->cmd);
 }
 
 void
@@ -456,6 +456,20 @@ CommMgr_isCondC6ToCurrentFinal36(CommMgr *const me, RKH_EVT_T *pe)
 {
     /*return (isMaxRecvTries()) ? true : false;*/
     return (me->nRecvTries == 0) ? true : false;
+}
+
+rbool_t
+CommMgr_isCondC3ToCommand43(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*return (isCmd()) ? true : false;*/
+    return (me->lastRecvResponse == TypeOfRespCmd) ? true : false;
+}
+
+rbool_t
+CommMgr_isCondC0ToCommand42(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*return (isCmd()) ? true : false;*/
+    return (me->lastRecvResponse == TypeOfRespCmd) ? true : false;
 }
 
 /* ---------------------------- Global functions --------------------------- */

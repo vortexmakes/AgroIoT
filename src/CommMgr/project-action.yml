@@ -22,6 +22,7 @@
     - ../geoMgr
     - ../Trace/inc
     - ../Flowmeter/inc
+    - ../YCommand/inc
     - ../
   :support:
 

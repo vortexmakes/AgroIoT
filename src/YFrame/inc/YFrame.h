@@ -22,6 +22,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhtype.h"
 #include "GStatus.h"
+#include "YCommand.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -50,7 +51,7 @@ rInt YFrame_getFlags(GStatusType *from, rui8_t *flags, rInt type);
 ruint YFrame_header(GStatusType *from, char *to, rInt nFrames, rInt type);
 ruint YFrame_data(GStatusType *from, char *to, rInt type);
 ruint YFrame_multipleTail(char *to);
-TypeOfResp YFrame_parse(char *from);
+TypeOfResp YFrame_parse(char *from, ruint size, YCommand *cmd);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
