@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_e6Q5QO0fEem6TqTrgnK7zA" specification="@EventDriven&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;&#xA;interface:&#xA;&#x9;in event evGeo&#xA;&#x9;in event evGeoInvalid&#xA;&#x9;in event evDigOutChanged&#xA;&#x9;in event evDigInChanged&#xA;&#x9;in event evDevData&#xA;&#x9;in event evNoDev&#xA;&#x9;in event evMapping&#xA;&#x9;in event evNoMapping&#xA;    in event evUsbMounted&#xA;    in event evUsbUnmounted&#xA;&#xA;&#x9;operation init()&#xA;&#x9;operation getUpdatingStatusTime()&#xA;&#x9;operation updatePosition()&#xA;&#x9;operation updateDigOut()&#xA;&#x9;operation publishCurrStatus()&#xA;&#x9;operation initAndTestDevNull()&#xA;&#x9;operation updateDigInTestDevNull()&#xA;&#x9;operation updateAndTestDevData()&#xA;&#x9;operation updateDigIn()&#xA;&#x9;operation testDevNull()&#xA;&#x9;operation isSyncDirOnStopped(): boolean&#xA;&#x9;operation syncDir()&#xA;&#x9;operation getMapTimeOnStop(): integer&#xA;&#x9;operation storeStatus()&#xA;&#x9;operation isSyncDirOnRunning(): boolean&#xA;&#x9;operation getMapTimeOnRunning(): integer&#xA;&#x9;operation initBackup()&#xA;&#x9;operation deinitBackup()" name="Collector">
+  <sgraph:Statechart xmi:id="_e6Q5QO0fEem6TqTrgnK7zA" specification="@EventDriven&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;&#xA;interface:&#xA;&#x9;in event evGeo&#xA;&#x9;in event evGeoInvalid&#xA;&#x9;in event evDigOutChanged&#xA;&#x9;in event evDigInChanged&#xA;&#x9;in event evDevData&#xA;&#x9;in event evNoDev&#xA;&#x9;in event evMapping&#xA;&#x9;in event evNoMapping&#xA;    in event evUsbMounted&#xA;    in event evUsbUnmounted&#xA;    in event evTerminate&#xA;&#xA;&#x9;operation init()&#xA;&#x9;operation getUpdatingStatusTime()&#xA;&#x9;operation updatePosition()&#xA;&#x9;operation updateDigOut()&#xA;&#x9;operation publishCurrStatus()&#xA;&#x9;operation initAndTestDevNull()&#xA;&#x9;operation updateDigInTestDevNull()&#xA;&#x9;operation updateAndTestDevData()&#xA;&#x9;operation updateDigIn()&#xA;&#x9;operation testDevNull()&#xA;&#x9;operation isSyncDirOnStopped(): boolean&#xA;&#x9;operation syncDir()&#xA;&#x9;operation getMapTimeOnStop(): integer&#xA;&#x9;operation storeStatus()&#xA;&#x9;operation isSyncDirOnRunning(): boolean&#xA;&#x9;operation getMapTimeOnRunning(): integer&#xA;&#x9;operation initBackup()&#xA;&#x9;operation deinitBackup()" name="Collector">
     <regions xmi:id="_e6SHYO0fEem6TqTrgnK7zA" name="main region">
       <vertices xsi:type="sgraph:Entry" xmi:id="_e6T8kO0fEem6TqTrgnK7zA">
         <outgoingTransitions xmi:id="__k320O02Eemg6KQwm_8wCw" specification="/ init()" target="_s1gFEO0fEem6TqTrgnK7zA"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_s1gFEO0fEem6TqTrgnK7zA" specification="evGeo / updatePosition()&#xD;&#xA;evGeoInvalid / updatePosition()&#xD;&#xA;evDigOutChanged / updateDigOut()&#xD;&#xA;evTrace/ storeTrace()&#xD;&#xA;after getUpdatingStatusTime() / publishCurrStatus()&#xD;&#xA;evUsbMounted / initBackup()&#xD;&#xA;evUsbUnmounted / deinitBackup()" name="Active" incomingTransitions="__k320O02Eemg6KQwm_8wCw">
+        <outgoingTransitions xmi:id="_OTrk0LivEeqmj4PiveOg9Q" specification="evTerminate" target="_Mj30ELivEeqmj4PiveOg9Q"/>
         <regions xmi:id="_s1hTMO0fEem6TqTrgnK7zA" name="DevStatus">
           <vertices xsi:type="sgraph:State" xmi:id="_EmjfcO0gEem6TqTrgnK7zA" specification="entry / initAndTestDevNull()&#xD;&#xA;evDigInChanged / updateDigInTestDevNull()" name="DevNotConnected" incomingTransitions="_L8HXwO0gEem6TqTrgnK7zA _Z82HkO0gEem6TqTrgnK7zA">
             <outgoingTransitions xmi:id="_Yzc2kO0gEem6TqTrgnK7zA" specification="evDevData/&#xD;&#xA;updateAndTestDevData()" target="_VZhtYO0gEem6TqTrgnK7zA"/>
@@ -43,6 +44,7 @@
           </vertices>
         </regions>
       </vertices>
+      <vertices xsi:type="sgraph:FinalState" xmi:id="_Mj30ELivEeqmj4PiveOg9Q" incomingTransitions="_OTrk0LivEeqmj4PiveOg9Q"/>
     </regions>
   </sgraph:Statechart>
   <notation:Diagram xmi:id="_e6RgVu0fEem6TqTrgnK7zA" type="org.yakindu.sct.ui.editor.editor.StatechartDiagramEditor" element="_e6Q5QO0fEem6TqTrgnK7zA" measurementUnit="Pixel">
@@ -202,6 +204,9 @@
           <styles xsi:type="notation:FontStyle" xmi:id="_s1h6Qu0fEem6TqTrgnK7zA"/>
           <styles xsi:type="notation:BooleanValueStyle" xmi:id="_s1jIY-0fEem6TqTrgnK7zA" name="isHorizontal" booleanValue="true"/>
           <layoutConstraint xsi:type="notation:Bounds" xmi:id="_s1h6Q-0fEem6TqTrgnK7zA" x="9" y="57" width="951" height="523"/>
+        </children>
+        <children xsi:type="notation:Shape" xmi:id="_Mj9ToLivEeqmj4PiveOg9Q" type="FinalState" element="_Mj30ELivEeqmj4PiveOg9Q" fontName="Verdana" lineColor="4210752">
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_Mj9TobivEeqmj4PiveOg9Q" x="302" y="7"/>
         </children>
         <layoutConstraint xsi:type="notation:Bounds" xmi:id="_e6SudO0fEem6TqTrgnK7zA"/>
       </children>
@@ -384,6 +389,17 @@
       <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_fyld4u7LEemHz4nbna2J_g" points="[0, -8, 143, -47]$[-100, -8, 43, -47]$[-100, 35, 43, -4]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_fypIQO7LEemHz4nbna2J_g" id="(0.0,1.0)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_fypvUO7LEemHz4nbna2J_g" id="(0.07477309301577084,0.09056603773584908)"/>
+    </edges>
+    <edges xmi:id="_OTsy8LivEeqmj4PiveOg9Q" type="Transition" element="_OTrk0LivEeqmj4PiveOg9Q" source="_s1h6QO0fEem6TqTrgnK7zA" target="_Mj9ToLivEeqmj4PiveOg9Q">
+      <children xsi:type="notation:DecorationNode" xmi:id="_OTtaAbivEeqmj4PiveOg9Q" type="TransitionExpression">
+        <styles xsi:type="notation:ShapeStyle" xmi:id="_OTtaArivEeqmj4PiveOg9Q"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_OTtaA7ivEeqmj4PiveOg9Q" x="4" y="44"/>
+      </children>
+      <styles xsi:type="notation:ConnectorStyle" xmi:id="_OTsy8bivEeqmj4PiveOg9Q" routing="Rectilinear" lineColor="4210752"/>
+      <styles xsi:type="notation:FontStyle" xmi:id="_OTtaALivEeqmj4PiveOg9Q" fontName="Verdana"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_OTsy8rivEeqmj4PiveOg9Q" points="[255, 0, 5, 41]$[255, -36, 5, 5]"/>
+      <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_OTv2QLivEeqmj4PiveOg9Q" id="(0.048370136698212406,0.0)"/>
+      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_OTwdULivEeqmj4PiveOg9Q" id="(0.13333333333333333,0.6)"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>
