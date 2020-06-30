@@ -18,6 +18,9 @@
 #include "rkh.h"
 #include "YCommand.h"
 #include "YCommandExec.h"
+#include "Collector.h"
+#include "CommMgr.h"
+#include "signals.h"
 #include "Config.h"
 #include "dOut.h"
 #include "ffdir.h"
@@ -45,6 +48,8 @@ static rInt exec_setOut2(YCmdParserData *pCmd);
 static rInt exec_reset(YCmdParserData *pCmd);
 static rInt exec_sampleTime(YCmdParserData *pCmd);
 static rInt exec_dataFormat(YCmdParserData *pCmd);
+
+static RKH_ROM_STATIC_EVENT(evTerminateObj, evTerminate);        
 
 /* ----------------------- Local function prototypes ----------------------- */
 static const YCmdExec execTable[YCmdNum] =
@@ -180,6 +185,9 @@ static
 rInt 
 exec_dataFormat(YCmdParserData *pCmd)
 {
+    RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, collector), &evTerminateObj, NULL);
+    RKH_SMA_POST_LIFO(RKH_UPCAST(RKH_SMA_T, commMgr ), &evTerminateObj, NULL);
+
     ffdir_clean();
     pCmd->p->reset = 1;
     return 0;
