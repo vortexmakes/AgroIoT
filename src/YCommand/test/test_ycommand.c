@@ -23,6 +23,12 @@
 #include "YCommandExec.h"
 #include "IpValid.h"
 #include "ssp.h"
+#include "Collector.h"
+#include "CommMgr.h"
+#include "signals.h"
+#include "Mock_rkhtrc_record.h"
+#include "Mock_rkhtrc_filter.h"
+#include "Mock_rkhsma.h"
 #include "Mock_Config.h"
 #include "Mock_dOut.h"
 #include "Mock_ffdir.h"
@@ -32,6 +38,20 @@
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+RKH_SMA_CREATE(Collector, collector, 0, HCAL, NULL, NULL, NULL);
+RKH_SMA_DEF_PTR(collector);
+
+RKH_SMA_CREATE(CommMgr, commMgr, 0, HCAL, NULL, NULL, NULL);
+RKH_SMA_DEF_PTR(commMgr);
+
+const RKHSmaVtbl rkhSmaVtbl =  /* Instantiate it because rkhsma is mocked */
+{
+    rkh_sma_activate,
+    rkh_sma_dispatch,
+    rkh_sma_post_fifo,
+    rkh_sma_post_lifo
+};
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
@@ -420,6 +440,11 @@ test_smsDataFormat(void)
     char *p;
     
     p = "Im:15,123,0;"; 
+
+    rkh_sma_post_lifo_Expect(collector, NULL, NULL);
+    rkh_sma_post_lifo_IgnoreArg_e();
+    rkh_sma_post_lifo_Expect(commMgr, NULL, NULL);
+    rkh_sma_post_lifo_IgnoreArg_e();
 
     ffdir_clean_ExpectAndReturn(ff);
 
@@ -863,6 +888,11 @@ test_gprsDataFormat(void)
     char *p;
     
     p = "!3123456789AB,15,123,0;"; 
+
+    rkh_sma_post_lifo_Expect(collector, NULL, NULL);
+    rkh_sma_post_lifo_IgnoreArg_e();
+    rkh_sma_post_lifo_Expect(commMgr, NULL, NULL);
+    rkh_sma_post_lifo_IgnoreArg_e();
 
     ffdir_clean_ExpectAndReturn(ff);
 

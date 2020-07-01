@@ -1278,7 +1278,7 @@ SendingSMSToIdleSMSExt79(SMS *const me, RKH_EVT_T *pe)
 static void 
 C3ToSMSResetExt81(SMS *const me, RKH_EVT_T *pe)
 {
-	PowerMgr_reset(RKH_UPCAST(RKH_SMA_T, me));
+	bsp_safeReset();
 }
 
 static void 
