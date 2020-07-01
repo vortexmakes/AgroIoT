@@ -62,6 +62,7 @@ struct CommMgr
     int nRecvTries;
     rui16_t nFramesPerMsg;
     YCommand cmd;
+    bool isExecCmdComeFromStatus;
 };
 
 /* -------------------------- External variables --------------------------- */

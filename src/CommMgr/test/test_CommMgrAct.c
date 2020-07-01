@@ -121,6 +121,13 @@ setupForSendingABlockOfFrames(ruint nFrames, int len, bool validity)
     return n;
 }
 
+static void
+topicPublishCallback(Topics topic, RKH_EVT_T *evt, RKH_SMA_T *ao, 
+                     int cmock_num_calls)
+{
+    TEST_ASSERT_EQUAL(evReset, evt->e);
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 setUp(void)
@@ -725,6 +732,7 @@ test_ReceiveCommand(void)
     strcpy(evReceivedObj.buf, "!3|...");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
+    RKH_UPCAST(RKH_SM_T, me)->state = RKH_UPCAST(RKH_ST_T, &ReceivingMsgAck);
     YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
                                  evReceivedObj.size,
                                  &me->cmd,
@@ -736,7 +744,9 @@ test_ReceiveCommand(void)
     res = CommMgr_isCondC3ToCommand43(me, 
                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(me->isExecCmdComeFromStatus == false);
 
+    RKH_UPCAST(RKH_SM_T, me)->state = RKH_UPCAST(RKH_ST_T, &ReceivingStatusAck);
     YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
                                  evReceivedObj.size,
                                  &me->cmd,
@@ -748,30 +758,76 @@ test_ReceiveCommand(void)
     res = CommMgr_isCondC0ToCommand42(me, 
                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(me->isExecCmdComeFromStatus == true);
 }
 
 void
 test_SendCommandAck(void)
 {
-    TEST_IGNORE_MESSAGE("SendCommandAck");
-#if 0
-    ruint frameLen, headerLen;
+    ruint cmdAckLen;
+    char *cmdAck = "!4|355826018345180,123456789AB,";
 
-    me->status = gStatus;
-    frameLen = strlen(singleFrame);
-    headerLen = strlen("!0|19355826018345180,");
-
-    YFrame_header_ExpectAndReturn(&me->status, me->evSendObj.buf, 0, 
-                                  YFRAME_SGP_TYPE, headerLen);
-    YFrame_data_ExpectAndReturn(&me->status, &me->evSendObj.buf[headerLen], 
-                                YFRAME_SGP_TYPE, frameLen);
+    cmdAckLen = strlen(cmdAck);
+    YFrame_getCmdAck_ExpectAndReturn(&me->cmd, me->evSendObj.buf, cmdAckLen);
     topic_publish_Expect(TCPConnection, 
                          RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                          RKH_UPCAST(RKH_SMA_T, me));
 
     CommMgr_enSendingCmdAck(me);
-    TEST_ASSERT_TRUE(me->isPendingStatus == false);
-#endif
+
+    TEST_ASSERT_EQUAL(cmdAckLen, me->evSendObj.size);
+}
+
+void
+test_ReceivedCommandRequiresRestart(void)
+{
+    rbool_t res;
+
+    me->cmd.reset = true;
+    res = CommMgr_isCondC7ToActiveFinal40(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+
+    topic_publish_Expect(Status, 0, RKH_UPCAST(RKH_SMA_T, me));
+    topic_publish_IgnoreArg_evt();
+    topic_publish_StubWithCallback(topicPublishCallback);
+
+    CommMgr_C7ToActiveFinalExt41(me, evt);
+}
+
+void
+test_ReceivedCommandDoNotRequireRestartAndComeFromStatus(void)
+{
+    rbool_t res;
+
+    RKH_UPCAST(RKH_SM_T, me)->state = RKH_UPCAST(RKH_ST_T, &ReceivingStatusAck);
+    res = CommMgr_isCondC0ToCommand42(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(me->isExecCmdComeFromStatus == true);
+
+    me->cmd.reset = false;
+    res = CommMgr_isCondC7ToActiveFinal40(me, evt);
+    TEST_ASSERT_TRUE(res == false);
+
+    res = CommMgr_isCondC8ToHistory44(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+}
+
+void
+test_ReceivedCommandDoNotRequireRestartAndComeFromHistory(void)
+{
+    rbool_t res;
+
+    RKH_UPCAST(RKH_SM_T, me)->state = RKH_UPCAST(RKH_ST_T, &ReceivingMsgAck);
+    res = CommMgr_isCondC3ToCommand43(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(me->isExecCmdComeFromStatus == false);
+
+    me->cmd.reset = false;
+    res = CommMgr_isCondC7ToActiveFinal40(me, evt);
+    TEST_ASSERT_TRUE(res == false);
+
+    res = CommMgr_isCondC8ToHistory44(me, evt);
+    TEST_ASSERT_TRUE(res == false);
 }
 
 /* ------------------------------ End of file ------------------------------ */
