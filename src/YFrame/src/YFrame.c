@@ -29,6 +29,7 @@
 #define YFRAME_SEPARATOR        ","
 #define YFRAME_TERMINATOR       "#"
 #define YFRAME_ACK              "!2|"
+#define YFRAME_CACK             "!4|"
 
 #define FLG_GPS_VALID           1
 #define FLG_HISTORY             2
@@ -210,6 +211,26 @@ YFrame_parse(char *from, ruint size, YCommand *cmd)
         res = TypeOfRespUnknown;
     }
     return res;
+}
+
+ruint 
+YFrame_getCmdAck(YCommand *from, char *to)
+{
+    ruint size;
+    char *frame;
+
+    size = 0;
+    frame = to;
+    if ((from != (YCommand *)0) && (to != (char *)0))
+    {
+        strcpy(frame, YFRAME_CACK);
+        strcat(frame, GsmMgr_getImei());
+        strcat(frame, YFRAME_SEPARATOR);
+        strcat(frame, from->index);
+        strcat(frame, YFRAME_SEPARATOR);
+        size = strlen(frame);
+    }
+    return size;
 }
 
 /* ------------------------------ End of file ------------------------------ */
