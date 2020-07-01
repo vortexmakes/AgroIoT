@@ -28,6 +28,7 @@
 #include "Config.h"
 #include "geoMgr.h"
 #include "Trace.h"
+#include "bsp.h"
 
 RKH_MODULE_NAME(CommMgrAct);
 
@@ -45,7 +46,6 @@ RKH_MODULE_NAME(CommMgrAct);
 /* ------------------------------- Constants ------------------------------- */
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static RKH_ROM_STATIC_EVENT(evRestartObj, evRestart);
-static RKH_ROM_STATIC_EVENT(evResetObj, evReset);
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -325,9 +325,7 @@ void
 CommMgr_C7ToActiveFinalExt41(CommMgr *const me, RKH_EVT_T *pe)
 {
     /*reset()*/
-    topic_publish(Status, 
-                  RKH_UPCAST(RKH_EVT_T, &evResetObj), 
-                  RKH_UPCAST(RKH_SMA_T, me));
+    bsp_safeReset();
 }
 
 /* ............................. Entry actions ............................. */

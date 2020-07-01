@@ -33,6 +33,7 @@
 #include "Mock_Config.h"
 #include "Mock_geoMgr.h"
 #include "Mock_Trace.h"
+#include "Mock_bsp.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -119,13 +120,6 @@ setupForSendingABlockOfFrames(ruint nFrames, int len, bool validity)
         YFrame_data_IgnoreArg_from(); 
     }
     return n;
-}
-
-static void
-topicPublishCallback(Topics topic, RKH_EVT_T *evt, RKH_SMA_T *ao, 
-                     int cmock_num_calls)
-{
-    TEST_ASSERT_EQUAL(evReset, evt->e);
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -787,10 +781,7 @@ test_ReceivedCommandRequiresRestart(void)
     res = CommMgr_isCondC7ToActiveFinal40(me, evt);
     TEST_ASSERT_TRUE(res == true);
 
-    topic_publish_Expect(Status, 0, RKH_UPCAST(RKH_SMA_T, me));
-    topic_publish_IgnoreArg_evt();
-    topic_publish_StubWithCallback(topicPublishCallback);
-
+    bsp_safeReset_Expect();
     CommMgr_C7ToActiveFinalExt41(me, evt);
 }
 

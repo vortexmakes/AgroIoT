@@ -23,6 +23,8 @@
     - ../Trace/inc
     - ../Flowmeter/inc
     - ../YCommand/inc
+    - ../bsp
+    - ../ioChg
     - ../
   :support:
 
