@@ -191,32 +191,23 @@ YFrame_multipleTail(char *to)
 }
 
 TypeOfResp
-YFrame_parse(char *from)
+YFrame_parse(char *from, ruint size, YCommand *cmd)
 {
-    ruint size;
-    char *str;
     TypeOfResp res;
+    YCmdRes yCmdRes;
 
-    res = TypeOfRespUnknown;
-    if (from != (char *)0)
+    yCmdRes = YCommand_parseAndExec(cmd, from, size);
+    if (yCmdRes == YCmdOk)
     {
-        /* Check Ack */
-        size = strlen(from);
-        if (size >= YFRAME_ACK_LEN)
-        {
-            str = (from + (size - YFRAME_ACK_LEN));
-            if (strcmp(str, YFRAME_ACK) == 0)
-            {
-                res = TypeOfRespAck;
-            }
-        }
-        else if (size == 0)
-        {
-            res = TypeOfRespEmpty;
-        }
-
-        /* Check Cmd */
-        /* 636D643A XX ... XX 3B */
+        res = TypeOfRespCmd;
+    }
+    else if (yCmdRes == YAck)
+    {
+        res = TypeOfRespAck;
+    }
+    else
+    {
+        res = TypeOfRespUnknown;
     }
     return res;
 }

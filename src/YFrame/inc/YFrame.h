@@ -52,6 +52,7 @@ ruint YFrame_header(GStatusType *from, char *to, rInt nFrames, rInt type);
 ruint YFrame_data(GStatusType *from, char *to, rInt type);
 ruint YFrame_multipleTail(char *to);
 TypeOfResp YFrame_parse(char *from, ruint size, YCommand *cmd);
+ruint YFrame_getCmdAck(YCommand *from, char *to);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
