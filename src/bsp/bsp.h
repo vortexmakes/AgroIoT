@@ -156,6 +156,7 @@ void bsp_usbHostProcess(void);
 UsbHostStatus_t bsp_usbHostStatus(void);
 UsbDiskStatus_t bsp_usbDiskStatus(void);
 void bsp_setAllLeds(uint8_t val);
+void bsp_setErrLeds(uint8_t err);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

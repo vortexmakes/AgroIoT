@@ -503,4 +503,27 @@ bsp_setAllLeds(uint8_t val)
     HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, val);
 }
 
+void
+bsp_setErrLeds(uint8_t err)
+{
+	bsp_setAllLeds(0);
+
+	switch(err)
+	{
+		case 1:
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
+			break;
+		case 2:
+			HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
+			break;
+		case 3:
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
+			HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
+			break;
+
+		default:
+			break;
+	}
+}
+
 /* ------------------------------ File footer ------------------------------ */
