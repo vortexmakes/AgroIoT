@@ -44,6 +44,7 @@ enum TraceId
     TraceId_Restore,        /* 10 */
     TraceId_FileFormat,     /* 11 */
     TraceId_CorruptStatus,  /* 12 */
+    TraceId_GSMConnected,   /* 13 */
 
     TraceId_NumOfEvents
 };

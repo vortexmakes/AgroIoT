@@ -20,7 +20,7 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ........................ States and pseudostates ........................ */
-RKH_CREATE_BASIC_STATE(Idle, NULL, NULL, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(Idle, CommMgr_enIdle, NULL, RKH_ROOT, NULL);
 RKH_CREATE_BASIC_STATE(WaitSync, CommMgr_enWaitSync, CommMgr_exWaitSync, &Active, NULL);
 RKH_CREATE_BASIC_STATE(SendingStatus, CommMgr_enSendingStatus, NULL, &Current, NULL);
 RKH_CREATE_BASIC_STATE(ReceivingStatusAck, CommMgr_enReceivingStatusAck, NULL, &Current, NULL);
@@ -29,6 +29,7 @@ RKH_CREATE_BASIC_STATE(SendingHist, CommMgr_enSendingHist, NULL, &History, NULL)
 RKH_CREATE_BASIC_STATE(ReceivingMsgAck, CommMgr_enReceivingMsgAck, NULL, &History, NULL);
 RKH_CREATE_BASIC_STATE(SendingStartOfHist, CommMgr_enSendingStartOfHist, NULL, &History, NULL);
 RKH_CREATE_BASIC_STATE(SendingCmdAck, CommMgr_enSendingCmdAck, NULL, &Command, NULL);
+RKH_CREATE_BASIC_STATE(Disconnected, CommMgr_enDisconnected, NULL, RKH_ROOT, NULL);
 
 RKH_CREATE_COMP_REGION_STATE(Active, NULL, NULL, RKH_ROOT, &Current, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Current, NULL, NULL, &Active, &SendingStatus, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
@@ -36,11 +37,11 @@ RKH_CREATE_COMP_REGION_STATE(History, NULL, NULL, &Active, &C1, CommMgr_ToC1Ext1
 RKH_CREATE_COMP_REGION_STATE(Command, NULL, NULL, &Active, &SendingCmdAck, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 
 RKH_CREATE_TRANS_TABLE(Idle)
-	RKH_TRREG(evNetConnected, NULL, CommMgr_IdleToActiveExt1, &Active),
+	RKH_TRREG(evNetConnected, NULL, NULL, &Active),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Active)
-	RKH_TRREG(evNetDisconnected, NULL, NULL, &Idle),
+	RKH_TRREG(evNetDisconnected, NULL, NULL, &Disconnected),
 	RKH_TRINT(evGStatus, NULL, CommMgr_ActiveToActiveLoc0),
 	RKH_TRREG(evTerminate, NULL, NULL, &CommMgrFinal),
     RKH_TRCOMPLETION(NULL, NULL, &CommMgrFinal),
@@ -93,6 +94,10 @@ RKH_CREATE_TRANS_TABLE(SendingCmdAck)
 	RKH_TRREG(evSent, NULL, NULL, &C7),
 	RKH_TRREG(evSendFail, NULL, NULL, &C7),
 	RKH_TRINT(evTerminate, NULL, NULL),
+RKH_END_TRANS_TABLE
+
+RKH_CREATE_TRANS_TABLE(Disconnected)
+	RKH_TRREG(evNetConnected, NULL, NULL, &Active),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(C0);

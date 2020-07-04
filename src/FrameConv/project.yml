@@ -39,6 +39,8 @@
     - ../../third-party/rkh/source/sm/inc
     - ../../third-party/rkh/source/queue/inc
     - ../../third-party/rkh/source/tmr/inc
+    - ../../third-party/rkh/source/trc/inc
+    - ../../third-party/rkh/source/mempool/inc
     - ../tpsens/cbox
     - ../Collector/inc
     - ../gps/inc
@@ -50,6 +52,7 @@
     - ../YFrame/inc
     - ../GsmMgr/inc
     - ../gps/inc
+    - ../YCommand/inc
     - ../
   :support:
     - test/support
