@@ -9,7 +9,7 @@
 
 source_dir="../../src"
 ceedling_dir="tools/ceedling"
-modules="Config epoch GStatus StatQue YFrame device topic SecString"
+modules="Config epoch GStatus StatQue YFrame device topic SecString Trace Crc32 Flowmeter FrameConv YCommand"
 stateMachines="Collector CommMgr"
 
 #echo $PATH
@@ -97,6 +97,20 @@ testModuleExceptions()
     fi
 }
 
+releaseModules()
+{
+    echo ""
+    echo "Release FrameConv module"
+    echo "------------------------"
+    cd $source_dir/FrameConv
+    if [ ! -e "project.yml" ]; then
+        echo "[ERROR] Ceedling project not found"
+        exit 1
+    else
+        ceedling release
+    fi
+}
+
 coverModuleExceptions()
 {
     echo ""
@@ -173,6 +187,7 @@ do
 done
 
 testModuleExceptions
+releaseModules
 
 echo ""
 echo "Generating code coverage report for modules"

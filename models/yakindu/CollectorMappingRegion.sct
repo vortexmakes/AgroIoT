@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_VwSC0P8vEemOF-Zd97UPAA" specification="@EventDriven&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;&#xA;interface:&#xA;// Define events&#xA;// and variables here. &#xA;// Use CTRL + Space for content assist.&#xA;internal:&#xA;&#x9;event evMapping&#xA;&#x9;event evNoMapping&#xA;&#x9;&#xA;&#x9;operation init()&#xA;&#x9;operation isSyncDirOnStopped(): boolean&#xA;&#x9;operation syncDir()&#xA;&#x9;operation getMapTimeOnStop(): integer&#xA;&#x9;operation storeStatus()&#xA;&#x9;operation isSyncDirOnRunning(): boolean&#xA;&#x9;operation getMapTimeOnRunning(): integer" name="CollectoMapping">
+  <sgraph:Statechart xmi:id="_VwSC0P8vEemOF-Zd97UPAA" specification="@EventDriven&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;&#xA;interface:&#xA;// Define events&#xA;// and variables here. &#xA;// Use CTRL + Space for content assist.&#xA;internal:&#xA;&#x9;event evMapping&#xA;&#x9;event evNoMapping&#xA;&#x9;event evTerminate&#xA;&#x9;&#xA;&#x9;operation init()&#xA;&#x9;operation isSyncDirOnStopped(): boolean&#xA;&#x9;operation syncDir()&#xA;&#x9;operation getMapTimeOnStop(): integer&#xA;&#x9;operation storeStatus()&#xA;&#x9;operation isSyncDirOnRunning(): boolean&#xA;&#x9;operation getMapTimeOnRunning(): integer" name="CollectoMapping">
     <regions xmi:id="_VwSp4P8vEemOF-Zd97UPAA" name="Mapping">
       <vertices xsi:type="sgraph:Entry" xmi:id="_aO4VEP8vEemOF-Zd97UPAA">
         <outgoingTransitions xmi:id="_aO4VEf8vEemOF-Zd97UPAA" specification="/ init()" target="_aO48IP8vEemOF-Zd97UPAA"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_aO48IP8vEemOF-Zd97UPAA" specification="" name="Active" incomingTransitions="_aO4VEf8vEemOF-Zd97UPAA">
+        <outgoingTransitions xmi:id="_FtoVALivEeqmj4PiveOg9Q" specification="evTerminate" target="_ENNEELivEeqmj4PiveOg9Q"/>
         <regions xmi:id="_aO6xav8vEemOF-Zd97UPAA" name="r1">
           <vertices xsi:type="sgraph:State" xmi:id="_aO6xa_8vEemOF-Zd97UPAA" specification="" name="Stopped" incomingTransitions="_aO7YbP8vEemOF-Zd97UPAA _aO7_ff8vEemOF-Zd97UPAA _aO7_f_8vEemOF-Zd97UPAA _aO7_hv8vEemOF-Zd97UPAA _aO7_iP8vEemOF-Zd97UPAA">
             <outgoingTransitions xmi:id="_aO7YYf8vEemOF-Zd97UPAA" specification="evMapping" target="_aO7Ybf8vEemOF-Zd97UPAA"/>
@@ -32,6 +33,7 @@
           </vertices>
         </regions>
       </vertices>
+      <vertices xsi:type="sgraph:FinalState" xmi:id="_ENNEELivEeqmj4PiveOg9Q" incomingTransitions="_FtoVALivEeqmj4PiveOg9Q"/>
     </regions>
   </sgraph:Statechart>
   <notation:Diagram xmi:id="_VwSC1_8vEemOF-Zd97UPAA" type="org.yakindu.sct.ui.editor.editor.StatechartDiagramEditor" element="_VwSC0P8vEemOF-Zd97UPAA" measurementUnit="Pixel">
@@ -135,6 +137,9 @@
           <styles xsi:type="notation:FontStyle" xmi:id="_aO3HXf8vEemOF-Zd97UPAA"/>
           <styles xsi:type="notation:BooleanValueStyle" xmi:id="_aO3HXv8vEemOF-Zd97UPAA" name="isHorizontal" booleanValue="true"/>
           <layoutConstraint xsi:type="notation:Bounds" xmi:id="_aO3HX_8vEemOF-Zd97UPAA" x="19" y="67" width="551" height="491"/>
+        </children>
+        <children xsi:type="notation:Shape" xmi:id="_ENO5QLivEeqmj4PiveOg9Q" type="FinalState" element="_ENNEELivEeqmj4PiveOg9Q" fontName="Verdana" lineColor="4210752">
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_ENO5QbivEeqmj4PiveOg9Q" x="393" y="17"/>
         </children>
         <layoutConstraint xsi:type="notation:Bounds" xmi:id="_VwTQ9P8vEemOF-Zd97UPAA"/>
       </children>
@@ -284,6 +289,17 @@
       <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_aPCtL_8vEemOF-Zd97UPAA" points="[0, -8, 143, -47]$[-100, -8, 43, -47]$[-100, 35, 43, -4]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_aPCtMP8vEemOF-Zd97UPAA" id="(0.0,1.0)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_aPCtMf8vEemOF-Zd97UPAA" id="(0.07477309301577084,0.09056603773584908)"/>
+    </edges>
+    <edges xmi:id="_FtqKMLivEeqmj4PiveOg9Q" type="Transition" element="_FtoVALivEeqmj4PiveOg9Q" source="_aO3G-v8vEemOF-Zd97UPAA" target="_ENO5QLivEeqmj4PiveOg9Q">
+      <children xsi:type="notation:DecorationNode" xmi:id="_FtrYULivEeqmj4PiveOg9Q" type="TransitionExpression">
+        <styles xsi:type="notation:ShapeStyle" xmi:id="_FtrYUbivEeqmj4PiveOg9Q"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_FtrYUrivEeqmj4PiveOg9Q" y="44"/>
+      </children>
+      <styles xsi:type="notation:ConnectorStyle" xmi:id="_FtqKMbivEeqmj4PiveOg9Q" routing="Rectilinear" lineColor="4210752"/>
+      <styles xsi:type="notation:FontStyle" xmi:id="_FtqxQLivEeqmj4PiveOg9Q" fontName="Verdana"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_FtqKMrivEeqmj4PiveOg9Q" points="[335, 0, -7, 47]$[335, -37, -7, 10]"/>
+      <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_FtvCsLivEeqmj4PiveOg9Q" id="(0.08348457350272233,0.0)"/>
+      <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_FtvCsbivEeqmj4PiveOg9Q" id="(0.8666666666666667,0.2)"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>

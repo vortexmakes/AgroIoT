@@ -38,16 +38,32 @@
     - ../YCommand/inc
     - ../Config/inc
     - ../Collector/inc
+    - ../CommMgr/inc
+    - ../YFrame/inc
+    - ../epoch/inc
+    - ../Trace/inc
+    - ../GStatus/inc
+    - ../tpsens/cbox
+    - ../BatChr
+    - ../gps/inc
+    - ../Crc32/inc
+    - ../Backup/inc
+    - ../Flowmeter/inc
     - ../IpValid/inc
+    - ../ffile/portable/test
+    - ../ffile/inc
+    - ../ioChg
     - ../
   :support:
     - test/support
     - src/YCommandParser.c
+    - src/YCommandExec.c
+    - src/YCommandFormat.c
     - ../../third-party/ssp/src/ssp.c
     - ../IpValid/src/IpValid.c
 
 :defines:
-  :common: &common_defines [__TEST__]
+  :common: &common_defines [__TEST__, __FFILETEST__]
   :test:
     - *common_defines
     - TEST

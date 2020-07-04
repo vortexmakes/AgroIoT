@@ -24,6 +24,7 @@
 #include "Mock_GsmMgr.h"
 #include "Mock_geoMgr.h"
 #include "Mock_rmc.h"
+#include "Mock_YCommand.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -212,55 +213,52 @@ void
 test_CheckResponseAck(void)
 {
     TypeOfResp res;
+    YCmdRes yCmdRes;
+    YCommand cmd;
+    size_t respLen;
 
     strcpy(buf, "!2|");
-    res = YFrame_parse(buf);
+    respLen = strlen(buf);
+    yCmdRes = YAck;
+    YCommand_parseAndExec_ExpectAndReturn(&cmd, buf, respLen, yCmdRes);
+
+    res = YFrame_parse(buf, respLen, &cmd);
+
     TEST_ASSERT_EQUAL(TypeOfRespAck, res);
-
-    strcpy(buf, "!3|");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
-
-    strcpy(buf, "!2,");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
-
-    strcpy(buf, "!2||");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
-
-    strcpy(buf, "!2|!2|");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespAck, res);
-
-    strcpy(buf, "!3|!2|");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespAck, res);
-
-    strcpy(buf, "!2|!3|");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
-
-    strcpy(buf, "cmd:04040404!2|");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespAck, res);
-
-    strcpy(buf, "cmd:0408!2|cmd:0408");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
-
-    res = YFrame_parse((char *)0);
-    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 }
 
 void
-test_CheckEmptyFrame(void)
+test_CheckWrongResponse(void)
 {
     TypeOfResp res;
+    YCmdRes yCmdRes;
+    YCommand cmd;
+    size_t respLen = 1;
 
-    strcpy(buf, "");
-    res = YFrame_parse(buf);
-    TEST_ASSERT_EQUAL(TypeOfRespEmpty, res);
+    yCmdRes = YCmdUnknown;
+    YCommand_parseAndExec_ExpectAndReturn(&cmd, buf, respLen, yCmdRes);
+    res = YFrame_parse(buf, respLen, &cmd);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
+
+    yCmdRes = YCmdInvalidKey;
+    YCommand_parseAndExec_ExpectAndReturn(&cmd, buf, respLen, yCmdRes);
+    res = YFrame_parse(buf, respLen, &cmd);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
+
+    yCmdRes = YCmdWrongLen;
+    YCommand_parseAndExec_ExpectAndReturn(&cmd, buf, respLen, yCmdRes);
+    res = YFrame_parse(buf, respLen, &cmd);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
+
+    yCmdRes = YCmdWrongFormat;
+    YCommand_parseAndExec_ExpectAndReturn(&cmd, buf, respLen, yCmdRes);
+    res = YFrame_parse(buf, respLen, &cmd);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
+
+    yCmdRes = YCmdExecError;
+    YCommand_parseAndExec_ExpectAndReturn(&cmd, buf, respLen, yCmdRes);
+    res = YFrame_parse(buf, respLen, &cmd);
+    TEST_ASSERT_EQUAL(TypeOfRespUnknown, res);
 }
 
 void
@@ -320,6 +318,38 @@ test_MakeSingleFrameWithAnInvalidPosition(void)
     size += YFrame_data(&invStatus, &buf[size], YFRAME_SGP_TYPE);
     TEST_ASSERT_EQUAL_STRING(invFrame, buf);
     TEST_ASSERT_EQUAL(expLen, size);
+}
+
+void
+test_GetCommandAck(void)
+{
+    ruint size;
+    YCommand cmd;
+    char expCmdAck[256];
+    size_t cmdAckLen;
+
+    strcpy(expCmdAck, "!4|355826018345180,123456789AB,");
+    cmdAckLen = strlen(expCmdAck);
+    strcpy(cmd.index, "123456789AB");
+    GsmMgr_getImei_ExpectAndReturn("355826018345180");
+
+    size = YFrame_getCmdAck(&cmd, buf);
+
+    TEST_ASSERT_EQUAL_STRING(expCmdAck, buf);
+    TEST_ASSERT_EQUAL(cmdAckLen, size);
+}
+
+void
+test_GetCommandAckWithWrongArgs(void)
+{
+    ruint size;
+    YCommand cmd;
+
+    size = YFrame_getCmdAck(0, buf);
+    TEST_ASSERT_EQUAL(0, size);
+
+    size = YFrame_getCmdAck(&cmd, 0);
+    TEST_ASSERT_EQUAL(0, size);
 }
 
 /* ------------------------------ End of file ------------------------------ */

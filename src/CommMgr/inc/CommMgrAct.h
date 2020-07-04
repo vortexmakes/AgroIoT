@@ -33,7 +33,6 @@ extern "C" {
 /* -------------------------- Function prototypes -------------------------- */
 /* ........................ Declares effect actions ........................ */
 void CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe);
-void CommMgr_IdleToActiveExt1(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_CurrentToWaitSyncExt5(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_CurrentToWaitSyncExt6(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ReceivingStatusAckToC0Ext9(CommMgr *const me, RKH_EVT_T *pe);
@@ -58,6 +57,7 @@ void CommMgr_SendingStatusToReceivingiStatusAckExt37(CommMgr *const me,
                                                      RKH_EVT_T *pe);
 void CommMgr_C5ToHistoryFinalExt38(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_C6ToCurrentFinalExt39(CommMgr *const me, RKH_EVT_T *pe);
+void CommMgr_C7ToActiveFinalExt41(CommMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 void CommMgr_enWaitSync(CommMgr *const me);
@@ -67,6 +67,9 @@ void CommMgr_enSendingEndOfHist(CommMgr *const me);
 void CommMgr_enSendingHist(CommMgr *const me);
 void CommMgr_enReceivingMsgAck(CommMgr *const me);
 void CommMgr_enSendingStartOfHist(CommMgr *const me);
+void CommMgr_enSendingCmdAck(CommMgr *const me);
+void CommMgr_enIdle(CommMgr *const me);
+void CommMgr_enDisconnected(CommMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
 void CommMgr_exWaitSync(CommMgr *const me);
@@ -81,6 +84,10 @@ rbool_t CommMgr_isCondC3ToC529(CommMgr *const me, RKH_EVT_T *pe);
 rbool_t CommMgr_isCondC4ToCurrent26(CommMgr *const me, RKH_EVT_T *pe);
 rbool_t CommMgr_isCondC5ToHistoryFinal33(CommMgr *const me, RKH_EVT_T *pe);
 rbool_t CommMgr_isCondC6ToCurrentFinal36(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t CommMgr_isCondC7ToActiveFinal40(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t CommMgr_isCondC0ToCommand42(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t CommMgr_isCondC3ToCommand43(CommMgr *const me, RKH_EVT_T *pe);
+rbool_t CommMgr_isCondC8ToHistory44(CommMgr *const me, RKH_EVT_T *pe);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

@@ -18,5 +18,6 @@
     - ../Crc32/inc
     - ../Trace/inc
     - ../Flowmeter/inc
+    - ../YCommand/inc
     - ../
   :support:

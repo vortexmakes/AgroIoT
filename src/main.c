@@ -40,6 +40,7 @@
 #include "Collector.h"
 #include "CollectorAct.h"
 #include "StatQue.h"
+#include "ffport.h"
 #include "ffile.h"
 #include "ffdata.h"
 #include "Config.h"
@@ -68,7 +69,7 @@
 #define SIZEOF_EP2STO           (16 * SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
-#define _CHECK_FORMATING_START_	0
+#define _CHECK_FORMATING_START_	1
 #define _DO_FIRST_FORMAT_		0
 
 /* ---------------------------- Local data types --------------------------- */
@@ -107,7 +108,7 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     RKH_FILTER_OFF_SMA(powerMgr);
     /*RKH_FILTER_OFF_SMA(modMgr); */
-    /*RKH_FILTER_OFF_SMA(gsmMgr); */
+    RKH_FILTER_OFF_SMA(gsmMgr);
     /*RKH_FILTER_OFF_SMA(geoMgr);*/
     /*RKH_FILTER_OFF_SMA(deviceMgr); */
     RKH_FILTER_OFF_SMA(commMgr);
@@ -126,6 +127,7 @@ int
 main(int argc, char *argv[])
 {
     InitMode mode;
+    MInt flashCheck;
 
     bsp_init(argc, argv);
 
@@ -137,6 +139,23 @@ main(int argc, char *argv[])
 #if (_DO_FIRST_FORMAT_ == 1)
     bsp_setAllLeds(1);
     ffile_init(CleanAndRestoreMode);
+    flashCheck = flash_verify_device();
+    if(flashCheck != FLASH_OK)
+    {
+    	switch(flashCheck)
+    	{
+    		case FLASH_MUST_POWERCYCLE:
+    			bsp_setErrLeds(1);
+    			break;
+    		case FLASH_UNKNOWN:
+    			bsp_setErrLeds(2);
+    			break;
+    		default:
+    			bsp_setErrLeds(3);
+				break;
+    	}
+    	for(;;);
+    }
     StatQue_init();
     Config_init();
     bsp_setAllLeds(0);

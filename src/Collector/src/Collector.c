@@ -40,6 +40,7 @@ RKH_TRINT(evTrace, NULL, Collector_storeTrace),
 RKH_TRINT(evUsbMounted, NULL, Collector_initBackup),
 RKH_TRINT(evUsbUnmounted, NULL, Collector_deinitBackup),
 RKH_TRINT(evFlowmeter, NULL, Collector_updateFlowmeter),
+RKH_TRREG(evTerminate, NULL, NULL, &DevStatus_Final),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(DevStatus_DevNotConnected,
@@ -63,6 +64,7 @@ RKH_CREATE_COMP_REGION_STATE(Mapping_Active, NULL, NULL, RKH_ROOT,
                              &Mapping_Stopped, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(Mapping_Active)
+RKH_TRREG(evTerminate, NULL, NULL, &DevStatus_Final),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(Mapping_Stopped, Mapping_enStopped,
@@ -96,6 +98,9 @@ RKH_CREATE_BRANCH_TABLE(Mapping_C3)
 RKH_BRANCH(Mapping_isSyncDirOnRunning, Mapping_syncDir, &Mapping_Running),
 RKH_BRANCH(ELSE, NULL, &Mapping_Running),
 RKH_END_BRANCH_TABLE
+
+RKH_CREATE_FINAL_STATE(DevStatus_Final, RKH_NULL);
+RKH_CREATE_FINAL_STATE(Mapping_Final, RKH_NULL);
 
 /* ............................. Active object ............................. */
 RKH_SMA_CREATE(Collector, collector, 8, HCAL, &DevStatus_Active,

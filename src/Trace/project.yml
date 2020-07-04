@@ -44,6 +44,8 @@
     - ../StatQue/inc
     - ../ffile/portable/test
     - ../ffile/inc
+    - ../Flowmeter/inc
+    - ../Backup/inc
     - ../
   :support:
     - test/support

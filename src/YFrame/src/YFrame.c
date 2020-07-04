@@ -29,6 +29,7 @@
 #define YFRAME_SEPARATOR        ","
 #define YFRAME_TERMINATOR       "#"
 #define YFRAME_ACK              "!2|"
+#define YFRAME_CACK             "!4|"
 
 #define FLG_GPS_VALID           1
 #define FLG_HISTORY             2
@@ -191,34 +192,45 @@ YFrame_multipleTail(char *to)
 }
 
 TypeOfResp
-YFrame_parse(char *from)
+YFrame_parse(char *from, ruint size, YCommand *cmd)
 {
-    ruint size;
-    char *str;
     TypeOfResp res;
+    YCmdRes yCmdRes;
 
-    res = TypeOfRespUnknown;
-    if (from != (char *)0)
+    yCmdRes = YCommand_parseAndExec(cmd, from, size);
+    if (yCmdRes == YCmdOk)
     {
-        /* Check Ack */
-        size = strlen(from);
-        if (size >= YFRAME_ACK_LEN)
-        {
-            str = (from + (size - YFRAME_ACK_LEN));
-            if (strcmp(str, YFRAME_ACK) == 0)
-            {
-                res = TypeOfRespAck;
-            }
-        }
-        else if (size == 0)
-        {
-            res = TypeOfRespEmpty;
-        }
-
-        /* Check Cmd */
-        /* 636D643A XX ... XX 3B */
+        res = TypeOfRespCmd;
+    }
+    else if (yCmdRes == YAck)
+    {
+        res = TypeOfRespAck;
+    }
+    else
+    {
+        res = TypeOfRespUnknown;
     }
     return res;
+}
+
+ruint 
+YFrame_getCmdAck(YCommand *from, char *to)
+{
+    ruint size;
+    char *frame;
+
+    size = 0;
+    frame = to;
+    if ((from != (YCommand *)0) && (to != (char *)0))
+    {
+        strcpy(frame, YFRAME_CACK);
+        strcat(frame, GsmMgr_getImei());
+        strcat(frame, YFRAME_SEPARATOR);
+        strcat(frame, from->index);
+        strcat(frame, YFRAME_SEPARATOR);
+        size = strlen(frame);
+    }
+    return size;
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -5,7 +5,7 @@
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2020.04.17  Daba  v1.0.00  Initial version
+ *  2020.04.17  DaBa  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -21,6 +21,9 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "ssp.h"
+#include "YCommand.h"
+#include "Config.h"
+
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -33,16 +36,12 @@ typedef enum
 {
     YCommandFound,
     YCommandValidKey = YCommandFound,
+    YAckFound,
 
     YCommandNotFound = -1,
     YCommandInvalidKey = YCommandNotFound,
 
-}YCmdPResult;
-
-#define YCOMMAND_INDEX_LEN       11
-#define YCOMMAND_ID_LEN          2
-#define YCOMMAND_SECURITY_LEN    3
-#define YCOMMAND_DATA_LEN        32
+} YCmdPResult;
 
 /* ------------------------------- Data types ------------------------------ */
 typedef struct
@@ -53,15 +52,35 @@ typedef struct
     char security[YCOMMAND_SECURITY_LEN+1];
     char data[YCOMMAND_DATA_LEN+1];
     YCmdPResult result;
-}YCommandParser;
+} YCommandParser;
+
+typedef union
+{
+    char serverIp[IP_LENGTH+1];
+    char serverPort[PORT_LENGTH+1];
+
+    rui16_t _rui16;
+        rui16_t connTime;
+        rui16_t updateGPSTime;
+
+    rui8_t _rui8;
+        rui8_t sampleTime;
+        rui8_t accLimit;
+        rui8_t brLimit;
+        rui8_t status;
+        rui8_t outValue;
+} CmdData;
+
+typedef struct
+{
+    YCommand *p;
+    YCmd_t id;
+    CmdData data;
+} YCmdParserData;
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-YCmdPResult YCommandParser_search(YCommandParser *me, char *p, ruint size);
-YCmdPResult YCommandParser_securityCheck(YCommandParser *me, char *pkey);
-ruint YCommandParser_getId(YCommandParser *me);
-char * YCommandParser_getIndex(YCommandParser *me);
-char * YCommandParser_getData(YCommandParser *me);
+YCmdRes YCommandParser_parse(YCmdParserData *pCmd, char *p, ruint size);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

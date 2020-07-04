@@ -23,6 +23,7 @@
 #include "YFrame.h"
 #include "events.h"
 #include "settings.h"
+#include "YCommand.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -40,10 +41,10 @@ RKH_SMA_DCLR(commMgr);
 /* ................... Declares states and pseudostates .................... */
 RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingStatusAck,
                      SendingEndOfHist, SendingHist, ReceivingMsgAck,
-                     SendingStartOfHist;
-RKH_DCLR_COMP_STATE Active, Current, History;
-RKH_DCLR_CHOICE_STATE C0, C1, C2, C3, C4, C5, C6;
-RKH_DCLR_FINAL_STATE CurrentFinal, HistoryFinal;
+                     SendingStartOfHist, SendingCmdAck, Disconnected;
+RKH_DCLR_COMP_STATE Active, Current, History, Command;
+RKH_DCLR_CHOICE_STATE C0, C1, C2, C3, C4, C5, C6, C7, C8;
+RKH_DCLR_FINAL_STATE CurrentFinal, HistoryFinal, ActiveFinal, CommMgrFinal;
 
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */
@@ -60,6 +61,8 @@ struct CommMgr
     rui16_t framesToSend;
     int nRecvTries;
     rui16_t nFramesPerMsg;
+    YCommand cmd;
+    bool isExecCmdComeFromStatus;
 };
 
 /* -------------------------- External variables --------------------------- */

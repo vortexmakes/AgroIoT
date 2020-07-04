@@ -1,27 +1,21 @@
 /**
  *  \file       YCommand.c
- *  \brief      ...
+ *  \brief      Trivial stub for frame converter program
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2020.04.17  Daba  v1.0.00  Initial version
+ *  2020.04.05  LeFr  v1.0.00  ---
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  LeFr  Leandro Francucci  lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include <string.h>
-#include <stdlib.h>
-#include "rkh.h"
 #include "YCommand.h"
-#include "YCommandParser.h"
-#include "YCommandExec.h"
-#include "IpValid.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -31,35 +25,10 @@
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
-YCmdRes
+YCmdRes 
 YCommand_parseAndExec(YCommand *pCmd, char *p, ruint size)
 {
-    YCmdParserData cmd;
-    YCmdRes r;
-
-    if(pCmd == NULL || p == NULL || size == 0)
-    {
-        return YCmdUnknown;
-    }
-
-    memset(pCmd, 0, sizeof(YCommand));
- 
-    cmd.p = pCmd;
-    memset(&(cmd.data), 0, sizeof(CmdData));
-    pCmd->id = YCmdNum;
-
-    r = YCommandParser_parse(&cmd, p, size);
-    if((r < 0) || (r == YAck))
-        return r;
-
-    pCmd->id = cmd.id;
-
-    if(YCommandExec_exec(&cmd) < 0)
-    {
-        return YCmdExecError; 
-    }
-
-    return YCmdOk;
+    return 0;
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -13,7 +13,7 @@
 /* -------------------------------- Authors -------------------------------- */
 /*
  *  LeFr  Leandro Francucci  lf@vortexmakes.com
- *  DaBa  Dario Baliña       dariosb@gmail.com
+ *  DaBa  Dario Balina       dariosb@gmail.com
  */
 
 /* --------------------------------- Module -------------------------------- */
@@ -45,7 +45,7 @@ enum
 };
 
 /*
- * User trace events id´s
+ * User trace events id's
  */
 enum
 {
@@ -80,7 +80,7 @@ typedef enum
 } SIMSelect_t;
 
 /*
- * Status Led´s
+ * Status Led's
  */
 typedef enum
 {
@@ -114,6 +114,9 @@ typedef enum
 /* -------------------------- Function prototypes -------------------------- */
 void bsp_init(int argc, char *argv[]);
 void bsp_close(void);
+
+void bsp_reset(void);
+void bsp_safeReset(void);
 
 void bsp_keyParser(int c);
 void bsp_timeTick(void);
@@ -153,6 +156,7 @@ void bsp_usbHostProcess(void);
 UsbHostStatus_t bsp_usbHostStatus(void);
 UsbDiskStatus_t bsp_usbDiskStatus(void);
 void bsp_setAllLeds(uint8_t val);
+void bsp_setErrLeds(uint8_t err);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

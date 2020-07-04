@@ -1,28 +1,25 @@
 /**
- *  \file       YFrame.h
- *  \brief      Specifies the interface of Yipies frame (remote protocol)
- *              module
+ *  \file       YCommandExec.h
+ *  \brief      Yipies Command Parser.
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2018.05.02  LeFr  v1.0.00  Initial version
+ *  2020.04.17  DaBa  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
+ *  DaBa  Dario Balina db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __YFRAME_H__
-#define __YFRAME_H__
+#ifndef __YCOMMANDEXEC_H__
+#define __YCOMMANDEXEC_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "rkhtype.h"
-#include "GStatus.h"
-#include "YCommand.h"
+#include "YCommandParser.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -31,28 +28,10 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-typedef enum TypeOfResp TypeOfResp;
-enum TypeOfResp
-{
-    TypeOfRespAck,
-    TypeOfRespCmd,
-    TypeOfRespUnknown,
-    TypeOfRespEmpty,        /* indicates an empty frame */
-    NumTypeOfResp
-};
-
-#define YFRAME_SGP_TYPE        0
-#define YFRAME_MGP_TYPE        1
-
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-rInt YFrame_getFlags(GStatusType *from, rui8_t *flags, rInt type);
-ruint YFrame_header(GStatusType *from, char *to, rInt nFrames, rInt type);
-ruint YFrame_data(GStatusType *from, char *to, rInt type);
-ruint YFrame_multipleTail(char *to);
-TypeOfResp YFrame_parse(char *from, ruint size, YCommand *cmd);
-ruint YFrame_getCmdAck(YCommand *from, char *to);
+YCmdRes YCommandExec_exec(YCmdParserData *pCmd);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

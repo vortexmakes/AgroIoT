@@ -38,6 +38,12 @@
 RKH_THIS_MODULE
 
 /* ----------------------------- Local macros ------------------------------ */
+#ifdef DEBUG
+#define reset_now()		__asm volatile	("	bkpt 0x00FF\n" )
+#else
+#define reset_now()		NVIC_SystemReset()
+#endif
+
 #define BlinkLed(b)  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, b)
 #define ModemCTS(b)  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, b)
 #define RS485_DIR(b) HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, b)
@@ -155,6 +161,22 @@ bsp_init(int argc, char *argv[])
     dIn_init();
     dOut_init();
     usbDisk_init();
+}
+
+void
+bsp_reset(void)
+{
+    reset_now();
+}
+
+void
+bsp_safeReset(void)
+{
+	ffile_sync();
+    Backup_sync();
+	RKH_TRC_FLUSH();
+	trace_msd_close();
+    reset_now();
 }
 
 void
@@ -298,13 +320,9 @@ bsp_SIMReady(void)
 void 
 bsp_SIMSelect(SIMSelect_t sim)
 {
-    simSelect = sim;
-
     HAL_GPIO_WritePin(SIM_SELECT_GPIO_Port,
                               SIM_SELECT_Pin, 
                               sim == MainSIM ? 0 : 1);
-
-//    set_led(LED_SIM, simSelect ? SEQ_LSTAGE2 : SEQ_LSTAGE1);
 }
 
 void
@@ -312,6 +330,7 @@ bsp_SIMChange(void)
 {
     simSelect = (simSelect == MainSIM) ? SecSIM : MainSIM;
 
+    set_led(LED_SIM, simSelect == MainSIM ? SEQ_NO_LIT : SEQ_LIT);
     bsp_SIMSelect(simSelect);
 }
 
@@ -482,6 +501,29 @@ bsp_setAllLeds(uint8_t val)
     HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, val);
     HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, val);
     HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, val);
+}
+
+void
+bsp_setErrLeds(uint8_t err)
+{
+	bsp_setAllLeds(0);
+
+	switch(err)
+	{
+		case 1:
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
+			break;
+		case 2:
+			HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
+			break;
+		case 3:
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
+			HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
+			break;
+
+		default:
+			break;
+	}
 }
 
 /* ------------------------------ File footer ------------------------------ */

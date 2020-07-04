@@ -28,6 +28,7 @@
 #include "Config.h"
 #include "geoMgr.h"
 #include "Trace.h"
+#include "bsp.h"
 
 RKH_MODULE_NAME(CommMgrAct);
 
@@ -45,6 +46,7 @@ RKH_MODULE_NAME(CommMgrAct);
 /* ------------------------------- Constants ------------------------------- */
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static RKH_ROM_STATIC_EVENT(evRestartObj, evRestart);
+static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -70,7 +72,7 @@ parseReceived(CommMgr *const me, RKH_EVT_T *pe)
     ReceivedEvt *realEvt;
 
     realEvt = RKH_DOWNCAST(ReceivedEvt, pe);
-    me->lastRecvResponse = YFrame_parse(realEvt->buf);
+    me->lastRecvResponse = YFrame_parse(realEvt->buf, realEvt->size, &me->cmd);
 }
 
 void
@@ -105,6 +107,12 @@ sendFrames(CommMgr *const me)
                                     me->evSendObj.buf + me->evSendObj.size, 
                                     YFRAME_MGP_TYPE);
     }
+}
+
+static bool
+isIn(CommMgr *const me, const RKH_SBSC_T *state)
+{
+    return (RKH_UPCAST(RKH_SM_T, me)->state == RKH_UPCAST(RKH_ST_T, state));
 }
 
 /* ............................ Effect actions ............................. */
@@ -148,12 +156,6 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
     me->isPendingStatus = false;
     me->lastRecvResponse = TypeOfRespUnknown;
     RKH_SET_STATIC_EVENT(&me->evSendObj, evSend);
-}
-
-void
-CommMgr_IdleToActiveExt1(CommMgr *const me, RKH_EVT_T *pe)
-{
-    /*activateSync();*/
 }
 
 void
@@ -314,6 +316,13 @@ CommMgr_C6ToCurrentFinalExt39(CommMgr *const me, RKH_EVT_T *pe)
                   RKH_UPCAST(RKH_SMA_T, me));
 }
 
+void
+CommMgr_C7ToActiveFinalExt41(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*reset()*/
+    bsp_safeReset();
+}
+
 /* ............................. Entry actions ............................. */
 void
 CommMgr_enWaitSync(CommMgr *const me)
@@ -387,6 +396,32 @@ CommMgr_enSendingStartOfHist(CommMgr *const me)
                   RKH_UPCAST(RKH_SMA_T, me));
 }
 
+void 
+CommMgr_enSendingCmdAck(CommMgr *const me)
+{
+    /*sendCmdAck();*/
+    me->evSendObj.size = YFrame_getCmdAck(&me->cmd, me->evSendObj.buf);
+    topic_publish(TCPConnection,
+                  RKH_UPCAST(RKH_EVT_T, &me->evSendObj),
+                  RKH_UPCAST(RKH_SMA_T, me));
+}
+
+void
+CommMgr_enIdle(CommMgr *const me)
+{
+    /*setCurrentAsInitial()*/
+    me->status.position = invalidPosition;
+    Trace_generate(&me->status, TraceId_PowerUp, 0, 0);
+}
+
+void
+CommMgr_enDisconnected(CommMgr *const me)
+{
+    /*setCurrentAsGSMConnected()*/
+    me->status.position = invalidPosition;
+    Trace_generate(&me->status, TraceId_GSMConnected, 0, 0);
+}
+
 /* ............................. Exit actions .............................. */
 void
 CommMgr_exWaitSync(CommMgr *const me)
@@ -456,6 +491,36 @@ CommMgr_isCondC6ToCurrentFinal36(CommMgr *const me, RKH_EVT_T *pe)
 {
     /*return (isMaxRecvTries()) ? true : false;*/
     return (me->nRecvTries == 0) ? true : false;
+}
+
+rbool_t
+CommMgr_isCondC3ToCommand43(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*return (isCmd()) ? true : false;*/
+    me->isExecCmdComeFromStatus = isIn(me, &ReceivingStatusAck);
+    return (me->lastRecvResponse == TypeOfRespCmd) ? true : false;
+}
+
+rbool_t
+CommMgr_isCondC0ToCommand42(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*return (isCmd()) ? true : false;*/
+    me->isExecCmdComeFromStatus = isIn(me, &ReceivingStatusAck);
+    return (me->lastRecvResponse == TypeOfRespCmd) ? true : false;
+}
+
+rbool_t
+CommMgr_isCondC7ToActiveFinal40(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*return (isRequiredRestart()) ? true : false;*/
+    return (me->cmd.reset == true) ? true : false;
+}
+
+rbool_t
+CommMgr_isCondC8ToHistory44(CommMgr *const me, RKH_EVT_T *pe)
+{
+    /*return (isComeFromStatus()) ? true : false;*/
+    return (me->isExecCmdComeFromStatus == true) ? true : false;
 }
 
 /* ---------------------------- Global functions --------------------------- */
