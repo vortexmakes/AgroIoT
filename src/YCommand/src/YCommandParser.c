@@ -60,7 +60,7 @@ SSP_END_BR_TABLE
 SSP_CREATE_NORMAL_NODE(socket);
 SSP_CREATE_BR_TABLE(socket)
 SSPBR("2|",     foundAck,       &rootYCommandParser),
-SSPBR("3",     indexInit,       &socketIndex),
+SSPBR("3|",     indexInit,      &socketIndex),
 SSP_END_BR_TABLE
 
 SSP_CREATE_TRN_NODE(socketIndex, indexCollect);

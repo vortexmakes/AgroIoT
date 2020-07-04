@@ -480,7 +480,7 @@ test_gprsIndex(void)
     YCmdRes res;
     char *p;
     
-    p= "!3123456789AB,2,123,10;"; 
+    p= "!3|123456789AB,2,123,10;"; 
 
     Config_setConnTime_Expect(10);
 
@@ -491,7 +491,7 @@ test_gprsIndex(void)
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
-    p= "!3123456789ABCD,2,123,10;"; 
+    p= "!3|123456789ABCD,2,123,10;"; 
 
     Config_setConnTime_Expect(10);
 
@@ -502,7 +502,7 @@ test_gprsIndex(void)
     TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
-    p= "!31,2,123,10;"; 
+    p= "!3|1,2,123,10;"; 
 
     Config_setConnTime_Expect(10);
 
@@ -521,7 +521,7 @@ test_gprsInvalidKey(void)
     YCmdRes res;
     char *p;
     
-    p= "!3:123456789AB,2,321,10;"; 
+    p= "!3|123456789AB,2,321,10;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -538,7 +538,7 @@ test_gprsUnknown(void)
     YCmdRes res;
     char *p;
     
-    p= "!3123456789AB,16,123,10;"; 
+    p= "!3|123456789AB,16,123,10;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -547,7 +547,7 @@ test_gprsUnknown(void)
     TEST_ASSERT_EQUAL_STRING("", yCmd.index);
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
-    p= "!3123456789AB,000;"; 
+    p= "!3|123456789AB,000;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -565,7 +565,7 @@ test_gprsWrongLen(void)
     char *p;
     
     /* WrongLen min */
-    p = "!3123456789AB,1,123,;"; 
+    p = "!3|123456789AB,1,123,;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -575,7 +575,7 @@ test_gprsWrongLen(void)
     TEST_ASSERT_EQUAL(0, yCmd.reset);
 
     /* WrongLen max */
-    p = "!312345679AB,1,123,123456;"; 
+    p = "!3|12345679AB,1,123,123456;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -592,7 +592,7 @@ test_gprsWrongFormat(void)
     YCmdRes res;
     char *p;
 
-    p = "!3123456789AB,0,123,255.2552.55.6666;"; 
+    p = "!3|123456789AB,0,123,255.2552.55.6666;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -609,7 +609,7 @@ test_gprsServerIp(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,0,123,255.255.255.255;"; 
+    p = "!3|123456789AB,0,123,255.255.255.255;"; 
 
     Config_setConnectionDomain_Expect("255.255.255.255");
 
@@ -628,7 +628,7 @@ test_gprsServerPort(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,1,123,12345;"; 
+    p = "!3|123456789AB,1,123,12345;"; 
 
     Config_setConnectionPort_Expect("12345");
 
@@ -647,7 +647,7 @@ test_gprsConnectionTime(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,2,123,123;"; 
+    p = "!3|123456789AB,2,123,123;"; 
 
     Config_setConnTime_Expect(123);
 
@@ -666,7 +666,7 @@ test_gprsGpsTime(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,3,123,123;"; 
+    p = "!3|123456789AB,3,123,123;"; 
 
     Config_setUpdateGPSTime_Expect(123);
 
@@ -685,7 +685,7 @@ test_gprsAccLimit(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,4,123,12;"; 
+    p = "!3|123456789AB,4,123,12;"; 
 
     Config_setAccLimit_Expect(12);
 
@@ -704,7 +704,7 @@ test_gprsBreakLimit(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,5,123,12;"; 
+    p = "!3|123456789AB,5,123,12;"; 
 
     Config_setBrLimit_Expect(12);
 
@@ -723,7 +723,7 @@ test_gprsStatus(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,6,123,1;"; 
+    p = "!3|123456789AB,6,123,1;"; 
 
     Config_setDefault_Expect(1);
 
@@ -742,7 +742,7 @@ test_gprsSetOut1(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,7,123,1;"; 
+    p = "!3|123456789AB,7,123,1;"; 
 
     Config_setDftDigOut_Expect(1);
     dOut_set_Expect(dOut1, 1, 1);
@@ -762,7 +762,7 @@ test_gprsSetOut2(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,8,123,1;"; 
+    p = "!3|123456789AB,8,123,1;"; 
 
     Config_setDftDigOut_Expect(1);
     dOut_set_Expect(dOut2, 1, 1);
@@ -782,7 +782,7 @@ test_gprsSetOut3(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,9,123,1;"; 
+    p = "!3|123456789AB,9,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -799,7 +799,7 @@ test_gprsSetOut4(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,10,123,1;"; 
+    p = "!3|123456789AB,10,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -816,7 +816,7 @@ test_gprsSetOut5(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,11,123,1;"; 
+    p = "!3|123456789AB,11,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -833,7 +833,7 @@ test_gprsSetOut6(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,12,123,1;"; 
+    p = "!3|123456789AB,12,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -850,7 +850,7 @@ test_gprsReset(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,13,123,0;"; 
+    p = "!3|123456789AB,13,123,0;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -867,7 +867,7 @@ test_gprsSampleTime(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,14,123,1;"; 
+    p = "!3|123456789AB,14,123,1;"; 
 
     Config_setMapTimeOnRunning_Expect(1);
 
@@ -887,7 +887,7 @@ test_gprsDataFormat(void)
     YCmdRes res;
     char *p;
     
-    p = "!3123456789AB,15,123,0;"; 
+    p = "!3|123456789AB,15,123,0;"; 
 
     rkh_sma_post_lifo_Expect(collector, NULL, NULL);
     rkh_sma_post_lifo_IgnoreArg_e();
