@@ -1,6 +1,9 @@
 #
 # YAML for ceedling test in module level
 #
+# Usage: 
+#   ceedling test:Backup
+#   ceedling options:project-complete test:complete
 
 :project:
   :use_exceptions: FALSE

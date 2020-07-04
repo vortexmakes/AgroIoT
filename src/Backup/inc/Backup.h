@@ -31,7 +31,7 @@ extern "C" {
 #define BACKUP_MAXNUMFILES          40
 #define BACKUP_MAXNUMREGPERFILE     15600 /* 13[h]*60[m/h]*60[s/m]/3[s] */
 #define BACKUP_SIZEOF_REG           sizeof(GStatus)
-#define BACKUP_NUMWRITES            1200
+#define BACKUP_NUMWRITES            100
 
 /* ------------------------------- Data types ------------------------------ */
 typedef enum BackupCode BackupCode;
