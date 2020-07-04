@@ -69,7 +69,7 @@
 #define SIZEOF_EP2STO           (16 * SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
-#define _CHECK_FORMATING_START_	1
+#define _CHECK_FORMATING_START_	0
 #define _DO_FIRST_FORMAT_		0
 
 /* ---------------------------- Local data types --------------------------- */

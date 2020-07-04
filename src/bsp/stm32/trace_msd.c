@@ -99,4 +99,11 @@ trace_msd_write(uint8_t *pData, uint16_t Size)
     }
 }
 
+void
+trace_msd_sync(void)
+{
+	if(File.obj.fs != NULL)
+		f_sync(&File);
+}
+
 /* ------------------------------ File footer ------------------------------ */

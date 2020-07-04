@@ -33,6 +33,7 @@ extern "C" {
 void trace_msd_init(void);
 void trace_msd_close(void);
 void trace_msd_write(uint8_t *pData, uint16_t Size);
+void trace_msd_sync(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

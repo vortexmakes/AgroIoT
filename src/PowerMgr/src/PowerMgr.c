@@ -103,6 +103,8 @@ storeStatus(PowerMgr *const me)
 	StatQue_put(&me->status);
 }
 
+#include "cubemx.h"
+
 static void
 updateStatus(PowerMgr *const me, RKH_EVT_T *pe)
 {
@@ -110,6 +112,10 @@ updateStatus(PowerMgr *const me, RKH_EVT_T *pe)
 
 	realEvt = RKH_DOWNCAST(GStatusEvt, pe);
 	me->status.data = realEvt->status;
+
+	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 0);
+	Backup_sync();
+    trace_msd_sync();
 }
 
 static void
