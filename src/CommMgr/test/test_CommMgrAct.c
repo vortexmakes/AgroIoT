@@ -33,6 +33,7 @@
 #include "Mock_Config.h"
 #include "Mock_geoMgr.h"
 #include "Mock_Trace.h"
+#include "Mock_bsp.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -261,7 +262,10 @@ test_ReceiveAck(void)
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespAck);
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
+                                 evReceivedObj.size,
+                                 &me->cmd,
+                                 TypeOfRespAck);
     CommMgr_ReceivingMsgAckToC3Ext19(me, 
                                      RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespAck, me->lastRecvResponse);
@@ -269,7 +273,10 @@ test_ReceiveAck(void)
     res = CommMgr_isCondC3ToC425(me, RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
 
-    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespAck);
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
+                                 evReceivedObj.size,
+                                 &me->cmd,
+                                 TypeOfRespAck);
     CommMgr_ReceivingStatusAckToC0Ext9(me, 
                                        RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespAck, me->lastRecvResponse);
@@ -287,7 +294,10 @@ test_ReceiveEmptyResponse(void)
     strcpy(evReceivedObj.buf, "");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespEmpty);
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
+                                 evReceivedObj.size,
+                                 &me->cmd,
+                                 TypeOfRespEmpty);
     CommMgr_ReceivingStatusAckToC0Ext9(me, 
                                        RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespEmpty, me->lastRecvResponse);
@@ -296,7 +306,10 @@ test_ReceiveEmptyResponse(void)
                                  RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_TRUE(res == true);
 
-    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespEmpty);
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
+                                 evReceivedObj.size,
+                                 &me->cmd,
+                                 TypeOfRespEmpty);
     CommMgr_ReceivingMsgAckToC3Ext19(me, 
                                      RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespEmpty, me->lastRecvResponse);
@@ -343,7 +356,10 @@ test_ReceiveUnknownResponse(void)
     strcpy(evReceivedObj.buf, "!2|");   /* in ConnMgr */
     evReceivedObj.size = strlen(evReceivedObj.buf);
 
-    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, TypeOfRespUnknown);
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
+                                 evReceivedObj.size,
+                                 &me->cmd,
+                                 TypeOfRespUnknown);
     CommMgr_ReceivingStatusAckToC0Ext9(me, 
                                        RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
     TEST_ASSERT_EQUAL(TypeOfRespUnknown, me->lastRecvResponse);
@@ -700,6 +716,109 @@ test_SendMsgFailInHistory(void)
     topic_publish_IgnoreArg_evt();
 
     CommMgr_HistoryToWaitSyncExt14(me, evt);
+}
+
+void
+test_ReceiveCommand(void)
+{
+    rbool_t res;
+
+    strcpy(evReceivedObj.buf, "!3|...");   /* in ConnMgr */
+    evReceivedObj.size = strlen(evReceivedObj.buf);
+
+    RKH_UPCAST(RKH_SM_T, me)->state = RKH_UPCAST(RKH_ST_T, &ReceivingMsgAck);
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
+                                 evReceivedObj.size,
+                                 &me->cmd,
+                                 TypeOfRespCmd);
+    CommMgr_ReceivingMsgAckToC3Ext19(me, 
+                                     RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespCmd, me->lastRecvResponse);
+
+    res = CommMgr_isCondC3ToCommand43(me, 
+                                      RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(me->isExecCmdComeFromStatus == false);
+
+    RKH_UPCAST(RKH_SM_T, me)->state = RKH_UPCAST(RKH_ST_T, &ReceivingStatusAck);
+    YFrame_parse_ExpectAndReturn(evReceivedObj.buf, 
+                                 evReceivedObj.size,
+                                 &me->cmd,
+                                 TypeOfRespCmd);
+    CommMgr_ReceivingStatusAckToC0Ext9(me, 
+                                       RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_EQUAL(TypeOfRespCmd, me->lastRecvResponse);
+
+    res = CommMgr_isCondC0ToCommand42(me, 
+                                      RKH_UPCAST(RKH_EVT_T, &evReceivedObj));
+    TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(me->isExecCmdComeFromStatus == true);
+}
+
+void
+test_SendCommandAck(void)
+{
+    ruint cmdAckLen;
+    char *cmdAck = "!4|355826018345180,123456789AB,";
+
+    cmdAckLen = strlen(cmdAck);
+    YFrame_getCmdAck_ExpectAndReturn(&me->cmd, me->evSendObj.buf, cmdAckLen);
+    topic_publish_Expect(TCPConnection, 
+                         RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
+                         RKH_UPCAST(RKH_SMA_T, me));
+
+    CommMgr_enSendingCmdAck(me);
+
+    TEST_ASSERT_EQUAL(cmdAckLen, me->evSendObj.size);
+}
+
+void
+test_ReceivedCommandRequiresRestart(void)
+{
+    rbool_t res;
+
+    me->cmd.reset = true;
+    res = CommMgr_isCondC7ToActiveFinal40(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+
+    bsp_safeReset_Expect();
+    CommMgr_C7ToActiveFinalExt41(me, evt);
+}
+
+void
+test_ReceivedCommandDoNotRequireRestartAndComeFromStatus(void)
+{
+    rbool_t res;
+
+    RKH_UPCAST(RKH_SM_T, me)->state = RKH_UPCAST(RKH_ST_T, &ReceivingStatusAck);
+    res = CommMgr_isCondC0ToCommand42(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(me->isExecCmdComeFromStatus == true);
+
+    me->cmd.reset = false;
+    res = CommMgr_isCondC7ToActiveFinal40(me, evt);
+    TEST_ASSERT_TRUE(res == false);
+
+    res = CommMgr_isCondC8ToHistory44(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+}
+
+void
+test_ReceivedCommandDoNotRequireRestartAndComeFromHistory(void)
+{
+    rbool_t res;
+
+    RKH_UPCAST(RKH_SM_T, me)->state = RKH_UPCAST(RKH_ST_T, &ReceivingMsgAck);
+    res = CommMgr_isCondC3ToCommand43(me, evt);
+    TEST_ASSERT_TRUE(res == true);
+    TEST_ASSERT_TRUE(me->isExecCmdComeFromStatus == false);
+
+    me->cmd.reset = false;
+    res = CommMgr_isCondC7ToActiveFinal40(me, evt);
+    TEST_ASSERT_TRUE(res == false);
+
+    res = CommMgr_isCondC8ToHistory44(me, evt);
+    TEST_ASSERT_TRUE(res == false);
 }
 
 /* ------------------------------ End of file ------------------------------ */

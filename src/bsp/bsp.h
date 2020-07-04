@@ -13,7 +13,7 @@
 /* -------------------------------- Authors -------------------------------- */
 /*
  *  LeFr  Leandro Francucci  lf@vortexmakes.com
- *  DaBa  Dario Baliña       dariosb@gmail.com
+ *  DaBa  Dario Balina       dariosb@gmail.com
  */
 
 /* --------------------------------- Module -------------------------------- */
@@ -45,7 +45,7 @@ enum
 };
 
 /*
- * User trace events id´s
+ * User trace events id's
  */
 enum
 {
@@ -80,7 +80,7 @@ typedef enum
 } SIMSelect_t;
 
 /*
- * Status Led´s
+ * Status Led's
  */
 typedef enum
 {

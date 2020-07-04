@@ -48,6 +48,7 @@ RKH_DCLR_COMP_STATE DevStatus_Active, Mapping_Active;
 RKH_DCLR_BASIC_STATE DevStatus_DevNotConnected, DevStatus_DevConnected,
                      Mapping_Stopped, Mapping_Running;
 RKH_DCLR_CHOICE_STATE Mapping_C1, Mapping_C2, Mapping_C3;
+RKH_DCLR_FINAL_STATE DevStatus_Final, Mapping_Final;
 
 /* ------------------------------- Data types ------------------------------ */
 typedef struct Device Device;

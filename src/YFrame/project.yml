@@ -43,6 +43,7 @@
     - ../epoch/inc
     - ../Crc32/inc
     - ../geoMgr
+    - ../YCommand/inc
     - ../
   :support:
     - test/support
