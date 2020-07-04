@@ -11,34 +11,22 @@ set_hard_leds( unsigned short minor, MUInt arga, MUInt argb )
 {
     (void)argb;
   
-    switch(minor)
-    {
-        case LED_POWER:
-            HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, arga);
-            break;
+    if((minor & LED_POWER) != 0)
+        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, arga);
 
-        case LED_GSM:
-            HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, arga);
-            break;
+    if((minor & LED_GSM) != 0)
+        HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, arga);
 
-        case LED_STORAGE:
-            HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, arga);
-            break;
+    if((minor & LED_STORAGE) != 0)
+        HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, arga);
 
-        case LED_GPS:
-            HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, arga);
-            break;
+    if((minor & LED_GPS) != 0)
+        HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, arga);
 
-        case LED_WORK:
-            HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, arga);
-            break;
+    if((minor & LED_WORK) != 0)
+        HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, arga);
 
-        case LED_SIM:
-            HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, arga);
-            break;
-
-        default:
-            break;
-    }
+    if((minor & LED_SIM) != 0)
+        HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, arga);
 }
 

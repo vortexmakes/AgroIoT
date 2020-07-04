@@ -59,11 +59,11 @@
           <vertices xsi:type="sgraph:State" xmi:id="_vN-dgBaOEeqrVYsqYiTIyw" specification="entry/powerOff()&#xD;&#xA;exit/powerOn(); retryCount = 0" name="ConFailure" incomingTransitions="_zKaL8BaQEeqrVYsqYiTIyw _uxE3YBaUEeqrVYsqYiTIyw _STS5-jCEEeqnJcfbx735Yg _yLYbEBaUEeqrVYsqYiTIyw">
             <outgoingTransitions xmi:id="_-DKJEBaOEeqrVYsqYiTIyw" specification="after 5 s // FAILURE_TRY_DELAY" target="_M0HG0BaNEeqrVYsqYiTIyw"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_WOxmQBaUEeqrVYsqYiTIyw" specification="entry/ModCmd_getRegStatus()&#xD;&#xA;evRegStatusTout/ModCmd_getRegStatus() &#xD;&#xA;evNoReg/startRegStatusTimer() //CHECK_REG_PERIOD" name="Unregistered" incomingTransitions="_STSS5jCEEeqnJcfbx735Yg _dQqxIBaTEeqrVYsqYiTIyw">
+          <vertices xsi:type="sgraph:State" xmi:id="_WOxmQBaUEeqrVYsqYiTIyw" specification="entry / ModCmd_getRegStatus(); unregistered()&#xD;&#xA;evRegStatusTout/ModCmd_getRegStatus() &#xD;&#xA;evNoReg/startRegStatusTimer() //CHECK_REG_PERIOD" name="Unregistered" incomingTransitions="_STSS5jCEEeqnJcfbx735Yg _dQqxIBaTEeqrVYsqYiTIyw">
             <outgoingTransitions xmi:id="_uxE3YBaUEeqrVYsqYiTIyw" specification="after 60s //REGISTRATION_TIME" target="_vN-dgBaOEeqrVYsqYiTIyw"/>
-            <outgoingTransitions xmi:id="_SStEFjCEEeqnJcfbx735Yg" specification="evReg / gsmIsReady()" target="_g-0qkF40Eeq7zY0D93VU0w"/>
+            <outgoingTransitions xmi:id="_SStEFjCEEeqnJcfbx735Yg" specification="evReg / registered(); gsmIsReady()" target="_g-0qkF40Eeq7zY0D93VU0w"/>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_g-0qkF40Eeq7zY0D93VU0w" specification="entry/registered()&#xD;&#xA;exit/unregistered()&#xD;&#xA;evNetClockSync/ModCmd_getLocalTime()&#xD;&#xA;evLocalTime/rtimeSync()" name="Registered" incomingTransitions="_SStEFjCEEeqnJcfbx735Yg _sSCrQF40Eeq7zY0D93VU0w">
+          <vertices xsi:type="sgraph:State" xmi:id="_g-0qkF40Eeq7zY0D93VU0w" specification="evNetClockSync/ModCmd_getLocalTime()&#xD;&#xA;evLocalTime/rtimeSync()" name="Registered" incomingTransitions="_SStEFjCEEeqnJcfbx735Yg _sSCrQF40Eeq7zY0D93VU0w">
             <outgoingTransitions xmi:id="_STSS5jCEEeqnJcfbx735Yg" specification="evNoReg" target="_WOxmQBaUEeqrVYsqYiTIyw"/>
             <outgoingTransitions xmi:id="_sSCrQF40Eeq7zY0D93VU0w" specification="every 5s / // CheckRegstatus&#xD;&#xA;ModCmd_getRegStatus()" target="_g-0qkF40Eeq7zY0D93VU0w"/>
             <outgoingTransitions xmi:id="_MJiEcF45Eeq7zY0D93VU0w" specification="evClose" target="_BUso4F45Eeq7zY0D93VU0w"/>

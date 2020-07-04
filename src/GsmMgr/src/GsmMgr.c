@@ -1104,6 +1104,7 @@ GetImeiToCipShutdownExt18(GsmMgr *const me, RKH_EVT_T *pe)
 static void 
 UnregisteredToRegisteredExt23(GsmMgr *const me, RKH_EVT_T *pe)
 {
+	registered();
     gsmIsReady(me);
 }
 
@@ -1434,6 +1435,7 @@ enConFailure(GsmMgr *const me)
 static void 
 enUnregistered(GsmMgr *const me)
 {
+	unregistered();
 	ModCmd_getRegStatus();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj1, evTout1);
 	RKH_TMR_INIT(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj1), NULL);
@@ -1443,7 +1445,6 @@ enUnregistered(GsmMgr *const me)
 static void 
 enRegistered(GsmMgr *const me)
 {
-	registered();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj2, evTout2);
 	RKH_TMR_INIT(&me->tmEvtObj2.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj2), NULL);
 	RKH_TMR_PERIODIC(&me->tmEvtObj2.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime2, WaitTime2);
@@ -1558,7 +1559,6 @@ exUnregistered(GsmMgr *const me)
 static void 
 exRegistered(GsmMgr *const me)
 {
-	unregistered();
 	rkh_tmr_stop(&me->tmEvtObj2.tmr);
 }
 
