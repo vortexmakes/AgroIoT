@@ -84,6 +84,7 @@ static const char frameData[] =
     "|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
 static const char invalidFrameData[] =
     "|1b,185124,-37.8402883,-057.6884350,0.078,,310119,3FFF,0000,00,00,DDDD,FFFF,FFFF,3";
+static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
@@ -819,6 +820,26 @@ test_ReceivedCommandDoNotRequireRestartAndComeFromHistory(void)
 
     res = CommMgr_isCondC8ToHistory44(me, evt);
     TEST_ASSERT_TRUE(res == false);
+}
+
+void
+test_SetGStatusAsInitial(void)
+{
+    Trace_generate_Expect(&me->status, TraceId_PowerUp, 0, 0);
+    CommMgr_enIdle(me);
+    TEST_ASSERT_EQUAL_MEMORY(&invalidPosition, 
+                             &me->status.position, 
+                             sizeof(Geo));
+}
+
+void
+test_SetGStatusAsGSMConnected(void)
+{
+    Trace_generate_Expect(&me->status, TraceId_GSMConnected, 0, 0);
+    CommMgr_enDisconnected(me);
+    TEST_ASSERT_EQUAL_MEMORY(&invalidPosition, 
+                             &me->status.position, 
+                             sizeof(Geo));
 }
 
 /* ------------------------------ End of file ------------------------------ */

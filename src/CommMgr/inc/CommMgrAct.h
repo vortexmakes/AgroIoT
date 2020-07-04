@@ -33,7 +33,6 @@ extern "C" {
 /* -------------------------- Function prototypes -------------------------- */
 /* ........................ Declares effect actions ........................ */
 void CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe);
-void CommMgr_IdleToActiveExt1(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_CurrentToWaitSyncExt5(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_CurrentToWaitSyncExt6(CommMgr *const me, RKH_EVT_T *pe);
 void CommMgr_ReceivingStatusAckToC0Ext9(CommMgr *const me, RKH_EVT_T *pe);
@@ -69,6 +68,8 @@ void CommMgr_enSendingHist(CommMgr *const me);
 void CommMgr_enReceivingMsgAck(CommMgr *const me);
 void CommMgr_enSendingStartOfHist(CommMgr *const me);
 void CommMgr_enSendingCmdAck(CommMgr *const me);
+void CommMgr_enIdle(CommMgr *const me);
+void CommMgr_enDisconnected(CommMgr *const me);
 
 /* ......................... Declares exit actions ......................... */
 void CommMgr_exWaitSync(CommMgr *const me);

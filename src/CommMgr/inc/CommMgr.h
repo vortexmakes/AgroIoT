@@ -41,7 +41,7 @@ RKH_SMA_DCLR(commMgr);
 /* ................... Declares states and pseudostates .................... */
 RKH_DCLR_BASIC_STATE Idle, WaitSync, SendingStatus, ReceivingStatusAck,
                      SendingEndOfHist, SendingHist, ReceivingMsgAck,
-                     SendingStartOfHist, SendingCmdAck;
+                     SendingStartOfHist, SendingCmdAck, Disconnected;
 RKH_DCLR_COMP_STATE Active, Current, History, Command;
 RKH_DCLR_CHOICE_STATE C0, C1, C2, C3, C4, C5, C6, C7, C8;
 RKH_DCLR_FINAL_STATE CurrentFinal, HistoryFinal, ActiveFinal, CommMgrFinal;

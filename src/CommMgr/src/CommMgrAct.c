@@ -46,6 +46,7 @@ RKH_MODULE_NAME(CommMgrAct);
 /* ------------------------------- Constants ------------------------------- */
 static RKH_ROM_STATIC_EVENT(evRecvObj, evRecv);
 static RKH_ROM_STATIC_EVENT(evRestartObj, evRestart);
+static const Geo invalidPosition = GEO_INVALID_GEOSTAMP;
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
@@ -155,12 +156,6 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
     me->isPendingStatus = false;
     me->lastRecvResponse = TypeOfRespUnknown;
     RKH_SET_STATIC_EVENT(&me->evSendObj, evSend);
-}
-
-void
-CommMgr_IdleToActiveExt1(CommMgr *const me, RKH_EVT_T *pe)
-{
-    /*activateSync();*/
 }
 
 void
@@ -409,6 +404,22 @@ CommMgr_enSendingCmdAck(CommMgr *const me)
     topic_publish(TCPConnection,
                   RKH_UPCAST(RKH_EVT_T, &me->evSendObj),
                   RKH_UPCAST(RKH_SMA_T, me));
+}
+
+void
+CommMgr_enIdle(CommMgr *const me)
+{
+    /*setCurrentAsInitial()*/
+    me->status.position = invalidPosition;
+    Trace_generate(&me->status, TraceId_PowerUp, 0, 0);
+}
+
+void
+CommMgr_enDisconnected(CommMgr *const me)
+{
+    /*setCurrentAsGSMConnected()*/
+    me->status.position = invalidPosition;
+    Trace_generate(&me->status, TraceId_GSMConnected, 0, 0);
 }
 
 /* ............................. Exit actions .............................. */
