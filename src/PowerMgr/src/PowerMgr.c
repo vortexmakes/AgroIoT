@@ -15,41 +15,56 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "signals.h"
+#include "rkhtmr.h"
 #include "PowerMgr.h"
 #include "Backup.h"
 #include "bsp.h"
+#include "genled.h"
 #include "PowerMgrRequired.h"
 
+
 /* ----------------------------- Local macros ------------------------------ */
+#define WaitTime0	RKH_TIME_SEC(2)
+#define WaitTime1	RKH_TIME_SEC(10)
 
 /* ......................... Declares active object ........................ */
 typedef struct PowerMgr PowerMgr;
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE PowerMgr_Ready;
+RKH_DCLR_BASIC_STATE PowerMgr_Ready, PowerMgr_ShuttingDown;
 RKH_DCLR_FINAL_STATE PowerMgrFinal;
 
 /* ........................ Declares effect actions ........................ */
 static void ToReadyExt0(PowerMgr *const me, RKH_EVT_T *pe);
-static void ReadyToPowerMgrFinalExt1(PowerMgr *const me, RKH_EVT_T *pe);
+static void ShuttingDownToPowerMgrFinalExt2(PowerMgr *const me, RKH_EVT_T *pe);
 static void ReadyToReadyLoc0(PowerMgr *const me, RKH_EVT_T *pe);
+static void ReadyToReadyLoc1(PowerMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
+static void enReady(PowerMgr *const me);
+static void enShuttingDown(PowerMgr *const me);
+
 /* ......................... Declares exit actions ......................... */
 static void exReady(PowerMgr *const me);
+static void exShuttingDown(PowerMgr *const me);
 
 /* ............................ Declares guards ............................ */
-static rbool_t isCondReadyToPowerMgrFinal1(PowerMgr *const me, RKH_EVT_T *pe);
+static rbool_t isCondReadyToShuttingDown1(PowerMgr *const me, RKH_EVT_T *pe);
 
 /* ........................ States and pseudostates ........................ */
-RKH_CREATE_BASIC_STATE(PowerMgr_Ready, NULL, exReady, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(PowerMgr_Ready, enReady, exReady, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(PowerMgr_ShuttingDown, enShuttingDown, exShuttingDown, RKH_ROOT, NULL);
 
 
 RKH_CREATE_TRANS_TABLE(PowerMgr_Ready)
-	RKH_TRREG(evBatChrStatus, isCondReadyToPowerMgrFinal1, ReadyToPowerMgrFinalExt1, &PowerMgrFinal),
+	RKH_TRREG(evBatChrStatus, isCondReadyToShuttingDown1, NULL, &PowerMgr_ShuttingDown),
 	RKH_TRINT(evGStatus, NULL, ReadyToReadyLoc0),
+	RKH_TRINT(evTout1, NULL, ReadyToReadyLoc1),
 RKH_END_TRANS_TABLE
 
+RKH_CREATE_TRANS_TABLE(PowerMgr_ShuttingDown)
+	RKH_TRREG(evTout0, NULL, ShuttingDownToPowerMgrFinalExt2, &PowerMgrFinal),
+RKH_END_TRANS_TABLE
 
 RKH_CREATE_FINAL_STATE(PowerMgrFinal, RKH_NULL);
 
@@ -57,8 +72,9 @@ RKH_CREATE_FINAL_STATE(PowerMgrFinal, RKH_NULL);
 struct PowerMgr
 {
     RKH_SMA_T sma;      /* base structure */
+    RKHTmEvt tmEvtObj0;
+    RKHTmEvt tmEvtObj1;
     GStatus status;
-
 };
 
 RKH_SMA_CREATE(PowerMgr, powerMgr, 0, HCAL, &PowerMgr_Ready, ToReadyExt0, NULL);
@@ -68,6 +84,8 @@ RKH_SMA_DEF_PTR(powerMgr);
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+static Backup backup;
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void
@@ -89,8 +107,40 @@ static void
 updateStatus(PowerMgr *const me, RKH_EVT_T *pe)
 {
 	GStatusEvt *realEvt;
+
 	realEvt = RKH_DOWNCAST(GStatusEvt, pe);
 	me->status.data = realEvt->status;
+}
+
+static void
+updateMemStatus(void)
+{
+    MInt flashCheck;
+
+    flashCheck = flash_verify_device();
+    if(flashCheck != FLASH_OK)
+    {
+    	switch(flashCheck)
+    	{
+    		case FLASH_UNKNOWN:
+    			set_led(LED_POWER, SEQ_LSTAGE1);
+    			break;
+    		case FLASH_MUST_POWERCYCLE:
+    			set_led(LED_POWER, SEQ_LSTAGE2);
+    			break;
+    		default:
+    			set_led(LED_POWER, SEQ_LSTAGE3);
+				break;
+    	}
+        return;
+    }
+
+    Backup_getInfo(&backup);
+
+    if((backup.error == Backup_Ok) && (backup.nFiles > 0))
+        set_led(LED_POWER, SEQ_LIT);
+    else
+        set_led(LED_POWER, SEQ_NO_LIT);
 }
 
 static rbool_t
@@ -110,22 +160,26 @@ ToReadyExt0(PowerMgr *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_AO(me);
 	RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
 	RKH_TR_FWK_STATE(me, &PowerMgr_Ready);
+	RKH_TR_FWK_STATE(me, &PowerMgr_ShuttingDown);
 	RKH_TR_FWK_STATE(me, &PowerMgrFinal);
 	RKH_TR_FWK_SIG(evGStatus);
 	RKH_TR_FWK_SIG(evBatChrStatus);
+	RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
+	RKH_TR_FWK_TIMER(&me->tmEvtObj1.tmr);
 	#if 0
 		RKH_TR_FWK_OBJ_NAME(ToReadyExt0, "ToReadyExt0");
-		RKH_TR_FWK_OBJ_NAME(ReadoToPowerMgrFinalExt1, "ReadyToPowerMgrFinalExt1");
+		RKH_TR_FWK_OBJ_NAME(ShuttingDownToPowerMgrFinalExt2, "ShuttingDownToPowerMgrFinalExt2");
 		RKH_TR_FWK_OBJ_NAME(ReadyToReadyLoc0, "ReadyToReadyLoc0");
-		RKH_TR_FWK_OBJ_NAME(exReady, "exReady");
-		RKH_TR_FWK_OBJ_NAME(isCondReadyToPowerMgrFinal1, "isCondReadyToPowerMgrFinal1");
+		RKH_TR_FWK_OBJ_NAME(ReadyToReadyLoc1, "ReadyToReadyLoc1");
+		RKH_TR_FWK_OBJ_NAME(enShuttingDown, "enShuttingDown");
+		RKH_TR_FWK_OBJ_NAME(isCondReadyToShuttingDown1, "isCondReadyToShuttingDown1");
 	#endif
 	
 	init(me);
 }
 
 static void 
-ReadyToPowerMgrFinalExt1(PowerMgr *const me, RKH_EVT_T *pe)
+ShuttingDownToPowerMgrFinalExt2(PowerMgr *const me, RKH_EVT_T *pe)
 {
 	BatChr_shutDown();
 }
@@ -136,21 +190,51 @@ ReadyToReadyLoc0(PowerMgr *const me, RKH_EVT_T *pe)
 	updateStatus(me, pe);
 }
 
+static void 
+ReadyToReadyLoc1(PowerMgr *const me, RKH_EVT_T *pe)
+{
+	updateMemStatus();
+}
+
 /* ............................. Entry actions ............................. */
+static void 
+enReady(PowerMgr *const me)
+{
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj1, evTout1);
+	RKH_TMR_INIT(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj1), NULL);
+	RKH_TMR_PERIODIC(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime1, WaitTime1);
+}
+
+static void 
+enShuttingDown(PowerMgr *const me)
+{
+	storeStatus(me);
+	ffile_sync();
+	Backup_sync();
+	RKH_TRC_FLUSH();
+	trace_msd_close();
+	set_led(LED_POWER, SEQ_LSTAGE4);
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
+	RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
+}
+
 /* ............................. Exit actions .............................. */
 static void 
 exReady(PowerMgr *const me)
 {
-	storeStatus(me);
-	ffile_sync();
-    Backup_sync();
-	RKH_TRC_FLUSH();
-	trace_msd_close();
+	rkh_tmr_stop(&me->tmEvtObj1.tmr);
+}
+
+static void 
+exShuttingDown(PowerMgr *const me)
+{
+	rkh_tmr_stop(&me->tmEvtObj0.tmr);
 }
 
 /* ................................ Guards ................................. */
 static rbool_t
-isCondReadyToPowerMgrFinal1(PowerMgr *const me, RKH_EVT_T *pe)
+isCondReadyToShuttingDown1(PowerMgr *const me, RKH_EVT_T *pe)
 {
 	return (isPowerFail(pe)) ? true : false;
 }
