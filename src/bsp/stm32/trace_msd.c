@@ -27,6 +27,8 @@
 
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
+USBH_HandleTypeDef hUsbHostHS;
+
 /* ---------------------------- Local variables ---------------------------- */
 static FIL File;              /* File object */
 static char fileName[25];
@@ -48,7 +50,9 @@ trace_msd_close(void)
 
 	if(File.obj.fs != NULL)
 	{
+		while(USBH_Process(&hUsbHostHS) != USBH_OK);
 		f_close(&File);
+		while(USBH_Process(&hUsbHostHS) != USBH_OK);
 	}
 }
 

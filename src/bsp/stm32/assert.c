@@ -69,9 +69,11 @@ rkh_assert(RKHROM char * const file, int line)
 {
     fprintf(stderr,    "RKH_ASSERT: [%d] line from %s "
             "file\n", line, file);
-    RKH_DIS_INTERRUPT();
     RKH_TR_FWK_ASSERT((RKHROM char *)file, __LINE__);
     rkh_fwk_exit();
+	RKH_TRC_FLUSH();
+	trace_msd_close();
+    RKH_DIS_INTERRUPT();
 	bsp_reset();
 }
 
