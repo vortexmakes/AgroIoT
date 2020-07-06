@@ -33,6 +33,7 @@ typedef enum
     YCmdServerIp,
     YCmdServerPort,
     YCmdConnectionTime,
+    YCmdTotActTime,
     YCmdGpsTime,
     YCmdAccLimit,
     YCmdBreakLimit,

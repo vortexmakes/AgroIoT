@@ -57,6 +57,7 @@ static const YCmdExec execTable[YCmdNum] =
     { exec_serverIp },       // YCmdServerIp
     { exec_serverPort },     // YCmdServerPort
     { exec_connectionTime }, // YCmdConnectionTime
+    { exec_cmdNotSupported },// YCmdTotActTime
     { exec_gpsTime },        // YCmdGpsTime
     { exec_accLimit },       // YCmdAccLimit
     { exec_breakLimit },     // YCmdBreakLimit

@@ -89,7 +89,7 @@ test_smsUnknown(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:16,123,10;"; 
+    p = "Im:17,123,10;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -211,13 +211,30 @@ test_smsConnectionTime(void)
 }
 
 void
-test_smsGpsTime(void)
+test_smsTotActTime(void)
 {
     YCommand yCmd;
     YCmdRes res;
     char *p;
     
     p = "Im:3,123,123;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdTotActTime, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_smsGpsTime(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "Im:4,123,123;"; 
 
     Config_setUpdateGPSTime_Expect(123);
 
@@ -236,7 +253,7 @@ test_smsAccLimit(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:4,123,12;"; 
+    p = "Im:5,123,12;"; 
 
     Config_setAccLimit_Expect(12);
 
@@ -255,7 +272,7 @@ test_smsBreakLimit(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:5,123,12;"; 
+    p = "Im:6,123,12;"; 
 
     Config_setBrLimit_Expect(12);
 
@@ -274,7 +291,7 @@ test_smsStatus(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:6,123,1;"; 
+    p = "Im:7,123,1;"; 
     
     Config_setDefault_Expect(1);
 
@@ -293,7 +310,7 @@ test_smsSetOut1(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:7,123,1;"; 
+    p = "Im:8,123,1;"; 
 
     Config_setDftDigOut_Expect(1);
     dOut_set_Expect(dOut1, 1, 1);
@@ -313,7 +330,7 @@ test_smsSetOut2(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:8,123,1;"; 
+    p = "Im:9,123,1;"; 
 
     Config_setDftDigOut_Expect(1);
     dOut_set_Expect(dOut2, 1, 1);
@@ -333,7 +350,7 @@ test_smsSetOut3(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:9,123,1;"; 
+    p = "Im:10,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -350,7 +367,7 @@ test_smsSetOut4(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:10,123,1;"; 
+    p = "Im:11,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -367,7 +384,7 @@ test_smsSetOut5(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:11,123,1;"; 
+    p = "Im:12,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -384,7 +401,7 @@ test_smsSetOut6(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:12,123,1;"; 
+    p = "Im:13,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -401,7 +418,7 @@ test_smsReset(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:13,123,0;"; 
+    p = "Im:14,123,0;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -418,7 +435,7 @@ test_smsSampleTime(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:14,123,1;"; 
+    p = "Im:15,123,1;"; 
     
     Config_setMapTimeOnRunning_Expect(1);
 
@@ -439,7 +456,7 @@ test_smsDataFormat(void)
     YCmdRes res;
     char *p;
     
-    p = "Im:15,123,0;"; 
+    p = "Im:16,123,0;"; 
 
     rkh_sma_post_lifo_Expect(collector, NULL, NULL);
     rkh_sma_post_lifo_IgnoreArg_e();
@@ -538,7 +555,7 @@ test_gprsUnknown(void)
     YCmdRes res;
     char *p;
     
-    p= "!3|123456789AB,16,123,10;"; 
+    p= "!3|123456789AB,17,123,10;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -660,13 +677,30 @@ test_gprsConnectionTime(void)
 }
 
 void
-test_gprsGpsTime(void)
+test_gprsTotActTime(void)
 {
     YCommand yCmd;
     YCmdRes res;
     char *p;
     
     p = "!3|123456789AB,3,123,123;"; 
+
+    res = YCommand_parseAndExec(&yCmd, p, strlen(p));
+
+    TEST_ASSERT_EQUAL(YCmdExecError, res);
+    TEST_ASSERT_EQUAL(YCmdTotActTime, yCmd.id);
+    TEST_ASSERT_EQUAL_STRING("123456789AB", yCmd.index);
+    TEST_ASSERT_EQUAL(0, yCmd.reset);
+}
+
+void
+test_gprsGpsTime(void)
+{
+    YCommand yCmd;
+    YCmdRes res;
+    char *p;
+    
+    p = "!3|123456789AB,4,123,123;"; 
 
     Config_setUpdateGPSTime_Expect(123);
 
@@ -685,7 +719,7 @@ test_gprsAccLimit(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,4,123,12;"; 
+    p = "!3|123456789AB,5,123,12;"; 
 
     Config_setAccLimit_Expect(12);
 
@@ -704,7 +738,7 @@ test_gprsBreakLimit(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,5,123,12;"; 
+    p = "!3|123456789AB,6,123,12;"; 
 
     Config_setBrLimit_Expect(12);
 
@@ -723,7 +757,7 @@ test_gprsStatus(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,6,123,1;"; 
+    p = "!3|123456789AB,7,123,1;"; 
 
     Config_setDefault_Expect(1);
 
@@ -742,7 +776,7 @@ test_gprsSetOut1(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,7,123,1;"; 
+    p = "!3|123456789AB,8,123,1;"; 
 
     Config_setDftDigOut_Expect(1);
     dOut_set_Expect(dOut1, 1, 1);
@@ -762,7 +796,7 @@ test_gprsSetOut2(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,8,123,1;"; 
+    p = "!3|123456789AB,9,123,1;"; 
 
     Config_setDftDigOut_Expect(1);
     dOut_set_Expect(dOut2, 1, 1);
@@ -782,7 +816,7 @@ test_gprsSetOut3(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,9,123,1;"; 
+    p = "!3|123456789AB,10,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -799,7 +833,7 @@ test_gprsSetOut4(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,10,123,1;"; 
+    p = "!3|123456789AB,11,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -816,7 +850,7 @@ test_gprsSetOut5(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,11,123,1;"; 
+    p = "!3|123456789AB,12,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -833,7 +867,7 @@ test_gprsSetOut6(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,12,123,1;"; 
+    p = "!3|123456789AB,13,123,1;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -850,7 +884,7 @@ test_gprsReset(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,13,123,0;"; 
+    p = "!3|123456789AB,14,123,0;"; 
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -867,7 +901,7 @@ test_gprsSampleTime(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,14,123,1;"; 
+    p = "!3|123456789AB,15,123,1;"; 
 
     Config_setMapTimeOnRunning_Expect(1);
 
@@ -887,7 +921,7 @@ test_gprsDataFormat(void)
     YCmdRes res;
     char *p;
     
-    p = "!3|123456789AB,15,123,0;"; 
+    p = "!3|123456789AB,16,123,0;"; 
 
     rkh_sma_post_lifo_Expect(collector, NULL, NULL);
     rkh_sma_post_lifo_IgnoreArg_e();

@@ -44,6 +44,7 @@ static const YCmdFormat fmtTable[YCmdNum] =
     { fmt_serverIp, 7, IP_LENGTH },     // YCmdServerIp
     { fmt_string, 1, PORT_LENGTH},      // YCmdServerPort
     { fmt_rui16, 1, 4 },                // YCmdConnectionTime
+    { fmt_rui16, 1, 4 },                // YCmdTotActTime
     { fmt_rui16, 1, 4 },                // YCmdGpsTime
     { fmt_rui8, 1, 2 },                 // YCmdAccLimit
     { fmt_rui8, 1, 2 },                 // YCmdBreakLimit
