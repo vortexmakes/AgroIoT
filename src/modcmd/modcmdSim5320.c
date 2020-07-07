@@ -115,7 +115,7 @@ static const CmdTbl cmdTbl =
 #ifdef GPRS_QUICK_SEND
      "AT+CIPRXGET=1;+CIPQSEND=1\r\n",
 #else
-     "AT+CIPRXGET=1\r\n",
+     "AT+CIPRXGET=1;+CIPSENDMODE=1\r\n",
 #endif
      &gsmMgr,
      RKH_TIME_MS(300), RKH_TIME_MS(100)},
