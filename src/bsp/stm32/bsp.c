@@ -34,6 +34,9 @@
 #include "mTime.h"
 #include "epoch.h"
 #include "genled.h"
+#include "ffile.h"
+#include "Backup.h"
+#include "trace_msd.h"
 
 RKH_THIS_MODULE
 
@@ -190,7 +193,7 @@ bsp_timeTick(void)
 RKH_TS_T
 rkh_trc_getts(void)
 {
-    return tstamp;
+    return epoch_get(); //tstamp;
 }
 
 void

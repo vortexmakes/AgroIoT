@@ -69,7 +69,7 @@
 #define SIZEOF_EP2STO           (16 * SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
-#define _CHECK_FORMATING_START_	1
+#define _CHECK_FORMATING_START_	0
 #define _DO_FIRST_FORMAT_		0
 
 /* ---------------------------- Local data types --------------------------- */
@@ -101,12 +101,12 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_GROUP_ALL_EVENTS(RKH_TG_USR); */
     /*RKH_FILTER_OFF_EVENT(RKH_TE_TMR_TOUT);*/
     RKH_FILTER_OFF_EVENT(RKH_TE_SM_STATE);
-    RKH_FILTER_OFF_EVENT(RKH_TE_SMA_FIFO);
-    RKH_FILTER_OFF_EVENT(RKH_TE_SMA_GET);
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_SMA_FIFO);*/
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_SMA_GET);*/
     RKH_FILTER_OFF_EVENT(RKH_TE_FWK_ASSERT);
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SMA_LIFO); */
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
-    /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
+    RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);
     RKH_FILTER_OFF_SMA(powerMgr);
     /*RKH_FILTER_OFF_SMA(modMgr); */
     RKH_FILTER_OFF_SMA(gsmMgr);
