@@ -21,6 +21,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "settings.h"
+#include "AgroIoTVersion.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -36,7 +37,7 @@ extern "C" {
 #define GEO_INVALID_LONGITUDE_IND   "-"
 #define GEO_INVALID_SPEED           "000.000"
 #define GEO_INVALID_COURSE          "000"
-#define GEO_INVALID_DATE            AGROIOT_VERSION_DATE
+#define GEO_INVALID_DATE            AGROIOT_RELEASE_DATE
 
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */
