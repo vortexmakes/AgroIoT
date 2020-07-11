@@ -28,9 +28,8 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define AGROIOT_VERSION_DATE        "190918"
-#define ACCELERATION_PERIOD         3
-#define MAX_NFRAMES_TOSEND          100
+#define ACCELERATION_PERIOD             3
+#define MAX_NFRAMES_TOSEND              100
 
 /* Default configurations */
 #define ACC_LIMIT_DFT                   6
