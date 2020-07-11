@@ -46,7 +46,7 @@ static GStatusType invStatus =
         {GEO_INVALID_LATITUDE}, {GEO_INVALID_LATITUDE_IND},
         {GEO_INVALID_LONGITUDE}, {GEO_INVALID_LONGITUDE_IND},
         {GEO_INVALID_SPEED}, {GEO_INVALID_COURSE},
-        {GEO_INVALID_DATE}
+        "190918"
     },
     {1, 1, {0, 0, 1}, {0xdddd, 0xffff, 0xffff}, 0},
     {0xff, 0x3f},
