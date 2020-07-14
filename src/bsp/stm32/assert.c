@@ -53,6 +53,7 @@
 #include <stdio.h>
 #include "rkh.h"
 #include "bsp.h"
+#include "trace_msd.h"
 
 RKH_THIS_MODULE
 
@@ -67,8 +68,6 @@ RKH_THIS_MODULE
 void
 rkh_assert(RKHROM char * const file, int line)
 {
-    fprintf(stderr,    "RKH_ASSERT: [%d] line from %s "
-            "file\n", line, file);
     RKH_TR_FWK_ASSERT((RKHROM char *)file, __LINE__);
     rkh_fwk_exit();
 	RKH_TRC_FLUSH();
