@@ -31,11 +31,29 @@ USBH_HandleTypeDef hUsbHostHS;
 
 /* ---------------------------- Local variables ---------------------------- */
 static FIL File;              /* File object */
+static FILINFO fno;
 static char fileName[25];
 static ruint isopen = 0;
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static
+void
+newFileName(char *p )
+{
+    FRESULT fr;
+    Epoch ts;
+    int i = 0;
+
+    ts = epoch_get();
+    do
+    {
+    	sprintf(p, "trc%lu.bin", ts + i);
+        fr = f_stat(p, &fno);
+        ++i;
+    } while(fr == FR_OK);
+}
+
 /* ---------------------------- Global functions --------------------------- */
 void
 trace_msd_init(void)
@@ -56,6 +74,7 @@ trace_msd_close(void)
 	}
 }
 
+
 void
 trace_msd_write(uint8_t *pData, uint16_t Size)
 {
@@ -74,7 +93,7 @@ trace_msd_write(uint8_t *pData, uint16_t Size)
 
     if(File.obj.fs == NULL)
     {
-        sprintf(fileName,"trc%lu.bin", epoch_get());
+    	newFileName(fileName);
 
         if(f_open(&File, fileName, FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
         {

@@ -50,7 +50,7 @@
 #include "Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define POWERMGR_QSTO_SIZE        4
+#define POWERMGR_QSTO_SIZE      4
 #define COMMMGR_QSTO_SIZE       16
 #define GSMMGR_QSTO_SIZE        8
 #define MODMGR_QSTO_SIZE        4
@@ -69,9 +69,6 @@
 #define SIZEOF_EP2STO           (16 * SIZEOF_EP2_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
-#define _CHECK_FORMATING_START_	0
-#define _DO_FIRST_FORMAT_		0
-
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
