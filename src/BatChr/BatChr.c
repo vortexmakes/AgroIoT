@@ -43,18 +43,8 @@ static BatChrEvt e_BatChr;
 void
 BatChr_init(void)
 {
-    if(bsp_get_ExtPower() == ExtPowerOk)
-    {
-    	bsp_set_battery(Ready);
-        status = LINE_BATT;
-    }
-    else
-    {
-    	bsp_set_battery(Release);
-        status = NOLINE_BATT;
-        topic_publish(Status, RKH_UPCAST(RKH_EVT_T, &e_BatChr), 
-                              RKH_UPCAST(RKH_SMA_T, &BatChr));
-    }
+   	bsp_set_battery(Ready);
+    status = LINE_BATT;
 
     RKH_SET_STATIC_EVENT(&e_BatChr, evBatChrStatus);
 
