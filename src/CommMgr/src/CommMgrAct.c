@@ -124,6 +124,7 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
     RKH_TR_FWK_STATE(me, &Idle);
     RKH_TR_FWK_STATE(me, &Active);
+    RKH_TR_FWK_STATE(me, &Disconnected);
     RKH_TR_FWK_STATE(me, &WaitSync);
     RKH_TR_FWK_STATE(me, &Current);
     RKH_TR_FWK_STATE(me, &SendingStatus);
