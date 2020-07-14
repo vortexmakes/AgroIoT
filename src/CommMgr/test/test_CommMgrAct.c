@@ -48,7 +48,7 @@
 /* ------------------------------- Constants ------------------------------- */
 RKHROM RKH_SBSC_T Idle, WaitSync, SendingStatus, ReceivingStatusAck, 
                      SendingEndOfHist, SendingHist, ReceivingMsgAck,
-                     SendingStartOfHist;
+                     SendingStartOfHist, SendingCmdAck, Disconnected;
 RKHROM RKH_SCMP_T Active, Current, History;
 RKHROM RKH_SCHOICE_T C0, C1, C2, C3, C4, C5, C6;
 RKHROM RKH_FINAL_T CurrentFinal, HistoryFinal;
