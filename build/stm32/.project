@@ -42,6 +42,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/AgroIoTVersion.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/AgroIoTVersion.h</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/Backup</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/Backup</locationURI>
