@@ -52,6 +52,7 @@ static void ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe);
 static void InactiveToActiveExt1(GsmMgr *const me, RKH_EVT_T *pe);
 static void ActiveToInactiveExt2(GsmMgr *const me, RKH_EVT_T *pe);
 static void ToInitializeExt4(GsmMgr *const me, RKH_EVT_T *pe);
+static void PinToEnableNetTimeExt15(GsmMgr *const me, RKH_EVT_T *pe);
 static void GetImeiToCipShutdownExt18(GsmMgr *const me, RKH_EVT_T *pe);
 static void UnregisteredToRegisteredExt23(GsmMgr *const me, RKH_EVT_T *pe);
 static void RegisteredToRegisteredExt25(GsmMgr *const me, RKH_EVT_T *pe);
@@ -87,16 +88,16 @@ static void C4ToDeleteSMSExt84(SMS *const me, RKH_EVT_T *pe);
 static void ActiveToActiveLoc0(GsmMgr *const me, RKH_EVT_T *pe);
 static void UnregisteredToUnregisteredLoc12(GsmMgr *const me, RKH_EVT_T *pe);
 static void UnregisteredToUnregisteredLoc13(GsmMgr *const me, RKH_EVT_T *pe);
-static void RegisteredToRegisteredLoc16(GsmMgr *const me, RKH_EVT_T *pe);
-static void RegisteredToRegisteredLoc17(GsmMgr *const me, RKH_EVT_T *pe);
-static void Socket_GsmReadyToSocket_GsmReadyLoc18(Socket *const me, RKH_EVT_T *pe);
-static void Socket_GsmReadyToSocket_GsmReadyLoc19(Socket *const me, RKH_EVT_T *pe);
-static void GetStatusToGetStatusLoc28(Socket *const me, RKH_EVT_T *pe);
-static void GetStatusToGetStatusLoc29(Socket *const me, RKH_EVT_T *pe);
-static void Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc30(Socket *const me, RKH_EVT_T *pe);
-static void Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc31(Socket *const me, RKH_EVT_T *pe);
-static void SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc32(SMS *const me, RKH_EVT_T *pe);
-static void SMS_GsmReadyToSMS_GsmReadyLoc33(SMS *const me, RKH_EVT_T *pe);
+static void RegisteredToRegisteredLoc14(GsmMgr *const me, RKH_EVT_T *pe);
+static void RegisteredToRegisteredLoc15(GsmMgr *const me, RKH_EVT_T *pe);
+static void Socket_GsmReadyToSocket_GsmReadyLoc16(Socket *const me, RKH_EVT_T *pe);
+static void Socket_GsmReadyToSocket_GsmReadyLoc17(Socket *const me, RKH_EVT_T *pe);
+static void GetStatusToGetStatusLoc26(Socket *const me, RKH_EVT_T *pe);
+static void GetStatusToGetStatusLoc27(Socket *const me, RKH_EVT_T *pe);
+static void Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc28(Socket *const me, RKH_EVT_T *pe);
+static void Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc29(Socket *const me, RKH_EVT_T *pe);
+static void SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc30(SMS *const me, RKH_EVT_T *pe);
+static void SMS_GsmReadyToSMS_GsmReadyLoc31(SMS *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void enSync(GsmMgr *const me);
@@ -220,7 +221,7 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_TRANS_TABLE(GsmMgr_Pin)
 	RKH_TRREG(evSimError, NULL, NULL, &GsmMgr_InitializeFinal),
 	RKH_TRREG(evSimPin, NULL, NULL, &GsmMgr_SetPin),
-	RKH_TRREG(evSimReady, NULL, NULL, &GsmMgr_EnableNetTime),
+	RKH_TRREG(evSimReady, NULL, PinToEnableNetTimeExt15, &GsmMgr_EnableNetTime),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_SetPin)
@@ -259,8 +260,8 @@ RKH_CREATE_TRANS_TABLE(GsmMgr_Registered)
 	RKH_TRREG(evTout2, NULL, RegisteredToRegisteredExt25, &GsmMgr_Registered),
 	RKH_TRREG(evClose, NULL, NULL, &GsmMgr_WaitingClose),
 	RKH_TRREG(evGsmError, NULL, NULL, &GsmMgr_ConFailure),
-	RKH_TRINT(evNetClockSync, NULL, RegisteredToRegisteredLoc16),
-	RKH_TRINT(evLocalTime, NULL, RegisteredToRegisteredLoc17),
+	RKH_TRINT(evNetClockSync, NULL, RegisteredToRegisteredLoc14),
+	RKH_TRINT(evLocalTime, NULL, RegisteredToRegisteredLoc15),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_WaitingClose)
@@ -271,8 +272,8 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Socket_GsmReady)
     RKH_TRCOMPLETION(NULL, NULL, &GsmMgr_Socket_WaitGsmReady),
-    RKH_TRINT(evSend, NULL, Socket_GsmReadyToSocket_GsmReadyLoc18),
-    RKH_TRINT(evRecv, NULL, Socket_GsmReadyToSocket_GsmReadyLoc19),
+    RKH_TRINT(evSend, NULL, Socket_GsmReadyToSocket_GsmReadyLoc16),
+    RKH_TRINT(evRecv, NULL, Socket_GsmReadyToSocket_GsmReadyLoc17),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_WaitRetryConfig)
@@ -350,8 +351,8 @@ RKH_END_TRANS_TABLE
 RKH_CREATE_TRANS_TABLE(GsmMgr_GetStatus)
     RKH_TRREG(evNoResponse, isCondGetStatusToIdle62, GetStatusToIdleExt62, &GsmMgr_Idle),
     RKH_TRREG(evConnected, NULL, GetStatusToIdleExt63, &GsmMgr_Idle),
-    RKH_TRINT(evSend, NULL, GetStatusToGetStatusLoc28),
-    RKH_TRINT(evRecv, NULL, GetStatusToGetStatusLoc29),
+    RKH_TRINT(evSend, NULL, GetStatusToGetStatusLoc26),
+    RKH_TRINT(evRecv, NULL, GetStatusToGetStatusLoc27),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Sending)
@@ -371,18 +372,18 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_Socket_WaitGsmReady)
     RKH_TRREG(evGsmReady, NULL, NULL, &GsmMgr_Socket_GsmReady),
-    RKH_TRINT(evRecv, NULL, Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc30),
-    RKH_TRINT(evSend, NULL, Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc31),
+    RKH_TRINT(evRecv, NULL, Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc28),
+    RKH_TRINT(evSend, NULL, Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc29),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_SMS_WaitGsmReady)
     RKH_TRREG(evGsmReady, NULL, NULL, &GsmMgr_SMS_GsmReady),
-    RKH_TRINT(evSendSMS, NULL, SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc32),
+    RKH_TRINT(evSendSMS, NULL, SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc30),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_SMS_GsmReady)
     RKH_TRREG(evGsmError, NULL, NULL, &GsmMgr_SMS_WaitGsmReady),
-    RKH_TRINT(evSendSMS, NULL, SMS_GsmReadyToSMS_GsmReadyLoc33),
+    RKH_TRINT(evSendSMS, NULL, SMS_GsmReadyToSMS_GsmReadyLoc31),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(GsmMgr_IdleSMS)
@@ -995,6 +996,7 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
         RKH_TR_FWK_OBJ_NAME(InactiveToActiveExt1, "InactiveToActiveExt1");
         RKH_TR_FWK_OBJ_NAME(ActiveToInactiveExt2, "ActiveToInactiveExt2");
         RKH_TR_FWK_OBJ_NAME(ToInitializeExt4, "ToInitializeExt4");
+		RKH_TR_FWK_OBJ_NAME(PinToEnableNetTimeExt15, "PinToEnableNetTimeExt15");
         RKH_TR_FWK_OBJ_NAME(GetImeiToCipShutdownExt18, "GetImeiToCipShutdownExt18");
         RKH_TR_FWK_OBJ_NAME(UnregisteredToRegisteredExt23, "UnregisteredToRegisteredExt23");
         RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredExt25, "RegisteredToRegisteredExt25");
@@ -1030,16 +1032,16 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
         RKH_TR_FWK_OBJ_NAME(ActiveToActiveLoc0, "ActiveToActiveLoc0");
         RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc12, "UnregisteredToUnregisteredLoc12");
         RKH_TR_FWK_OBJ_NAME(UnregisteredToUnregisteredLoc13, "UnregisteredToUnregisteredLoc13");
-        RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredLoc16, "RegisteredToRegisteredLoc16");
-        RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredLoc17, "RegisteredToRegisteredLoc17");
-        RKH_TR_FWK_OBJ_NAME(Socket_GsmReadyToSocket_GsmReadyLoc18, "Socket_GsmReadyToSocket_GsmReadyLoc18");
-        RKH_TR_FWK_OBJ_NAME(Socket_GsmReadyToSocket_GsmReadyLoc19, "Socket_GsmReadyToSocket_GsmReadyLoc19");
-        RKH_TR_FWK_OBJ_NAME(GetStatusToGetStatusLoc28, "GetStatusToGetStatusLoc28");
-        RKH_TR_FWK_OBJ_NAME(GetStatusToGetStatusLoc29, "GetStatusToGetStatusLoc29");
-        RKH_TR_FWK_OBJ_NAME(Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc30, "Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc30");
-        RKH_TR_FWK_OBJ_NAME(Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc31, "Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc31");
-        RKH_TR_FWK_OBJ_NAME(SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc32, "SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc32");
-        RKH_TR_FWK_OBJ_NAME(SMS_GsmReadyToSMS_GsmReadyLoc33, "SMS_GsmReadyToSMS_GsmReadyLoc33");
+		RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredLoc14, "RegisteredToRegisteredLoc14");
+		RKH_TR_FWK_OBJ_NAME(RegisteredToRegisteredLoc15, "RegisteredToRegisteredLoc15");
+		RKH_TR_FWK_OBJ_NAME(Socket_GsmReadyToSocket_GsmReadyLoc16, "Socket_GsmReadyToSocket_GsmReadyLoc16");
+		RKH_TR_FWK_OBJ_NAME(Socket_GsmReadyToSocket_GsmReadyLoc17, "Socket_GsmReadyToSocket_GsmReadyLoc17");
+		RKH_TR_FWK_OBJ_NAME(GetStatusToGetStatusLoc26, "GetStatusToGetStatusLoc26");
+		RKH_TR_FWK_OBJ_NAME(GetStatusToGetStatusLoc27, "GetStatusToGetStatusLoc27");
+		RKH_TR_FWK_OBJ_NAME(Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc28, "Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc28");
+		RKH_TR_FWK_OBJ_NAME(Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc29, "Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc29");
+		RKH_TR_FWK_OBJ_NAME(SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc30, "SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc30");
+		RKH_TR_FWK_OBJ_NAME(SMS_GsmReadyToSMS_GsmReadyLoc31, "SMS_GsmReadyToSMS_GsmReadyLoc31");
         RKH_TR_FWK_OBJ_NAME(enSync, "enSync");
         RKH_TR_FWK_OBJ_NAME(enInit, "enInit");
         RKH_TR_FWK_OBJ_NAME(enPin, "enPin");
@@ -1050,7 +1052,6 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
         RKH_TR_FWK_OBJ_NAME(enCipShutdown, "enCipShutdown");
         RKH_TR_FWK_OBJ_NAME(enConFailure, "enConFailure");
         RKH_TR_FWK_OBJ_NAME(enUnregistered, "enUnregistered");
-        RKH_TR_FWK_OBJ_NAME(enRegistered, "enRegistered");
         RKH_TR_FWK_OBJ_NAME(enSetAPN, "enSetAPN");
         RKH_TR_FWK_OBJ_NAME(enEnableNetwork, "enEnableNetwork");
         RKH_TR_FWK_OBJ_NAME(enCheckIP, "enCheckIP");
@@ -1059,7 +1060,6 @@ ToInactiveExt0(GsmMgr *const me, RKH_EVT_T *pe)
         RKH_TR_FWK_OBJ_NAME(enListSMS, "enListSMS");
 		RKH_TR_FWK_OBJ_NAME(enDeleteSMS, "enDeleteSMS");
         RKH_TR_FWK_OBJ_NAME(exConFailure, "exConFailure");
-        RKH_TR_FWK_OBJ_NAME(exRegistered, "exRegistered");
         RKH_TR_FWK_OBJ_NAME(exWaitRetryConnect, "exWaitRetryConnect");
         RKH_TR_FWK_OBJ_NAME(exConnected, "exConnected");
         RKH_TR_FWK_OBJ_NAME(exGetStatus, "exGetStatus");
@@ -1094,6 +1094,12 @@ static void
 ToInitializeExt4(GsmMgr *const me, RKH_EVT_T *pe)
 {
 	me->retryCount = 0;
+}
+
+static void 
+PinToEnableNetTimeExt15(GsmMgr *const me, RKH_EVT_T *pe)
+{
+	bsp_SIMReady();
 }
 
 static void 
@@ -1314,61 +1320,61 @@ UnregisteredToUnregisteredLoc13(GsmMgr *const me, RKH_EVT_T *pe)
 }
 
 static void 
-RegisteredToRegisteredLoc16(GsmMgr *const me, RKH_EVT_T *pe)
+RegisteredToRegisteredLoc14(GsmMgr *const me, RKH_EVT_T *pe)
 {
 	ModCmd_getLocalTime();
 }
 
 static void 
-RegisteredToRegisteredLoc17(GsmMgr *const me, RKH_EVT_T *pe)
+RegisteredToRegisteredLoc15(GsmMgr *const me, RKH_EVT_T *pe)
 {
 	rtimeSync(pe);
 }
 
 static void 
-Socket_GsmReadyToSocket_GsmReadyLoc18(Socket *const me, RKH_EVT_T *pe)
+Socket_GsmReadyToSocket_GsmReadyLoc16(Socket *const me, RKH_EVT_T *pe)
 {
     sendFail(me);
 }
 
 static void 
-Socket_GsmReadyToSocket_GsmReadyLoc19(Socket *const me, RKH_EVT_T *pe)
+Socket_GsmReadyToSocket_GsmReadyLoc17(Socket *const me, RKH_EVT_T *pe)
 {
     recvFail(me);
 }
 
 static void 
-GetStatusToGetStatusLoc28(Socket *const me, RKH_EVT_T *pe)
+GetStatusToGetStatusLoc26(Socket *const me, RKH_EVT_T *pe)
 {
 	reqDefer(pe);
 }
 
 static void 
-GetStatusToGetStatusLoc29(Socket *const me, RKH_EVT_T *pe)
+GetStatusToGetStatusLoc27(Socket *const me, RKH_EVT_T *pe)
 {
 	reqDefer(pe);
 }
 
 static void 
-Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc30(Socket *const me, RKH_EVT_T *pe)
+Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc28(Socket *const me, RKH_EVT_T *pe)
 {
     recvFail(me);
 }
 
 static void 
-Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc31(Socket *const me, RKH_EVT_T *pe)
+Socket_WaitGsmReadyToSocket_WaitGsmReadyLoc29(Socket *const me, RKH_EVT_T *pe)
 {
     sendFail(me);
 }
 
 static void 
-SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc32(SMS *const me, RKH_EVT_T *pe)
+SMS_WaitGsmReadyToSMS_WaitGsmReadyLoc30(SMS *const me, RKH_EVT_T *pe)
 {
     sendSMSFail(me);
 }
 
 static void 
-SMS_GsmReadyToSMS_GsmReadyLoc33(SMS *const me, RKH_EVT_T *pe)
+SMS_GsmReadyToSMS_GsmReadyLoc31(SMS *const me, RKH_EVT_T *pe)
 {
     sendSMSFail(me);
 }

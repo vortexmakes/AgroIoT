@@ -317,7 +317,8 @@ bsp_get_ExtPower(void)
 void 
 bsp_SIMReady(void)
 {
-    set_led(LED_GSM, SEQ_LSTAGE2);
+	set_led(LED_SIM, simSelect == MainSIM ? SEQ_LSTAGE1 : SEQ_LSTAGE3);
+	set_led(LED_GSM, SEQ_LSTAGE2);
 }
 
 void 
@@ -332,8 +333,6 @@ void
 bsp_SIMChange(void)
 {
     simSelect = (simSelect == MainSIM) ? SecSIM : MainSIM;
-
-    set_led(LED_SIM, simSelect == MainSIM ? SEQ_NO_LIT : SEQ_LIT);
     bsp_SIMSelect(simSelect);
 }
 
