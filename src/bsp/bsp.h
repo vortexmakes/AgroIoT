@@ -109,6 +109,21 @@ typedef enum
     UsbDiskNotReady
 } UsbDiskStatus_t;
 
+/*
+ * Reset Source Flags
+ */
+typedef enum
+{
+    ResetSrcUnknown,
+    ResetSrcLP,     // Low Power reset.
+    ResetSrcWWDG,   // Window Watchdog reset.
+    ResetSrcWDG,    // Independent Watchdog reset.
+    ResetSrcSW,     // Software reset.
+    ResetSrcPOR,    // POR reset.
+    ResetSrcPIN,    // Pin reset.
+    ResetSrcBOR,    // POR/PDR or BOR reset.
+} ResetSource_t;
+
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
@@ -157,6 +172,8 @@ UsbHostStatus_t bsp_usbHostStatus(void);
 UsbDiskStatus_t bsp_usbDiskStatus(void);
 void bsp_setAllLeds(uint8_t val);
 void bsp_setErrLeds(uint8_t err);
+
+ResetSource_t bsp_getResetSource(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

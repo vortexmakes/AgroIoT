@@ -72,6 +72,8 @@ static uint8_t uart1RxBuff[10];
 static uint8_t uart2RxBuff[10];
 static uint8_t uart3RxBuff[10];
 
+static ResetSource_t resetSource;
+
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static UART_HandleTypeDef *
@@ -100,6 +102,45 @@ usbDisk_init(void)
     USBDISKFatFs.fs_type = 0;
     usbHostStatus = UsbHostClassDisconnect;
     usbDiskStatus = UsbDiskNotReady;
+}
+
+static void
+readResetSource(void)
+{
+    if (__HAL_RCC_GET_FLAG(RCC_FLAG_LPWRRST))
+    {
+        resetSource = ResetSrcLP;
+    }
+    else if (__HAL_RCC_GET_FLAG(RCC_FLAG_WWDGRST))
+    {
+        resetSource = ResetSrcWWDG;
+    }
+    else if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST))
+    {
+        resetSource = ResetSrcWDG;
+    }
+    else if (__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST))  
+    {
+        resetSource = ResetSrcSW;
+    }
+    else if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST))
+    {
+        resetSource = ResetSrcPOR;
+    }
+    else if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST))
+    {
+        resetSource = ResetSrcPIN;
+    }
+    else if (__HAL_RCC_GET_FLAG(RCC_FLAG_BORRST))
+    {
+        resetSource = ResetSrcBOR;
+    }
+    else
+    {
+    	resetSource = ResetSrcUnknown;
+    }
+
+    __HAL_RCC_CLEAR_RESET_FLAGS(); // The flags cleared after use
 }
 
 /* ---------------------------- Global functions --------------------------- */
@@ -147,6 +188,7 @@ bsp_init(int argc, char *argv[])
     (void)argc;
     (void)argv;
 
+    readResetSource();
     HAL_Init();
 
     SystemClock_Config();
@@ -528,4 +570,9 @@ bsp_setErrLeds(uint8_t err)
 	}
 }
 
+ResetSource_t
+bsp_getResetSource(void)
+{
+    return resetSource;
+}
 /* ------------------------------ File footer ------------------------------ */
