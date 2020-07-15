@@ -129,13 +129,14 @@ main(int argc, char *argv[])
 
     bsp_init(argc, argv);
 
+    bsp_setAllLeds(1);
+
     epoch_init();
     init_seqs();
     mTime_init();
     Trace_init();
 
 #if (_DO_FIRST_FORMAT_ == 1)
-    bsp_setAllLeds(1);
     ffile_init(CleanAndRestoreMode);
     flashCheck = flash_verify_device();
     if(flashCheck != FLASH_OK)
@@ -207,6 +208,8 @@ main(int argc, char *argv[])
     RKH_SMA_POST_FIFO(usbMgr, &evOpenObj, &main);
 
     BatChr_init();
+
+    bsp_setAllLeds(0);
 
     rkh_fwk_enter();
 
