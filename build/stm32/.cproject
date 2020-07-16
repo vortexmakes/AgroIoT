@@ -305,6 +305,7 @@
 								<option id="gnu.c.compiler.option.debugging.level.589593743" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1665436357" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
+									<listOptionValue builtIn="false" value="_USB_PERIODIC_SYNC_=1"/>
 									<listOptionValue builtIn="false" value="NODEBUG"/>
 									<listOptionValue builtIn="false" value="__DF_AT45DB321D__"/>
 									<listOptionValue builtIn="false" value="STM32F4"/>

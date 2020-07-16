@@ -39,6 +39,7 @@ RKH_DCLR_FINAL_STATE PowerMgrFinal;
 static void ToReadyExt0(PowerMgr *const me, RKH_EVT_T *pe);
 static void ShuttingDownToPowerMgrFinalExt2(PowerMgr *const me, RKH_EVT_T *pe);
 static void ReadyToReadyLoc0(PowerMgr *const me, RKH_EVT_T *pe);
+static void ReadyToReadyLoc1(PowerMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void enReady(PowerMgr *const me);
@@ -58,7 +59,8 @@ RKH_CREATE_BASIC_STATE(PowerMgr_ShuttingDown, enShuttingDown, exShuttingDown, RK
 
 RKH_CREATE_TRANS_TABLE(PowerMgr_Ready)
 	RKH_TRREG(evBatChrStatus, isCondReadyToShuttingDown1, NULL, &PowerMgr_ShuttingDown),
-	RKH_TRINT(evTout1, NULL, ReadyToReadyLoc0),
+	RKH_TRINT(evGStatus, NULL, ReadyToReadyLoc0),
+	RKH_TRINT(evTout1, NULL, ReadyToReadyLoc1),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(PowerMgr_ShuttingDown)
@@ -74,6 +76,7 @@ struct PowerMgr
     RKH_SMA_T sma;      /* base structure */
     RKHTmEvt tmEvtObj0;
     RKHTmEvt tmEvtObj1;
+    GStatus status;
 };
 
 RKH_SMA_CREATE(PowerMgr, powerMgr, 0, HCAL, &PowerMgr_Ready, ToReadyExt0, NULL);
@@ -91,6 +94,23 @@ static void
 init(PowerMgr *const me)
 {
 	topic_subscribe(Status, RKH_UPCAST(RKH_SMA_T, me));
+}
+
+static void
+storeStatus(PowerMgr *const me)
+{
+	me->status.data.batChrStatus = BatChr_getStatus();
+	GStatus_setChecksum(&me->status);
+	StatQue_put(&me->status);
+}
+
+static void
+updateStatus(PowerMgr *const me, RKH_EVT_T *pe)
+{
+	GStatusEvt *realEvt;
+
+	realEvt = RKH_DOWNCAST(GStatusEvt, pe);
+	me->status.data = realEvt->status;
 }
 
 static void
@@ -174,6 +194,7 @@ ToReadyExt0(PowerMgr *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(ToReadyExt0, "ToReadyExt0");
 		RKH_TR_FWK_OBJ_NAME(ShuttingDownToPowerMgrFinalExt2, "ShuttingDownToPowerMgrFinalExt2");
 		RKH_TR_FWK_OBJ_NAME(ReadyToReadyLoc0, "ReadyToReadyLoc0");
+        RKH_TR_FWK_OBJ_NAME(ReadyToReadyLoc1, "ReadyToReadyLoc1");
 		RKH_TR_FWK_OBJ_NAME(enShuttingDown, "enShuttingDown");
 		RKH_TR_FWK_OBJ_NAME(isCondReadyToShuttingDown1, "isCondReadyToShuttingDown1");
 	#endif
@@ -190,8 +211,14 @@ ShuttingDownToPowerMgrFinalExt2(PowerMgr *const me, RKH_EVT_T *pe)
 static void 
 ReadyToReadyLoc0(PowerMgr *const me, RKH_EVT_T *pe)
 {
-	updateMemStatus();
-	usbSync();
+    updateStatus(me, pe);
+}
+
+static void
+ReadyToReadyLoc1(PowerMgr *const me, RKH_EVT_T *pe)
+{
+    updateMemStatus();
+    usbSync();
 }
 
 /* ............................. Entry actions ............................. */
@@ -206,13 +233,14 @@ enReady(PowerMgr *const me)
 static void 
 enShuttingDown(PowerMgr *const me)
 {
+    storeStatus(me);
     tracePowerFail();
-	Backup_sync();
-	RKH_TRC_FLUSH();
-	trace_msd_close();
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
-	RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
+    Backup_sync();
+    RKH_TRC_FLUSH();
+    trace_msd_close();
+    RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
+    RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
+    RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
 }
 
 /* ............................. Exit actions .............................. */
