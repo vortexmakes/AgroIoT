@@ -1,0 +1,11 @@
+codecov:
+    branch: develop
+
+ignore:
+    - "third-party"
+    - "third-party/ceedling"
+    - "third-party/rkh"
+    - "third-party/ssp"
+    - "src/bsp"
+    - "src/**/test"
+

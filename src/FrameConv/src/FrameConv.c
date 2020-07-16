@@ -144,6 +144,7 @@ static GStatusLayout layout =
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+#if 0
 static uint32_t
 toh(uint32_t value, ByteOrder from) /* From LE or BE to host order */
 {
@@ -159,6 +160,7 @@ toh(uint32_t value, ByteOrder from) /* From LE or BE to host order */
     }
     return val;
 }
+#endif
 
 /* ---------------------------- Global functions --------------------------- */
 int

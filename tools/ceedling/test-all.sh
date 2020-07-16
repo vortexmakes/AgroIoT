@@ -95,6 +95,21 @@ testModuleExceptions()
             ceedling clean clobber gcov:Backup
         fi
     fi
+
+    echo ""
+    echo "Run all test of gps module"
+    echo "-----------------------------"
+    cd $source_dir/gps
+    if [ ! -e "project.yml" ]; then
+        echo "[ERROR] Ceedling project not found"
+        exit 1
+    else
+        if [ $clobber == 0 ]; then
+            ceedling clean gcov:all
+        else
+            ceedling clean clobber gcov:all
+        fi
+    fi
 }
 
 releaseModules()
@@ -132,6 +147,14 @@ coverModuleExceptions()
     cd $source_dir/Backup
     lcov -e ../../$ceedling_dir/gcov/coverage-total.info "$(pwd)/src/Backup.c" -o ../../$ceedling_dir/gcov/Backup.info
     add+=(-a Backup.info)
+
+    echo ""
+    echo "Generating code coverage report for gps"
+    echo "---------------------------------------"
+    cd $currdir
+    cd $source_dir/gps
+    lcov -e ../../$ceedling_dir/gcov/coverage-total.info "$(pwd)/src/Geo.c" -o ../../$ceedling_dir/gcov/Geo.info
+    add+=(-a Geo.info)
 }
 
 case "$1" in
@@ -228,6 +251,9 @@ echo "----------------------------------------"
 cd ../../$ceedling_dir/gcov/
 lcov "${add[@]}" -o coverage.info
 genhtml coverage.info -o .
+if [ ! -z $CODECOV_TOKEN ]; then
+    bash <(curl -s https://codecov.io/bash)
+fi
 
 exit 0
 
