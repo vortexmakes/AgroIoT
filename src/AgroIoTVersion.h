@@ -52,7 +52,7 @@ extern "C" {
  *  \brief
  *  This macro indicates the release date as string in DDMMYY format.
  */
-#define AGROIOT_RELEASE_DATE    "140720"
+#define AGROIOT_RELEASE_DATE    "160720"
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
