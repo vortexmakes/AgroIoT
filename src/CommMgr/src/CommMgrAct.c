@@ -411,9 +411,12 @@ CommMgr_enSendingCmdAck(CommMgr *const me)
 void
 CommMgr_enIdle(CommMgr *const me)
 {
+    ResetSource_t resetCode;
+
     /*setCurrentAsInitial()*/
+    resetCode = bsp_getResetSource();
     me->status.position = invalidPosition;
-    Trace_generate(&me->status, TraceId_PowerUp, 0, 0);
+    Trace_generate(&me->status, TraceId_PowerUp, (TraceArg)resetCode, 0);
 }
 
 void

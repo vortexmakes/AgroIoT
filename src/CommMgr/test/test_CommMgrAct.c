@@ -825,7 +825,8 @@ test_ReceivedCommandDoNotRequireRestartAndComeFromHistory(void)
 void
 test_SetGStatusAsInitial(void)
 {
-    Trace_generate_Expect(&me->status, TraceId_PowerUp, 0, 0);
+    bsp_getResetSource_ExpectAndReturn(ResetSrcSW);
+    Trace_generate_Expect(&me->status, TraceId_PowerUp, ResetSrcSW, 0);
     CommMgr_enIdle(me);
     TEST_ASSERT_EQUAL_MEMORY(&invalidPosition, 
                              &me->status.position, 
