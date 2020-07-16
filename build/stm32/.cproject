@@ -38,6 +38,7 @@
 									<listOptionValue builtIn="false" value="MODPWR_CTRL_ENABLE=1"/>
 									<listOptionValue builtIn="false" value="__DATAFLASH__"/>
 									<listOptionValue builtIn="false" value="_CHECK_FORMATING_START_=1"/>
+									<listOptionValue builtIn="false" value="_USB_PERIODIC_SYNC_=1"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.675484694" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../../src/BatChr"/>

@@ -131,6 +131,7 @@ updateMemStatus(void)
         set_led(LED_POWER, SEQ_NO_LIT);
 }
 
+#if (_USB_PERIODIC_SYNC_== 1)
 static void
 usbSync(void)
 {
@@ -138,6 +139,13 @@ usbSync(void)
 	Backup_sync();
 	trace_msd_sync();
 }
+#else
+static void
+usbSync(void)
+{
+}
+#endif
+
 
 static rbool_t
 isPowerFail(RKH_EVT_T *pe)
