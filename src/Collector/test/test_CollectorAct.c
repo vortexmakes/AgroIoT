@@ -462,14 +462,18 @@ test_StoreTrace(void)
 void
 test_InitBackup(void)
 {
-    Backup_init_ExpectAndReturn(&me->backupInfo, 0);
+    Backup_init_ExpectAndReturn(&me->backupInfo, Backup_Ok);
+    Trace_put_Expect(TraceId_UsbFlashMounted, Backup_Ok, 0);
+
     Collector_initBackup(me, RKH_UPCAST(RKH_EVT_T, evt));
 }
 
 void
 test_deinitBackup(void)
 {
-    Backup_deinit_ExpectAndReturn(&me->backupInfo, 0);
+    Backup_deinit_ExpectAndReturn(&me->backupInfo, Backup_NoInit);
+    Trace_put_Expect(TraceId_UsbFlashUnmounted, Backup_NoInit, 0);
+
     Collector_deinitBackup(me, RKH_UPCAST(RKH_EVT_T, evt));
 }
 

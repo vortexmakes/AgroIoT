@@ -33,18 +33,20 @@ typedef enum TraceId TraceId;
 enum TraceId
 {
     TraceId_PowerUp = 1,
-    TraceId_OdmFlw,         /*  2 */
-    TraceId_GpsReset,       /*  3 */
-    TraceId_ModUnsync,      /*  4 */
-    TraceId_CmdReset,       /*  5 */
-    TraceId_CmdFmt,         /*  6 */
-    TraceId_QfullServer,    /*  7 */
-    TraceId_SmsRcv,         /*  8 */
-    TraceId_PowerFail,      /*  9 */
-    TraceId_Restore,        /* 10 */
-    TraceId_FileFormat,     /* 11 */
-    TraceId_CorruptStatus,  /* 12 */
-    TraceId_GSMConnected,   /* 13 */
+    TraceId_OdmFlw,             /*  2 */
+    TraceId_GpsReset,           /*  3 */
+    TraceId_ModUnsync,          /*  4 */
+    TraceId_CmdReset,           /*  5 */
+    TraceId_CmdFmt,             /*  6 */
+    TraceId_QfullServer,        /*  7 */
+    TraceId_SmsRcv,             /*  8 */
+    TraceId_PowerFail,          /*  9 */
+    TraceId_Restore,            /* 10 */
+    TraceId_FileFormat,         /* 11 */
+    TraceId_CorruptStatus,      /* 12 */
+    TraceId_GSMConnected,       /* 13 */
+    TraceId_UsbFlashMounted,    /* 14 */
+    TraceId_UsbFlashUnmounted,  /* 15 */
 
     TraceId_NumOfEvents
 };

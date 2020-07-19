@@ -238,13 +238,19 @@ Collector_storeTrace(Collector *const me, RKH_EVT_T *pe)
 void
 Collector_initBackup(Collector *const me, RKH_EVT_T *pe)
 {
-    Backup_init(&me->backupInfo);
+    BackupCode res;
+
+    res = Backup_init(&me->backupInfo);
+    Trace_put(TraceId_UsbFlashMounted, (TraceArg)res, 0);
 }
 
 void
 Collector_deinitBackup(Collector *const me, RKH_EVT_T *pe)
 {
-    Backup_deinit(&me->backupInfo);
+    BackupCode res;
+
+    res = Backup_deinit(&me->backupInfo);
+    Trace_put(TraceId_UsbFlashUnmounted, (TraceArg)res, 0);
 }
 
 void
