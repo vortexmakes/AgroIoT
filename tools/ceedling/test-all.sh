@@ -11,6 +11,7 @@ source_dir="../../src"
 ceedling_dir="tools/ceedling"
 modules="Config epoch GStatus StatQue YFrame device topic SecString Trace Crc32 Flowmeter FrameConv YCommand"
 stateMachines="Collector CommMgr"
+exceptionModules="ffile Backup gps"
 
 #echo $PATH
 export PATH="$PATH:/home/travis/.rvm/gems/ruby-2.4.1/bin"
@@ -39,6 +40,7 @@ cleanModules()
             ceedling clobber
          fi
     done
+
     currdir=$PWD
     for module in $modules;
     do
@@ -51,6 +53,20 @@ cleanModules()
             exit 1
         else
             ceedling clean
+            ceedling clobber
+        fi
+    done
+
+    for module in $exceptionModules;
+    do
+        echo ""
+        echo "Clean "$module "module"
+        echo "----------------------"
+        cd $source_dir/$module
+        if [ ! -e "project.yml" ]; then
+            echo "[ERROR] Ceedling project not found"
+            exit 1
+        else
             ceedling clobber
         fi
     done
