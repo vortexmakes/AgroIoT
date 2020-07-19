@@ -14,6 +14,7 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <string.h>
 #include "unity.h"
 #include "Collector.h"
 #include "CollectorAct.h"
@@ -37,6 +38,7 @@
 #include "Mock_Trace.h"
 #include "Mock_Backup.h"
 #include "Mock_Flowmeter.h"
+#include "AgroIoTVersion.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -153,6 +155,19 @@ test_UpdatePosition(void)
     Collector_updatePosition(me, RKH_UPCAST(RKH_EVT_T, &event));
     TEST_ASSERT_EQUAL_MEMORY(&me->status.data.position, &event.position,
                              sizeof(Geo));
+}
+
+void
+test_UpdateInvalidPosition(void)
+{
+    GeoEvt event;
+
+    strcpy(event.position.speed, agroIoTVersion);
+
+    Collector_updateInvPosition(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL_MEMORY(&me->status.data.position, &event.position,
+                             sizeof(Geo));
+    TEST_ASSERT_EQUAL_STRING(agroIoTVersion, &me->status.data.position.speed);
 }
 
 void

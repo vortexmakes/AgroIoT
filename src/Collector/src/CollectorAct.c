@@ -173,6 +173,13 @@ Collector_updatePosition(Collector *const me, RKH_EVT_T *pe)
 }
 
 void
+Collector_updateInvPosition(Collector *const me, RKH_EVT_T *pe)
+{
+    me->status.data.position = RKH_DOWNCAST(GeoEvt, pe)->position;
+    /* Update dynamic information in invalid positions */
+}
+
+void
 Collector_updateDigOut(Collector *const me, RKH_EVT_T *pe)
 {
     me->status.data.ioStatus.digOut = RKH_DOWNCAST(DigOutChangedEvt, pe)->status;

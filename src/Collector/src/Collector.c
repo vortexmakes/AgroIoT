@@ -33,7 +33,7 @@ RKH_CREATE_COMP_REGION_STATE(DevStatus_Active, Collector_enActive,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(DevStatus_Active)
 RKH_TRINT(evGeo, NULL, Collector_updatePosition),
-RKH_TRINT(evGeoInvalid, NULL, Collector_updatePosition),
+RKH_TRINT(evGeoInvalid, NULL, Collector_updateInvPosition),
 RKH_TRINT(evDigOutChanged, NULL, Collector_updateDigOut),
 RKH_TRINT(evTimeout, NULL, Collector_publishCurrStatus),
 RKH_TRINT(evTrace, NULL, Collector_storeTrace),

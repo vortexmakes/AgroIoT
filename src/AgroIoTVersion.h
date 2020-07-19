@@ -56,6 +56,12 @@ extern "C" {
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
+/**
+ *  \brief
+ *  String indicating the AgroIoT version.
+ */
+extern const char agroIoTVersion[];
+
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
