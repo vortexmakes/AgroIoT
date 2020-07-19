@@ -15,6 +15,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include <string.h>
+#include <stdio.h>
 #include "rkhsma.h"
 #include "rkhsm.h"
 #include "rkhfwk_cast.h"
@@ -178,11 +179,15 @@ Collector_updateInvPosition(Collector *const me, RKH_EVT_T *pe)
 {
     Geo *pos;
 
+    /* An invalid position carries: */
+    /* ---------------------------- */
+    /* version code (AGROIOT_VERSION)      -> speed */
+    /* release date (AGROIOT_RELEASE_DATE) -> date */
+    /* backup status (BackupCode)          -> course */
     pos = &me->status.data.position;
     *pos = RKH_DOWNCAST(GeoEvt, pe)->position;
-
-    /* Update dynamic information in invalid positions */
     strcpy(pos->speed, agroIoTVersion);
+    sprintf(pos->course, "%02d", me->backupInfo.error);
 }
 
 void

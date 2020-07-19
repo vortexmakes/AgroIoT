@@ -162,7 +162,11 @@ test_UpdateInvalidPosition(void)
 {
     GeoEvt event;
     Geo *pos;
+    char backupCode[COURSE_LENGTH];
 
+    me->backupInfo.error = Backup_NoInit;
+    sprintf(backupCode, "%02d", me->backupInfo.error);
+    
     pos = &me->status.data.position;
     event.position = invalidPosition;
     Collector_updateInvPosition(me, RKH_UPCAST(RKH_EVT_T, &event));
@@ -171,6 +175,7 @@ test_UpdateInvalidPosition(void)
     TEST_ASSERT_EQUAL_STRING(GEO_INVALID_LATITUDE, pos->latitude);
     TEST_ASSERT_EQUAL_STRING(GEO_INVALID_LONGITUDE, pos->longitude);
     TEST_ASSERT_EQUAL_STRING(agroIoTVersion, pos->speed);
+    TEST_ASSERT_EQUAL_STRING(backupCode, pos->course);
 }
 
 void
