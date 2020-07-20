@@ -420,6 +420,18 @@ bsp_GPSStatus(char status)
     set_led(LED_GPS, status == RMC_StatusValid ? SEQ_LIT : SEQ_LSTAGE2);
 }
 
+void 
+bsp_storageLed(SeqNo seqNo)
+{
+    set_led(LED_STORAGE, seqNo);
+}
+
+void 
+bsp_workStatusLed(SeqNo seqNo)
+{
+    set_led(LED_WORK, seqNo);
+}
+
 void
 bsp_gpsParserHandler_set(void *p)
 {

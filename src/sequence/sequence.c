@@ -117,7 +117,7 @@ static const STATE states[] =
  */
 
 static SEQ_VT sequence_channels[NUM_SEQ_CHANNELS];
-static MUInt sync;
+static MUInt first, running, sync;
 
 /*
  *  Parser action functions
@@ -350,6 +350,8 @@ init_seqs(void)
     for (p = sequence_channels; p < sequence_channels + NUM_SEQ_CHANNELS; ++p)
         p->code = NOT_USED;
 
+    first = 1;
+    running = 0;
 #ifdef __linux__
     init_log();
 #endif
@@ -416,8 +418,12 @@ set_sequence(MUInt major, unsigned minor, MUInt code)
         fatal_driver(BAD_CODE);
     }
 #endif
-    for (sync = 1; sync;)
+
+    if(running)
+    {
+    	for (sync = 1; sync;)
         ;
+    }
 
     install_new(major, minor, code);
 }
@@ -443,6 +449,12 @@ sequence_interrupt(void)
 #ifdef __linux__
     begin_seqlog();
 #endif
+    if(first)
+    {
+    	running = 1;
+    	first = 0;
+    }
+
     sync = 0;
 
     for (p = sequence_channels, count = 0; p

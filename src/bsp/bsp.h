@@ -1,6 +1,6 @@
 /**
  *  \file       bsp.h
- *  \brief      BSP for 80x86 OS win32
+ *  \brief      BSP AgroIot
  *
  *  \ingroup    bsp
  */
@@ -12,8 +12,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  LeFr  Leandro Francucci  lf@vortexmakes.com
- *  DaBa  Dario Balina       dariosb@gmail.com
+ *  DaBa  Dario Baliña       db@vortexmakes.com
  */
 
 /* --------------------------------- Module -------------------------------- */
@@ -156,6 +155,8 @@ void bsp_sendFail(void);
 void bsp_recvFail(void);
 void bsp_recvOk(void);
 void bsp_GPSStatus(char status);
+void bsp_storageLed(SeqNo seqNo);
+void bsp_workStatusLed(SeqNo seqNo);
 
 void bsp_gpsParserHandler_set(void *p);
 
@@ -175,8 +176,6 @@ void bsp_setAllLeds(uint8_t val);
 void bsp_setErrLeds(uint8_t err);
 
 ResetSource_t bsp_getResetSource(void);
-void bsp_storageLed(SeqNo seqNo);
-void bsp_workStatusLed(SeqNo seqNo);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

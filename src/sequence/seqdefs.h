@@ -9,8 +9,7 @@
  *  Led codes
  */
 
-typedef enum SeqNo SeqNo;
-enum SeqNo
+typedef enum
 {
     SEQ_NO_LIT,
     SEQ_GPKG_NOTON_FLASH = SEQ_NO_LIT,
@@ -34,7 +33,7 @@ enum SeqNo
     SEQ_LFAIL,
     SEQ_GPS_FAILURE = SEQ_LFAIL,
     SEQ_NUM_LEDS
-};
+} SeqNo;
 
 /*
  *  Addressed by main led sequences
