@@ -9,7 +9,8 @@
  *  Led codes
  */
 
-enum
+typedef enum SeqNo SeqNo;
+enum SeqNo
 {
     SEQ_NO_LIT,
     SEQ_GPKG_NOTON_FLASH = SEQ_NO_LIT,

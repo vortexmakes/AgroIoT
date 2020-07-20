@@ -25,6 +25,7 @@
     - ../YCommand/inc
     - ../bsp
     - ../ioChg
+    - ../sequence
     - ../
   :support:
 

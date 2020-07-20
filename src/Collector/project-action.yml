@@ -26,6 +26,7 @@
     - ../Trace/inc
     - ../Backup/inc
     - ../Flowmeter/inc
+    - ../sequence
     - ../
   :support:
 

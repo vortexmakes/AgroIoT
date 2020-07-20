@@ -336,6 +336,7 @@ CommMgr_enWaitSync(CommMgr *const me)
     RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr,
                     RKH_UPCAST(RKH_SMA_T, me),
                     RKH_TIME_SEC(Config_getConnTime()));
+    bsp_storageLed(SEQ_LSTAGE1);
 }
 
 void
@@ -351,6 +352,7 @@ CommMgr_enSendingStatus(CommMgr *const me)
                   RKH_UPCAST(RKH_EVT_T, &me->evSendObj),
                   RKH_UPCAST(RKH_SMA_T, me));
     me->isPendingStatus = false;
+    bsp_storageLed(SEQ_LIT);
 }
 
 void
@@ -396,6 +398,7 @@ CommMgr_enSendingStartOfHist(CommMgr *const me)
     topic_publish(TCPConnection,
                   RKH_UPCAST(RKH_EVT_T, &me->evSendObj),
                   RKH_UPCAST(RKH_SMA_T, me));
+    bsp_storageLed(SEQ_LSTAGE4);
 }
 
 void 
@@ -417,6 +420,7 @@ CommMgr_enIdle(CommMgr *const me)
     resetCode = bsp_getResetSource();
     me->status.position = invalidPosition;
     Trace_generate(&me->status, TraceId_PowerUp, (TraceArg)resetCode, 0);
+    bsp_storageLed(SEQ_NO_LIT);
 }
 
 void
@@ -425,6 +429,7 @@ CommMgr_enDisconnected(CommMgr *const me)
     /*setCurrentAsGSMConnected()*/
     me->status.position = invalidPosition;
     Trace_generate(&me->status, TraceId_GSMConnected, 0, 0);
+    bsp_storageLed(SEQ_NO_LIT);
 }
 
 /* ............................. Exit actions .............................. */

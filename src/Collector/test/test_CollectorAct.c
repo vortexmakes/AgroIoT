@@ -39,6 +39,7 @@
 #include "Mock_Backup.h"
 #include "Mock_Flowmeter.h"
 #include "AgroIoTVersion.h"
+#include "Mock_bsp.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -376,6 +377,8 @@ test_StartAndStopSyncStoppedTmr(void)
     rkh_tmr_start_Expect(&region->syncStoppedTmr.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
                          RKH_TIME_SEC(60), RKH_TIME_SEC(60));
+    bsp_workStatusLed_Expect(SEQ_NO_LIT);
+
     Mapping_enStopped(region);
     TEST_ASSERT_EQUAL_HEX32(MAPPING_STOP, me->status.data.devData.a.x);
 
@@ -426,6 +429,8 @@ test_StartAndStopSyncRunningTmr(void)
     rkh_tmr_start_Expect(&region->syncRunningTmr.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
                          RKH_TIME_SEC(3), RKH_TIME_SEC(3));
+    bsp_workStatusLed_Expect(SEQ_LIT);
+
     Mapping_enRunning(region);
     TEST_ASSERT_EQUAL_HEX32(MAPPING_RUNNING, me->status.data.devData.a.x);
 

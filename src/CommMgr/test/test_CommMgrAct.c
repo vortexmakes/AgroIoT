@@ -177,6 +177,7 @@ test_StartSync(void)
     rkh_tmr_start_Expect(&me->tmEvtObj0.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
                          RKH_TIME_SEC(60), 0);
+    bsp_storageLed_Expect(SEQ_LSTAGE1);
     CommMgr_enWaitSync(me);
     TEST_ASSERT_EQUAL(evTout0, me->tmEvtObj0.evt.e);
 }
@@ -218,6 +219,7 @@ test_SendCurrentStatus(void)
     topic_publish_Expect(TCPConnection, 
                          RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                          RKH_UPCAST(RKH_SMA_T, me));
+    bsp_storageLed_Expect(SEQ_LIT);
 
     CommMgr_enSendingStatus(me);
     TEST_ASSERT_TRUE(me->isPendingStatus == false);
@@ -508,6 +510,7 @@ test_StartHistoryMessage(void)
     topic_publish_Expect(TCPConnection, 
                          RKH_UPCAST(RKH_EVT_T, &me->evSendObj), 
                          RKH_UPCAST(RKH_SMA_T, me));
+    bsp_storageLed_Expect(SEQ_LSTAGE4);
 
     CommMgr_enSendingStartOfHist(me);
 
@@ -827,6 +830,8 @@ test_SetGStatusAsInitial(void)
 {
     bsp_getResetSource_ExpectAndReturn(ResetSrcSW);
     Trace_generate_Expect(&me->status, TraceId_PowerUp, ResetSrcSW, 0);
+    bsp_storageLed_Expect(SEQ_NO_LIT);
+
     CommMgr_enIdle(me);
     TEST_ASSERT_EQUAL_MEMORY(&invalidPosition, 
                              &me->status.position, 
@@ -837,6 +842,8 @@ void
 test_SetGStatusAsGSMConnected(void)
 {
     Trace_generate_Expect(&me->status, TraceId_GSMConnected, 0, 0);
+    bsp_storageLed_Expect(SEQ_NO_LIT);
+
     CommMgr_enDisconnected(me);
     TEST_ASSERT_EQUAL_MEMORY(&invalidPosition, 
                              &me->status.position, 

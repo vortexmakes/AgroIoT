@@ -37,6 +37,7 @@
 #include "Trace.h"
 #include "Backup.h"
 #include "Flowmeter.h"
+#include "bsp.h"
 
 RKH_MODULE_NAME(CollectorAct)
 
@@ -327,6 +328,7 @@ Mapping_enStopped(Mapping *const me)
                      RKH_UPCAST(RKH_SMA_T, me->itsCollector),
                      nTicks, nTicks);
     setMappingStatus(me, MAPPING_STOP);
+    bsp_workStatusLed(SEQ_NO_LIT);
 }
 
 void
@@ -342,6 +344,7 @@ Mapping_enRunning(Mapping *const me)
                      RKH_UPCAST(RKH_SMA_T, me->itsCollector),
                      nTicks, nTicks);
     setMappingStatus(me, MAPPING_RUNNING);
+    bsp_workStatusLed(SEQ_LIT);
 }
 
 /* ............................. Exit actions .............................. */

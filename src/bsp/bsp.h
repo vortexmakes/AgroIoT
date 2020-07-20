@@ -24,6 +24,7 @@
 #include "rkh.h"
 #include "dOut.h"
 #include "dIn.h"
+#include "seqdefs.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -174,6 +175,8 @@ void bsp_setAllLeds(uint8_t val);
 void bsp_setErrLeds(uint8_t err);
 
 ResetSource_t bsp_getResetSource(void);
+void bsp_storageLed(SeqNo seqNo);
+void bsp_workStatusLed(SeqNo seqNo);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
