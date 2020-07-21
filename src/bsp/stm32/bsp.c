@@ -182,11 +182,24 @@ HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
     }
 }
 
+
+extern const volatile unsigned int _estack;
+extern const volatile unsigned int _Min_Stack_Size;
+
+unsigned int *psstack = &_estack;
+unsigned int StackSize = &_Min_Stack_Size;
+
 void
 bsp_init(int argc, char *argv[])
 {
     (void)argc;
     (void)argv;
+
+    unsigned int *p;
+	for(p = psstack - (StackSize/4); p < psstack - (0x50/4); ++p)
+	{
+		*p = 0xAA55AA55;
+	}
 
     readResetSource();
     HAL_Init();
