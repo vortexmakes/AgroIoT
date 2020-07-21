@@ -1,82 +1,79 @@
 /**
- *  \file       hook.c
- *  \brief      RKH hooks functions for Tracking-STM32
+ *  \file       stackMonitor.c
+ *  \brief      Stack Usage Level Monitor for STM32
  *
  *  \ingroup    bsp
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2019.01.31  DaBa  v2.4.05  Initial version
+ *  2020.21.07  DaBa  v1.0.00  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña     db@vortexmakes.com
+ *  DaBa  Dario Baliña       db@vortexmakes.com
  */
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
+#include <stdio.h>
+#include "rkh.h"
 #include "bsp.h"
-#include "cubemx.h"
-#include "stackMonitor.h"
 
 RKH_THIS_MODULE
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
-#define BSP_TICK_RATE_MS    (1000/RKH_CFG_FWK_TICK_RATE_HZ)
-
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
-/* ---------------------------- Local variables ---------------------------- */
-#if defined(RKH_CFG_SMA_TRC_SNDR_EN)
-static rui8_t rkhtick;
-#endif
+extern const volatile unsigned int _estack;
+extern const volatile unsigned int _Min_Stack_Size;
 
-static ruint tickCounter;
+/* ---------------------------- Local variables ---------------------------- */
+unsigned int *psstack = &_estack;
+unsigned int StackSize = &_Min_Stack_Size;
+
+unsigned int *pstart, *pend;
+
+unsigned int usage;
 
 /* ----------------------- Local function prototypes ----------------------- */
-static void SystickHook(void);
-
 /* ---------------------------- Local functions ---------------------------- */
-static void
-SystickHook(void)
-{
-    if(tickCounter && (--tickCounter == 0))
-    {
-        tickCounter = BSP_TICK_RATE_MS;
-        RKH_TIM_TICK(&rkhtick);
-    }
-}
-
 /* ---------------------------- Global functions --------------------------- */
 void
-rkh_hook_start(void)
-{    
-    tickCounter = BSP_TICK_RATE_MS;
-    Systick_setCallback(SystickHook);
-    RKH_TR_FWK_ACTOR(&rkhtick, "rkhtick");
+stackMonitor_init(void)
+{
+    unsigned int *p;
+
+	for(p = psstack - (StackSize/4); p < &p; ++p) //psstack - (0x50/4); ++p)
+	{
+		*p = 0xAA55AA55;
+	}
+
+    pstart = psstack - (StackSize/4);
+    pend = p;
 }
 
 void
-rkh_hook_exit(void)
+stackMonitor_check(void)
 {
-    RKH_TRC_FLUSH();
+    unsigned int *p;
+
+    for(p = pstart; p < pend; ++p)
+    {
+        if(*p != 0xAA55AA55)
+            break;
+    }
+
+    usage = psstack - p;
+
+    RKH_ASSERT(usage < (StackSize - 0x100));
 }
 
-void
-rkh_hook_timetick(void)
+unsigned int
+stackMonitor_getUsage(void)
 {
-    bsp_timeTick();
-}
-
-void
-rkh_hook_idle(void)             /* called within critical section */
-{
-	RKH_ENA_INTERRUPT();
-    MX_USB_HOST_Process();
-	RKH_TRC_FLUSH();
-    stackMonitor_check();
+    return usage;
 }
 
 /* ------------------------------ File footer ------------------------------ */
