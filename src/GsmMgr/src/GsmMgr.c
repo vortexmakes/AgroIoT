@@ -27,7 +27,7 @@
 /* ----------------------------- Local macros ------------------------------ */
 #define WaitTime0	RKH_TIME_SEC(5)
 #define WaitTime1	RKH_TIME_SEC(60)
-#define WaitTime2	RKH_TIME_SEC(5)
+#define WaitTime2	RKH_TIME_SEC(10)
 #define WaitTime3	RKH_TIME_SEC(2)
 #define WaitTime4	RKH_TIME_SEC(2)
 #define WaitTime5	RKH_TIME_SEC(2)
@@ -633,6 +633,10 @@ init(GsmMgr *const me)
     rkh_queue_init(&GsmMgrInt.qDefer, (const void **)GsmMgrInt.qDefer_sto, 
                     SIZEOF_QDEFER, CV(0));
 
+    RKH_SET_STATIC_EVENT(&GsmMgrInt.tmEvtRegStatus, evRegStatusTout);
+    RKH_TMR_INIT(&GsmMgrInt.tmEvtRegStatus.tmr, 
+                    RKH_UPCAST(RKH_EVT_T, &GsmMgrInt.tmEvtRegStatus), NULL);
+
     GsmMgrInt.pGsmMgr = me;
 
     me->imei = GsmMgrInt.Imei;
@@ -680,9 +684,6 @@ setupAPN(Socket *const me)
 static void
 startRegStatusTimer(GsmMgr *const me)
 {
-    RKH_SET_STATIC_EVENT(&GsmMgrInt.tmEvtRegStatus, evRegStatusTout);
-    RKH_TMR_INIT(&GsmMgrInt.tmEvtRegStatus.tmr, 
-                    RKH_UPCAST(RKH_EVT_T, &GsmMgrInt.tmEvtRegStatus), NULL);
     RKH_TMR_ONESHOT(&GsmMgrInt.tmEvtRegStatus.tmr, RKH_UPCAST(RKH_SMA_T, me),
                         CHECK_REG_STATUS_PERIOD);
 }
