@@ -359,16 +359,19 @@ bsp_get_ExtPower(void)
 void 
 bsp_SIMReady(void)
 {
-	set_led(LED_SIM, simSelect == MainSIM ? SEQ_LSTAGE1 : SEQ_LSTAGE3);
 	set_led(LED_GSM, SEQ_LSTAGE2);
 }
 
 void 
 bsp_SIMSelect(SIMSelect_t sim)
 {
+	simSelect = sim;
+
     HAL_GPIO_WritePin(SIM_SELECT_GPIO_Port,
                               SIM_SELECT_Pin, 
                               sim == MainSIM ? 0 : 1);
+
+    set_led(LED_SIM, simSelect == MainSIM ? SEQ_LSTAGE1 : SEQ_LSTAGE2);
 }
 
 void
