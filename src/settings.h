@@ -47,7 +47,7 @@ extern "C" {
 #define MAX_NUM_STORE_ON_RUNNING_DFT    100
 #define SIM_PIN_NUMBER_DFT              9474
 #define MAX_NUM_CONNNORESP_RETRIES_DFT  2
-#define CONNECTION_STATUS_PERIOD_DFT    2
+#define CONNECTION_STATUS_PERIOD_DFT    5
 #define REOPEN_DELAY_DFT                5
 #define CONNECT_TRY_DELAY_DFT           5
 #define MAX_NUM_CONNECT_RETRIES_DFT     3

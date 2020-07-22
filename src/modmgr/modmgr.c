@@ -19,6 +19,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "rkhfwk_pubsub.h"
+#include "priorities.h"
 #include "signals.h"
 #include "topic.h"
 #include "modmgr.h"
@@ -106,8 +107,7 @@ struct ModMgr
     ModMgrEvt *pCmd;        /* stores a reference to current command */
 };
 
-RKH_SMA_CREATE(ModMgr, modMgr, 1, HCAL, &ModMgr_inactive, initialization,
-               NULL);
+RKH_SMA_CREATE(ModMgr, modMgr, ModMgrPrio, HCAL, &ModMgr_inactive, initialization, NULL);
 RKH_SMA_DEF_PTR(modMgr);
 
 /* ------------------------------- Constants ------------------------------- */

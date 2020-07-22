@@ -22,6 +22,7 @@
 #include "rkhfwk_pubsub.h"
 #include "rkhtmr.h"
 #include "bsp.h"
+#include "priorities.h"
 #include "signals.h"
 #include "events.h"
 #include "topic.h"
@@ -133,7 +134,7 @@ struct GeoMgr
     int cog;
 };
 
-RKH_SMA_CREATE(GeoMgr, geoMgr, 5, HCAL, &GeoMgr_Configure, init, NULL);
+RKH_SMA_CREATE(GeoMgr, geoMgr, GeoMgrPrio, HCAL, &GeoMgr_Configure, init, NULL);
 RKH_SMA_DEF_PTR(geoMgr);
 
 /* ------------------------------- Constants ------------------------------- */

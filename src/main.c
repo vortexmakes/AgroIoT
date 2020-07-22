@@ -50,13 +50,17 @@
 #include "Trace.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define POWERMGR_QSTO_SIZE      4
-#define COMMMGR_QSTO_SIZE       16
-#define GSMMGR_QSTO_SIZE        8
+
+/*
+ * Active Objects Queues
+ */
+#define POWERMGR_QSTO_SIZE	    4
+#define COLLECTOR_QSTO_SIZE     8
 #define MODMGR_QSTO_SIZE        4
+#define GSMMGR_QSTO_SIZE        8
 #define GEOMGR_QSTO_SIZE        4
 #define DEVSRV_QSTO_SIZE        4
-#define COLLECTOR_QSTO_SIZE     4
+#define COMMMGR_QSTO_SIZE       16
 #define USBMGR_QSTO_SIZE        4
 
 #define SIZEOF_EP0STO           16
@@ -105,19 +109,18 @@ setupTraceFilters(void)
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     RKH_FILTER_OFF_SMA(powerMgr);
-    /*RKH_FILTER_OFF_SMA(modMgr); */
+    RKH_FILTER_OFF_SMA(modMgr);
     RKH_FILTER_OFF_SMA(gsmMgr);
-    /*RKH_FILTER_OFF_SMA(geoMgr);*/
-    /*RKH_FILTER_OFF_SMA(deviceMgr); */
+    RKH_FILTER_OFF_SMA(geoMgr);
+    RKH_FILTER_OFF_SMA(deviceMgr);
     RKH_FILTER_OFF_SMA(commMgr);
     RKH_FILTER_OFF_SMA(collector);
     RKH_FILTER_OFF_SMA(usbMgr);
-    /*RKH_FILTER_OFF_SMA(fsMgr); */
     RKH_FILTER_OFF_ALL_SIGNALS();
     /*RKH_FILTER_ON_SMA(((Collector *)collector)->itsMapping);*/
-    RKH_FILTER_ON_SIGNAL(evGeo);
-    RKH_FILTER_ON_SIGNAL(evGStatus);
-    RKH_FILTER_ON_SIGNAL(evNoDev);
+    /*RKH_FILTER_ON_SIGNAL(evGeo);*/
+    /*RKH_FILTER_ON_SIGNAL(evGStatus);*/
+    /*RKH_FILTER_ON_SIGNAL(evNoDev);*/
 }
 
 /* ---------------------------- Global functions --------------------------- */

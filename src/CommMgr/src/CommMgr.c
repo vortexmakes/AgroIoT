@@ -14,6 +14,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhsma.h"
+#include "priorities.h"
 #include "signals.h"
 #include "CommMgr.h"
 #include "CommMgrAct.h"
@@ -162,7 +163,7 @@ RKH_END_BRANCH_TABLE
 RKH_CREATE_FINAL_STATE(CommMgrFinal, RKH_ROOT);
 
 /* ............................. Active object ............................. */
-RKH_SMA_CREATE(CommMgr, commMgr, 7, HCAL, &Idle, CommMgr_ToIdleExt0, NULL);
+RKH_SMA_CREATE(CommMgr, commMgr, CommMgrPrio, HCAL, &Idle, CommMgr_ToIdleExt0, NULL);
 RKH_SMA_DEF_PTR(commMgr);
 
 /* ------------------------------- Constants ------------------------------- */

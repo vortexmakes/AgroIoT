@@ -16,6 +16,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhsma.h"
+#include "priorities.h"
 #include "signals.h"
 #include "Collector.h"
 #include "CollectorAct.h"
@@ -103,10 +104,9 @@ RKH_CREATE_FINAL_STATE(DevStatus_Final, RKH_NULL);
 RKH_CREATE_FINAL_STATE(Mapping_Final, RKH_NULL);
 
 /* ............................. Active object ............................. */
-RKH_SMA_CREATE(Collector, collector, 8, HCAL, &DevStatus_Active,
-                                                    Collector_init, NULL);
+RKH_SMA_CREATE(Collector, collector, CollectorPrio, HCAL, &DevStatus_Active, Collector_init, NULL);
 RKH_SMA_DEF_PTR(collector);
-RKH_SM_CONST_CREATE(mapping, 9, HCAL, &Mapping_Active, NULL, NULL);
+RKH_SM_CONST_CREATE(mapping, MappingPrio, HCAL, &Mapping_Active, NULL, NULL);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */

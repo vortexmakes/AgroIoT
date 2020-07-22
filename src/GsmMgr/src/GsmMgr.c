@@ -16,6 +16,7 @@
 #include <stdio.h>
 
 #include "rkh.h"
+#include "priorities.h"
 #include "signals.h"
 #include "rkhtmr.h"
 #include "GsmMgr.h"
@@ -30,8 +31,8 @@
 #define WaitTime2	RKH_TIME_SEC(10)
 #define WaitTime3	RKH_TIME_SEC(2)
 #define WaitTime4	RKH_TIME_SEC(2)
-#define WaitTime5	RKH_TIME_SEC(2)
-#define WaitTime6	RKH_TIME_SEC(2)
+#define WaitTime5	RKH_TIME_SEC(5)
+#define WaitTime6	RKH_TIME_SEC(5)
 #define WaitTime7	RKH_TIME_SEC(2)
 #define WaitTime8   RKH_TIME_SEC(10)
 
@@ -484,11 +485,11 @@ struct GsmMgr
     rInt retryCount;
 };
 
-RKH_SMA_CREATE(GsmMgr, gsmMgr, 2, HCAL, &GsmMgr_Inactive, ToInactiveExt0, NULL);
+RKH_SMA_CREATE(GsmMgr, gsmMgr, GsmMgrPrio, HCAL, &GsmMgr_Inactive, ToInactiveExt0, NULL);
 RKH_SMA_DEF_PTR(gsmMgr);
 
-RKH_SM_CONST_CREATE(socket, 3, HCAL, &GsmMgr_Socket_WaitGsmReady, ToSocket_WaitGsmReadyExt69, NULL);
-RKH_SM_CONST_CREATE(sms, 4, HCAL, &GsmMgr_SMS_WaitGsmReady, NULL, NULL);
+RKH_SM_CONST_CREATE(socket, SocketPrio, HCAL, &GsmMgr_Socket_WaitGsmReady, ToSocket_WaitGsmReadyExt69, NULL);
+RKH_SM_CONST_CREATE(sms, SMSPrio, HCAL, &GsmMgr_SMS_WaitGsmReady, NULL, NULL);
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */

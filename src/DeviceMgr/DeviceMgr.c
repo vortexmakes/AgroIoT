@@ -23,6 +23,7 @@
 #include "rkhtmr.h"
 #include "mytypes.h"
 #include "bsp.h"
+#include "priorities.h"
 #include "signals.h"
 #include "events.h"
 #include "topic.h"
@@ -87,7 +88,7 @@ struct DeviceMgr
     RKHTmEvt tmr;
 };
 
-RKH_SMA_CREATE(DeviceMgr, deviceMgr, 6, HCAL, &DeviceMgr_Inactive, init, NULL);
+RKH_SMA_CREATE(DeviceMgr, deviceMgr, DeviceMgrPrio, HCAL, &DeviceMgr_Inactive, init, NULL);
 RKH_SMA_DEF_PTR(deviceMgr);
 
 /* ------------------------------- Constants ------------------------------- */

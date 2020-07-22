@@ -14,6 +14,7 @@
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
+#include "priorities.h"
 #include "signals.h"
 #include "rkhtmr.h"
 #include "PowerMgr.h"
@@ -79,7 +80,7 @@ struct PowerMgr
     GStatus status;
 };
 
-RKH_SMA_CREATE(PowerMgr, powerMgr, 0, HCAL, &PowerMgr_Ready, ToReadyExt0, NULL);
+RKH_SMA_CREATE(PowerMgr, powerMgr, PowerMgrPrio, HCAL, &PowerMgr_Ready, ToReadyExt0, NULL);
 RKH_SMA_DEF_PTR(powerMgr);
 
 /* ------------------------------- Constants ------------------------------- */

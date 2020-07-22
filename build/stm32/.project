@@ -237,6 +237,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/src/parser</locationURI>
 		</link>
 		<link>
+			<name>Sources/src/priorities.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/priorities.h</locationURI>
+		</link>
+		<link>
 			<name>Sources/src/rkhcfg.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/rkhcfg.h</locationURI>

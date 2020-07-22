@@ -23,6 +23,7 @@
 #include "YFrame.h"
 #include "events.h"
 #include "settings.h"
+#include "priorities.h"
 #include "YCommand.h"
 
 /* ---------------------- External C language linkage ---------------------- */

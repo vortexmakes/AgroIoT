@@ -22,6 +22,7 @@
 #include "rkhtmr.h"
 #include "mytypes.h"
 #include "bsp.h"
+#include "priorities.h"
 #include "signals.h"
 #include "events.h"
 #include "topic.h"
@@ -90,7 +91,7 @@ struct UsbMgr
     RKHTmEvt tmEvtObj1;
 };
 
-RKH_SMA_CREATE(UsbMgr, usbMgr, 10, HCAL, &UsbMgr_Inactive, init, NULL);
+RKH_SMA_CREATE(UsbMgr, usbMgr, UsbMgrPrio, HCAL, &UsbMgr_Inactive, init, NULL);
 RKH_SMA_DEF_PTR(usbMgr);
 
 /* ------------------------------- Constants ------------------------------- */
