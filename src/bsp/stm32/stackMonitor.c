@@ -24,14 +24,17 @@ RKH_THIS_MODULE
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
+#define STACK_USAGE_WATERMARK   80  // Percent of total stack size
+#define STACK_FILL_PATTERN      0xA5A5A5A5
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 extern const volatile unsigned int _estack;
 extern const volatile unsigned int _Min_Stack_Size;
 
 /* ---------------------------- Local variables ---------------------------- */
-unsigned int *psstack = &_estack;
-unsigned int StackSize = &_Min_Stack_Size;
+unsigned int *psstack = (unsigned int *)(&_estack);
+unsigned int StackSize = (unsigned int)(&_Min_Stack_Size);
 
 unsigned int *pstart, *pend;
 
@@ -45,29 +48,37 @@ stackMonitor_init(void)
 {
     unsigned int *p;
 
-	for(p = psstack - (StackSize/4); p < &p; ++p) //psstack - (0x50/4); ++p)
-	{
-		*p = 0xAA55AA55;
+    pstart = psstack - (StackSize/sizeof(int));
+
+    /* 'p' is allocated at most lower stack used address  */
+    /* then unused stack memory is filled with pattern */
+    /* until this address the address of 'p' &p */
+	for(p = pstart; p < (unsigned int *)(&p); ++p)
+	{                             
+		*p = STACK_FILL_PATTERN;
 	}
 
-    pstart = psstack - (StackSize/4);
     pend = p;
 }
 
 void
 stackMonitor_check(void)
 {
-    unsigned int *p;
+	unsigned int *p;
+	RKH_SR_ALLOC();
 
     for(p = pstart; p < pend; ++p)
     {
-        if(*p != 0xAA55AA55)
+        if(*p != STACK_FILL_PATTERN)
             break;
     }
 
-    usage = psstack - p;
+    RKH_ENTER_CRITICAL_();
+    usage = (psstack - p) * sizeof(int);
+    usage = usage * 100 / StackSize;
+    RKH_EXIT_CRITICAL_();
 
-    RKH_ASSERT(usage < (StackSize - 0x100));
+    RKH_ASSERT(usage < STACK_USAGE_WATERMARK);
 }
 
 unsigned int
