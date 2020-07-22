@@ -135,7 +135,7 @@
                 <outgoingTransitions xmi:id="_nHhQsV5AEequQ_CX_ZIIdA" specification="/ModCmd_connect(protocol, domain, port)" target="_nHe0fF5AEequQ_CX_ZIIdA"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_nHe0fF5AEequQ_CX_ZIIdA" name="WaitingServer" incomingTransitions="_nHhQsV5AEequQ_CX_ZIIdA _nHgCkF5AEequQ_CX_ZIIdA">
-                <outgoingTransitions xmi:id="_nHgCkF5AEequQ_CX_ZIIdA" specification="after 2 s / // CONSTATUS_PERIOD&#xD;&#xA;ModCmd_getConnStatus()" target="_nHe0fF5AEequQ_CX_ZIIdA"/>
+                <outgoingTransitions xmi:id="_nHgCkF5AEequQ_CX_ZIIdA" specification="after 5 s / // CONSTATUS_PERIOD&#xD;&#xA;ModCmd_getConnStatus()" target="_nHe0fF5AEequQ_CX_ZIIdA"/>
                 <outgoingTransitions xmi:id="_nHe0iF5AEequQ_CX_ZIIdA" specification="evConnected" target="_nHRZHF5AEequQ_CX_ZIIdA"/>
               </vertices>
               <vertices xsi:type="sgraph:State" xmi:id="_nHRZHF5AEequQ_CX_ZIIdA" specification="entry/socketConnected()&#xD;&#xA;exit/socketDisconnected()" name="Connected" incomingTransitions="_nHe0iF5AEequQ_CX_ZIIdA">
@@ -146,7 +146,7 @@
                     <outgoingTransitions xmi:id="_nHc_QF5AEequQ_CX_ZIIdA" specification="" target="_nHZVDV5AEequQ_CX_ZIIdA"/>
                   </vertices>
                   <vertices xsi:type="sgraph:State" xmi:id="_nHZVDV5AEequQ_CX_ZIIdA" specification="" name="Idle" incomingTransitions="_nHc_QF5AEequQ_CX_ZIIdA _nHYG2F5AEequQ_CX_ZIIdA _nHYGx15AEequQ_CX_ZIIdA _nHXfyV5AEequQ_CX_ZIIdA _nHXftV5AEequQ_CX_ZIIdA _nHW4s15AEequQ_CX_ZIIdA _nHT1UV5AEequQ_CX_ZIIdA">
-                    <outgoingTransitions xmi:id="_nHbKHV5AEequQ_CX_ZIIdA" specification="after 2s / // CONSTATUS_PERIOD&#xD;&#xA;ModCmd_getConnStatus()" target="_nHVqgF5AEequQ_CX_ZIIdA"/>
+                    <outgoingTransitions xmi:id="_nHbKHV5AEequQ_CX_ZIIdA" specification="after 5s / // CONSTATUS_PERIOD&#xD;&#xA;ModCmd_getConnStatus()" target="_nHVqgF5AEequQ_CX_ZIIdA"/>
                     <outgoingTransitions xmi:id="_nHajCl5AEequQ_CX_ZIIdA" specification="evSend/sendData()" target="_nHTOVV5AEequQ_CX_ZIIdA"/>
                     <outgoingTransitions xmi:id="_nHZ7-F5AEequQ_CX_ZIIdA" specification="evRecv/readData()" target="_nHW4r15AEequQ_CX_ZIIdA"/>
                   </vertices>
