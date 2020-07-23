@@ -56,6 +56,8 @@ rkh_trc_close(void)
     trace_msd_close();
 }
 
+static rui8_t flushBuff[512];
+static rui8_t uartFlushBuff[512];
 void
 rkh_trc_flush(void)
 {
@@ -65,19 +67,22 @@ rkh_trc_flush(void)
 
     FOREVER
     {
-        nbytes = 512;
+        nbytes = sizeof(flushBuff);
 
         RKH_ENTER_CRITICAL_();
         blk = rkh_trc_get_block(&nbytes);
+        memcpy(flushBuff, blk, nbytes);
         RKH_EXIT_CRITICAL_();
 
-        if ((blk != (rui8_t *)0))
+        if (nbytes != 0)
         {
-            trace_msd_write(blk, nbytes);
-
         	while(HAL_UART_GetState(TRC_COM_PORT) != HAL_UART_STATE_READY);
+            RKH_ENTER_CRITICAL_();
+            memcpy(uartFlushBuff, flushBuff, nbytes);
+            RKH_EXIT_CRITICAL_();
 
-            HAL_UART_Transmit_DMA(TRC_COM_PORT, blk, nbytes);
+            HAL_UART_Transmit_DMA(TRC_COM_PORT, uartFlushBuff, nbytes);
+            trace_msd_write(uartFlushBuff, nbytes);
         }
         else
         {
