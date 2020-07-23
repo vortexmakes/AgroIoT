@@ -216,14 +216,8 @@ main(int argc, char *argv[])
 
     rkh_fwk_enter();
 
-	RKH_TRC_FLUSH();
-  	trace_msd_close();
-    RKH_DIS_INTERRUPT();
-  	bsp_reset();
-
-    RKH_TRC_CLOSE();
-
 #endif
+
     return 0;
 }
 

@@ -68,10 +68,21 @@ RKH_THIS_MODULE
 void
 rkh_assert(RKHROM char * const file, int line)
 {
-    RKH_TR_FWK_ASSERT((RKHROM char *)file, __LINE__);
+	/* Before to exit gets high trace output peripherals for
+	 * complete stream transmission as soon as possible,
+	 * and also handle assertion into peripheral's isr.
+	 */
+    /* UART output on UART5+DMA1_S7 */
+	HAL_NVIC_SetPriority(UART5_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(DMA1_Stream7_IRQn, 0, 0);
+
+    /* MassStorage file on USBOTG */
+    HAL_NVIC_SetPriority(OTG_HS_IRQn, 0, 0);
+
+    RKH_TR_FWK_ASSERT((RKHROM char *)file, line);
     rkh_fwk_exit();
 	RKH_TRC_FLUSH();
-	trace_msd_close();
+	RKH_TRC_CLOSE();
     RKH_DIS_INTERRUPT();
 	bsp_reset();
 }

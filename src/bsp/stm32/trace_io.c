@@ -53,6 +53,7 @@ rkh_trc_open(void)
 void
 rkh_trc_close(void)
 {
+    trace_msd_close();
 }
 
 void
