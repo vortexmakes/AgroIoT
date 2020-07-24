@@ -43,6 +43,7 @@ static BatChrEvt e_BatChr;
 void
 BatChr_init(void)
 {
+	bsp_get_ExtPower();
    	bsp_set_battery(Ready);
     status = LINE_BATT;
 
