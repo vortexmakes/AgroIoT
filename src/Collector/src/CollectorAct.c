@@ -181,14 +181,16 @@ Collector_updateInvPosition(Collector *const me, RKH_EVT_T *pe)
     Geo *pos;
 
     /* An invalid position carries: */
-    /* ---------------------------- */
-    /* version code (AGROIOT_VERSION)      -> speed */
-    /* release date (AGROIOT_RELEASE_DATE) -> date */
-    /* backup status (BackupCode)          -> course */
+    /* ---------------------------------------------- */
+    /* version code  (AGROIOT_VERSION)      -> speed  */
+    /* release date  (AGROIOT_RELEASE_DATE) -> date   */
+    /* backup status (BackupCode)           -> course */
+    /* reset source  (ResetSource_t)        -> latInd */
     pos = &me->status.data.position;
     *pos = RKH_DOWNCAST(GeoEvt, pe)->position;
     strcpy(pos->speed, agroIoTVersion);
     sprintf(pos->course, "%02d", me->backupInfo.error);
+    sprintf(pos->latInd, "%hhX", bsp_getResetSource());
 }
 
 void
