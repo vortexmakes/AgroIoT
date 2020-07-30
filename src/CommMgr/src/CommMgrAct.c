@@ -153,7 +153,7 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_SIG(evGStatus);
     RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
 
-    topic_subscribe(Status, RKH_UPCAST(RKH_SMA_T, me));
+    topic_subscribe(GeneralStatus, RKH_UPCAST(RKH_SMA_T, me));
     topic_subscribe(TCPConnection, RKH_UPCAST(RKH_SMA_T, me));
     me->isPendingStatus = false;
     me->lastRecvResponse = TypeOfRespUnknown;

@@ -206,7 +206,7 @@ Collector_publishCurrStatus(Collector *const me, RKH_EVT_T *pe)
 
     evt = RKH_ALLOC_EVT(GStatusEvt, evGStatus, me);
     evt->status = me->status.data;
-    topic_publish(Status,
+    topic_publish(GeneralStatus,
                   RKH_UPCAST(RKH_EVT_T, evt),
                   RKH_UPCAST(RKH_SMA_T, me));
 }

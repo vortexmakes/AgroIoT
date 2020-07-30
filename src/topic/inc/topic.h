@@ -36,6 +36,7 @@ enum Topics
     TCPConnection,
     ModURC,
     Status,
+    GeneralStatus,
     NumOfTopics
 };
 

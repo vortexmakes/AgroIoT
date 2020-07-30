@@ -215,7 +215,7 @@ test_PublishCurrStatusWithNoDevAndMappingStopped(void)
     me->itsMapping.sm.state = RKH_CAST(RKH_ST_T, &Mapping_Stopped);
     rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
-    topic_publish_Expect(Status,
+    topic_publish_Expect(GeneralStatus,
                          RKH_UPCAST(RKH_EVT_T, &event),
                          RKH_UPCAST(RKH_SMA_T, me));
 
@@ -230,7 +230,7 @@ test_PublishCurrStatusWithNoDevAndMappingRunning(void)
 
     rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
-    topic_publish_Expect(Status,
+    topic_publish_Expect(GeneralStatus,
                          RKH_UPCAST(RKH_EVT_T, &event),
                          RKH_UPCAST(RKH_SMA_T, me));
 
@@ -244,7 +244,7 @@ test_PublishCurrStatusWithDevConnected(void)
 
     rkh_fwk_ae_ExpectAndReturn(sizeof(GStatusEvt), evGStatus, me,
                                RKH_UPCAST(RKH_EVT_T, &event));
-    topic_publish_Expect(Status,
+    topic_publish_Expect(GeneralStatus,
                          RKH_UPCAST(RKH_EVT_T, &event),
                          RKH_UPCAST(RKH_SMA_T, me));
 

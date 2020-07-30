@@ -158,7 +158,7 @@ test_Initialize(void)
     rkh_trc_sig_Ignore();
     rkh_trc_sig_Ignore();
     rkh_trc_obj_Ignore();
-    topic_subscribe_Expect(Status, RKH_UPCAST(RKH_SMA_T, me));
+    topic_subscribe_Expect(GeneralStatus, RKH_UPCAST(RKH_SMA_T, me));
     topic_subscribe_Expect(TCPConnection, RKH_UPCAST(RKH_SMA_T, me));
 
     CommMgr_ToIdleExt0(me, evt);
