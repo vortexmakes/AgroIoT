@@ -1,6 +1,7 @@
 # Respaldo de estados
 
 ## Definiciones
+Las siguientes definiciones pertenecen al archivo `src/Backup/inc/Backup.h`
 - `BACKUP_MAXNUMREGPERFILE`: 15600 -> `13[h]*60*[m/h]*60[s/m]/3[sa]`
 - `BACKUP_MAXNUMFILES`: 40
 - `BACKUP_DIR_NAME`: "frames"
@@ -18,7 +19,7 @@
 - El registro del archivo de respaldo es de formato `GStatus` (binario). 
 
 - El programa `frameconv` transforma los archivos de respaldo en tramas.
-  `$./frameconv -i <imei> <backup-file>`
+  `./frameconv -i <imei> <backup-file>`
 
 - Existe como máximo `BACKUP_MAXNUMFILES` archivos en el directorio. 
   Al menos 40 días. Alcanzado este límite se recicla el archivo más antiguo
