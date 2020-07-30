@@ -1,7 +1,7 @@
 # Descripción del comportamiento de los LEDs
 
 ## Led 1
-Alimentacion externa, bateria. error grave (por ejemplo SIM error)
+Alimentacion externa, bateria, error grave (por ejemplo SIM error)
 
 ## Led 2
 Indica el estado de la red GSM
