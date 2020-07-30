@@ -39,7 +39,6 @@ RKH_DCLR_FINAL_STATE PowerMgrFinal;
 static void ToReadyExt0(PowerMgr *const me, RKH_EVT_T *pe);
 static void ShuttingDownToPowerMgrFinalExt2(PowerMgr *const me, RKH_EVT_T *pe);
 static void ReadyToReadyLoc0(PowerMgr *const me, RKH_EVT_T *pe);
-static void ReadyToReadyLoc1(PowerMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void enShuttingDown(PowerMgr *const me);
@@ -58,7 +57,6 @@ RKH_CREATE_BASIC_STATE(PowerMgr_ShuttingDown, enShuttingDown, exShuttingDown, RK
 RKH_CREATE_TRANS_TABLE(PowerMgr_Ready)
 	RKH_TRREG(evBatChrStatus, isCondReadyToShuttingDown1, NULL, &PowerMgr_ShuttingDown),
 	RKH_TRINT(evGStatus, NULL, ReadyToReadyLoc0),
-	RKH_TRINT(evGeo, NULL, ReadyToReadyLoc1),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(PowerMgr_ShuttingDown)
@@ -90,7 +88,7 @@ static Backup backup;
 static void
 init(PowerMgr *const me)
 {
-	topic_subscribe(Status, RKH_UPCAST(RKH_SMA_T, me));
+	topic_subscribe(GeneralStatus, RKH_UPCAST(RKH_SMA_T, me));
 }
 
 static void
@@ -174,7 +172,6 @@ ToReadyExt0(PowerMgr *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(ToReadyExt0, "ToReadyExt0");
 		RKH_TR_FWK_OBJ_NAME(ShuttingDownToPowerMgrFinalExt2, "ShuttingDownToPowerMgrFinalExt2");
 		RKH_TR_FWK_OBJ_NAME(ReadyToReadyLoc0, "ReadyToReadyLoc0");
-		RKH_TR_FWK_OBJ_NAME(ReadyToReadyLoc1, "ReadyToReadyLoc1");
 		RKH_TR_FWK_OBJ_NAME(enShuttingDown, "enShuttingDown");
 		RKH_TR_FWK_OBJ_NAME(isCondReadyToShuttingDown1, "isCondReadyToShuttingDown1");
 	#endif
@@ -194,11 +191,6 @@ static void
 ReadyToReadyLoc0(PowerMgr *const me, RKH_EVT_T *pe)
 {
     updateStatus(me, pe);
-}
-
-static void
-ReadyToReadyLoc1(PowerMgr *const me, RKH_EVT_T *pe)
-{
     updateMemStatus();
 }
 
