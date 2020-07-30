@@ -21,7 +21,6 @@
 #include "rkh.h"
 #include "rkhfwk_pubsub.h"
 #include "rkhtmr.h"
-#include "mytypes.h"
 #include "bsp.h"
 #include "priorities.h"
 #include "signals.h"
@@ -30,6 +29,7 @@
 #include "DeviceMgr.h"
 #include "device.h"
 #include "ps.h"
+#include "ps_callback.h"
 #include "tplink.h"
 #include "tplhal.h"
 #include "Config.h"
@@ -88,7 +88,13 @@ struct DeviceMgr
     RKHTmEvt tmr;
 };
 
-RKH_SMA_CREATE(DeviceMgr, deviceMgr, DeviceMgrPrio, HCAL, &DeviceMgr_Inactive, init, NULL);
+RKH_SMA_CREATE(DeviceMgr, 
+               deviceMgr, 
+               DeviceMgrPrio, 
+               HCAL, 
+               &DeviceMgr_Inactive, 
+               init, 
+               NULL);
 RKH_SMA_DEF_PTR(deviceMgr);
 
 /* ------------------------------- Constants ------------------------------- */
