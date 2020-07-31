@@ -63,7 +63,7 @@ BatChr_powerFailCheck(void)
             {
                 status = NOLINE_BATT;
                 e_BatChr.status = status; 
-                topic_publish(Status, RKH_UPCAST(RKH_EVT_T, &e_BatChr), 
+                topic_publish(GeneralStatus, RKH_UPCAST(RKH_EVT_T, &e_BatChr), 
                                       RKH_UPCAST(RKH_SMA_T, &BatChr));
             }
             break;
@@ -73,7 +73,7 @@ BatChr_powerFailCheck(void)
             {
                 status = LINE_BATT;
                 e_BatChr.status = status; 
-                topic_publish(Status, RKH_UPCAST(RKH_EVT_T, &e_BatChr), 
+                topic_publish(GeneralStatus, RKH_UPCAST(RKH_EVT_T, &e_BatChr), 
                                       RKH_UPCAST(RKH_SMA_T, &BatChr));
             }
             break;
