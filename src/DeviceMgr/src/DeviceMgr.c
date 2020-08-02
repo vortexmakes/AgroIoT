@@ -37,8 +37,6 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ......................... Declares active object ........................ */
-typedef struct DeviceMgr DeviceMgr;
-
 /* ................... Declares states and pseudostates .................... */
 RKH_DCLR_BASIC_STATE DeviceMgr_Inactive, DeviceMgr_InCycle, DeviceMgr_Idle;
 RKH_DCLR_COMP_STATE DeviceMgr_Active;
@@ -50,6 +48,7 @@ static void init(DeviceMgr *const me, RKH_EVT_T *pe);
 static void startPs(DeviceMgr *const me, RKH_EVT_T *pe);
 static void stopPs(DeviceMgr *const me, RKH_EVT_T *pe);
 static void restartPs(DeviceMgr *const me, RKH_EVT_T *pe);
+static void setPollCycleTime(DeviceMgr *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 static void nIdle(DeviceMgr *const me);
@@ -73,7 +72,7 @@ RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(DeviceMgr_InCycle, NULL, NULL, &DeviceMgr_Active, NULL);
 RKH_CREATE_TRANS_TABLE(DeviceMgr_InCycle)
-RKH_TRREG(evEndOfCycle, NULL, NULL, &DeviceMgr_Idle),
+RKH_TRREG(evEndOfCycle, NULL, setPollCycleTime, &DeviceMgr_Idle),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_BASIC_STATE(DeviceMgr_Idle, nIdle, xIdle, &DeviceMgr_Active, NULL);
@@ -82,12 +81,6 @@ RKH_TRREG(evTimeout, NULL, restartPs, &DeviceMgr_InCycle),
 RKH_END_TRANS_TABLE
 
 /* ............................. Active object ............................. */
-struct DeviceMgr
-{
-    RKH_SMA_T ao;       /* Base structure */
-    RKHTmEvt tmr;
-};
-
 RKH_SMA_CREATE(DeviceMgr, 
                deviceMgr, 
                DeviceMgrPrio, 
@@ -95,7 +88,7 @@ RKH_SMA_CREATE(DeviceMgr,
                &DeviceMgr_Inactive, 
                init, 
                NULL);
-RKH_SMA_DEF_PTR(deviceMgr);
+RKH_SMA_DEF_PTR_TYPE(DeviceMgr, deviceMgr);
 
 /* ------------------------------- Constants ------------------------------- */
 static const PS_PLBUFF_T reqs[] =
@@ -145,6 +138,25 @@ getDevice(DevId devId)
     return dev;
 }
 
+static void
+setPollCycle(DeviceMgr *const me)
+{
+    if (me->tries == 0)
+    {
+        deviceMgr->backoff = 0;
+        deviceMgr->pollCycle = Config_getDevPollCycleTime();
+    }
+    else if (me->tries >= DEV_MAX_NUM_TRIES)
+    {
+        if (me->backoff < DEV_MAX_NUM_BACKOFF)
+        {
+            ++me->backoff;
+            me->pollCycle <<= 1;
+        }
+        me->tries = 0;
+    }
+}
+
 /* ............................ Initial action ............................. */
 static void
 init(DeviceMgr *const me, RKH_EVT_T *pe)
@@ -172,6 +184,9 @@ startPs(DeviceMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 
     ps_start();
+    deviceMgr->tries = 0;
+    deviceMgr->backoff = 0;
+    deviceMgr->pollCycle = Config_getDevPollCycleTime();
 }
 
 static void
@@ -190,13 +205,19 @@ stopPs(DeviceMgr *const me, RKH_EVT_T *pe)
     (void)pe;
 }
 
+static void
+setPollCycleTime(DeviceMgr *const me, RKH_EVT_T *pe)
+{
+    setPollCycle(me);
+}
+
 /* ............................. Entry actions ............................. */
 static void
 nIdle(DeviceMgr *const me)
 {
     RKH_TMR_ONESHOT(&me->tmr.tmr,
                     RKH_UPCAST(RKH_SMA_T, me),
-                    RKH_TIME_SEC(Config_getDevPollCycleTime()));
+                    RKH_TIME_SEC(me->pollCycle));
 }
 
 /* ............................. Exit actions .............................. */
@@ -221,12 +242,15 @@ ps_onStop(void)
 {
     topic_publish(Status, RKH_UPCAST(RKH_EVT_T, &evNoDevObj), 
                           RKH_UPCAST(RKH_SMA_T, deviceMgr));
+    ++deviceMgr->tries;
 }
 
 void
 ps_onEndCycle(void)
 {
-    RKH_SMA_POST_FIFO(deviceMgr, &evEndOfCycleObj, deviceMgr);
+    RKH_SMA_POST_FIFO(RKH_UPCAST(RKH_SMA_T, deviceMgr), 
+                      &evEndOfCycleObj, 
+                      deviceMgr);
 }
 
 void
@@ -257,10 +281,10 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             if (dev != (Device *)0)
             {
                 evt = device_makeEvt(dev, &cbox);
-                topic_publish(Status, evt, deviceMgr);
+                topic_publish(Status, evt, RKH_UPCAST(RKH_SMA_T, deviceMgr));
+                deviceMgr->tries = 0;
             }
             break;
-
         case ADDR_CAUDALIMETRO:
             p = (uchar *)pb->payload;
             flow1.nPulses = *p++;
@@ -268,7 +292,8 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             flow2.nPulses = *p++;
             flow2.dir = *p++;
             evt = Flowmeter_makeEvt(&flow1, &flow2);
-            topic_publish(Status, evt, deviceMgr);
+            topic_publish(Status, evt, RKH_UPCAST(RKH_SMA_T, deviceMgr));
+            deviceMgr->tries = 0;
             break;
         default:
             break;

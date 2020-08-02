@@ -26,6 +26,7 @@
     - -:test/support
   :source:
     - src/DeviceMgr.c
+    - ../../third-party/rkh/source/sm/src/rkhsm.c
   :include:
     - inc
     - ../../third-party/rkh/source/fwk/inc
