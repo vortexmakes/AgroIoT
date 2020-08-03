@@ -9,7 +9,7 @@
 
 source_dir="../../src"
 ceedling_dir="tools/ceedling"
-modules="Config epoch GStatus StatQue YFrame device topic SecString Trace Crc32 Flowmeter FrameConv YCommand"
+modules="Config epoch GStatus StatQue YFrame device topic SecString Trace Crc32 Flowmeter FrameConv YCommand DeviceMgr"
 stateMachines="Collector CommMgr"
 exceptionModules="ffile Backup gps"
 
