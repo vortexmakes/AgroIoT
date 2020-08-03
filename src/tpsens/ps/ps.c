@@ -33,6 +33,7 @@
 #include <stdarg.h>
 #include "ps.h"
 #include "psport.h"
+#include "ps_callback.h"
 
 #define forever                     for (;;)
 #define ps_is_active()              (prot.state == PS_RUNNING)
