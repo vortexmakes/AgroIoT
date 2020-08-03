@@ -21,6 +21,7 @@
 #include "Mock_topic.h"
 #include "Mock_rkhtrc_record.h"
 #include "Mock_rkhtrc_filter.h"
+#include "Mock_rkhtrc_out.h"
 #include "Mock_rkhtmr.h"
 #include "Mock_rkhfwk_dynevt.h"
 #include "Mock_device.h"
@@ -58,6 +59,15 @@ initDeviceMgr(void)
     rkh_trc_ao_Ignore();
     rkh_trc_obj_Ignore();
     rkh_trc_state_Ignore();
+
+    rkh_enter_critical_Ignore();    /* User trace */
+    rkh_trc_begin_Ignore();
+    rkh_trc_u8_Ignore();
+    rkh_trc_str_Ignore();
+    rkh_trc_end_Ignore();
+    rkh_trc_flush_Ignore();
+    rkh_exit_critical_Ignore();
+
     rkh_tmr_init__Ignore();
     ps_init_Ignore();
 
@@ -68,9 +78,10 @@ static void
 activeDeviceMgr(void)
 {
     RKH_SET_STATIC_EVENT(&event, evOpen);
-    ps_start_Ignore();
     Config_getDevPollCycleTime_ExpectAndReturn(DEV_POLL_CYCLE_TIME_DFT);
+    ps_start_Expect();
 
+    ++deviceMgr->tries; /* set on ps_onStop() */
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
 }
 
@@ -104,6 +115,8 @@ test_SetPollCycleWoutDevicesFirstTime(void)
 
     ++deviceMgr->tries; /* set by ps_onStop() callback */
     RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
     rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
                          RKH_UPCAST(RKH_SMA_T, deviceMgr), 
                          RKH_TIME_SEC(DEV_POLL_CYCLE_TIME_DFT), 
