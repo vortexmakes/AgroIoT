@@ -121,7 +121,6 @@ setupTraceFilters(void)
     /*RKH_FILTER_ON_SIGNAL(evGeo);*/
     /*RKH_FILTER_ON_SIGNAL(evGStatus);*/
     /*RKH_FILTER_ON_SIGNAL(evNoDev);*/
-    RKH_FILTER_OFF_EVENT(DEVMGR_BACKOFF_USR_TRACE);
 }
 
 /* ---------------------------- Global functions --------------------------- */

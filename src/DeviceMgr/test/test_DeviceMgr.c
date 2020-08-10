@@ -60,14 +60,6 @@ initDeviceMgr(void)
     rkh_trc_obj_Ignore();
     rkh_trc_state_Ignore();
 
-    rkh_enter_critical_Ignore();    /* User trace */
-    rkh_trc_begin_Ignore();
-    rkh_trc_u8_Ignore();
-    rkh_trc_str_Ignore();
-    rkh_trc_end_Ignore();
-    rkh_trc_flush_Ignore();
-    rkh_exit_critical_Ignore();
-
     rkh_tmr_init__Ignore();
     ps_init_Ignore();
 

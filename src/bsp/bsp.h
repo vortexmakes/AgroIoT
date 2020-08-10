@@ -50,7 +50,6 @@ enum
 enum
 {
     MODCMD_USR_TRACE = RKH_TE_USER,
-    DEVMGR_BACKOFF_USR_TRACE
 };
 
 /*

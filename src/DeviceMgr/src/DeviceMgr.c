@@ -151,7 +151,6 @@ init(DeviceMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_STATE(me, &DeviceMgr_Active);
     RKH_TR_FWK_STATE(me, &DeviceMgr_Idle);
     RKH_TR_FWK_STATE(me, &DeviceMgr_InCycle);
-    RKH_TR_FWK_TUSR(DEVMGR_BACKOFF_USR_TRACE);
 
     RKH_SET_STATIC_EVENT(&me->tmr.evt, evTimeout);
     RKH_TMR_INIT(&me->tmr.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmr), NULL);
@@ -204,9 +203,6 @@ setPollCycleTime(DeviceMgr *const me, RKH_EVT_T *pe)
         }
         me->tries = 0;
     }
-    RKH_TRC_USR_BEGIN(DEVMGR_BACKOFF_USR_TRACE)
-    RKH_TUSR_UI32(RKH_UI32_T, me->pollCycle);
-    RKH_TRC_USR_END();
 }
 
 /* ............................. Entry actions ............................. */
