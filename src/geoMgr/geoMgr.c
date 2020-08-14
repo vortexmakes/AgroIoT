@@ -278,7 +278,7 @@ publishRmc(GeoMgr *const me, RKH_EVT_T *pe)
 
     me->rmc = *pRmc;
 
-    geoEvt = RKH_ALLOC_EVT(GeoEvt, evGeo, &geoMgr);
+    geoEvt = RKH_ALLOC_EVT(GeoEvt, evGeo, me);
     pGps = &(geoEvt->position);
 
     memset(pGps, 0, sizeof(Geo));
