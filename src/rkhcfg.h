@@ -33,7 +33,7 @@
  *	(can be a number in the range [0..256]).
  *	Note that a value of 0 will completely suppress the memory pool services.
  */
-#define RKH_CFG_FWK_MAX_EVT_POOL        3u
+#define RKH_CFG_FWK_MAX_EVT_POOL        4u
 
 /**
  *  Specify the size of the event signal. The valid values [in bits] are

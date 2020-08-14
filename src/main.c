@@ -63,14 +63,17 @@
 #define COMMMGR_QSTO_SIZE       16
 #define USBMGR_QSTO_SIZE        4
 
-#define SIZEOF_EP0STO           16
-#define SIZEOF_EP0_BLOCK        sizeof(RKH_EVT_T)
+#define SIZEOF_EP0_BLOCK        (2 * sizeof(RKH_EVT_T))
+#define SIZEOF_EP0STO           (12 * SIZEOF_EP0_BLOCK)
 
-#define SIZEOF_EP1_BLOCK        sizeof(RmcEvt)
-#define SIZEOF_EP1STO           (16 * SIZEOF_EP1_BLOCK)
+#define SIZEOF_EP1_BLOCK        sizeof(SensorData)
+#define SIZEOF_EP1STO           (12 * SIZEOF_EP1_BLOCK)
 
-#define SIZEOF_EP2_BLOCK        sizeof(ModMgrEvt)
-#define SIZEOF_EP2STO           (16 * SIZEOF_EP2_BLOCK)
+#define SIZEOF_EP2_BLOCK        sizeof(RmcEvt)
+#define SIZEOF_EP2STO           (12 * SIZEOF_EP2_BLOCK)
+
+#define SIZEOF_EP3_BLOCK        sizeof(ModMgrEvt)
+#define SIZEOF_EP3STO           (12 * SIZEOF_EP3_BLOCK)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -86,7 +89,8 @@ static RKH_EVT_T *Collector_qsto[COLLECTOR_QSTO_SIZE];
 static RKH_EVT_T *UsbMgt_qsto[USBMGR_QSTO_SIZE];
 static rui8_t evPool0Sto[SIZEOF_EP0STO],
               evPool1Sto[SIZEOF_EP1STO],
-              evPool2Sto[SIZEOF_EP2STO];
+			  evPool2Sto[SIZEOF_EP2STO],
+              evPool3Sto[SIZEOF_EP3STO];
 
 static RKH_ROM_STATIC_EVENT(evOpenObj, evOpen);
 Device *sprayer, *sampler, *harvest;
@@ -106,6 +110,13 @@ setupTraceFilters(void)
     RKH_FILTER_OFF_EVENT(RKH_TE_SMA_LIFO);
     RKH_FILTER_OFF_EVENT(RKH_TE_SMA_GET);
     RKH_FILTER_OFF_EVENT(RKH_TE_FWK_ASSERT);
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_MP_INIT);
+    RKH_FILTER_OFF_EVENT(RKH_TE_MP_PUT);
+    RKH_FILTER_OFF_EVENT(RKH_TE_MP_GET);*/
+    RKH_FILTER_OFF_EVENT(RKH_TE_FWK_EPREG);
+    RKH_FILTER_OFF_EVENT(RKH_TE_FWK_AE);
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_FWK_GC);*/
+    /*RKH_FILTER_OFF_EVENT(RKH_TE_FWK_GCR);*/
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_TS_STATE);*/
     /*RKH_FILTER_OFF_EVENT(RKH_TE_SM_DCH);*/
     RKH_FILTER_OFF_SMA(powerMgr);
@@ -191,10 +202,16 @@ main(int argc, char *argv[])
     RKH_TR_FWK_ACTOR(&ubxm8parser, "ubxm8parser");
     RKH_TR_FWK_ACTOR(&main, "main");
 
+    RKH_TR_FWK_EPOOL(0, "evPool0");
+    RKH_TR_FWK_EPOOL(1, "evPool1");
+    RKH_TR_FWK_EPOOL(2, "evPool2");
+    RKH_TR_FWK_EPOOL(3, "evPool3");
+
     rkh_dynEvt_init();
     rkh_fwk_registerEvtPool(evPool0Sto, SIZEOF_EP0STO, SIZEOF_EP0_BLOCK);
     rkh_fwk_registerEvtPool(evPool1Sto, SIZEOF_EP1STO, SIZEOF_EP1_BLOCK);
     rkh_fwk_registerEvtPool(evPool2Sto, SIZEOF_EP2STO, SIZEOF_EP2_BLOCK);
+    rkh_fwk_registerEvtPool(evPool3Sto, SIZEOF_EP3STO, SIZEOF_EP3_BLOCK);
 
     RKH_SMA_ACTIVATE(powerMgr, PowerMgr_qsto, POWERMGR_QSTO_SIZE, 0, 0);
 
