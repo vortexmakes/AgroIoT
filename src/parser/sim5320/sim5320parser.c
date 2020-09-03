@@ -10,14 +10,14 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario Baliï¿½a db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
 #include "sim5320parser.h"
 #include "signals.h"
-#include "modmgr.h"
+#include "ModMgr.h"
 #include <stdlib.h>
 #include <string.h>
 

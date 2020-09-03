@@ -19,11 +19,12 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>com.st.stm32cube.ide.mcu.MCUProjectNature</nature>
 		<nature>org.eclipse.cdt.core.cnature</nature>
-		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCUSingleCpuProjectNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
-		<nature>fr.ac6.mcu.ide.core.MCUProjectNature</nature>
-		<nature>fr.ac6.mcu.ide.core.MCUSingleCoreProjectNature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCUSW4STM32ConvertedProjectNature</nature>
 	</natures>
 	<linkedResources>
 		<link>
@@ -64,7 +65,7 @@
 		<link>
 			<name>Sources/src/Collector</name>
 			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/src/collector</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/src/Collector</locationURI>
 		</link>
 		<link>
 			<name>Sources/src/CommMgr</name>
@@ -110,6 +111,11 @@
 			<name>Sources/src/IpValid</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/IpValid</locationURI>
+		</link>
+		<link>
+			<name>Sources/src/ModMgr</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/src/ModMgr</locationURI>
 		</link>
 		<link>
 			<name>Sources/src/PowerMgr</name>
@@ -220,11 +226,6 @@
 			<name>Sources/src/modcmd</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/src/modcmd</locationURI>
-		</link>
-		<link>
-			<name>Sources/src/modmgr</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/src/modmgr</locationURI>
 		</link>
 		<link>
 			<name>Sources/src/modpwr</name>

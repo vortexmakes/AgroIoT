@@ -17,9 +17,9 @@
 
 #include "rkh.h"
 #include "GsmMgr.h"
-#include "GsMMgrAccess.h"
+#include "GsmMgrAccess.h"
 #include "bsp.h"
-#include "ModCmd.h"
+#include "modcmd.h"
 #include "modpwr.h"
 
 /* ----------------------------- Local macros ------------------------------ */

@@ -12,7 +12,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  DaBa  Dario Baliï¿½a       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -27,7 +27,7 @@
 #include "modpwr.h"
 #include "dIn.h"
 #include "dOut.h"
-#include "modmgr.h"
+#include "ModMgr.h"
 #include "modcmd.h"
 #include "tplhal.h"
 #include "tplfsm.h"

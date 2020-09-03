@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña      db@vortexmakes.com
+ *  DaBa  Dario Baliï¿½a      db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -18,7 +18,7 @@
 #include "rkh.h"
 #include "rkhfwk_dynevt.h"
 #include "modcmd.h"
-#include "modmgr.h"
+#include "ModMgr.h"
 #include "GsmMgr.h"
 #include "sim5320parser.h"
 #include "signals.h"

@@ -1,5 +1,5 @@
 /**
- *  \file       modmgr.c
+ *  \file       ModMgr.c
  *  \brief      AT-command Module Manager.
  */
 
@@ -22,7 +22,7 @@
 #include "priorities.h"
 #include "signals.h"
 #include "topic.h"
-#include "modmgr.h"
+#include "ModMgr.h"
 #include "GsmMgr.h"
 #include "bsp.h"
 

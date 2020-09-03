@@ -1,5 +1,5 @@
 /**
- *  \file       modmgr.h
+ *  \file       ModMgr.h
  *  \brief      Module Manager.
  */
 
@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña db@vortexmakes.com
+ *  DaBa  Dario Baliï¿½a db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */

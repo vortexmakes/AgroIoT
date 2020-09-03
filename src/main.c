@@ -10,7 +10,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña       db@vortexmakes.com
+ *  DaBa  Dario Baliï¿½a       db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -26,7 +26,7 @@
 #include "PowerMgr.h"
 #include "CommMgr.h"
 #include "GsmMgr.h"
-#include "modmgr.h"
+#include "ModMgr.h"
 #include "geoMgr.h"
 #include "ioChg.h"
 #include "DeviceMgr.h"
