@@ -56,7 +56,7 @@
  */
 #define POWERMGR_QSTO_SIZE	    4
 #define COLLECTOR_QSTO_SIZE     8
-#define MODMGR_QSTO_SIZE        4
+#define MODMGR_QSTO_SIZE        8
 #define GSMMGR_QSTO_SIZE        8
 #define GEOMGR_QSTO_SIZE        4
 #define DEVSRV_QSTO_SIZE        4
