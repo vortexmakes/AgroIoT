@@ -138,6 +138,29 @@ getDevice(DevId devId)
     return dev;
 }
 
+static DevId
+mapCboxDevToDevId(uint32_t cboxDev)
+{
+    DevId devId;
+
+    switch (cboxDev)
+    {
+        case EQTYPE_SPRAYER:
+            devId = SPRAYER;
+            break;
+        case EQTYPE_SAMPLER:
+            devId = SAMPLER;
+            break;
+        case EQTYPE_HARVEST_WO_ACC:
+            devId = HARVEST;
+            break;
+        default:
+            devId = DEVNULL;
+            break;
+    }
+    return devId;
+}
+
 /* ............................ Initial action ............................. */
 static void
 init(DeviceMgr *const me, RKH_EVT_T *pe)
@@ -255,6 +278,7 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
     uchar *p;
     RKH_EVT_T *evt;
     FlowData flow1, flow2;
+    DevId devId;
 
     switch (station)
     {
@@ -271,7 +295,8 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             cbox.a.m = *p++;
             cbox.hum = *p++;
 
-            dev = getDevice(cbox.a.x);
+            devId = mapCboxDevToDevId((uint32_t)cbox.a.x);
+            dev = getDevice(devId);
             if (dev != (Device *)0)
             {
                 evt = device_makeEvt(dev, &cbox);
