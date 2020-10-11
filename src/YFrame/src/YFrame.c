@@ -158,7 +158,7 @@ YFrame_data(GStatusType *from, char *to, rInt type)
         strcat(frame, temp);
         sprintf(temp, "%04X,", dev->h.hoard);
         strcat(frame, temp);
-        sprintf(temp, "%02hhX,", dev->h.pqty);
+        sprintf(temp, "%02X,", (uint8_t)dev->h.pqty);
         strcat(frame, temp);
         sprintf(temp, "%02X,", dev->hum);
         strcat(frame, temp);
@@ -168,7 +168,7 @@ YFrame_data(GStatusType *from, char *to, rInt type)
         strcat(frame, temp);
         sprintf(temp, "%04X,", (rui16_t)(dev->a.z));
         strcat(frame, temp);
-        sprintf(temp, "%01hhX", from->batChrStatus);
+        sprintf(temp, "%01X", (uint8_t)from->batChrStatus);
         strcat(frame, temp);
         size = strlen(frame);
     }

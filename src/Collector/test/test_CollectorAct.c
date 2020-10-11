@@ -167,7 +167,7 @@ test_UpdateInvalidPosition(void)
 
     me->backupInfo.error = Backup_NoInit;
     sprintf(backupCode, "%02d", me->backupInfo.error);
-    sprintf(reset, "%hhX", ResetSrcWDG);
+    sprintf(reset, "%X", ResetSrcWDG);
     
     pos = &me->status.data.position;
     event.position = invalidPosition;

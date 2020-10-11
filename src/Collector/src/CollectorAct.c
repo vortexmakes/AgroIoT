@@ -190,7 +190,7 @@ Collector_updateInvPosition(Collector *const me, RKH_EVT_T *pe)
     *pos = RKH_DOWNCAST(GeoEvt, pe)->position;
     strcpy(pos->speed, agroIoTVersion);
     sprintf(pos->course, "%02d", me->backupInfo.error);
-    sprintf(pos->latInd, "%hhX", bsp_getResetSource());
+    sprintf(pos->latInd, "%X", bsp_getResetSource());
 }
 
 void
