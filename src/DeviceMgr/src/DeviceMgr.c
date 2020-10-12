@@ -139,7 +139,7 @@ getDevice(DevId devId)
 }
 
 static DevId
-mapCboxDevToDevId(uint32_t cboxDev)
+mapCboxDevToDevId(unsigned short cboxDev)
 {
     DevId devId;
 
@@ -295,7 +295,7 @@ ps_onStationRecv(ST_T station, PS_PLBUFF_T *pb)
             cbox.a.m = *p++;
             cbox.hum = *p++;
 
-            devId = mapCboxDevToDevId((uint32_t)cbox.a.x);
+            devId = mapCboxDevToDevId((unsigned short)cbox.a.x);
             dev = getDevice(devId);
             if (dev != (Device *)0)
             {
