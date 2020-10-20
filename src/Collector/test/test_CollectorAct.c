@@ -380,7 +380,7 @@ test_StartAndStopSyncStoppedTmr(void)
                          RKH_UPCAST(RKH_EVT_T, &region->syncStoppedTmr));
     rkh_tmr_start_Expect(&region->syncStoppedTmr.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
-                         RKH_TIME_SEC(60), RKH_TIME_SEC(60));
+                         RKH_TIME_SEC(60), 0);
     bsp_workStatusLed_Expect(SEQ_NO_LIT);
 
     Mapping_enStopped(region);
@@ -432,7 +432,7 @@ test_StartAndStopSyncRunningTmr(void)
                          RKH_UPCAST(RKH_EVT_T, &region->syncRunningTmr));
     rkh_tmr_start_Expect(&region->syncRunningTmr.tmr,
                          RKH_UPCAST(RKH_SMA_T, me),
-                         RKH_TIME_SEC(3), RKH_TIME_SEC(3));
+                         RKH_TIME_SEC(3), 0);
     bsp_workStatusLed_Expect(SEQ_LIT);
 
     Mapping_enRunning(region);

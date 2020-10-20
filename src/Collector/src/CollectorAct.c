@@ -326,9 +326,9 @@ Mapping_enStopped(Mapping *const me)
     RKH_SET_STATIC_EVENT(&me->syncStoppedTmr, evToutSyncStopped);
     RKH_TMR_INIT(&me->syncStoppedTmr.tmr,
                  RKH_UPCAST(RKH_EVT_T, &me->syncStoppedTmr), NULL);
-    RKH_TMR_PERIODIC(&me->syncStoppedTmr.tmr,
-                     RKH_UPCAST(RKH_SMA_T, me->itsCollector),
-                     nTicks, nTicks);
+    RKH_TMR_ONESHOT(&me->syncStoppedTmr.tmr,
+                    RKH_UPCAST(RKH_SMA_T, me->itsCollector),
+                    nTicks);
     setMappingStatus(me, MAPPING_STOP);
     bsp_workStatusLed(SEQ_NO_LIT);
 }
@@ -342,9 +342,9 @@ Mapping_enRunning(Mapping *const me)
     RKH_SET_STATIC_EVENT(&me->syncRunningTmr.evt, evToutSyncRunning);
     RKH_TMR_INIT(&me->syncRunningTmr.tmr,
                  RKH_UPCAST(RKH_EVT_T, &me->syncRunningTmr), NULL);
-    RKH_TMR_PERIODIC(&me->syncRunningTmr.tmr,
-                     RKH_UPCAST(RKH_SMA_T, me->itsCollector),
-                     nTicks, nTicks);
+    RKH_TMR_ONESHOT(&me->syncRunningTmr.tmr,
+                    RKH_UPCAST(RKH_SMA_T, me->itsCollector),
+                    nTicks);
     setMappingStatus(me, MAPPING_RUNNING);
     bsp_workStatusLed(SEQ_LIT);
 }
