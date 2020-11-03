@@ -46,13 +46,13 @@ extern "C" {
  *  For example, the code for version 2.2.04 is 0x220400 and the code 
  *  for version 2.2.04-beta.2 is 0x220402
  */
-#define AGROIOT_VERSION         0x090009
+#define AGROIOT_VERSION         0x090010
 
 /**
  *  \brief
  *  This macro indicates the release date as string in DDMMYY format.
  */
-#define AGROIOT_RELEASE_DATE    "201020"
+#define AGROIOT_RELEASE_DATE    "031120"
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
