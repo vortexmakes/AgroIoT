@@ -12,7 +12,7 @@
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Baliña     db@vortexmakes.com
+ *  DaBa  Dario BaliÃ±a     db@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -56,8 +56,9 @@ rkh_trc_close(void)
     trace_msd_close();
 }
 
-static rui8_t flushBuff[512];
-static rui8_t uartFlushBuff[512];
+static rui8_t flushBuff[RKH_CFG_TRC_SIZEOF_STREAM];
+static rui8_t uartFlushBuff[RKH_CFG_TRC_SIZEOF_STREAM];
+
 void
 rkh_trc_flush(void)
 {
@@ -70,13 +71,13 @@ rkh_trc_flush(void)
         nbytes = sizeof(flushBuff);
 
         RKH_ENTER_CRITICAL_();
-        blk = rkh_trc_get_block(&nbytes);
-        memcpy(flushBuff, blk, nbytes);
+        nbytes = rkh_trc_getWholeBlock(flushBuff, sizeof(flushBuff));
         RKH_EXIT_CRITICAL_();
 
         if (nbytes != 0)
         {
-        	while(HAL_UART_GetState(TRC_COM_PORT) != HAL_UART_STATE_READY);
+            while(HAL_UART_GetState(TRC_COM_PORT) != HAL_UART_STATE_READY);
+
             RKH_ENTER_CRITICAL_();
             memcpy(uartFlushBuff, flushBuff, nbytes);
             RKH_EXIT_CRITICAL_();
