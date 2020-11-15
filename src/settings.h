@@ -52,7 +52,7 @@ extern "C" {
 #define CONNECT_TRY_DELAY_DFT           5
 #define MAX_NUM_CONNECT_RETRIES_DFT     3
 #define CONFIG_TRY_DELAY_DFT            3
-#define DIGIN_POLARITY_DFT              0   /* DigInPol::ActiveLow (0) */
+#define DIGIN_POLARITY_DFT              1   /* DigInPol::ActiveHigh (1) */
 
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
