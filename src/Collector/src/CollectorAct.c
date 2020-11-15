@@ -78,7 +78,10 @@ dispatch(RKH_SMA_T *me, void *arg)
 static bool
 testDevNullJobCond(Collector *const me)
 {
-    return (me->status.data.ioStatus.digIn != 0xff) ? true : false;
+    uint8_t mask;
+
+    mask = (Config_getDigInPolarity() == ActiveLow) ? 0xff : 0;
+    return (me->status.data.ioStatus.digIn != mask) ? true : false;
 }
 
 static RKH_TNT_T

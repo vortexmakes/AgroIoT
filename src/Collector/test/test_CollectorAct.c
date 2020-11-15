@@ -252,9 +252,10 @@ test_PublishCurrStatusWithDevConnected(void)
 }
 
 void
-test_ActiveDigInOnEntryDevNotConnected(void)
+test_ActiveLowDigInOnEntryDevNotConnected(void)
 {
     me->status.data.ioStatus.digIn = 0xfe;
+    Config_getDigInPolarity_ExpectAndReturn(ActiveLow);
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();
 
@@ -263,9 +264,22 @@ test_ActiveDigInOnEntryDevNotConnected(void)
 }
 
 void
-test_IdleDigInOnEntryDevNotConnected(void)
+test_ActiveHighDigInOnEntryDevNotConnected(void)
+{
+    me->status.data.ioStatus.digIn = 0xfe;
+    Config_getDigInPolarity_ExpectAndReturn(ActiveHigh);
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_initAndTestDevNull(me);
+    TEST_ASSERT_NULL(me->dev);
+}
+
+void
+test_IdleActiveLowDigInOnEntryDevNotConnected(void)
 {
     me->status.data.ioStatus.digIn = 0xff;
+    Config_getDigInPolarity_ExpectAndReturn(ActiveLow);
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();
 
@@ -274,11 +288,24 @@ test_IdleDigInOnEntryDevNotConnected(void)
 }
 
 void
-test_ActiveDigInInDevNotConnected(void)
+test_IdleActiveHighDigInOnEntryDevNotConnected(void)
+{
+    me->status.data.ioStatus.digIn = 0;
+    Config_getDigInPolarity_ExpectAndReturn(ActiveHigh);
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_initAndTestDevNull(me);
+    TEST_ASSERT_NULL(me->dev);
+}
+
+void
+test_ActiveLowDigInInDevNotConnected(void)
 {
     DigInChangedEvt event;
 
     event.status = 0xfe;
+    Config_getDigInPolarity_ExpectAndReturn(ActiveLow);
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();
 
@@ -287,11 +314,40 @@ test_ActiveDigInInDevNotConnected(void)
 }
 
 void
-test_IdleDigInInDevNotConnected(void)
+test_IdleActiveLowDigInInDevNotConnected(void)
 {
     DigInChangedEvt event;
 
     event.status = 0xff;
+    Config_getDigInPolarity_ExpectAndReturn(ActiveLow);
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_updateDigInTestDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL(event.status, me->status.data.ioStatus.digIn);
+}
+
+void
+test_ActiveHighDigInInDevNotConnected(void)
+{
+    DigInChangedEvt event;
+
+    event.status = 0xfe;
+    Config_getDigInPolarity_ExpectAndReturn(ActiveHigh);
+    rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
+    rkh_sma_post_lifo_IgnoreArg_e();
+
+    Collector_updateDigInTestDevNull(me, RKH_UPCAST(RKH_EVT_T, &event));
+    TEST_ASSERT_EQUAL(event.status, me->status.data.ioStatus.digIn);
+}
+
+void
+test_IdleActiveHighDigInInDevNotConnected(void)
+{
+    DigInChangedEvt event;
+
+    event.status = 0;
+    Config_getDigInPolarity_ExpectAndReturn(ActiveHigh);
     rkh_sma_post_lifo_Expect(RKH_UPCAST(RKH_SMA_T, me), 0, me);
     rkh_sma_post_lifo_IgnoreArg_e();
 
