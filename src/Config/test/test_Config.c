@@ -49,7 +49,8 @@ static const Config cfgDft =
     REOPEN_DELAY_DFT,
     CONNECT_TRY_DELAY_DFT,
     MAX_NUM_CONNECT_RETRIES_DFT,
-    CONFIG_TRY_DELAY_DFT
+    CONFIG_TRY_DELAY_DFT,
+    DIGIN_POLARITY_DFT
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -77,7 +78,8 @@ static Config cfgFile =
     REOPEN_DELAY_DFT,
     CONNECT_TRY_DELAY_DFT,
     MAX_NUM_CONNECT_RETRIES_DFT,
-    CONFIG_TRY_DELAY_DFT
+    CONFIG_TRY_DELAY_DFT,
+    DIGIN_POLARITY_DFT
 };
 
 /* ----------------------- Local function prototypes ----------------------- */
@@ -156,6 +158,7 @@ test_InitWithoutStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgDft.connectTryDelay, cfg->connectTryDelay);
     TEST_ASSERT_EQUAL(cfgDft.maxNumConnectRetries, cfg->maxNumConnectRetries);
     TEST_ASSERT_EQUAL(cfgDft.configTryDelay, cfg->configTryDelay);
+    TEST_ASSERT_EQUAL(cfgDft.digInPolarity, cfg->digInPolarity);
 }
 
 void
@@ -197,6 +200,7 @@ test_InitWithStoredSettings(void)
     TEST_ASSERT_EQUAL(cfgFile.connectTryDelay, cfg->connectTryDelay);
     TEST_ASSERT_EQUAL(cfgFile.maxNumConnectRetries, cfg->maxNumConnectRetries);
     TEST_ASSERT_EQUAL(cfgFile.configTryDelay, cfg->configTryDelay);
+    TEST_ASSERT_EQUAL(cfgFile.digInPolarity, cfg->digInPolarity);
 }
 
 void
@@ -242,6 +246,7 @@ test_InitWithFileError(void)
     TEST_ASSERT_EQUAL(cfgDft.connectTryDelay, cfg->connectTryDelay);
     TEST_ASSERT_EQUAL(cfgDft.maxNumConnectRetries, cfg->maxNumConnectRetries);
     TEST_ASSERT_EQUAL(cfgDft.configTryDelay, cfg->configTryDelay);
+    TEST_ASSERT_EQUAL(cfgDft.digInPolarity, cfg->digInPolarity);
 }
 
 void
@@ -858,6 +863,23 @@ test_SetGetConfigTryDelay(void)
 
     value = Config_getConfigTryDelay();
     TEST_ASSERT_EQUAL(value, cfg->configTryDelay);
+}
+
+void
+test_SetGetDigInPolarity(void)
+{
+    DigInPol value;
+    Config *cfg;
+
+    setupGetterAndSettter();
+
+    value = ActiveHigh;
+    Config_setDigInPolarity(value);
+    cfg = Config_get();
+    TEST_ASSERT_EQUAL(value, cfg->digInPolarity);
+
+    value = Config_getDigInPolarity();
+    TEST_ASSERT_EQUAL(value, cfg->digInPolarity);
 }
 
 /* ------------------------------ End of file ------------------------------ */

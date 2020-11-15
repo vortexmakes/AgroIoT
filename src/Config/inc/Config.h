@@ -23,6 +23,7 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhtype.h"
 #include "IOStatus.h"
+#include "ioChg.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -150,6 +151,11 @@ struct Config
      * restarting connection in seconds
      */
     rui8_t configTryDelay;
+
+    /**
+     * Specifies digital input's polarity 
+     */
+    DigInPol digInPolarity;
 };
 
 /* -------------------------- External variables --------------------------- */
@@ -202,6 +208,8 @@ void Config_setMaxNumConnectRetries(rui8_t value);
 rui8_t Config_getMaxNumConnectRetries(void);
 void Config_setConfigTryDelay(rui8_t value);
 rui8_t Config_getConfigTryDelay(void);
+void Config_setDigInPolarity(DigInPol value);
+DigInPol Config_getDigInPolarity(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

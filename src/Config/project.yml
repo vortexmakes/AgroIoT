@@ -40,6 +40,7 @@
     - ../BatChr
     - ../GStatus/inc
     - ../ffile/inc
+    - ../ioChg
     - ../
   :support:
     - test/support

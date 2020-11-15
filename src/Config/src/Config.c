@@ -58,7 +58,8 @@ static const Config cfgDft =
     REOPEN_DELAY_DFT,
     CONNECT_TRY_DELAY_DFT,
     MAX_NUM_CONNECT_RETRIES_DFT,
-    CONFIG_TRY_DELAY_DFT
+    CONFIG_TRY_DELAY_DFT,
+    DIGIN_POLARITY_DFT
 };
 
 /* ---------------------------- Local data types --------------------------- */
@@ -531,6 +532,25 @@ Config_getConfigTryDelay(void)
 
     cfg = Config_get();
     return cfg->configTryDelay;
+}
+
+void 
+Config_setDigInPolarity(DigInPol value)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    cfg->digInPolarity = value;
+    Config_set(cfg);
+}
+
+DigInPol
+Config_getDigInPolarity(void)
+{
+    Config *cfg;
+
+    cfg = Config_get();
+    return cfg->digInPolarity;
 }
 
 /* ------------------------------ End of file ------------------------------ */
