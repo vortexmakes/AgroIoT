@@ -33,12 +33,19 @@
     - ../gps/inc
     - ../../third-party/rkh/source/portable/test
     - ../../third-party/rkh/source/fwk/inc
+    - ../../third-party/rkh/source/sma/inc
+    - ../../third-party/rkh/source/sm/inc
+    - ../../third-party/rkh/source/queue/inc
+    - ../../third-party/rkh/source/mempool/inc
+    - ../../third-party/rkh/source/tmr/inc
+    - ../../third-party/rkh/source/trc/inc
     - ../tpsens/cbox
     - ../Collector/inc
     - ../BatChr
     - ../Config/inc
     - ../Crc32/inc
     - ../Trace/inc
+    - ../ioChg
   :support:
     - test/support
 
