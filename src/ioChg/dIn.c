@@ -25,6 +25,7 @@
 #include "signals.h"
 #include "events.h"
 #include "topic.h"
+#include "Config.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define DEBOUNCE_NSAMPLE    2
@@ -52,7 +53,9 @@ DigIn
 assembleDin(void)
 {
     DigInSignalId i;
-    DigIn status = DUMMY_MASK;
+    DigIn status;
+
+    status = Config_getDigInPolarity() == ActiveHigh ? 0 : DUMMY_MASK;
 
     for (i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
@@ -67,14 +70,29 @@ void
 dIn_init(void)
 {
     DigInSignalId i;
+    uint8_t pullSelect, initState;
+    unsigned char initFilter;
 
-    bsp_DigInPullSelect(pullSelect1, 0);
-    bsp_DigInPullSelect(pullSelect2, 0);
+    if( Config_getDigInPolarity() == ActiveHigh)
+    {
+        pullSelect = 0;
+        initState = 0;
+        initFilter = 0;
+    }
+    else
+    {
+        pullSelect = 1;
+        initState = 1;
+        initFilter = 0xFF;
+    }
+
+    bsp_DigInPullSelect(pullSelect1, pullSelect);
+    bsp_DigInPullSelect(pullSelect2, pullSelect);
 
     for (i = 0; i < NUM_DIN_SIGNALS; ++i)
     {
-        dIns[i] = 0xFF;
-        dInsSt[i] = 1;
+        dIns[i] = initFilter;
+        dInsSt[i] = initState;
     }
 }
 
