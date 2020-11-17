@@ -138,6 +138,7 @@ setupTraceFilters(void)
 int
 main(int argc, char *argv[])
 {
+	RKH_SR_ALLOC();
     InitMode mode;
     MInt flashCheck;
 
@@ -169,6 +170,7 @@ main(int argc, char *argv[])
     	}
     	for(;;);
     }
+
     StatQue_init();
     Config_init();
     bsp_setAllLeds(0);
@@ -183,6 +185,10 @@ main(int argc, char *argv[])
     ffile_init(mode);
     StatQue_init();
     Config_init();
+
+    dIn_init();
+    dOut_init();
+
     rkh_fwk_init();
     rkh_pubsub_init();
 

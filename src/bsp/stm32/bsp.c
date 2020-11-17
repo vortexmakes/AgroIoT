@@ -205,8 +205,6 @@ bsp_init(int argc, char *argv[])
     MX_CRC_Init();
 
     modPwr_init();
-    dIn_init();
-    dOut_init();
     usbDisk_init();
 }
 
