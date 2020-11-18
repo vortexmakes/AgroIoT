@@ -107,11 +107,13 @@ tearDown(void)
 }
 
 void
-test_Constructor(void)
+test_ConstructorWithDigInPolActiveLow(void)
 {
+    Config_getDigInPolarity_ExpectAndReturn(ActiveLow);
     rkh_sma_ctor_Expect(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
 
     Collector_ctor();
+
     TEST_ASSERT_NOT_NULL(me->vtbl.task);
     TEST_ASSERT_EQUAL(me, me->itsMapping.itsCollector);
     TEST_ASSERT_NULL(me->dev);
@@ -120,6 +122,27 @@ test_Constructor(void)
                              sizeof(Geo));
     TEST_ASSERT_EQUAL(MAPPING_STOP, me->status.data.devData.a.x);
     TEST_ASSERT_EQUAL(0xff, me->status.data.ioStatus.digIn);
+    TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digOut);
+    TEST_ASSERT_EQUAL(LINE_BATT, me->status.data.batChrStatus);
+    TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
+}
+
+void
+test_ConstructorWithDigInPolActiveHigh(void)
+{
+    Config_getDigInPolarity_ExpectAndReturn(ActiveHigh);
+    rkh_sma_ctor_Expect(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
+
+    Collector_ctor();
+
+    TEST_ASSERT_NOT_NULL(me->vtbl.task);
+    TEST_ASSERT_EQUAL(me, me->itsMapping.itsCollector);
+    TEST_ASSERT_NULL(me->dev);
+    TEST_ASSERT_EQUAL_MEMORY(&invalidPosition, 
+                             &me->status.data.position, 
+                             sizeof(Geo));
+    TEST_ASSERT_EQUAL(MAPPING_STOP, me->status.data.devData.a.x);
+    TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digIn);
     TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digOut);
     TEST_ASSERT_EQUAL(LINE_BATT, me->status.data.batChrStatus);
     TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);

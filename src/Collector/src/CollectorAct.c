@@ -65,6 +65,12 @@ static RKH_ROM_STATIC_EVENT(evNoMappingObj, evNoMapping);
 
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
+static rui8_t
+getDigInMask(void)
+{
+    return (Config_getDigInPolarity() == ActiveLow) ? 0xff : 0;
+}
+
 static void
 dispatch(RKH_SMA_T *me, void *arg)
 {
@@ -80,7 +86,7 @@ testDevNullJobCond(Collector *const me)
 {
     uint8_t mask;
 
-    mask = (Config_getDigInPolarity() == ActiveLow) ? 0xff : 0;
+    mask = getDigInMask();
     return (me->status.data.ioStatus.digIn != mask) ? true : false;
 }
 
@@ -135,7 +141,7 @@ Collector_ctor(void)
     me->vtbl.task = dispatch;
     me->status.data.position = invalidPosition;
     me->status.data.devData.a.x = MAPPING_STOP;
-    me->status.data.ioStatus.digIn = 0xff;
+    me->status.data.ioStatus.digIn = getDigInMask();
     me->status.data.ioStatus.digOut = 0;
     rkh_sma_ctor(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
 
