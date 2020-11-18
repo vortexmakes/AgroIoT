@@ -140,7 +140,12 @@ static
 rInt 
 exec_cmdStatus(YCmdParserData *pCmd)
 {
+    RKH_SR_ALLOC();
+
+	RKH_ENTER_CRITICAL_();
     Config_setDefault(pCmd->data.status);
+    Config_init();
+    RKH_EXIT_CRITICAL_();
     pCmd->p->reset = 1;
     return 0;
 }
