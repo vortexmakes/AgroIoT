@@ -173,6 +173,7 @@ main(int argc, char *argv[])
 
     StatQue_init();
     Config_init();
+    Config_setDefault(0);
     bsp_setAllLeds(0);
     for(;;);
 #else
