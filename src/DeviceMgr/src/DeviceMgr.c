@@ -178,6 +178,7 @@ init(DeviceMgr *const me, RKH_EVT_T *pe)
     RKH_SET_STATIC_EVENT(&me->tmr.evt, evTimeout);
     RKH_TMR_INIT(&me->tmr.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmr), NULL);
     ps_init();
+    deviceMgr->enableBackoff = false;
 }
 
 /* ............................ Effect actions ............................. */
@@ -257,7 +258,10 @@ ps_onStartCycle(void)
 void
 ps_onStop(void)
 {
-    ++deviceMgr->tries;
+    if (deviceMgr->enableBackoff == true)
+    {
+        ++deviceMgr->tries;
+    }
     topic_publish(Status, RKH_UPCAST(RKH_EVT_T, &evNoDevObj), 
                           RKH_UPCAST(RKH_SMA_T, deviceMgr));
 }

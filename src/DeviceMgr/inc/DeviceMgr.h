@@ -41,6 +41,7 @@ struct DeviceMgr
     uint32_t pollCycle;
     uint32_t tries;
     uint32_t backoff;
+    uint32_t enableBackoff;
 };
 
 RKH_SMA_DCLR_TYPE(DeviceMgr, deviceMgr);

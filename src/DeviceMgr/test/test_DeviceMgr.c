@@ -40,6 +40,9 @@
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
+#define EnableBackoff       true
+#define DisableBackoff      false
+
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
@@ -53,7 +56,7 @@ static RKH_STATIC_EVENT(event, 0);
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void
-initDeviceMgr(void)
+initDeviceMgr(bool enableBackoff)
 {
     rkh_trc_isoff__IgnoreAndReturn(false);
     rkh_trc_ao_Ignore();
@@ -64,6 +67,10 @@ initDeviceMgr(void)
     ps_init_Ignore();
 
     rkh_sm_init(RKH_UPCAST(RKH_SM_T, deviceMgr));
+    if (enableBackoff == true)
+    {
+        deviceMgr->enableBackoff = true;    /* force to true to test it */
+    }
 }
 
 static void
@@ -73,7 +80,11 @@ activeDeviceMgr(void)
     Config_getDevPollCycleTime_ExpectAndReturn(DEV_POLL_CYCLE_TIME_DFT);
     ps_start_Expect();
 
-    ++deviceMgr->tries; /* set on ps_onStop() */
+    if (deviceMgr->enableBackoff == true)
+    {
+        ++deviceMgr->tries; /* set on ps_onStop() */
+                            /* if enableBackoff is true */
+    }
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
 }
 
@@ -91,8 +102,31 @@ tearDown(void)
 void
 test_InitPollCycle(void)
 {
-    initDeviceMgr();
+    initDeviceMgr(DisableBackoff);
     activeDeviceMgr();
+
+    TEST_ASSERT_EQUAL(0, deviceMgr->tries);
+    TEST_ASSERT_EQUAL(0, deviceMgr->backoff);
+    TEST_ASSERT_EQUAL(false, deviceMgr->enableBackoff);
+    TEST_ASSERT_EQUAL(DEV_POLL_CYCLE_TIME_DFT, deviceMgr->pollCycle);
+}
+
+void
+test_SetPollCycleWithDisabledBackoff(void)
+{
+    initDeviceMgr(DisableBackoff);
+    activeDeviceMgr();
+
+    RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
+    Config_getDevPollCycleTime_ExpectAndReturn(DEV_POLL_CYCLE_TIME_DFT);
+    rkh_enter_critical_Ignore();
+    rkh_exit_critical_Ignore();
+    rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
+                         RKH_UPCAST(RKH_SMA_T, deviceMgr), 
+                         RKH_TIME_SEC(DEV_POLL_CYCLE_TIME_DFT), 
+                         0);
+
+    rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
 
     TEST_ASSERT_EQUAL(0, deviceMgr->tries);
     TEST_ASSERT_EQUAL(0, deviceMgr->backoff);
@@ -102,10 +136,14 @@ test_InitPollCycle(void)
 void
 test_SetPollCycleWoutDevicesFirstTime(void)
 {
-    initDeviceMgr();
+    initDeviceMgr(EnableBackoff);
     activeDeviceMgr();
 
-    ++deviceMgr->tries; /* set by ps_onStop() callback */
+    if (deviceMgr->enableBackoff == true)
+    {
+        ++deviceMgr->tries; /* set on ps_onStop() */
+                            /* if enableBackoff is true */
+    }
     RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
     rkh_enter_critical_Ignore();
     rkh_exit_critical_Ignore();
@@ -124,7 +162,7 @@ test_SetPollCycleWoutDevicesFirstTime(void)
 void
 test_SetPollCycleWithConnectedDevices(void)
 {
-    initDeviceMgr();
+    initDeviceMgr(EnableBackoff);
     activeDeviceMgr();
 
     deviceMgr->tries = 0; /* set by ps_onStationRecv() callback */
@@ -145,10 +183,14 @@ test_SetPollCycleWithConnectedDevices(void)
 void
 test_SetPollCycleWoutDevicesReachingMaxNumTriesOnce(void)
 {
-    initDeviceMgr();
+    initDeviceMgr(EnableBackoff);
     activeDeviceMgr();
 
-    deviceMgr->tries = DEV_MAX_NUM_TRIES; /* set by ps_onStop() callback */
+    if (deviceMgr->enableBackoff == true)
+    {
+        deviceMgr->tries = DEV_MAX_NUM_TRIES; /* set by ps_onStop() callback */
+                                              /* if enableBackoff is true */
+    }
     RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
     rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
                          RKH_UPCAST(RKH_SMA_T, deviceMgr), 
@@ -167,10 +209,14 @@ test_SetPollCycleWoutDevicesReachingMaxNumTriesMaxNumBackoffTimes(void)
 {
     uint32_t pollCycleTime;
 
-    initDeviceMgr();
+    initDeviceMgr(EnableBackoff);
     activeDeviceMgr();
 
-    deviceMgr->tries = DEV_MAX_NUM_TRIES; /* set by ps_onStop() callback */
+    if (deviceMgr->enableBackoff == true)
+    {
+        deviceMgr->tries = DEV_MAX_NUM_TRIES; /* set by ps_onStop() callback */
+                                              /* if enableBackoff is true */
+    }
     deviceMgr->backoff = DEV_MAX_NUM_BACKOFF;
     pollCycleTime = (DEV_POLL_CYCLE_TIME_DFT << DEV_MAX_NUM_BACKOFF);
     deviceMgr->pollCycle = pollCycleTime;
