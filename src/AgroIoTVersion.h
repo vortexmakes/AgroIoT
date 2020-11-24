@@ -46,7 +46,7 @@ extern "C" {
  *  For example, the code for version 2.2.04 is 0x220400 and the code 
  *  for version 2.2.04-beta.2 is 0x220402
  */
-#define AGROIOT_VERSION         0x090011
+#define AGROIOT_VERSION         0x090000
 
 /**
  *  \brief
