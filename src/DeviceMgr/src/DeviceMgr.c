@@ -200,7 +200,7 @@ restartPs(DeviceMgr *const me, RKH_EVT_T *pe)
     (void)me;
     (void)pe;
 
-    ps_restart();
+    ps_start();
 }
 
 static void
