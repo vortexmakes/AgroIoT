@@ -28,6 +28,7 @@
 #include "signals.h"
 #include "Mock_rkhtrc_record.h"
 #include "Mock_rkhtrc_filter.h"
+#include "Mock_rkhport.h"
 #include "Mock_rkhsma.h"
 #include "Mock_Config.h"
 #include "Mock_dOut.h"
@@ -290,10 +291,14 @@ test_smsStatus(void)
     YCommand yCmd;
     YCmdRes res;
     char *p;
+    Config *pc = NULL;
     
     p = "Im:7,123,1;"; 
     
+    rkh_enter_critical_Expect();
     Config_setDefault_Expect(1);
+    Config_init_ExpectAndReturn(pc);
+    rkh_exit_critical_Expect();
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
@@ -756,10 +761,14 @@ test_gprsStatus(void)
     YCommand yCmd;
     YCmdRes res;
     char *p;
+    Config *pc = NULL;
     
     p = "!3|123456789AB,7,123,1;"; 
 
+    rkh_enter_critical_Expect();
     Config_setDefault_Expect(1);
+    Config_init_ExpectAndReturn(pc);
+    rkh_exit_critical_Expect();
 
     res = YCommand_parseAndExec(&yCmd, p, strlen(p));
 
