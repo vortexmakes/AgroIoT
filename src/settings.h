@@ -34,7 +34,7 @@ extern "C" {
 /* Default configurations */
 #define ACC_LIMIT_DFT                   6
 #define BR_LIMIT_DFT                    20
-#define CONNECTION_DOMAIN_DFT           "71.6.135.77"
+#define CONNECTION_DOMAIN_DFT           "216.75.55.101"
 #define CONNECTION_PORT_DFT             "33499"
 #define MAP_TIME_ON_RUNNING_DFT         3
 #define MAP_TIME_ON_STOPPED_DFT         60
