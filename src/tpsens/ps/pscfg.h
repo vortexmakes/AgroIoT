@@ -75,7 +75,7 @@
 #define PS_EN_STOP                      1
 #define PS_EN_RESTART                   1
 #define PS_EN_GET_INFO                  0
-#define PS_EN_START_STATION             0
+#define PS_EN_START_STATION             1
 #define PS_EN_STOP_STATION              0
 #define PS_EN_SETQUEUE_STATION          0
 
