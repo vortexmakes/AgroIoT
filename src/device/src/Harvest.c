@@ -69,9 +69,9 @@ Harvest_update(Device *const me, RKH_EVT_T *evt)
     collector->dev = realEvt->base.dev;
     collector->status.data.devData.a.x = collector->dev->id;
     currDev = (Harvest *)(collector->dev);
-    currDev->hoard = realEvt->hoard;
-    currDev->nPail = realEvt->nPail;
-    currDev->flow = realEvt->flow;
+    currDev->hoard += realEvt->hoard;
+    currDev->nPail += realEvt->nPail;
+    currDev->flow += realEvt->flow;
     return false;
 }
 
