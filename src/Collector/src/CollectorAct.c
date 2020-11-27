@@ -303,6 +303,13 @@ Mapping_syncDir(Mapping *const me, RKH_EVT_T *pe)
     me->nStoreLastSync = 0;
 }
 
+void
+Mapping_storeStatusAndSync(Mapping *const me, RKH_EVT_T *pe)
+{
+    storeStatus(me);
+    device_clear(me->itsCollector->dev);
+}
+
 /* ............................. Entry actions ............................. */
 void
 Collector_enActive(Collector *const me)

@@ -48,6 +48,7 @@ void Collector_deinitBackup(Collector *const me, RKH_EVT_T *pe);
 void Collector_updateFlowmeter(Collector *const me, RKH_EVT_T *pe);
 void Mapping_storeStatus(Mapping *const me, RKH_EVT_T *pe);
 void Mapping_syncDir(Mapping *const me, RKH_EVT_T *pe);
+void Mapping_storeStatusAndSync(Mapping *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 void Collector_enActive(Collector *const me);

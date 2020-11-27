@@ -77,7 +77,8 @@ device_updateRaw(Device *const me)
 void 
 device_clear(Device *const me)
 {
-    if ((me != (Device *)0) && (me->vptr->clear != (ClearOper)0))
+    if ((me != (Device *)0)                     /* device is not connected */
+         && (me->vptr->clear != (ClearOper)0))  /* oper is not implemented */
     {
         (*me->vptr->clear)(me);
     }
