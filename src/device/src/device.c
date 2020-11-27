@@ -74,4 +74,13 @@ device_updateRaw(Device *const me)
     (*me->vptr->updateRaw)(me);
 }
 
+void 
+device_clear(Device *const me)
+{
+    if ((me != (Device *)0) && (me->vptr->clear != (ClearOper)0))
+    {
+        (*me->vptr->clear)(me);
+    }
+}
+
 /* ------------------------------ End of file ------------------------------ */

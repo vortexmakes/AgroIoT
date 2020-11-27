@@ -122,6 +122,13 @@ DevA_updateRaw(Device *const me)
     ((Collector *)(me->collector))->status.data.devData.a.z = ((DevA *)me)->y;
 }
 
+static void
+DevA_clear(Device *const me)
+{
+    ((DevA *)me)->x = 0;
+    ((DevA *)me)->y = 0;
+}
+
 static Device *
 DevA_ctor(int xMin, int xMax, int yMin) /* Parameters of job condition */
 {
@@ -129,7 +136,8 @@ DevA_ctor(int xMin, int xMax, int yMin) /* Parameters of job condition */
     static DevVtbl vtbl = {DevA_test,
                            DevA_makeEvt,
                            DevA_update,
-                           DevA_updateRaw};
+                           DevA_updateRaw,
+                           DevA_clear};
 
     DevA *me = &devA;
     device_ctor((Device *)me, DEVA, (RKH_SMA_T *)collector,
@@ -295,6 +303,54 @@ test_UpdateRawData(void)
     device_updateRaw(dev);
     TEST_ASSERT_EQUAL(4, me->status.data.devData.a.y);
     TEST_ASSERT_EQUAL(8, me->status.data.devData.a.z);
+}
+
+void
+test_ClearDeviceAttributes(void)
+{
+    Device *dev;                    /* collector attribute */
+    Collector *me;
+
+    me = RKH_DOWNCAST(Collector, collector);
+    devAObj = DevA_ctor(2, 8, 3);   /* from main() */
+    me->dev = devAObj;              /* connected device */
+    dev = me->dev;
+    ((DevA *)dev)->x = 4;
+    ((DevA *)dev)->y = 5;
+
+    device_clear(dev);
+
+    TEST_ASSERT_EQUAL(DEVA, dev->id);
+    TEST_ASSERT_EQUAL(0, ((DevA *)dev)->x);
+    TEST_ASSERT_EQUAL(0, ((DevA *)dev)->y);
+}
+
+void
+test_CallClearWithNullDevice(void)
+{
+    Device *dev;                    /* collector attribute */
+    Collector *me;
+
+    me = RKH_DOWNCAST(Collector, collector);
+    me->dev = (Device *)0;          /* there is no device connected */
+    dev = me->dev;
+
+    device_clear(dev);
+}
+
+void
+test_CallClearWithoutClearOperation(void)
+{
+    Device *dev;                    /* collector attribute */
+    Collector *me;
+
+    me = RKH_DOWNCAST(Collector, collector);
+    devAObj = DevA_ctor(2, 8, 3);   /* from main() */
+    me->dev = devAObj;              /* connected device */
+    dev = me->dev;
+    dev->vptr->clear = (ClearOper)0;    /* undefined clear operation */
+
+    device_clear(dev);
 }
 
 /* ------------------------------ End of file ------------------------------ */
