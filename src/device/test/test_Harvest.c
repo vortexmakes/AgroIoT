@@ -233,4 +233,36 @@ test_TestOperation(void)
     TEST_ASSERT_EQUAL(true, result);
 }
 
+void
+test_ClearAttributes(void)
+{
+    Device *dev;                    /* collector attribute */
+    Collector *me;
+    Harvest *harvest;
+
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
+                       (DevVtbl *)0);
+    device_ctor_IgnoreArg_jobCond();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
+
+    me = RKH_DOWNCAST(Collector, collector);
+    dev = Harvest_ctor(0);
+
+    ((Harvest *)dev)->hoard = 4;
+    ((Harvest *)dev)->nPail = 5;
+    ((Harvest *)dev)->flow = 6;
+
+    (*dev->vptr->clear)(dev);
+
+    harvest = (Harvest *)me->dev;
+    TEST_ASSERT_EQUAL(dev, me->dev);
+    TEST_ASSERT_EQUAL(0, harvest->hoard);
+    TEST_ASSERT_EQUAL(0, harvest->nPail);
+    TEST_ASSERT_EQUAL(0, harvest->flow);
+}
+
 /* ------------------------------ End of file ------------------------------ */

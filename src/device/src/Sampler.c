@@ -88,7 +88,8 @@ Sampler_updateRaw(Device *const me)
 static DevVtbl vtbl = {Sampler_test,
                        Sampler_makeEvt,
                        Sampler_update,
-                       Sampler_updateRaw};
+                       Sampler_updateRaw,
+                       (ClearOper)0};
 
 /* ---------------------------- Global functions --------------------------- */
 Device *

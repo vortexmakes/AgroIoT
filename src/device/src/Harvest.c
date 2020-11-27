@@ -85,10 +85,24 @@ Harvest_updateRaw(Device *const me)
     rawData->h.flow = ((Harvest *)me)->flow;
 }
 
+static void
+Harvest_clear(Device *const me)
+{
+    Harvest *realMe;
+    Collector *collector;
+
+    collector = (Collector *)(me->collector);
+    realMe = (Harvest *)(collector->dev);
+    realMe->hoard = 0;
+    realMe->nPail = 0;
+    realMe->flow = 0;
+}
+
 static DevVtbl vtbl = {Harvest_test,
                        Harvest_makeEvt,
                        Harvest_update,
-                       Harvest_updateRaw};
+                       Harvest_updateRaw,
+                       Harvest_clear};
 
 /* ---------------------------- Global functions --------------------------- */
 Device *
