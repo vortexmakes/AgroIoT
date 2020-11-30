@@ -39,7 +39,7 @@ extern "C" {
 #define MAP_TIME_ON_RUNNING_DFT         3
 #define MAP_TIME_ON_STOPPED_DFT         60
 #define CONN_TIME_DFT                   60
-#define DEV_POLL_CYCLE_TIME_DFT         1
+#define DEV_POLL_CYCLE_TIME_DFT         1000
 #define MAX_NUM_FRAMES_TO_SEND_DFT      100
 #define UPDATE_GPS_TIME                 2
 #define DFT_DIG_OUT_DFT                 0

@@ -76,7 +76,7 @@ enum Signals
     evTurn,
     evDigInChanged,
     evRestart,
-    evEndOfCycle,
+    evEndOfPolling,
     evSensorData,
     evTerminate,     /* press the key escape on the keyboard */
     evDevData,

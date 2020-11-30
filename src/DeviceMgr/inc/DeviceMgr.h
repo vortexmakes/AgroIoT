@@ -11,6 +11,7 @@
 /* -------------------------------- Authors -------------------------------- */
 /*
  *  DaBa  Dario Baliña db@vortexmakes.com
+ *  LeFr  Leandro Francucci lf@vortexmakes.com
  */
 
 /* --------------------------------- Notes --------------------------------- */
@@ -28,9 +29,6 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-#define DEV_MAX_NUM_TRIES       10
-#define DEV_MAX_NUM_BACKOFF     5
-
 /* ................................ Signals ................................ */
 /* ........................ Declares active object ......................... */
 typedef struct DeviceMgr DeviceMgr;
@@ -38,10 +36,7 @@ struct DeviceMgr
 {
     RKH_SMA_T ao;       /* Base structure */
     RKHTmEvt tmr;
-    uint32_t pollCycle;
-    uint32_t tries;
-    uint32_t backoff;
-    uint32_t enableBackoff;
+    uint32_t pollPer;   /* Polling period */
 };
 
 RKH_SMA_DCLR_TYPE(DeviceMgr, deviceMgr);
