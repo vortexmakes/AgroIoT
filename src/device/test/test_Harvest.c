@@ -163,9 +163,6 @@ void
 test_UpdateOperation(void)
 {
     Device *dev;
-    uint16_t hoardExpect = 2;
-    uint16_t nPailExpect = 4;
-    uint16_t flowExpect = 6;
     EvtHarvestData evtHarvestData;
     RKH_EVT_T *evt;
     Harvest *harvest;
@@ -184,19 +181,23 @@ test_UpdateOperation(void)
 
     dev = Harvest_ctor(0);
 
-    evtHarvestData.base.dev = dev;
-    evtHarvestData.hoard = hoardExpect;
-    evtHarvestData.nPail = nPailExpect;
-    evtHarvestData.flow = flowExpect;
+    ((Harvest *)dev)->hoard = 1;
+    ((Harvest *)dev)->nPail = 2;
+    ((Harvest *)dev)->flow = 3;
+
+    evtHarvestData.base.dev = dev;  /* Receiving an evEvtDevData */
+    evtHarvestData.hoard = 4;
+    evtHarvestData.nPail = 5;
+    evtHarvestData.flow = 6;
     evt = (RKH_EVT_T *)&evtHarvestData;
 
     result = (*dev->vptr->update)(dev, evt);
 
     harvest = (Harvest *)me->dev;
     TEST_ASSERT_EQUAL(dev, me->dev);
-    TEST_ASSERT_EQUAL(hoardExpect, harvest->hoard);
-    TEST_ASSERT_EQUAL(nPailExpect, harvest->nPail);
-    TEST_ASSERT_EQUAL(flowExpect, harvest->flow);
+    TEST_ASSERT_EQUAL(1 + 4, harvest->hoard);
+    TEST_ASSERT_EQUAL(2 + 5, harvest->nPail);
+    TEST_ASSERT_EQUAL(3 + 6, harvest->flow);
     TEST_ASSERT_EQUAL(false, result);
 }
 
@@ -231,6 +232,38 @@ test_TestOperation(void)
 
     result = (*dev->vptr->test)(dev);
     TEST_ASSERT_EQUAL(true, result);
+}
+
+void
+test_ClearAttributes(void)
+{
+    Device *dev;                    /* collector attribute */
+    Collector *me;
+    Harvest *harvest;
+
+    device_ctor_Expect(HarvestSpy_getObj(),
+                       HARVEST,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
+                       (DevVtbl *)0);
+    device_ctor_IgnoreArg_jobCond();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
+
+    me = RKH_DOWNCAST(Collector, collector);
+    dev = Harvest_ctor(0);
+
+    ((Harvest *)dev)->hoard = 4;
+    ((Harvest *)dev)->nPail = 5;
+    ((Harvest *)dev)->flow = 6;
+
+    (*dev->vptr->clear)(dev);
+
+    harvest = (Harvest *)me->dev;
+    TEST_ASSERT_EQUAL(dev, me->dev);
+    TEST_ASSERT_EQUAL(0, harvest->hoard);
+    TEST_ASSERT_EQUAL(0, harvest->nPail);
+    TEST_ASSERT_EQUAL(0, harvest->flow);
 }
 
 /* ------------------------------ End of file ------------------------------ */

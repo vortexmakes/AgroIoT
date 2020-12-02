@@ -245,4 +245,24 @@ test_TestOperation(void)
     TEST_ASSERT_EQUAL(false, result);
 }
 
+void
+test_UndefinedClearOperation(void)
+{
+    Device *dev;                    /* collector attribute */
+
+    device_ctor_Expect(SamplerSpy_getObj(),
+                       SAMPLER,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
+                       (DevVtbl *)0);
+    device_ctor_IgnoreArg_jobCond();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
+
+    dev = Sampler_ctor();
+
+    TEST_ASSERT_NOT_NULL(dev);
+    TEST_ASSERT_NULL(dev->vptr->clear);
+}
+
 /* ------------------------------ End of file ------------------------------ */

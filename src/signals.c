@@ -76,7 +76,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evDigInChanged);
     RKH_TR_FWK_SIG(evDigOutChanged);
     RKH_TR_FWK_SIG(evRestart);
-    RKH_TR_FWK_SIG(evEndOfCycle);
+    RKH_TR_FWK_SIG(evEndOfPolling);
     RKH_TR_FWK_SIG(evSensorData);
     RKH_TR_FWK_SIG(evTerminate);
     RKH_TR_FWK_SIG(evDevData);

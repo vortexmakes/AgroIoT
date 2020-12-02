@@ -205,4 +205,31 @@ test_TestOperation(void)
     TEST_ASSERT_EQUAL(false, result);
 }
 
+void
+test_ClearOperation(void)
+{
+    Device *dev;
+    int xExpect = 0;
+    Skeleton *skeleton;
+    Collector *me;
+
+    me = RKH_DOWNCAST(Collector, collector);
+    device_ctor_Expect(SkeletonSpy_getObj(),
+                       SKELETON,
+                       (RKH_SMA_T *)collector,
+                       (JobCond *)0,
+                       (DevVtbl *)0);
+    device_ctor_IgnoreArg_jobCond();
+    device_ctor_IgnoreArg_vtbl();
+    device_ctor_StubWithCallback(Mock_device_ctor_Callback);
+
+    dev = Skeleton_ctor(4);
+
+    (*dev->vptr->clear)(dev);
+
+    skeleton = (Skeleton *)me->dev;
+    TEST_ASSERT_EQUAL(dev, me->dev);
+    TEST_ASSERT_EQUAL(xExpect, skeleton->x);
+}
+
 /* ------------------------------ End of file ------------------------------ */

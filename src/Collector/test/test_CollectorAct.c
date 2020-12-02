@@ -487,6 +487,45 @@ test_StoreStatus(void)
 }
 
 void
+test_StoreStatusAndSyncWithoutDeviceConnected(void)
+{
+    int n;
+    Mapping *region;
+
+    region = &me->itsMapping;
+    region->itsCollector->dev = (Device *)0;
+    region->nStoreLastSync = n = 20;
+    GStatus_setChecksum_Expect(&region->itsCollector->status);
+    StatQue_put_ExpectAndReturn(0, 0);
+    StatQue_put_IgnoreArg_elem();
+    Backup_store_ExpectAndReturn(&region->itsCollector->status, Backup_Ok);
+    device_clear_Expect(region->itsCollector->dev);
+
+    Mapping_storeStatusAndSync(region, (RKH_EVT_T *)0);
+    TEST_ASSERT_EQUAL(n + 1, me->itsMapping.nStoreLastSync);
+}
+
+void
+test_StoreStatusAndSync(void)
+{
+    int n;
+    Mapping *region;
+    Device device;
+
+    region = &me->itsMapping;
+    region->itsCollector->dev = &device;
+    region->nStoreLastSync = n = 20;
+    GStatus_setChecksum_Expect(&region->itsCollector->status);
+    StatQue_put_ExpectAndReturn(0, 0);
+    StatQue_put_IgnoreArg_elem();
+    Backup_store_ExpectAndReturn(&region->itsCollector->status, Backup_Ok);
+    device_clear_Expect(region->itsCollector->dev);
+
+    Mapping_storeStatusAndSync(region, (RKH_EVT_T *)0);
+    TEST_ASSERT_EQUAL(n + 1, me->itsMapping.nStoreLastSync);
+}
+
+void
 test_syncDir(void)
 {
     Mapping *region;

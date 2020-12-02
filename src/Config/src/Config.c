@@ -288,7 +288,7 @@ Config_getConnTime(void)
 }
 
 void
-Config_setDevPollCycleTime(rui8_t value)
+Config_setDevPollCycleTime(rui16_t value)
 {
     Config *cfg;
 
@@ -297,7 +297,7 @@ Config_setDevPollCycleTime(rui8_t value)
     Config_set(cfg);
 }
 
-rui8_t
+rui16_t
 Config_getDevPollCycleTime(void)
 {
     Config *cfg;
