@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_VwSC0P8vEemOF-Zd97UPAA" specification="@EventDriven&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;&#xA;interface:&#xA;// Define events&#xA;// and variables here. &#xA;// Use CTRL + Space for content assist.&#xA;internal:&#xA;&#x9;event evMapping&#xA;&#x9;event evNoMapping&#xA;&#x9;event evTerminate&#xA;&#x9;&#xA;&#x9;operation init()&#xA;&#x9;operation isSyncDirOnStopped(): boolean&#xA;&#x9;operation syncDir()&#xA;&#x9;operation getMapTimeOnStop(): integer&#xA;&#x9;operation storeStatus()&#xA;&#x9;operation isSyncDirOnRunning(): boolean&#xA;&#x9;operation getMapTimeOnRunning(): integer" name="CollectoMapping">
+  <sgraph:Statechart xmi:id="_VwSC0P8vEemOF-Zd97UPAA" specification="@EventDriven&#xA;// Use the event driven execution model.&#xA;// Runs a run-to-completion step&#xA;// each time an event is raised.&#xA;// Switch to cycle based behavior&#xA;// by specifying '@CycleBased(200)'&#xA;// instead.&#xA;&#xA;@ChildFirstExecution&#xA;// In composite states, execute&#xA;// child states first.&#xA;// @ParentFirstExecution does the opposite.&#xA;&#xA;interface:&#xA;// Define events&#xA;// and variables here. &#xA;// Use CTRL + Space for content assist.&#xA;internal:&#xA;&#x9;event evMapping&#xA;&#x9;event evNoMapping&#xA;&#x9;event evTerminate&#xA;&#x9;&#xA;&#x9;operation init()&#xA;&#x9;operation isSyncDirOnStopped(): boolean&#xA;&#x9;operation syncDir()&#xA;&#x9;operation storeStatus()&#xA;&#x9;operation isSyncDirOnRunning(): boolean&#xA;&#x9;operation storeStatusAndSync()" name="CollectoMapping">
     <regions xmi:id="_VwSp4P8vEemOF-Zd97UPAA" name="Mapping">
       <vertices xsi:type="sgraph:Entry" xmi:id="_aO4VEP8vEemOF-Zd97UPAA">
         <outgoingTransitions xmi:id="_aO4VEf8vEemOF-Zd97UPAA" specification="/ init()" target="_aO48IP8vEemOF-Zd97UPAA"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_aO48IP8vEemOF-Zd97UPAA" specification="" name="Active" incomingTransitions="_aO4VEf8vEemOF-Zd97UPAA">
+      <vertices xsi:type="sgraph:State" xmi:id="_aO48IP8vEemOF-Zd97UPAA" specification="evTurn/ storeStatus()" name="Active" incomingTransitions="_aO4VEf8vEemOF-Zd97UPAA">
         <outgoingTransitions xmi:id="_FtoVALivEeqmj4PiveOg9Q" specification="evTerminate" target="_ENNEELivEeqmj4PiveOg9Q"/>
         <regions xmi:id="_aO6xav8vEemOF-Zd97UPAA" name="r1">
           <vertices xsi:type="sgraph:State" xmi:id="_aO6xa_8vEemOF-Zd97UPAA" specification="" name="Stopped" incomingTransitions="_aO7YbP8vEemOF-Zd97UPAA _aO7_ff8vEemOF-Zd97UPAA _aO7_f_8vEemOF-Zd97UPAA _aO7_hv8vEemOF-Zd97UPAA _aO7_iP8vEemOF-Zd97UPAA">
@@ -16,7 +16,7 @@
             <outgoingTransitions xmi:id="_aO7YbP8vEemOF-Zd97UPAA" specification="" target="_aO6xa_8vEemOF-Zd97UPAA"/>
           </vertices>
           <vertices xsi:type="sgraph:State" xmi:id="_aO7Ybf8vEemOF-Zd97UPAA" name="Running" incomingTransitions="_aO7YYf8vEemOF-Zd97UPAA _aO7_dP8vEemOF-Zd97UPAA _aO7_ev8vEemOF-Zd97UPAA">
-            <outgoingTransitions xmi:id="_aO7Yb_8vEemOF-Zd97UPAA" specification="every 3s /*getMapTimeOnRunning*//&#xD;&#xA;storeStatus()" target="_aO7_c_8vEemOF-Zd97UPAA"/>
+            <outgoingTransitions xmi:id="_aO7Yb_8vEemOF-Zd97UPAA" specification="every 3s /*getMapTimeOnRunning*//&#xD;&#xA;storeStatusAndSync()" target="_aO7_c_8vEemOF-Zd97UPAA"/>
             <outgoingTransitions xmi:id="_aO7Ydf8vEemOF-Zd97UPAA" specification="evNoMapping" target="_aO7_fP8vEemOF-Zd97UPAA"/>
           </vertices>
           <vertices xsi:type="sgraph:Choice" xmi:id="_aO7_c_8vEemOF-Zd97UPAA" incomingTransitions="_aO7Yb_8vEemOF-Zd97UPAA">

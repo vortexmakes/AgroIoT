@@ -65,6 +65,7 @@ RKH_CREATE_COMP_REGION_STATE(Mapping_Active, NULL, NULL, RKH_ROOT,
                              &Mapping_Stopped, NULL,
                              RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_TRANS_TABLE(Mapping_Active)
+RKH_TRINT(evTurn, NULL, Mapping_storeStatus),
 RKH_TRREG(evTerminate, NULL, NULL, &DevStatus_Final),
 RKH_END_TRANS_TABLE
 
