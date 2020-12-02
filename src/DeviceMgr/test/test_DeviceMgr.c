@@ -56,35 +56,31 @@ static RKH_STATIC_EVENT(event, 0);
 /* ----------------------- Local function prototypes ----------------------- */
 /* ---------------------------- Local functions ---------------------------- */
 static void
-initDeviceMgr(bool enableBackoff)
+init(void)
 {
     rkh_trc_isoff__IgnoreAndReturn(false);
     rkh_trc_ao_Ignore();
     rkh_trc_obj_Ignore();
     rkh_trc_state_Ignore();
 
-    rkh_tmr_init__Ignore();
+    Config_getDevPollCycleTime_ExpectAndReturn(DEV_POLL_CYCLE_TIME_DFT);
     ps_init_Ignore();
 
     rkh_sm_init(RKH_UPCAST(RKH_SM_T, deviceMgr));
-    if (enableBackoff == true)
-    {
-        deviceMgr->enableBackoff = true;    /* force to true to test it */
-    }
+    TEST_ASSERT_EQUAL(DEV_POLL_CYCLE_TIME_DFT, deviceMgr->pollPer);
 }
 
 static void
-activeDeviceMgr(void)
+active(void)
 {
     RKH_SET_STATIC_EVENT(&event, evOpen);
-    Config_getDevPollCycleTime_ExpectAndReturn(DEV_POLL_CYCLE_TIME_DFT);
     ps_start_Expect();
+    rkh_tmr_init__Ignore();
+    rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
+                         RKH_UPCAST(RKH_SMA_T, deviceMgr), 
+                         RKH_TIME_MS(deviceMgr->pollPer), 
+                         0);
 
-    if (deviceMgr->enableBackoff == true)
-    {
-        ++deviceMgr->tries; /* set on ps_onStop() */
-                            /* if enableBackoff is true */
-    }
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
 }
 
@@ -100,137 +96,90 @@ tearDown(void)
 }
 
 void
-test_InitPollCycle(void)
+test_Init(void)
 {
-    initDeviceMgr(DisableBackoff);
-    activeDeviceMgr();
+    rkh_trc_isoff__IgnoreAndReturn(false);
+    rkh_trc_ao_Ignore();
+    rkh_trc_obj_Ignore();
+    rkh_trc_state_Ignore();
 
-    TEST_ASSERT_EQUAL(0, deviceMgr->tries);
-    TEST_ASSERT_EQUAL(0, deviceMgr->backoff);
-    TEST_ASSERT_EQUAL(false, deviceMgr->enableBackoff);
-    TEST_ASSERT_EQUAL(DEV_POLL_CYCLE_TIME_DFT, deviceMgr->pollCycle);
-}
-
-void
-test_SetPollCycleWithDisabledBackoff(void)
-{
-    initDeviceMgr(DisableBackoff);
-    activeDeviceMgr();
-
-    RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
     Config_getDevPollCycleTime_ExpectAndReturn(DEV_POLL_CYCLE_TIME_DFT);
-    rkh_enter_critical_Ignore();
-    rkh_exit_critical_Ignore();
-    rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
-                         RKH_UPCAST(RKH_SMA_T, deviceMgr), 
-                         RKH_TIME_SEC(DEV_POLL_CYCLE_TIME_DFT), 
-                         0);
+    ps_init_Ignore();
 
-    rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
-
-    TEST_ASSERT_EQUAL(0, deviceMgr->tries);
-    TEST_ASSERT_EQUAL(0, deviceMgr->backoff);
-    TEST_ASSERT_EQUAL(DEV_POLL_CYCLE_TIME_DFT, deviceMgr->pollCycle);
+    rkh_sm_init(RKH_UPCAST(RKH_SM_T, deviceMgr));
+    TEST_ASSERT_EQUAL(DEV_POLL_CYCLE_TIME_DFT, deviceMgr->pollPer);
 }
 
 void
-test_SetPollCycleWoutDevicesFirstTime(void)
+test_ActivateAndStartPollingCycle(void)
 {
-    initDeviceMgr(EnableBackoff);
-    activeDeviceMgr();
+    init();
 
-    if (deviceMgr->enableBackoff == true)
-    {
-        ++deviceMgr->tries; /* set on ps_onStop() */
-                            /* if enableBackoff is true */
-    }
-    RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
-    rkh_enter_critical_Ignore();
-    rkh_exit_critical_Ignore();
+    RKH_SET_STATIC_EVENT(&event, evOpen);
+    ps_start_Expect();
+    rkh_tmr_init__Ignore();
     rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
                          RKH_UPCAST(RKH_SMA_T, deviceMgr), 
-                         RKH_TIME_SEC(DEV_POLL_CYCLE_TIME_DFT), 
+                         RKH_TIME_MS(deviceMgr->pollPer), 
                          0);
 
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
-
-    TEST_ASSERT_EQUAL(1, deviceMgr->tries);
-    TEST_ASSERT_EQUAL(0, deviceMgr->backoff);
-    TEST_ASSERT_EQUAL(DEV_POLL_CYCLE_TIME_DFT, deviceMgr->pollCycle);
 }
 
 void
-test_SetPollCycleWithConnectedDevices(void)
+test_PollingFinishedWaitingForEndOfCycle(void)
 {
-    initDeviceMgr(EnableBackoff);
-    activeDeviceMgr();
+    init();
+    active();
 
-    deviceMgr->tries = 0; /* set by ps_onStationRecv() callback */
-    RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
-    Config_getDevPollCycleTime_ExpectAndReturn(DEV_POLL_CYCLE_TIME_DFT);
-    rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
-                         RKH_UPCAST(RKH_SMA_T, deviceMgr), 
-                         RKH_TIME_SEC(DEV_POLL_CYCLE_TIME_DFT), 
-                         0);
-
+    RKH_SET_STATIC_EVENT(&event, evEndOfPolling);
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
-
-    TEST_ASSERT_EQUAL(0, deviceMgr->tries);
-    TEST_ASSERT_EQUAL(0, deviceMgr->backoff);
-    TEST_ASSERT_EQUAL(DEV_POLL_CYCLE_TIME_DFT, deviceMgr->pollCycle);
 }
 
 void
-test_SetPollCycleWoutDevicesReachingMaxNumTriesOnce(void)
+test_RestartThePollingCycle(void)
 {
-    initDeviceMgr(EnableBackoff);
-    activeDeviceMgr();
+    init();
+    active();
 
-    if (deviceMgr->enableBackoff == true)
-    {
-        deviceMgr->tries = DEV_MAX_NUM_TRIES; /* set by ps_onStop() callback */
-                                              /* if enableBackoff is true */
-    }
-    RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
+    RKH_SET_STATIC_EVENT(&event, evEndOfPolling);
+    rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
+
+    /* Exit from Active state */
+    RKH_SET_STATIC_EVENT(&event, evTimeout);
+    rkh_tmr_stop_ExpectAndReturn(&deviceMgr->tmr.tmr, false);
+    /* Exit from Starting state through its null transition */
+    ps_start_station_Expect(ADDR_NORIA);
+    ps_restart_Expect();
+    /* Finally, reenter to Active state */
+    rkh_tmr_init__Ignore();
     rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
                          RKH_UPCAST(RKH_SMA_T, deviceMgr), 
-                         RKH_TIME_SEC(DEV_POLL_CYCLE_TIME_DFT * 2), 
+                         RKH_TIME_MS(deviceMgr->pollPer), 
                          0);
 
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
-
-    TEST_ASSERT_EQUAL(0, deviceMgr->tries);
-    TEST_ASSERT_EQUAL(1, deviceMgr->backoff);
-    TEST_ASSERT_EQUAL(DEV_POLL_CYCLE_TIME_DFT * 2, deviceMgr->pollCycle);
 }
 
 void
-test_SetPollCycleWoutDevicesReachingMaxNumTriesMaxNumBackoffTimes(void)
+test_DisablePollingCycle(void)
 {
-    uint32_t pollCycleTime;
+    init();
 
-    initDeviceMgr(EnableBackoff);
-    activeDeviceMgr();
-
-    if (deviceMgr->enableBackoff == true)
-    {
-        deviceMgr->tries = DEV_MAX_NUM_TRIES; /* set by ps_onStop() callback */
-                                              /* if enableBackoff is true */
-    }
-    deviceMgr->backoff = DEV_MAX_NUM_BACKOFF;
-    pollCycleTime = (DEV_POLL_CYCLE_TIME_DFT << DEV_MAX_NUM_BACKOFF);
-    deviceMgr->pollCycle = pollCycleTime;
-    RKH_SET_STATIC_EVENT(&event, evEndOfCycle);
+    RKH_SET_STATIC_EVENT(&event, evOpen);
+    ps_start_Expect();
+    rkh_tmr_init__Ignore();
     rkh_tmr_start_Expect(&deviceMgr->tmr.tmr, 
                          RKH_UPCAST(RKH_SMA_T, deviceMgr), 
-                         RKH_TIME_SEC(pollCycleTime), 
+                         RKH_TIME_MS(deviceMgr->pollPer), 
                          0);
 
     rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
 
-    TEST_ASSERT_EQUAL(0, deviceMgr->tries);
-    TEST_ASSERT_EQUAL(DEV_MAX_NUM_BACKOFF, deviceMgr->backoff);
-    TEST_ASSERT_EQUAL(pollCycleTime, deviceMgr->pollCycle);
+    RKH_SET_STATIC_EVENT(&event, evClose);
+    rkh_tmr_stop_ExpectAndReturn(&deviceMgr->tmr.tmr, false);
+    ps_stop_Expect();
+    rkh_sm_dispatch(RKH_UPCAST(RKH_SM_T, deviceMgr), &event);
 }
 
 /* ------------------------------ End of file ------------------------------ */

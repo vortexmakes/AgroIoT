@@ -93,7 +93,8 @@ sprayer_updateRaw(Device *const me)
 static DevVtbl vtbl = {sprayer_test,
                        sprayer_makeEvt,
                        sprayer_update,
-                       sprayer_updateRaw};
+                       sprayer_updateRaw,
+                       (ClearOper)0};
 
 /* ---------------------------- Global functions --------------------------- */
 Device *

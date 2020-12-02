@@ -84,7 +84,7 @@ RKH_END_BRANCH_TABLE
 RKH_CREATE_BASIC_STATE(Mapping_Running, Mapping_enRunning,
                        Mapping_exRunning, &Mapping_Active, NULL);
 RKH_CREATE_TRANS_TABLE(Mapping_Running)
-RKH_TRREG(evToutSyncRunning, NULL, Mapping_storeStatus, &Mapping_C3),
+RKH_TRREG(evToutSyncRunning, NULL, Mapping_storeStatusAndSync, &Mapping_C3),
 RKH_TRREG(evNoMapping, NULL, NULL, &Mapping_C2),
 RKH_END_TRANS_TABLE
 

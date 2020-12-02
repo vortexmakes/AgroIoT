@@ -69,9 +69,9 @@ Harvest_update(Device *const me, RKH_EVT_T *evt)
     collector->dev = realEvt->base.dev;
     collector->status.data.devData.a.x = collector->dev->id;
     currDev = (Harvest *)(collector->dev);
-    currDev->hoard = realEvt->hoard;
-    currDev->nPail = realEvt->nPail;
-    currDev->flow = realEvt->flow;
+    currDev->hoard += realEvt->hoard;
+    currDev->nPail += realEvt->nPail;
+    currDev->flow += realEvt->flow;
     return false;
 }
 
@@ -85,10 +85,24 @@ Harvest_updateRaw(Device *const me)
     rawData->h.flow = ((Harvest *)me)->flow;
 }
 
+static void
+Harvest_clear(Device *const me)
+{
+    Harvest *realMe;
+    Collector *collector;
+
+    collector = (Collector *)(me->collector);
+    realMe = (Harvest *)(collector->dev);
+    realMe->hoard = 0;
+    realMe->nPail = 0;
+    realMe->flow = 0;
+}
+
 static DevVtbl vtbl = {Harvest_test,
                        Harvest_makeEvt,
                        Harvest_update,
-                       Harvest_updateRaw};
+                       Harvest_updateRaw,
+                       Harvest_clear};
 
 /* ---------------------------- Global functions --------------------------- */
 Device *

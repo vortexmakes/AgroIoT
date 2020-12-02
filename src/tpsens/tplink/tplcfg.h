@@ -76,8 +76,8 @@
 
 #if (TPLINK_VAR_FRMTOUT == 0)
 #ifndef TPLINK_FRMTOUT_DFT
-#define TPLINK_FRMTOUT_DFT      (1000 / TPLINK_BASE_TIME) /* Inter Frame timeout
-                                                           * in ms */
+#define TPLINK_FRMTOUT_DFT      (200 / TPLINK_BASE_TIME) /* Inter Frame timeout
+                                                          * in ms */
 #endif
 #endif
 

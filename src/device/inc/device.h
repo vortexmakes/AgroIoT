@@ -61,6 +61,9 @@ typedef bool (*UpdateOper)(Device *const me, RKH_EVT_T *evt);
 /** Collector transforms device's data to CBOX_STR class */
 typedef void (*UpdateRawOper)(Device *const me);
 
+/** Collector clear device's data */
+typedef void (*ClearOper)(Device *const me);
+
 struct JobCond
 {
     int id;
@@ -72,6 +75,7 @@ struct DevVtbl
     MakeEvtOper makeEvt;
     UpdateOper update;
     UpdateRawOper updateRaw;
+    ClearOper clear;
 };
 
 struct Device
@@ -97,6 +101,7 @@ RKH_EVT_T *device_makeEvt(Device *const me, CBOX_STR *rawData);
 bool device_update(Device *const me, RKH_EVT_T *evt);
 int device_test(Device *const me);
 void device_updateRaw(Device *const me);
+void device_clear(Device *const me);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

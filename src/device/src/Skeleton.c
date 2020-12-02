@@ -79,10 +79,22 @@ Skeleton_updateRaw(Device *const me)
     rawData->hum = ((Skeleton *)me)->x;
 }
 
+static void
+Skeleton_clear(Device *const me)
+{
+    Skeleton *currDev;
+    Collector *collector;
+
+    collector = (Collector *)(me->collector);
+    currDev = (Skeleton *)(collector->dev);
+    currDev->x = 0;
+}
+
 static DevVtbl vtbl = {Skeleton_test,
                        Skeleton_makeEvt,
                        Skeleton_update,
-                       Skeleton_updateRaw};
+                       Skeleton_updateRaw,
+                       Skeleton_clear};
 
 /* ---------------------------- Global functions --------------------------- */
 Device *

@@ -86,9 +86,10 @@ struct Config
     rui8_t connTime;
 
     /**
-     * Every devPollCycleTime seconds a polling cycle starts over the RS485.
+     * Every devPollCycleTime milliseconds a polling cycle starts over the 
+     * RS485.
      */
-    rui8_t devPollCycleTime;
+    rui16_t devPollCycleTime;
 
     /**
      * Max. number of frames (status) to send in a multiframe message.
@@ -182,8 +183,8 @@ void Config_setMapTimeOnStopped(rui8_t value);
 rui8_t Config_getMapTimeOnStopped(void);
 void Config_setConnTime(rui8_t value);
 rui8_t Config_getConnTime(void);
-void Config_setDevPollCycleTime(rui8_t value);
-rui8_t Config_getDevPollCycleTime(void);
+void Config_setDevPollCycleTime(rui16_t value);
+rui16_t Config_getDevPollCycleTime(void);
 void Config_setMaxNumFramesToSend(rui16_t value);
 rui16_t Config_getMaxNumFramesToSend(void);
 void Config_setUpdateGPSTime(rui8_t value);
