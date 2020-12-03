@@ -35,8 +35,7 @@ jobs:
               Cambios destacables:
               ${{github.event.release.body}}
             # Recipients mail addresses (separated with comma)
-            #to: lf@vortexmakes.com,df@vortexmakes.com,truelsegaard@gmail.com 
-            to: lf@vortexmakes.com
+            to: lf@vortexmakes.com,df@vortexmakes.com,truelsegaard@gmail.com 
             # Full name of mail sender (might be with an email address specified in <>)
             from: Yipies AgroIOT bot releaser
             # Content-Type HTTP header (text/html or text/plain)
