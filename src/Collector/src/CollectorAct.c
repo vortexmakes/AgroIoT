@@ -384,7 +384,11 @@ Mapping_exStopped(Mapping *const me)
 void
 Mapping_exRunning(Mapping *const me)
 {
+    /* cleanDevAttributes() */
     rkh_tmr_stop(&me->syncRunningTmr.tmr);
+    me->itsCollector->status.data.devData.h.hoard = 0;
+    me->itsCollector->status.data.devData.h.pqty = 0;
+    me->itsCollector->status.data.devData.h.flow = 0;
 }
 
 /* ................................ Guards ................................. */

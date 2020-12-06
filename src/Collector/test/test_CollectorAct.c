@@ -665,4 +665,21 @@ test_StoreStatusWhenSystemTurns(void)
     TEST_ASSERT_EQUAL(n + 1, me->itsMapping.nStoreLastSync);
 }
 
+void
+test_CleanDeviceAttributesWhenItIsNotMapping(void)
+{
+    Mapping *region;
+
+    region = &me->itsMapping;
+    region->itsCollector->status.data.devData.h.hoard = 0xaa;
+    region->itsCollector->status.data.devData.h.pqty = 0x55;
+    region->itsCollector->status.data.devData.h.flow = 0xaa;
+    rkh_tmr_stop_ExpectAndReturn(&region->syncRunningTmr.tmr, 0);
+
+    Mapping_exRunning(region);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.hoard);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.flow);
+}
+
 /* ------------------------------ End of file ------------------------------ */
