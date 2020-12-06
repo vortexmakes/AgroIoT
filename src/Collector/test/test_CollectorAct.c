@@ -125,6 +125,10 @@ test_ConstructorWithDigInPolActiveLow(void)
     TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digOut);
     TEST_ASSERT_EQUAL(LINE_BATT, me->status.data.batChrStatus);
     TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
+    TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.hoard);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.flow);
 }
 
 void
@@ -145,7 +149,9 @@ test_ConstructorWithDigInPolActiveHigh(void)
     TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digIn);
     TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digOut);
     TEST_ASSERT_EQUAL(LINE_BATT, me->status.data.batChrStatus);
-    TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.hoard);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.flow);
 }
 
 void

@@ -143,6 +143,9 @@ Collector_ctor(void)
     me->status.data.devData.a.x = MAPPING_STOP;
     me->status.data.ioStatus.digIn = getDigInMask();
     me->status.data.ioStatus.digOut = 0;
+    me->status.data.devData.h.hoard = 0;
+    me->status.data.devData.h.pqty = 0;
+    me->status.data.devData.h.flow = 0;
     rkh_sma_ctor(RKH_UPCAST(RKH_SMA_T, me), &me->vtbl);
 
     me->itsMapping.itsCollector = me;
