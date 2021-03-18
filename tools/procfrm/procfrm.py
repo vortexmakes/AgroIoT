@@ -48,6 +48,7 @@ class Frame:
     Term = '#'
     Types = {'0': 'SGP', '1': 'MSG'}
     FlagValid = {0: 'v', 1: 'a'}
+    FlagMotion = {0: 's', 1: 'm'}
     DigInOutValue = {0: 'o', 1: 'c'}
     header = ''
     utc = ''
@@ -190,7 +191,7 @@ class Frame:
         self.db.valid = self.FlagValid[getBitValue(self.Header.flags.dec, 0)]
         self.db.lbatt = getBitValue(self.Header.flags.dec, 3)
         self.db.abreak = self.BatChr.dec
-        self.db.motion = getBitValue(self.Header.flags.dec, 2)
+        self.db.motion = self.FlagMotion[getBitValue(self.Header.flags.dec, 2)]
         self.db.in1 = self.DigInOutValue[getBitValue(self.Dig.DigOut.dec, 0)]
         self.db.in2 = self.DigInOutValue[getBitValue(self.Dig.DigOut.dec, 1)]
         self.db.in3 = self.DigInOutValue[getBitValue(self.Dig.DigOut.dec, 2)]
@@ -219,10 +220,10 @@ class Frame:
         print("ycoord = {0:s}".format(self.db.ycoord))
         print("speed  = {0:s}".format(self.db.speed))
         print("time   = {0:s}".format(self.db.time))
-        print("valid  = {}".format(self.db.valid))
+        print("valid  = {0:s}".format(self.db.valid))
         print("lbatt  = {0:d}".format(self.db.lbatt))
         print("abreak = {0:d}".format(self.db.abreak))
-        print("motion = {0:d}".format(self.db.motion))
+        print("motion = {0:s}".format(self.db.motion))
         print("in1    = {0:s}".format(self.db.in1))
         print("in2    = {0:s}".format(self.db.in2))
         print("in3    = {0:s}".format(self.db.in3))
@@ -253,7 +254,7 @@ class Frame:
                 "'{0:s}',".format(self.db.valid) + \
                 "'{0:d}',".format(self.db.lbatt) + \
                 "'{0:d}',".format(self.db.abreak) + \
-                "'{0:d}',".format(self.db.motion) + \
+                "'{0:s}',".format(self.db.motion) + \
                 "'{0:s}',".format(self.db.in1) + \
                 "'{0:s}',".format(self.db.in2) + \
                 "'{0:s}',".format(self.db.in3) + \
