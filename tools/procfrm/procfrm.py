@@ -181,7 +181,7 @@ class Frame:
                                                  self.BatChr.dec))
         print('')
 
-    def dbFields(self):
+    def mkDbFields(self):
         flags = int(self.Header.flags.hex, 16)
         self.db.xcoord = self.longitude
         self.db.ycoord = self.latitude
@@ -212,6 +212,7 @@ class Frame:
         self.db.agey = self.Y.dec
         self.db.agez = self.Z.dec
 
+    def showdbFields(self):
         print("db field values")
         print("---------------")
         print("xcoord = {0:s}".format(self.db.xcoord))
@@ -244,13 +245,41 @@ class Frame:
         print("agez   = {0:d}".format(self.db.agez))
         print('')
 
+    def getdbCmdValue(self):
+        value = "'{0:s}',".format(self.db.xcoord) + \
+                "'{0:s}',".format(self.db.ycoord) + \
+                "'{0:s}',".format(self.db.speed) + \
+                "'{0:s}',".format(self.db.time) + \
+                "'{0:s}',".format(self.db.valid) + \
+                "'{0:d}',".format(self.db.lbatt) + \
+                "'{0:d}',".format(self.db.abreak) + \
+                "'{0:d}',".format(self.db.motion) + \
+                "'{0:s}',".format(self.db.in1) + \
+                "'{0:s}',".format(self.db.in2) + \
+                "'{0:s}',".format(self.db.in3) + \
+                "'{0:s}',".format(self.db.in4) + \
+                "'{0:s}',".format(self.db.in5) + \
+                "'{0:s}',".format(self.db.in6) + \
+                "'{0:s}',".format(self.db.in7) + \
+                "'{0:s}',".format(self.db.in8) + \
+                "'{0:s}',".format(self.db.out1) + \
+                "'{0:s}',".format(self.db.out2) + \
+                "'{0:s}',".format(self.db.out3) + \
+                "'{0:s}',".format(self.db.out4) + \
+                "'{0:s}',".format(self.db.out5) + \
+                "'{0:s}',".format(self.db.out6) + \
+                "'{0:d}',".format(self.db.pfbf) + \
+                "'{0:d}',".format(self.db.gftpp) + \
+                "'{0:d}',".format(self.db.hf) + \
+                "'{0:d}',".format(self.db.agex) + \
+                "'{0:d}',".format(self.db.agey) + \
+                "'{0:d}'".format(self.db.agez)
+        return value
+
     def dbCmdInsert(self):
         cmd = dbCmd + "\"insert into mobile_" + self.Header.imei + " " + \
-              dbFieldNames + \
-              " values ('{0:s}',...)\"".format(self.db.xcoord)
-        print("db insert cmd")
-        print("-------------")
-        print(cmd)
+              dbFieldNames + " values (" + self.getdbCmdValue() + ")\""
+        return cmd
 
 parser = argparse.ArgumentParser(
             add_help=True,
@@ -273,11 +302,18 @@ def processFile(ifile):
                 print("Input frame")
                 print("-----------")
                 print(line)
+
                 frame = Frame(line)
                 frame.showInFrame()
-                frame.dbFields()
-                frame.dbCmdInsert()
-                outfil.write(line)
+                frame.mkDbFields()
+                frame.showdbFields()
+
+                print("db insert cmd")
+                print("-------------")
+                cmd = frame.dbCmdInsert()
+                print(cmd)
+
+                outfil.write(cmd)
 
 if __name__ == "__main__":
     try:
