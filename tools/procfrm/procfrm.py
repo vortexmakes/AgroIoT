@@ -153,7 +153,7 @@ class Frame:
         return self.time.entire
 
     def showInFrame(self):
-        print("Parsed input frame")
+        print("\nParsed input frame")
         print("------------------")
         print("type      = {0:s} ({1:s})".format(self.Header.type, 
                                                  self.Types[self.Header.type]))
@@ -180,10 +180,8 @@ class Frame:
         print("z         = 0x{0:s} ({1:d})".format(self.Z.hex, self.Z.dec))
         print("batchg    = 0x{0:s} ({1:d})".format(self.BatChr.hex, 
                                                  self.BatChr.dec))
-        print('')
 
     def mkDbFields(self):
-        flags = int(self.Header.flags.hex, 16)
         self.db.xcoord = self.longitude
         self.db.ycoord = self.latitude
         self.db.speed = self.speed
@@ -213,8 +211,11 @@ class Frame:
         self.db.agey = self.Y.dec
         self.db.agez = self.Z.dec
 
+        # unused fields
+        self.db.history = getBitValue(self.Header.flags.dec, 1)
+
     def showdbFields(self):
-        print("db field values")
+        print("\ndb field values")
         print("---------------")
         print("xcoord = {0:s}".format(self.db.xcoord))
         print("ycoord = {0:s}".format(self.db.ycoord))
@@ -244,7 +245,6 @@ class Frame:
         print("agex   = {0:d}".format(self.db.agex))
         print("agey   = {0:d}".format(self.db.agey))
         print("agez   = {0:d}".format(self.db.agez))
-        print('')
 
     def getdbCmdValue(self):
         value = "'{0:s}',".format(self.db.xcoord) + \
@@ -285,11 +285,64 @@ class Frame:
 parser = argparse.ArgumentParser(
             add_help=True,
             formatter_class=argparse.RawDescriptionHelpFormatter,
-            description="Process Yipies frames from a backup file")
+            description=
+            "Process Yipies frames from a backup file and write results " + \
+            "in a file, whose name is the same as the input file plus the " + \
+            "suffix \'.cnv\'.\n" + \
+            "The resulting file is located in the same directory of the " + \
+            "input file.\n\n" + \
+            "The input frames must be in compliance with:\n"
+            "!<type>|<flags:2><imei:15>,<utc (HHMMSS)>," + \
+            "<latitude>,<longitude>,<speed>,<course>,<date (DDMMYY)>," + \
+            "<digOut:2><digIn:2>,<hoard>,<pqty>,<hum>,<x>,<y>,<z>,<batchg>" + \
+            "\n\n<flags> is a bit-field of 1 byte width:\n" + \
+            "\t[0:0]: validity of GPS location\n" + \
+            "\t[1:1]: history or current frame\n" + \
+            "\t[2:2]: motion detection\n" + \
+            "\t[3:3]: battery status\n" + \
+            "\n\nFor example:\n" + \
+            "!0|09355826018345180,130044,-37.849640,-059.010879,0.0132," + \
+            "156,110920,00FC,0000,00,00,FFFF,0000,0000,0" + \
+            "\n\nThe db fields are mapped to input frame fields " + \
+            "according to:\n" + \
+            "\txcoord <-> longitude\n" + \
+            "\tycoord <-> latitude\n" + \
+            "\tspeed  <-> speed\n" + \
+            "\ttime   <-> date(YYYYMMDD) + utc(HHMMSS)\n" + \
+            "\tvalid  <-> flags[0:0]. Values 'v' -> 0, 'a' -> 1\n" + \
+            "\tlbatt  <-> flags[3:3]\n" + \
+            "\tabreak <-> batchg\n" + \
+            "\tmotion <-> flags[2:2]. Values 's' -> 0, 'm' -> 1\n" + \
+            "\tin1    <-> digIn[0:0]. Values 'o' -> 0, 'c' -> 1\n" + \
+            "\tin2    <-> digIn[0:1]\n" + \
+            "\tin3    <-> digIn[0:2]\n" + \
+            "\tin4    <-> digIn[0:3]\n" + \
+            "\tin5    <-> digIn[0:4]\n" + \
+            "\tin6    <-> digIn[0:5]\n" + \
+            "\tin7    <-> digIn[0:6]\n" + \
+            "\tin8    <-> digIn[0:7]\n" + \
+            "\tout1   <-> digOut[0:0]. Values 'o' -> 0, 'c' -> 1\n" + \
+            "\tout2   <-> digOut[1:1]\n" + \
+            "\tout3   <-> digOut[2:2]\n" + \
+            "\tout4   <-> digOut[3:3]\n" + \
+            "\tout5   <-> digOut[4:4]\n" + \
+            "\tout6   <-> digOut[5:5]\n" + \
+            "\tpfbf   <-> pqty\n" + \
+            "\tgftpp  <-> hoard\n" + \
+            "\thf     <-> hum\n" + \
+            "\tagex   <-> x\n" + \
+            "\tagey   <-> y\n" + \
+            "\tagez   <-> z\n"
+            )
 
-parser.add_argument('infile', action="store", metavar='file',
-                    help='an input file. Generally, it is the output of '
-                    'frameconv program')
+parser.add_argument('ifile', action="store", metavar='<in-file-path>',
+                    help='file of frames. In general, it is the '
+                    'output of frameconv program')
+parser.add_argument('--verbose', '-v', action="store", metavar='<level>', 
+                    default=0, type=int, choices=range(1, 3), 
+                    help='be verbose. Select a verbosity level from 1 to 2')
+parser.add_argument('--log', '-l', action="store_true", default=False,
+                    help='add the input frame to the output file')
 
 def getBitValue(value, bitIndex):
     return (value >> bitIndex) & 1
@@ -297,29 +350,37 @@ def getBitValue(value, bitIndex):
 def processFile(ifile):
     fcFile = os.path.expanduser(ifile)
     outFile = fcFile + ".cnv"
+    nFrames = 0
     with open(fcFile) as infil:
         with open(outFile, "w") as outfil:
             for line in infil:
-                print("Input frame")
-                print("-----------")
-                print(line)
+                if args.verbose > 0:
+                    print('>> ' + line[:-len('\n')])
+                if args.log == True:
+                    outfil.write('# ' + line)
 
                 frame = Frame(line)
-                frame.showInFrame()
                 frame.mkDbFields()
-                frame.showdbFields()
 
-                print("db insert cmd")
-                print("-------------")
                 cmd = frame.dbCmdInsert()
-                print(cmd)
+                if args.verbose > 0:
+                    print('<< ' + cmd)
+
+                if args.verbose > 1:
+                    frame.showInFrame()
+                    frame.showdbFields()
 
                 outfil.write(cmd)
+                nFrames += 1
+
+            if args.verbose > 0:
+                print("\nProcessed {0:d} frames".format(nFrames))
+            outfil.write('\n')  # add an output file terminator
 
 if __name__ == "__main__":
     try:
         args = parser.parse_args(sys.argv[1:])
-        processFile(args.infile)
+        processFile(args.ifile)
         
     except IOError as msg:
         parser.error(str(msg))
