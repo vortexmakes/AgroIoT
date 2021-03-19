@@ -291,6 +291,7 @@ parser = argparse.ArgumentParser(
             "suffix \'.cnv\'.\n" + \
             "The resulting file is located in the same directory of the " + \
             "input file.\n\n" + \
+            "EXAMPLE: $ ./procfrm.py ~/00001.frm.str ~/00002.frm.str\n\n" + \
             "The input frames must be in compliance with:\n"
             "!<type>|<flags:2><imei:15>,<utc (HHMMSS)>," + \
             "<latitude>,<longitude>,<speed>,<course>,<date (DDMMYY)>," + \
@@ -307,37 +308,30 @@ parser = argparse.ArgumentParser(
             "according to:\n" + \
             "\txcoord <-> longitude\n" + \
             "\tycoord <-> latitude\n" + \
-            "\tspeed  <-> speed\n" + \
-            "\ttime   <-> date(YYYYMMDD) + utc(HHMMSS)\n" + \
-            "\tvalid  <-> flags[0:0]. Values 'v' -> 0, 'a' -> 1\n" + \
-            "\tlbatt  <-> flags[3:3]\n" + \
+            "\t speed <-> speed\n" + \
+            "\t  time <-> date(YYYYMMDD) + utc(HHMMSS)\n" + \
+            "\t valid <-> flags[0:0]. Values 'v' -> 0, 'a' -> 1\n" + \
+            "\t lbatt <-> flags[3:3]\n" + \
             "\tabreak <-> batchg\n" + \
             "\tmotion <-> flags[2:2]. Values 's' -> 0, 'm' -> 1\n" + \
-            "\tin1    <-> digIn[0:0]. Values 'o' -> 0, 'c' -> 1\n" + \
-            "\tin2    <-> digIn[0:1]\n" + \
-            "\tin3    <-> digIn[0:2]\n" + \
-            "\tin4    <-> digIn[0:3]\n" + \
-            "\tin5    <-> digIn[0:4]\n" + \
-            "\tin6    <-> digIn[0:5]\n" + \
-            "\tin7    <-> digIn[0:6]\n" + \
-            "\tin8    <-> digIn[0:7]\n" + \
-            "\tout1   <-> digOut[0:0]. Values 'o' -> 0, 'c' -> 1\n" + \
-            "\tout2   <-> digOut[1:1]\n" + \
-            "\tout3   <-> digOut[2:2]\n" + \
-            "\tout4   <-> digOut[3:3]\n" + \
-            "\tout5   <-> digOut[4:4]\n" + \
-            "\tout6   <-> digOut[5:5]\n" + \
-            "\tpfbf   <-> pqty\n" + \
-            "\tgftpp  <-> hoard\n" + \
-            "\thf     <-> hum\n" + \
-            "\tagex   <-> x\n" + \
-            "\tagey   <-> y\n" + \
-            "\tagez   <-> z\n"
+            "\t   in1 <-> digIn[0:0]. Values 'o' -> 0, 'c' -> 1\n" + \
+            "\t  in.. <-> digIn[0:..]\n" + \
+            "\t   in8 <-> digIn[0:7]\n" + \
+            "\t  out1 <-> digOut[0:0]. Values 'o' -> 0, 'c' -> 1\n" + \
+            "\t out.. <-> digOut[1:..]\n" + \
+            "\t  out6 <-> digOut[5:5]\n" + \
+            "\t  pfbf <-> pqty\n" + \
+            "\t gftpp <-> hoard\n" + \
+            "\t    hf <-> hum\n" + \
+            "\t  agex <-> x\n" + \
+            "\t  agey <-> y\n" + \
+            "\t  agez <-> z\n"
             )
 
 parser.add_argument('ifile', action="store", metavar='<in-file-path>',
-                    help='file of frames. In general, it is the '
-                    'output of frameconv program')
+                    nargs='*',
+                    help="files of frames separated with spaces. " + \
+                    "In general, they are the output of frameconv program")
 parser.add_argument('--verbose', '-v', action="store", metavar='<level>', 
                     default=0, type=int, choices=range(1, 3), 
                     help='be verbose. Select a verbosity level from 1 to 2')
@@ -348,34 +342,36 @@ def getBitValue(value, bitIndex):
     return (value >> bitIndex) & 1
 
 def processFile(ifile):
-    fcFile = os.path.expanduser(ifile)
-    outFile = fcFile + ".cnv"
-    nFrames = 0
-    with open(fcFile) as infil:
-        with open(outFile, "w") as outfil:
-            for line in infil:
+    for f in ifile: 
+        fcFile = os.path.expanduser(f)
+        outFile = fcFile + ".cnv"
+        nFrames = 0
+        with open(fcFile) as infil:
+            with open(outFile, "w") as outfil:
+                for line in infil:
+                    if args.verbose > 0:
+                        print('>> ' + line[:-len('\n')])
+                    if args.log == True:
+                        outfil.write('# ' + line)
+
+                    frame = Frame(line)
+                    frame.mkDbFields()
+
+                    cmd = frame.dbCmdInsert()
+                    if args.verbose > 0:
+                        print('<< ' + cmd)
+
+                    if args.verbose > 1:
+                        frame.showInFrame()
+                        frame.showdbFields()
+
+                    outfil.write(cmd)
+                    nFrames += 1
+
                 if args.verbose > 0:
-                    print('>> ' + line[:-len('\n')])
-                if args.log == True:
-                    outfil.write('# ' + line)
-
-                frame = Frame(line)
-                frame.mkDbFields()
-
-                cmd = frame.dbCmdInsert()
-                if args.verbose > 0:
-                    print('<< ' + cmd)
-
-                if args.verbose > 1:
-                    frame.showInFrame()
-                    frame.showdbFields()
-
-                outfil.write(cmd)
-                nFrames += 1
-
-            if args.verbose > 0:
-                print("\nProcessed {0:d} frames".format(nFrames))
-            outfil.write('\n')  # add an output file terminator
+                    print("-- Processed {0:d} frames from file {1:s}".format(
+                                nFrames, os.path.basename(fcFile)))
+                outfil.write('\n')  # add an output file terminator
 
 if __name__ == "__main__":
     try:
