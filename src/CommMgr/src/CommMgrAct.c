@@ -101,7 +101,10 @@ sendFrames(CommMgr *const me)
         res = (bool)GStatus_checkValidity(&to);
         if (res == false)
         {
-            Trace_generate(&to.data, TraceId_CorruptStatus, 0, 0);
+            Trace_set(&to.data, 
+                      TraceId_CorruptStatus, 
+                      me->nFramesToSend, 
+                      me->framesToSend);
         }
         me->evSendObj.size += YFrame_data(&to.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 

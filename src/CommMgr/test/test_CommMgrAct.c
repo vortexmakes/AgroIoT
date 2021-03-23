@@ -112,8 +112,9 @@ setupForSendingABlockOfFrames(ruint nFrames, int len, bool validity)
         GStatus_checkValidity_IgnoreArg_me();
         if (validity == false)
         {
-            Trace_generate_Expect(0, TraceId_CorruptStatus, 0, 0);
-            Trace_generate_IgnoreArg_status(); 
+            Trace_set_Expect(0, TraceId_CorruptStatus, me->nFramesToSend, 
+                             me->framesToSend);
+            Trace_set_IgnoreArg_status(); 
         }
         YFrame_data_ExpectAndReturn(&elem.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 
