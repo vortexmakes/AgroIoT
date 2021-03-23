@@ -57,6 +57,7 @@ setPreconditions(char *attribute, char *value, size_t bufSize)
 void
 setUp(void)
 {
+    Geo_init(0);
 }
 
 void
@@ -91,6 +92,23 @@ test_AttemptToGetAnInvalidLatitude(void)
     size_t bufSize;
 
     Geo_init(errorHandler);
+    bufSize = LATITUDE_LENGTH + 1;
+    memcpy(position.latitude, value, bufSize);
+    pos = (char *)0;
+    SecString_strchk_ExpectAndReturn(position.latitude, bufSize, pos);
+
+    str = Geo_getLatitude(&position);
+
+    TEST_ASSERT_NULL(str);
+}
+
+void
+test_AttemptToGetAnInvalidLatitudeWithErrorHandler(void)
+{
+    Geo position;
+    char *str, *pos, value[] = "37.840288333";
+    size_t bufSize;
+
     bufSize = LATITUDE_LENGTH + 1;
     memcpy(position.latitude, value, bufSize);
     pos = (char *)0;
