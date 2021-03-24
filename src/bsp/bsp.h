@@ -50,6 +50,7 @@ enum
 enum
 {
     MODCMD_USR_TRACE = RKH_TE_USER,
+    GEO_GET_ATTR_ERROR
 };
 
 /*

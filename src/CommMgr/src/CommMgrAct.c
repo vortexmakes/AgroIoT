@@ -29,6 +29,7 @@
 #include "geoMgr.h"
 #include "Trace.h"
 #include "bsp.h"
+#include "rkhtrc_filter.h"
 
 RKH_MODULE_NAME(CommMgrAct);
 
@@ -118,6 +119,14 @@ isIn(CommMgr *const me, const RKH_SBSC_T *state)
     return (RKH_UPCAST(RKH_SM_T, me)->state == RKH_UPCAST(RKH_ST_T, state));
 }
 
+void 
+geoErrorHandler(GeoErrorCode errCode)
+{
+    RKH_TRC_USR_BEGIN(GEO_GET_ATTR_ERROR);
+        RKH_TUSR_UI8(RKH_UI8_T, errCode);
+    RKH_TRC_USR_END();
+}
+
 /* ............................ Effect actions ............................. */
 void
 CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
@@ -155,12 +164,14 @@ CommMgr_ToIdleExt0(CommMgr *const me, RKH_EVT_T *pe)
     RKH_TR_FWK_SIG(evSendFail);
     RKH_TR_FWK_SIG(evGStatus);
     RKH_TR_FWK_TIMER(&me->tmEvtObj0.tmr);
+    RKH_TR_FWK_TUSR(GEO_GET_ATTR_ERROR);
 
     topic_subscribe(GeneralStatus, RKH_UPCAST(RKH_SMA_T, me));
     topic_subscribe(TCPConnection, RKH_UPCAST(RKH_SMA_T, me));
     me->isPendingStatus = false;
     me->lastRecvResponse = TypeOfRespUnknown;
     RKH_SET_STATIC_EVENT(&me->evSendObj, evSend);
+    Geo_init(geoErrorHandler);
 }
 
 void
