@@ -48,9 +48,12 @@ getAttribute(char *attribute, size_t bufSize)
     char *pos;
 
     pos = SecString_strchk(attribute, bufSize);
-    if ((pos == (char *)0) && (errorHandler != (GeoErrorHandler)0))
+    if (pos == (char *)0)
     {
-        errorHandler(INDEX_OUT_OF_RANGE);
+        if (errorHandler != (GeoErrorHandler)0)
+        {
+            errorHandler(INDEX_OUT_OF_RANGE);
+        }
     }
     else
     {

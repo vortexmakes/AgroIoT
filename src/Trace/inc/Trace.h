@@ -61,6 +61,8 @@ void Trace_send(TraceId id, TraceArg arg0, TraceArg arg1);
 void Trace_put(TraceId id, TraceArg arg0, TraceArg arg1);
 void Trace_generate(GStatusType *status, TraceId id, TraceArg arg0, 
                     TraceArg arg1);
+void Trace_set(GStatusType *status, TraceId id, TraceArg arg0, 
+               TraceArg arg1);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
