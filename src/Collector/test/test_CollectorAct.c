@@ -125,6 +125,10 @@ test_ConstructorWithDigInPolActiveLow(void)
     TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digOut);
     TEST_ASSERT_EQUAL(LINE_BATT, me->status.data.batChrStatus);
     TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
+    TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.hoard);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.flow);
 }
 
 void
@@ -145,7 +149,9 @@ test_ConstructorWithDigInPolActiveHigh(void)
     TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digIn);
     TEST_ASSERT_EQUAL(0, me->status.data.ioStatus.digOut);
     TEST_ASSERT_EQUAL(LINE_BATT, me->status.data.batChrStatus);
-    TEST_ASSERT_EQUAL(0, me->itsMapping.nStoreLastSync);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.hoard);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.flow);
 }
 
 void
@@ -657,6 +663,23 @@ test_StoreStatusWhenSystemTurns(void)
 
     Mapping_storeStatus(region, (RKH_EVT_T *)0);
     TEST_ASSERT_EQUAL(n + 1, me->itsMapping.nStoreLastSync);
+}
+
+void
+test_CleanDeviceAttributesWhenItIsNotMapping(void)
+{
+    Mapping *region;
+
+    region = &me->itsMapping;
+    region->itsCollector->status.data.devData.h.hoard = 0xaa;
+    region->itsCollector->status.data.devData.h.pqty = 0x55;
+    region->itsCollector->status.data.devData.h.flow = 0xaa;
+    rkh_tmr_stop_ExpectAndReturn(&region->syncRunningTmr.tmr, 0);
+
+    Mapping_exRunning(region);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.hoard);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.pqty);
+    TEST_ASSERT_EQUAL(0, me->status.data.devData.h.flow);
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -24,6 +24,8 @@
 #include "rkhfwk_cast.h"
 #include "Mock_rkhtmr.h"
 #include "Mock_rkhtrc_record.h"
+#include "Mock_rkhtrc_filter.h"
+#include "Mock_rkhtrc_out.h"
 #include "Mock_rkhsma.h"
 #include "Mock_GStatus.h"
 #include "Mock_YFrame.h"
@@ -34,6 +36,8 @@
 #include "Mock_geoMgr.h"
 #include "Mock_Trace.h"
 #include "Mock_bsp.h"
+#include "Mock_Geo.h"
+#include "Mock_rkhport.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 #define GEO_INVALID_GEOSTAMP    \
@@ -112,8 +116,9 @@ setupForSendingABlockOfFrames(ruint nFrames, int len, bool validity)
         GStatus_checkValidity_IgnoreArg_me();
         if (validity == false)
         {
-            Trace_generate_Expect(0, TraceId_CorruptStatus, 0, 0);
-            Trace_generate_IgnoreArg_status(); 
+            Trace_set_Expect(0, TraceId_CorruptStatus, me->nFramesToSend, 
+                             me->framesToSend);
+            Trace_set_IgnoreArg_status(); 
         }
         YFrame_data_ExpectAndReturn(&elem.data, 
                                     me->evSendObj.buf + me->evSendObj.size, 
@@ -158,8 +163,23 @@ test_Initialize(void)
     rkh_trc_sig_Ignore();
     rkh_trc_sig_Ignore();
     rkh_trc_obj_Ignore();
+
+    /* Begin expectations for macro RKH_TR_FWK_TUSR() */
+    rkh_enter_critical_Expect();
+    rkh_trc_begin_Expect(RKH_TE_FWK_TUSR);
+    rkh_trc_u8_Expect(0);
+    rkh_trc_u8_IgnoreArg_d();
+    rkh_trc_str_Expect(0);
+    rkh_trc_str_IgnoreArg_s();
+    rkh_trc_end_Expect();
+    rkh_exit_critical_Expect();
+    rkh_trc_flush_Expect();
+    /* End expectations for macro RKH_TR_FWK_TUSR() */
+
     topic_subscribe_Expect(GeneralStatus, RKH_UPCAST(RKH_SMA_T, me));
     topic_subscribe_Expect(TCPConnection, RKH_UPCAST(RKH_SMA_T, me));
+    Geo_init_Expect(0);
+    Geo_init_IgnoreArg_errHandler();
 
     CommMgr_ToIdleExt0(me, evt);
 
